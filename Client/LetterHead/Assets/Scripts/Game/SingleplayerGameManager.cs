@@ -12,6 +12,12 @@ public class SingleplayerGameManager : GameManager
 
     private void StartGame()
     {
-        
+        BoardManager.Instance.GenerateRandomBoard();
+        OnGameStarted();
+    }
+
+    protected override void OnGameStarted()
+    {
+        base.OnGameStarted();
     }
 }

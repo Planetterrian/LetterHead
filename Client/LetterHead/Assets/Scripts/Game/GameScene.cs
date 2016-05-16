@@ -52,4 +52,8 @@ public class GameScene : Singleton<GameScene>
         OnStateChanged.AddListener(gameManager.OnGameStateChanged);
     }
 
+    public bool IsGameActive()
+    {
+        return true;
+    }
 }
