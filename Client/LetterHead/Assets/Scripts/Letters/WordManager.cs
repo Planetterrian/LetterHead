@@ -12,11 +12,9 @@ using Debug = UnityEngine.Debug;
 public class WordManager : Singleton<WordManager>
 {
     public string wordListFileName;
-    public string powerWordListFileName;
     public bool debugValid;
 
     private Dawg<bool> dawg;
-    private Dawg<bool> powerWordDawg;
 
     public class SpelledWord
     {
@@ -32,7 +30,6 @@ public class WordManager : Singleton<WordManager>
 	    //BuildPowrWordDawg();
 
         StartCoroutine(LoadWordList());
-        StartCoroutine(LoadPowerWordList());
     }
 
     private void BuildDawg()
@@ -75,24 +72,7 @@ public class WordManager : Singleton<WordManager>
 
         dawg = Dawg<bool>.Load(new MemoryStream(result), reader => reader.ReadBoolean());           // explained below
     }
-
-
-    private IEnumerator LoadPowerWordList()
-    {
-        var filePath = System.IO.Path.Combine(Application.streamingAssetsPath, powerWordListFileName);
-
-        byte[] result;
-        if (filePath.Contains("://"))
-        {
-            WWW www = new WWW(filePath);
-            yield return www;
-            result = www.bytes;
-        }
-        else
-            result = System.IO.File.ReadAllBytes(filePath);
-
-        powerWordDawg = Dawg<bool>.Load(new MemoryStream(result), reader => reader.ReadBoolean());           // explained below
-    }
+    
 
 
     public bool IsWordValid(string word)
@@ -104,9 +84,9 @@ public class WordManager : Singleton<WordManager>
         return dawg[word];
     }
 
-    internal IEnumerator GetLongestWord(Action<string> callback, bool powerWord)
+    internal IEnumerator GetLongestWord(Action<string> callback)
     {
-        var yoDawn = powerWord ? powerWordDawg : dawg;
+        var yoDawn = dawg;
 
         var letters = new List<char>();
 
