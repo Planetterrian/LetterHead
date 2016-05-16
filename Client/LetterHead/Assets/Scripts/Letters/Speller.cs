@@ -80,17 +80,26 @@ public class Speller : Singleton<Speller>
 
     private void CheckSubmitButtons()
     {
-        if (tiles.Count > 2 && !GameGui.Instance.submitWordButtons.gameObject.activeInHierarchy && ShouldShowSubmitButtons())
+        if (tiles.Count > 2 && !GameGui.Instance.submitWordButton.interactable && ShouldShowWordButtons())
         {
-            GameGui.Instance.submitWordButtons.gameObject.SetActive(true);
+            GameGui.Instance.submitWordButton.interactable = true;
         }
-        else if ((tiles.Count <= 2 || !ShouldShowSubmitButtons()) && GameGui.Instance.submitWordButtons.gameObject.activeInHierarchy)
+        else if ((tiles.Count <= 2 || !ShouldShowWordButtons()) && GameGui.Instance.submitWordButton.interactable)
         {
-            GameGui.Instance.submitWordButtons.gameObject.SetActive(false);
+            GameGui.Instance.submitWordButton.interactable = false;
+        }
+
+        if (tiles.Count > 0 && !GameGui.Instance.clearWordButtons.interactable && ShouldShowWordButtons())
+        {
+            GameGui.Instance.clearWordButtons.interactable = true;
+        }
+        else if ((tiles.Count == 0 || !ShouldShowWordButtons()) && GameGui.Instance.clearWordButtons.interactable)
+        {
+            GameGui.Instance.clearWordButtons.interactable = false;
         }
     }
 
-    private bool ShouldShowSubmitButtons()
+    private bool ShouldShowWordButtons()
     {
         if (!GameScene.Instance.IsGameActive())
             return false;

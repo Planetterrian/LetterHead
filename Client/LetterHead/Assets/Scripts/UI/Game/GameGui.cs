@@ -6,7 +6,8 @@ using UnityEngine.UI;
 
 public class GameGui : Singleton<GameGui>
 {
-    public Button submitWordButtons;
+    public Button submitWordButton;
+    public Button clearWordButtons;
 
     private void Start()
     {
