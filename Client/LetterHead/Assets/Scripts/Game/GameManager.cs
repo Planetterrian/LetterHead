@@ -2,6 +2,8 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using LetterHeadShared.DTO;
+using Newtonsoft.Json;
 
 public abstract class GameManager : Singleton<GameManager>
 {
@@ -28,7 +30,8 @@ public abstract class GameManager : Singleton<GameManager>
 
     private void OnMatchDetailsLoaded(string matchDetailsJson)
     {
-        //var matchDetails = 
+        var matchDetails = JsonConvert.DeserializeObject<Match>(matchDetailsJson);
+        Debug.Log(matchDetails.Letters);
     }
 
     protected override void Awake()
