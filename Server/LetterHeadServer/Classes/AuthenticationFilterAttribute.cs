@@ -24,7 +24,7 @@ namespace LetterHeadServer.Classes
             if(controller == null)
                 return;
 
-            var sessionId = filterContext.HttpContext.Request.Headers["SessionIdToken"];
+            var sessionId = filterContext.HttpContext.Request.Headers["SessionId"];
             if (sessionId != null)
             {
                 var user = UserManager.GetUserBySession(db, sessionId);
@@ -33,12 +33,15 @@ namespace LetterHeadServer.Classes
                     LoginUser(filterContext, db, user.Id);
                     return;
                 }
-                else
+                else if(!_allowLoggedOut)
                 {
                     InvalidSession(filterContext);
                     return;
                 }
             }
+
+            if(!_allowLoggedOut)
+                InvalidSession(filterContext);
         }
 
         private static void InvalidSession(ActionExecutingContext filterContext)

@@ -10,6 +10,7 @@ namespace LetterHeadServer.Models
     {
         public DbSet<Models.User> Users { get; set; }
         public DbSet<Models.DailyGame> DailyGames { get; set; }
+        public DbSet<Models.Match> Matches { get; set; }
 
         public static ApplicationDbContext Create()
         {

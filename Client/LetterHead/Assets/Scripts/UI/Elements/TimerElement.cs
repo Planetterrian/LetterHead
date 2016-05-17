@@ -17,6 +17,7 @@ public class TimerElement : MonoBehaviour
         label = GetComponent<TextMeshProUGUI>();
 
         StartTimer(120);
+        active = false;
     }
 
     private void Update()

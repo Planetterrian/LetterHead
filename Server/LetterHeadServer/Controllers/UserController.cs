@@ -24,7 +24,7 @@ namespace LetterHeadServer.Controllers
                     return Error("Email address already in use");
                 }
 
-                UserManager.CreateUser(db, model.Email, model.Password);
+                UserManager.CreateUser(db, model.Email, model.Password, model.Username);
                 UserManager.LoginUserWithEmail(db, model);
 
                 return Json("ok");

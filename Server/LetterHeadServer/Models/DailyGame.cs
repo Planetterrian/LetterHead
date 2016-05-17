@@ -43,5 +43,14 @@ namespace LetterHeadServer.Models
             context.SaveChanges();
         }
 
+        public Match CreateMatchForUser(User currentUser)
+        {
+            var match = Match.New();
+            match.DailyGame = this;
+            match.Users = new List<User> {currentUser};
+            match.Letters = Letters;
+
+            return match;
+        }
     }
 }
