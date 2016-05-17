@@ -9,7 +9,6 @@ namespace LetterHeadServer.Classes
 {
     public static class UserManager
     {
-        private static string RememberSalt = "NomYaiiimak";
 /*
 
         public static User LoginUserFromFacebook(ApplicationDbContext db, FacebookUser facebookUser)
@@ -27,13 +26,6 @@ namespace LetterHeadServer.Classes
         }
 */
 
-        private static void DoLogin(User user)
-        {
-            HttpContext.Current.Session["UserId"] = user.Id;
-        }
-/*
-
-
         public static User LoginUserWithEmail(ApplicationDbContext db, UserRegistrationModel model)
         {
             var user = db.Users.SingleOrDefault(u => u.Email == model.Email);
@@ -42,21 +34,12 @@ namespace LetterHeadServer.Classes
             {
                 if (Crypto.VerifyHashedPassword(user.PasswordHash, model.Password))
                 {
-                    DoLogin(user);
-
-                    if (model.RememberMe)
-                    {
-                        var rememberSession = Crypto.SHA256((user.Id + user.PasswordHash + RememberSalt));
-                        HttpContext.Current.Response.SetCookie(new HttpCookie("SessCrypt", rememberSession) { Expires = DateTime.Now.AddDays(60) });
-                        HttpContext.Current.Response.SetCookie(new HttpCookie("SessUID", user.Id.ToString()) { Expires = DateTime.Now.AddDays(60) });
-                    }
                     return user;
                 }
             }
 
             return null;
         }
-*/
 /*
 
         private static User CreateUser(ApplicationDbContext db, FacebookUser facebookUser)

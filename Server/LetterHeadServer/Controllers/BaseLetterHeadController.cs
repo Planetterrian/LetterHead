@@ -21,7 +21,7 @@ namespace LetterHeadServer.Controllers
         {
             return Json(new
                         {
-                            error = message
+                            Error = message
                         });
         }
 

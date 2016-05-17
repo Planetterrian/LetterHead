@@ -1,0 +1,51 @@
+﻿
+@{
+    ViewBag.Title = "CreateUser";
+}
+@model  LetterHeadServer.Models.UserRegistrationModel
+
+<h2>CreateUser</h2>
+
+@using (Html.BeginForm("RegisterEmail", "User"))
+{
+    <div class="form-horizontal">
+        <font color="#ff0000">
+            <b>
+                @Html.ValidationSummary(true)
+            </b>
+        </font>
+        @Html.HiddenFor(model => model.ID)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Email, new { @class = "control-label col-md-6" })
+            <div class="col-md-6">
+                @Html.EditorFor(model => model.Email)
+                <br />
+                <font color="#ff0000">
+                    <b>
+                        @Html.ValidationMessageFor(model => model.Email)
+                    </b>
+                </font>
+            </div>
+        </div>
+        <div class="form-group">
+
+            @Html.LabelFor(model => model.Password, new { @class = "control-label col-md-6" })
+            <div class="col-md-6">
+                @Html.EditorFor(model => model.Password)
+                <br />
+                <font color="#ff0000">
+                    <b>
+                        @Html.ValidationMessageFor(model => model.Password)
+                    </b>
+                </font>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-12">
+                <input type="submit" value="CREATE ACCOUNT" id="playbutton" class="btn" />
+            </div>
+        </div>
+    </div>
+}
