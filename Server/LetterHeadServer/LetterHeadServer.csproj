@@ -148,8 +148,13 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Classes\AuthenticationFilterAttribute.cs" />
+    <Compile Include="Classes\BoardHelper.cs" />
+    <Compile Include="Classes\UserManager.cs" />
     <Compile Include="Controllers\BackendController.cs" />
+    <Compile Include="Controllers\BaseLetterHeadController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\MatchController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -202,6 +207,8 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\Backend\" />
+    <Folder Include="Views\BaseLetterHead\" />
+    <Folder Include="Views\Match\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

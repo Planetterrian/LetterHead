@@ -11,11 +11,15 @@ namespace LetterHeadServer.Models
         public int Id { get; set; }
         public string Letters { get; set; }
         public DateTime StartDate;
-        public DateTime EndDate;
+        public DateTime? EndDate;
 
         public static void CreateNewDailyGame()
         {
             var db = ApplicationDbContext.Get();
+
+            var current = Current();
+            current?.End(db);
+
             db.DailyGames.Add(new DailyGame()
                                                       {
                                                           StartDate = DateTime.Now,
@@ -25,5 +29,19 @@ namespace LetterHeadServer.Models
 
             db.SaveChanges();
         }
+
+        public static DailyGame Current()
+        {
+            var db = ApplicationDbContext.Get();
+
+            return db.DailyGames.OrderByDescending(d => d.Id).FirstOrDefault();
+        }
+
+        private void End(ApplicationDbContext context)
+        {
+            EndDate = DateTime.Now;
+            context.SaveChanges();
+        }
+
     }
 }

@@ -36,7 +36,8 @@ public class TimerElement : MonoBehaviour
 
     private void UpdateLabel()
     {
-        label.text = Mathf.FloorToInt(secondsRemaining / 60).ToString() + ":" + (secondsRemaining % 60).ToString("00");
+        var timespan = new TimeSpan(0, 0, Mathf.CeilToInt(secondsRemaining));
+        label.text = ((int)timespan.TotalMinutes).ToString() + ":" + timespan.Seconds.ToString("00");
     }
 
     public void StartTimer(float time)
