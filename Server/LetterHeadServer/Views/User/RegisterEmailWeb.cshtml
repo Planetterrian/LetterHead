@@ -43,13 +43,13 @@
         </div>
         <div class="form-group">
 
-            @Html.LabelFor(model => model.Password, new { @class = "control-label col-md-6" })
+            @Html.LabelFor(model => model.Username, new { @class = "control-label col-md-6" })
             <div class="col-md-6">
-                @Html.EditorFor(model => model.Password)
+                @Html.EditorFor(model => model.Username)
                 <br />
                 <font color="#ff0000">
                     <b>
-                        @Html.ValidationMessageFor(model => model.Password)
+                        @Html.ValidationMessageFor(model => model.Username)
                     </b>
                 </font>
             </div>
