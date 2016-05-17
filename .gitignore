@@ -1,2 +1,3 @@
 *.mdf
 Server/LetterHeadServer/App_Data/letterhead_log.ldf
+Server/LetterHeadServer/App_Data/letterhead.mdf
