@@ -10,6 +10,14 @@ public abstract class GameManager : Singleton<GameManager>
     protected GameScene gameScene;
 
     private int matchId;
+
+    protected Match matchDetails;
+    public Match MatchDetails
+    {
+        get { return matchDetails; }
+        set { matchDetails = value; }
+    }
+
     public int MatchId
     {
         get
@@ -23,15 +31,26 @@ public abstract class GameManager : Singleton<GameManager>
         }
     }
 
+
     protected void LoadMatchDetails()
     {
-        Srv.Instance.POST("Match/MatchInfo", new Dictionary<string, string>() {{"matchId", MatchId.ToString()}}, OnMatchDetailsLoaded);
+        GameGui.Instance.shuffleButton.interactable = false;
+        GameGui.Instance.startButton.interactable = false;
+
+        Srv.Instance.POST("Match/MatchInfo", new Dictionary<string, string>() {{"matchId", MatchId.ToString()}}, MatchDetailsDownloaded);
     }
 
-    private void OnMatchDetailsLoaded(string matchDetailsJson)
+    protected virtual void MatchDetailsDownloaded(string matchDetailsJson)
     {
-        var matchDetails = JsonConvert.DeserializeObject<Match>(matchDetailsJson);
-        Debug.Log(matchDetails.Letters);
+        MatchDetails = JsonConvert.DeserializeObject<Match>(matchDetailsJson);
+
+        OnMatchDetailsLoaded();
+    }
+
+    protected virtual void OnMatchDetailsLoaded()
+    {
+        GameGui.Instance.shuffleButton.interactable = true;
+        GameGui.Instance.startButton.interactable = true;
     }
 
     protected override void Awake()
@@ -50,5 +69,11 @@ public abstract class GameManager : Singleton<GameManager>
     protected virtual void OnGameStarted()
     {
         gameScene.CurrentState = GameScene.State.Active;
+        BoardManager.Instance.RevealLetters();
+    }
+
+    public void StartGame()
+    {
+        OnGameStarted();
     }
 }

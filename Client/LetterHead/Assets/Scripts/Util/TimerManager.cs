@@ -17,9 +17,14 @@ public class TimerManager : Singleton<TimerManager>
         }
     }
 
-    private List<TimerEvent> events = new List<TimerEvent>(); 
+    private List<TimerEvent> events = new List<TimerEvent>();
 
-    public TimerEvent AddEvent(float time, Action callback)
+    public static TimerEvent AddEvent(float time, Action callback)
+    {
+        return Instance.DoAddEvent(time, callback);
+    }
+
+    private TimerEvent DoAddEvent(float time, Action callback)
     {
         var evnt = new TimerEvent()
         {

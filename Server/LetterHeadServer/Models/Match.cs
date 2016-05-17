@@ -23,6 +23,7 @@ namespace LetterHeadServer.Models
         public DateTime CreatedOn { get; set; }
         public DateTime? StartedOn { get; set; }
         public string Letters { get; set; }
+        public int RoundTimeSeconds { get; set; }
 
 
         public static Match New()
@@ -31,6 +32,7 @@ namespace LetterHeadServer.Models
                    {
                        CurrentState = LetterHeadShared.DTO.Match.State.Pregame,
                        CreatedOn = DateTime.Now,
+                       RoundTimeSeconds = 120,
                    };
         }
 

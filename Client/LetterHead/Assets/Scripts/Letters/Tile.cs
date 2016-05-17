@@ -12,6 +12,7 @@ public class Tile : MonoBehaviour
     public Image gloss;
     public uTweenAlpha glossTween;
     public uTweenRotation shakeTween;
+    public uTweenPosition slotRevealTween;
     public TextMeshProUGUI letterText;
 
     public LetterDefinition letterDefinition;
@@ -86,12 +87,24 @@ public class Tile : MonoBehaviour
 
         if(glow)
             glow.SetActive(false);
+
+        slotRevealTween.ResetToEndState();
+    }
+
+    public void HideLetter()
+    {
+        slotRevealTween.ResetToInitialState();
+    }
+
+    public void RevealLetter(float delay)
+    {
+        TimerManager.AddEvent(delay, () => slotRevealTween.Play());
     }
 
     public void StarburstFadeout()
     {
         starburst.SetActive(true);
-        TimerManager.Instance.AddEvent(0.5f, PopOut);
+        TimerManager.AddEvent(0.5f, PopOut);
     }
 
 	// Update is called once per frame
@@ -277,7 +290,7 @@ public class Tile : MonoBehaviour
 
         shakeTween.Play();
 
-        TimerManager.Instance.AddEvent(duration, () =>
+        TimerManager.AddEvent(duration, () =>
         {
             shakeTween.enabled = false;
             transform.rotation = Quaternion.identity;

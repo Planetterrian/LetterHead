@@ -7,7 +7,11 @@ using UnityEngine.UI;
 public class GameGui : Singleton<GameGui>
 {
     public Button submitWordButton;
-    public Button clearWordButtons;
+    public Button clearWordButton;
+    public Button shuffleButton;
+    public Button startButton;
+
+    public TimerElement timer;
 
     private void Start()
     {
@@ -15,11 +19,31 @@ public class GameGui : Singleton<GameGui>
 
     public bool CanClickBoardTile()
     {
-        return true;
+        return GameScene.Instance.CurrentState == GameScene.State.Active;
     }
 
     public bool CanClickSpellerTile()
     {
         return true;
     }
+
+    public void OnStartClicked()
+    {
+        GameManager.Instance.StartGame();
+    }
+
+    public void OnGameStateChanged()
+    {
+        if (GameScene.Instance.CurrentState == GameScene.State.Pregame)
+        {
+            startButton.interactable = false;
+        }
+        if (GameScene.Instance.CurrentState == GameScene.State.Active)
+        {
+            startButton.interactable = false;
+            timer.StartTimer(GameManager.Instance.MatchDetails.RoundTimeSeconds);
+        }
+    }
+
+
 }

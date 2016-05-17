@@ -16,5 +16,6 @@ namespace LetterHeadShared.DTO
         public List<string> Users;
         public string Letters;
         public int Id;
+        public int RoundTimeSeconds;
     }
 }

@@ -14,15 +14,10 @@ public class SingleplayerGameManager : GameManager
 	    });
 	}
 
-
-    private void StartGame()
+    protected override void OnMatchDetailsLoaded()
     {
-        BoardManager.Instance.GenerateRandomBoard();
-        OnGameStarted();
-    }
+        base.OnMatchDetailsLoaded();
 
-    protected override void OnGameStarted()
-    {
-        base.OnGameStarted();
+        BoardManager.Instance.SetBoardLetters(MatchDetails.Letters, true);
     }
 }

@@ -89,13 +89,13 @@ public class Speller : Singleton<Speller>
             GameGui.Instance.submitWordButton.interactable = false;
         }
 
-        if (tiles.Count > 0 && !GameGui.Instance.clearWordButtons.interactable && ShouldShowWordButtons())
+        if (tiles.Count > 0 && !GameGui.Instance.clearWordButton.interactable && ShouldShowWordButtons())
         {
-            GameGui.Instance.clearWordButtons.interactable = true;
+            GameGui.Instance.clearWordButton.interactable = true;
         }
-        else if ((tiles.Count == 0 || !ShouldShowWordButtons()) && GameGui.Instance.clearWordButtons.interactable)
+        else if ((tiles.Count == 0 || !ShouldShowWordButtons()) && GameGui.Instance.clearWordButton.interactable)
         {
-            GameGui.Instance.clearWordButtons.interactable = false;
+            GameGui.Instance.clearWordButton.interactable = false;
         }
     }
 

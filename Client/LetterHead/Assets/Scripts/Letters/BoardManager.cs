@@ -93,7 +93,43 @@ public class BoardManager : Singleton<BoardManager>
 
         return null;
     }
-    
+
+
+    public void SetBoardLetters(string letters, bool hidden)
+    {
+        Initilize();
+
+        var letterNum = 0;
+
+        for (int y = 0; y < gridSize.y; y++)
+        {
+            for (int x = 0; x < gridSize.x; x++)
+            {
+                if (!GetTile(x, y))
+                {
+                    var tile = AddNewTile(x, y, TileManager.Instance.CharToLetter(letters[letterNum]));
+
+                    if (hidden)
+                    {
+                        tile.HideLetter();
+                    }
+
+                    RepositionTile(tile);
+
+                    letterNum++;
+                }
+            }
+        }
+    }
+
+    public void RevealLetters()
+    {
+        foreach (var tile in tiles)
+        {
+            tile.RevealLetter(Random.Range(0f, 0.4f));
+        }
+    }
+
     public void GenerateRandomBoard(string preventLetters = "")
     {
         Initilize();
@@ -205,7 +241,7 @@ public class BoardManager : Singleton<BoardManager>
         if (effect == RemoveEffect.Starburst)
             replenishDelay = 0.5f;
 
-        TimerManager.Instance.AddEvent(replenishDelay, ShiftAndReplenish);
+        TimerManager.AddEvent(replenishDelay, ShiftAndReplenish);
     }
     
 
