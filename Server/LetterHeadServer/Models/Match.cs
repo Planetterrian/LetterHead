@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
+using MyWebApplication;
 
 namespace LetterHeadServer.Models
 {
@@ -11,41 +12,31 @@ namespace LetterHeadServer.Models
         public int Id { get; set; }
 
         [Index]
-        public List<User> Users { get; set; }
-        public User Winner { get; set; }
+        public virtual List<User> Users { get; set; }
+        public virtual User Winner { get; set; }
 
         [Index]
-        public State CurrentState { get; set; }
+        public LetterHeadShared.DTO.Match.State CurrentState { get; set; }
 
         [Index]
-        public DailyGame DailyGame { get; set; }
+        public virtual DailyGame DailyGame { get; set; }
         public DateTime CreatedOn { get; set; }
         public DateTime? StartedOn { get; set; }
         public string Letters { get; set; }
 
-        public enum State
-        {
-            Pregame, Running, Ended
-        }
 
         public static Match New()
         {
             return new Match()
                    {
-                       CurrentState = State.Pregame,
+                       CurrentState = LetterHeadShared.DTO.Match.State.Pregame,
                        CreatedOn = DateTime.Now,
                    };
         }
 
-        public Dictionary<object, object> DTO()
+        public LetterHeadShared.DTO.Match DTO()
         {
-            return new Dictionary<object, object>
-                   {
-                    {"CurrentState", CurrentState},
-                    {"Users", Users.Select(u => u.Username).ToList()},
-                    {"CurrentState", CurrentState},
-                    {"Letters", Letters},
-                   };
+            return Startup.Mapper.Map<LetterHeadShared.DTO.Match>(this);
         }
 
         public static Match GetById(ApplicationDbContext db, int matchId)

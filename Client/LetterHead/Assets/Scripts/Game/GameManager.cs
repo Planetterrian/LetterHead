@@ -28,7 +28,7 @@ public abstract class GameManager : Singleton<GameManager>
 
     private void OnMatchDetailsLoaded(string matchDetailsJson)
     {
-        var matchDetails = 
+        //var matchDetails = 
     }
 
     protected override void Awake()

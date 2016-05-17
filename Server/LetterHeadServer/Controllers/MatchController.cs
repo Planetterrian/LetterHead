@@ -21,7 +21,7 @@ namespace LetterHeadServer.Controllers
             }
 
             var match = currentUser.GetMatch(db, dailyGame);
-            if (match != null && match.CurrentState == Match.State.Ended)
+            if (match != null && match.CurrentState == LetterHeadShared.DTO.Match.State.Ended)
             {
                 return Error("You have already completed your daily game");
             }
