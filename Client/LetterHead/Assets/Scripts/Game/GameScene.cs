@@ -56,4 +56,10 @@ public class GameScene : Singleton<GameScene>
     {
         return true;
     }
+
+    public void OnWordSubmit()
+    {
+        var word = Speller.Instance.CurrentWord();
+        Debug.Log(WordManager.Instance.IsWordValid(word));
+    }
 }

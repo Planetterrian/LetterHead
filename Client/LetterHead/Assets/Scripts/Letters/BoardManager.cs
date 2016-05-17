@@ -122,6 +122,26 @@ public class BoardManager : Singleton<BoardManager>
         }
     }
 
+
+    public void Shuffle()
+    {
+        tiles.Shuffle();
+
+        var letterNum = 0;
+
+        for (int y = 0; y < gridSize.y; y++)
+        {
+            for (int x = 0; x < gridSize.x; x++)
+            {
+                tiles[letterNum].xBoardPos = x;
+                tiles[letterNum].yBoardPos = y;
+                RepositionTile(tiles[letterNum]);
+
+                letterNum++;
+            }
+        }
+    }
+
     public void RevealLetters()
     {
         foreach (var tile in tiles)
@@ -431,31 +451,7 @@ public class BoardManager : Singleton<BoardManager>
     {
         return forcedSpellWord;
     }
-
-    public void Load(System.IO.BinaryReader reader)
-    {
-        var ct = reader.ReadInt32();
-
-        for (int i = 0; i < ct; i++)
-        {
-            var chr = reader.ReadChar();
-            var xPos = (int)reader.ReadByte();
-            var yPos = (int)reader.ReadByte();
-
-            AddNewTile(xPos, yPos, TileManager.Instance.CharToLetter(chr));
-        }
-    }
-
-    public void Save(System.IO.BinaryWriter writer)
-    {
-        writer.Write(tiles.Count);
-        foreach (var tile in tiles)
-        {
-            writer.Write(tile.letterDefinition.letter[0]);
-            writer.Write((byte)tile.xBoardPos);
-            writer.Write((byte)tile.yBoardPos);
-        }
-    }
+    
 
     public void ShakeLetters(string[] letters)
     {
@@ -467,4 +463,5 @@ public class BoardManager : Singleton<BoardManager>
             }
         }
     }
+
 }

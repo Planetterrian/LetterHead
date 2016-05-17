@@ -7,7 +7,9 @@ public class SingleplayerGameManager : GameManager
     // Use this for initialization
     void Start ()
 	{
-	    Srv.Instance.POST("Match/RequestDailyGameStart", null, s =>
+        GameScene.Instance.CurrentState = GameScene.State.Pregame;
+
+        Srv.Instance.POST("Match/RequestDailyGameStart", null, s =>
 	    {
             MatchId = JsonConvert.DeserializeObject<int>(s);
 	        LoadMatchDetails();

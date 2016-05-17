@@ -34,9 +34,6 @@ public abstract class GameManager : Singleton<GameManager>
 
     protected void LoadMatchDetails()
     {
-        GameGui.Instance.shuffleButton.interactable = false;
-        GameGui.Instance.startButton.interactable = false;
-
         Srv.Instance.POST("Match/MatchInfo", new Dictionary<string, string>() {{"matchId", MatchId.ToString()}}, MatchDetailsDownloaded);
     }
 
@@ -49,7 +46,6 @@ public abstract class GameManager : Singleton<GameManager>
 
     protected virtual void OnMatchDetailsLoaded()
     {
-        GameGui.Instance.shuffleButton.interactable = true;
         GameGui.Instance.startButton.interactable = true;
     }
 

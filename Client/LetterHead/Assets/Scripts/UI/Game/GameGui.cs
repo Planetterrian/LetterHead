@@ -32,15 +32,33 @@ public class GameGui : Singleton<GameGui>
         GameManager.Instance.StartGame();
     }
 
+    public void ShuffleClicked()
+    {
+        BoardManager.Instance.Shuffle();
+    }
+
+    public void SubmitClicked()
+    {
+        GameScene.Instance.OnWordSubmit();
+    }
+
+    public void ClearClicked()
+    {
+        BoardManager.Instance.ClearCurrentWord();
+    }
+
     public void OnGameStateChanged()
     {
         if (GameScene.Instance.CurrentState == GameScene.State.Pregame)
         {
             startButton.interactable = false;
+            shuffleButton.interactable = false;
+            startButton.interactable = false;
         }
         if (GameScene.Instance.CurrentState == GameScene.State.Active)
         {
             startButton.interactable = false;
+            shuffleButton.interactable = true;
             timer.StartTimer(GameManager.Instance.MatchDetails.RoundTimeSeconds);
         }
     }
