@@ -18,7 +18,7 @@ public class Srv : REST
 
         if (Application.isEditor)
         {
-            if (System.Environment.UserName == "Pet2e")
+            if (System.Environment.UserName == "Pete")
                 baseUrl = editorUrl;
         }
     }

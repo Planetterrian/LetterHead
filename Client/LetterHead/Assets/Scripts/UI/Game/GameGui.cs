@@ -39,7 +39,7 @@ public class GameGui : Singleton<GameGui>
 
     public void SubmitClicked()
     {
-        GameScene.Instance.OnWordSubmit();
+        ScoringManager.Instance.OnWordSubmit();
     }
 
     public void ClearClicked()

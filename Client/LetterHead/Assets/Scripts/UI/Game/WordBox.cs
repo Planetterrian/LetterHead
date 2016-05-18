@@ -1,21 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using PathologicalGames;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class WordBox : MonoBehaviour
+public class WordBox : Singleton<WordBox>
 {
     public RectTransform contentBox;
     public GameObject rowPrefab;
     public Color altBackgroundColor;
+    public ScrollRect scroll;
+
     public int startingRows;
     public float rowHeight;
 
-    private List<GameObject> rows = new List<GameObject>();
-
-    private void Awake()
-    {
-    }
+    private List<WordRow> rows = new List<WordRow>();
 
     private void Start()
     {
@@ -23,15 +23,48 @@ public class WordBox : MonoBehaviour
         {
             AddRow();
         }
+
+        ScrollToBottom();
     }
 
-    private void AddRow()
+    private WordRow AddRow()
     {
-        var rowGo = GameObject.Instantiate(rowPrefab) as GameObject;
+        var rowGo = PoolManager.Pools["UI"].Spawn(rowPrefab.transform);
         rowGo.transform.SetParent(contentBox);
         rowGo.transform.ResetToOrigin();
-        rows.Add(rowGo);
+
+        var row = rowGo.GetComponent<WordRow>();
+        row.SetWord("");
+
+        rows.Add(row);
+
+        row.background.color = rows.Count % 2 == 0 ? Color.white : altBackgroundColor;
 
         contentBox.SetHeight(rowHeight * rows.Count);
+
+        return row;
+    }
+
+    public void AddWord(string word)
+    {
+        word = word.UppercaseFirst();
+
+        foreach (var wordRow in rows)
+        {
+            if (string.IsNullOrEmpty(wordRow.word))
+            {
+                wordRow.SetWord(word);
+                ScrollToBottom();
+                return;
+            }
+        }
+
+        AddRow().SetWord(word);
+        ScrollToBottom();
+    }
+
+    private void ScrollToBottom()
+    {
+        scroll.verticalNormalizedPosition = 0;
     }
 }
