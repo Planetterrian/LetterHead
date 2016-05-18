@@ -10,10 +10,17 @@ public class Srv : REST
 
     public string sessionId;
     public string baseUrl;
+    public string editorUrl;
 
     void Awake()
     {
         Instance = this;
+
+        if (Application.isEditor)
+        {
+            if (System.Environment.UserName == "Pet2e")
+                baseUrl = editorUrl;
+        }
     }
 
     public override WWW GET(string url, Action<string> onComplete, Action<string> onError = null)
