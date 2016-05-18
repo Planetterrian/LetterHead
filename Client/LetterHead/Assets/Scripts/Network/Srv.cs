@@ -19,7 +19,10 @@ public class Srv : REST
         if (Application.isEditor)
         {
             if (System.Environment.UserName == "Pete")
+            {
                 baseUrl = editorUrl;
+                Debug.Log("Using Editor URL");
+            }
         }
     }
 
