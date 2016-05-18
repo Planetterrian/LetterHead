@@ -4,6 +4,7 @@ using System.Linq;
 using LetterHeadShared;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 class CategoryBox : Singleton<CategoryBox>
 {
@@ -12,7 +13,9 @@ class CategoryBox : Singleton<CategoryBox>
 
     public TextMeshProUGUI totallabel;
 
-    private Dictionary<TextMeshProUGUI, Category> categoryScoreFunctions = new Dictionary<TextMeshProUGUI, Category>(); 
+    private Dictionary<TextMeshProUGUI, Category> categoryScoreFunctions = new Dictionary<TextMeshProUGUI, Category>();
+
+    public Image currentSelectedCategoryImage;
 
     void Start()
     {
@@ -20,11 +23,22 @@ class CategoryBox : Singleton<CategoryBox>
         {
             var category = ScoringManager.Instance.categoryManager.Categories[index];
             categoryTitles[index].text = category.name;
-
+            categoryTitles[index].GetComponentInParent<Button>().onClick.AddListener(() => OnCategoryClicked(category));
             categoryScoreFunctions[categoryValues[index]] = category;
         }
 
         Refresh();
+    }
+
+    private void OnCategoryClicked(Category category)
+    {
+        if (!GameGui.CanSelectCategory())
+            return;
+
+        if(GameManager.Instance.HasCategoryBeenUsed(category))
+            return;
+
+        GameManager.Instance.SelectCategory(category);
     }
 
     public void Refresh()
@@ -43,5 +57,13 @@ class CategoryBox : Singleton<CategoryBox>
         }
 
         totallabel.text = ScoringManager.Instance.TotalScore().ToString("N0");
+    }
+
+    public void SetCurrentlySelectedCategory(Category category)
+    {
+        currentSelectedCategoryImage.gameObject.SetActive(true);
+
+        var box = categoryScoreFunctions.First(c => c.Value == category).Key.transform.parent.parent;
+        currentSelectedCategoryImage.transform.position = box.position;
     }
 }

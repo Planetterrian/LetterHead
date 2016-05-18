@@ -64,4 +64,11 @@ public class GameGui : Singleton<GameGui>
     }
 
 
+    public static bool CanSelectCategory()
+    {
+        if (GameScene.Instance.CurrentState == GameScene.State.Active)
+            return true;
+
+        return false;
+    }
 }

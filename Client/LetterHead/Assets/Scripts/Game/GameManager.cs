@@ -3,6 +3,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using LetterHeadShared;
 using LetterHeadShared.DTO;
 using Newtonsoft.Json;
 
@@ -85,5 +86,17 @@ public abstract class GameManager : Singleton<GameManager>
     public void StartGame()
     {
         OnGameStarted();
+    }
+
+    public bool HasCategoryBeenUsed(Category category)
+    {
+        return MyRounds().Any(c => c.CategoryName == category.name);
+    }
+
+    public void SelectCategory(Category category)
+    {
+        MyCurrentRound().CategoryName = category.name;
+        CategoryBox.Instance.Refresh();
+        CategoryBox.Instance.SetCurrentlySelectedCategory(category);
     }
 }
