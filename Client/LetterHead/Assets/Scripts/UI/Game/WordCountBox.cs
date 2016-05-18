@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -29,5 +30,29 @@ public class WordCountBox : Singleton<WordCountBox>
         wordLength7Label.text = words.Count(w => w.Length >= 7).ToString("N0");
 
         totalLabel.text = words.Count.ToString("N0");
+
+        var leterDict = new Dictionary<char, int>();
+        foreach (var word in words)
+        {
+            if (leterDict.ContainsKey(word[0]))
+            {
+                leterDict[word[0]] = leterDict[word[0]] + 1;
+            }
+            else
+            {
+                leterDict[word[0]] = 1;
+            }
+        }
+
+        if (words.Count > 0)
+        {
+            var top = leterDict.OrderByDescending(l => l.Value).FirstOrDefault();
+            bestLetterLabel.text = top.Key.ToString().ToUpper() + "-" + top.Value;
+        }
+        else
+        {
+            bestLetterLabel.text = "0";
+        }
+
     }
 }

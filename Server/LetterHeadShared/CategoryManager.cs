@@ -59,8 +59,7 @@ namespace LetterHeadShared
                     return score;
                 }
             });
-
-
+            
             categories.Add(new Category()
             {
                 name = "Starter",
@@ -113,6 +112,28 @@ namespace LetterHeadShared
                  (words.Count(w => w.Length == 5 || w.Length == 6) * 2) +
                  (words.Count(w => w.Length >= 7) * 3)
             });
+
+            categories.Add(new Category()
+            {
+                name = "7+ Letters",
+                description = "",
+                GetScore = (words, uniqueLetterCount) =>
+                {
+                    var score = words.Count(w => w.Length >= 7) * 25;
+                    if (score > 75)
+                        score = 75;
+
+                    return score;
+                }
+            });
+
+            categories.Add(new Category()
+            {
+                name = "Big Word Bonus",
+                description = "",
+                GetScore = (words, uniqueLetterCount) => words.Count(w => w.Length >= 8) * 50
+            });
+
 
         }
 
