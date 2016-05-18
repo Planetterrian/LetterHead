@@ -2,6 +2,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using LetterHeadShared.DTO;
 using Newtonsoft.Json;
 
@@ -31,6 +32,18 @@ public abstract class GameManager : Singleton<GameManager>
         }
     }
 
+    public MatchRound MyCurrentRound()
+    {
+        return MatchDetails.Rounds.FirstOrDefault(m => m.UserId == MatchDetails.MyUserId && m.Number == MatchDetails.CurrentRoundNumber);
+    }
+
+    public List<MatchRound> MyRounds()
+    {
+        if(MatchDetails == null)
+            return new List<MatchRound>();
+
+        return MatchDetails.Rounds.Where(m => m.UserId == MatchDetails.MyUserId).ToList();
+    }
 
     protected void LoadMatchDetails()
     {
@@ -47,6 +60,7 @@ public abstract class GameManager : Singleton<GameManager>
     protected virtual void OnMatchDetailsLoaded()
     {
         GameGui.Instance.startButton.interactable = true;
+        CategoryBox.Instance.Refresh();
     }
 
     protected override void Awake()

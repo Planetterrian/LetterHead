@@ -66,6 +66,7 @@ namespace LetterHeadServer.Classes
                     if (arrow <= cur)
                     {
                         letterString += letterDefinition.letter;
+                        break;
                     }
                 }
             }

@@ -28,11 +28,13 @@ public class GameScene : Singleton<GameScene>
 
     public UnityEvent OnStateChanged;
 
-    // Use this for initialization
-	void Start ()
-	{
-	    SetForSingleplayer();
-	}
+    protected override void Awake()
+    {
+        base.Awake();
+
+        SetForSingleplayer();
+
+    }
 
     private void SetForSingleplayer()
     {

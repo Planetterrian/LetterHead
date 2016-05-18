@@ -16,7 +16,7 @@ namespace LetterHeadServer.Models
         public virtual User Winner { get; set; }
 
         [Index]
-        public LetterHeadShared.DTO.Match.State CurrentState { get; set; }
+        public LetterHeadShared.DTO.Match.MatchState CurrentState { get; set; }
 
         [Index]
         public virtual DailyGame DailyGame { get; set; }
@@ -25,15 +25,53 @@ namespace LetterHeadServer.Models
         public string Letters { get; set; }
         public int RoundTimeSeconds { get; set; }
 
+        public virtual List<MatchRound> Rounds { get; set; }
+        public int CurrentRoundNumber { get; set; }
 
-        public static Match New()
+        public static Match New(ApplicationDbContext db, List<User> users, int roundCount)
         {
-            return new Match()
+            var match = new Match()
                    {
-                       CurrentState = LetterHeadShared.DTO.Match.State.Pregame,
+                       CurrentState = LetterHeadShared.DTO.Match.MatchState.Pregame,
                        CreatedOn = DateTime.Now,
                        RoundTimeSeconds = 120,
+                       Rounds = new List<MatchRound>(),
+                       Users = users,
                    };
+
+            db.Matches.Add(match);
+            db.SaveChanges();
+
+            foreach (var user in users)
+            {
+                match.AddRounds(user, roundCount);
+            }
+
+            db.SaveChanges();
+
+            return match;
+        }
+
+        public MatchRound CurrentRoundForUser(User user)
+        {
+            return Rounds.FirstOrDefault(r => r.User.Id == user.Id && r.Number == CurrentRoundNumber);
+        }
+
+        private void AddRounds(User user, int roundCount)
+        {
+            for (int i = 0; i < roundCount; i++)
+            {
+                var round = new MatchRound()
+                            {
+                                Match = this,
+                                User = user,
+                                CurrentState = MatchRound.RoundState.NotStarted,
+                                Number = i,
+                                Words = new List<string>()
+                            };
+
+                Rounds.Add(round);
+            }
         }
 
         public LetterHeadShared.DTO.Match DTO()

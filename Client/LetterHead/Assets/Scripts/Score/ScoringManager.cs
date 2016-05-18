@@ -56,4 +56,20 @@ public class ScoringManager : Singleton<ScoringManager>
     {
         return usedLetterIds.Count;
     }
+
+    public int TotalScore()
+    {
+        if (!GameManager.Instance)
+            return 0;
+
+        var score = 0;
+        var rounds = GameManager.Instance.MyRounds();
+
+        foreach (var matchRound in rounds)
+        {
+            score += matchRound.Score;
+        }
+
+        return score;
+    }
 }

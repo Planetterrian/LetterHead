@@ -53,6 +53,5 @@ public class WordCountBox : Singleton<WordCountBox>
         {
             bestLetterLabel.text = "0";
         }
-
     }
 }

@@ -21,16 +21,14 @@ namespace LetterHeadServer.Controllers
             }
 
             var match = currentUser.GetMatch(db, dailyGame);
-            if (match != null && match.CurrentState == LetterHeadShared.DTO.Match.State.Ended)
+            if (match != null && match.CurrentState == LetterHeadShared.DTO.Match.MatchState.Ended)
             {
                 return Error("You have already completed your daily game");
             }
 
             if (match == null)
             {
-                match = dailyGame.CreateMatchForUser(currentUser);
-                db.Matches.Add(match);
-                db.SaveChanges();
+                match = dailyGame.CreateMatchForUser(db, currentUser);
             }
 
 
@@ -50,7 +48,10 @@ namespace LetterHeadServer.Controllers
                 return Error("You can't access that match");
             }
 
-            return Json(match.DTO());
+            var dto = match.DTO();
+            dto.MyUserId = currentUser.Id;
+
+            return Json(dto);
         }
     }
 }

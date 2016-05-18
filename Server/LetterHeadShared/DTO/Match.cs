@@ -7,15 +7,18 @@ namespace LetterHeadShared.DTO
 {
     public class Match
     {
-        public enum State
+        public enum MatchState
         {
             Pregame, Running, Ended
         }
 
-        public State CurrentState;
+        public MatchState CurrentState;
         public List<string> Users;
+        public List<MatchRound> Rounds;
         public string Letters;
         public int Id;
         public int RoundTimeSeconds;
+        public int CurrentRoundNumber;
+        public int MyUserId;
     }
 }
