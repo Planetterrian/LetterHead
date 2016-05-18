@@ -45,8 +45,7 @@ class CategoryBox : Singleton<CategoryBox>
     {
         foreach (var scoreFunc in categoryScoreFunctions)
         {
-            var score = scoreFunc.Value.GetScore(ScoringManager.Instance.Words(),
-                ScoringManager.Instance.UniqueLetterCount());
+            var score = ScoringManager.Instance.GetCategoryScore(scoreFunc.Value);
 
             if(score > 0)
                 scoreFunc.Key.text = score.ToString("N0");

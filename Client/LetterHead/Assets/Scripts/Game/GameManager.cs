@@ -95,8 +95,9 @@ public abstract class GameManager : Singleton<GameManager>
 
     public void SelectCategory(Category category)
     {
-        MyCurrentRound().CategoryName = category.name;
+        ScoringManager.Instance.OnCategorySelected(category);
         CategoryBox.Instance.Refresh();
         CategoryBox.Instance.SetCurrentlySelectedCategory(category);
+        
     }
 }
