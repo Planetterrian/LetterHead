@@ -59,7 +59,7 @@ public class GameGui : Singleton<GameGui>
             shuffleButton.interactable = false;
             startButton.interactable = false;
         }
-        if (GameScene.Instance.CurrentState == GameScene.State.Active)
+        else if (GameScene.Instance.CurrentState == GameScene.State.Active)
         {
             startButton.interactable = false;
             shuffleButton.interactable = true;

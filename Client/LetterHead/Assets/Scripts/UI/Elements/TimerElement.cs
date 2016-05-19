@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class TimerElement : MonoBehaviour
@@ -11,6 +12,8 @@ public class TimerElement : MonoBehaviour
     private TextMeshProUGUI label;
 
     private bool active;
+
+    public UnityEvent OnTimeExpired;
 
     private void Awake()
     {
@@ -26,9 +29,11 @@ public class TimerElement : MonoBehaviour
         {
             secondsRemaining -= Time.deltaTime;
 
-            if (secondsRemaining == 0)
+            if (secondsRemaining <= 0)
             {
                 active = false;
+                secondsRemaining = 0;
+                OnTimeExpired.Invoke();
             }
 
             UpdateLabel();

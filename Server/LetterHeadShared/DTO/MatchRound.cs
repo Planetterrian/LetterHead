@@ -13,7 +13,14 @@ namespace LetterHeadShared.DTO
         public int UserId;
         public List<string> Words;
         public string CategoryName;
-        public Match.MatchState CurrentState;
+        public RoundState CurrentState;
+        public DateTime? StartedOn;
+
+
+        public enum RoundState
+        {
+            NotStarted, Active, Ended, WaitingForCategory
+        }
 
         public Category Category(CategoryManager categoryManager)
         {

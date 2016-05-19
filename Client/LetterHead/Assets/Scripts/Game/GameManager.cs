@@ -71,8 +71,30 @@ public abstract class GameManager : Singleton<GameManager>
         base.Awake();
 
         gameScene = GameScene.Instance;
+        GameGui.Instance.timer.OnTimeExpired.AddListener(OnTimerExpired);
     }
-    
+
+    private void OnTimerExpired()
+    {
+        MyCurrentRound().CurrentState = MatchRound.RoundState.WaitingForCategory;
+
+        if (ScoringManager.Instance.SelectedCategory() != null)
+        {
+            SubmitRound();
+        }
+    }
+
+    public void SubmitRound()
+    {
+        Srv.Instance.POST("Match/SubmitRound", new Dictionary<string, string>()
+        {
+            { "matchId", MatchId.ToString() },
+            { "wordsEncoded", string.Join("#", ScoringManager.Instance.Words().ToArray()) },
+            { "uniqueLetters", MatchId.ToString() },
+            { "categoryName", ScoringManager.Instance.SelectedCategory().name }
+        }, s => { });
+    }
+
     public virtual void OnGameStateChanged()
     {
         
@@ -83,6 +105,7 @@ public abstract class GameManager : Singleton<GameManager>
     {
         gameScene.CurrentState = GameScene.State.Active;
         BoardManager.Instance.RevealLetters();
+        Srv.Instance.POST("Match/OnStart", new Dictionary<string, string>() {{"matchId", MatchId.ToString()}}, s => { });
     }
 
     public void StartGame()

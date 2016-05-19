@@ -16,12 +16,8 @@ namespace LetterHeadServer.Models
         public int Score { get; set; }
         public List<string> Words { get; set; }
         public string CategoryName { get; set; }
-        public RoundState CurrentState { get; set; }
-
-        public enum RoundState
-        {
-            NotStarted, Active, Ended
-        }
+        public LetterHeadShared.DTO.MatchRound.RoundState CurrentState { get; set; }
+        public DateTime? StartedOn { get; set; }
 
         public Category Category(CategoryManager categoryManager)
         {
@@ -31,6 +27,38 @@ namespace LetterHeadServer.Models
         public LetterHeadShared.DTO.MatchRound DTO()
         {
             return Startup.Mapper.Map<LetterHeadShared.DTO.MatchRound>(this);
+        }
+
+        public DateTime EndTime()
+        {
+            return StartedOn.Value.AddMinutes(2);
+        }
+
+        public void End()
+        {
+            if (!string.IsNullOrEmpty(CategoryName))
+            {
+                CurrentState = LetterHeadShared.DTO.MatchRound.RoundState.Ended;
+                Match.AdvanceRound();
+            }
+            else
+            {
+                CurrentState = LetterHeadShared.DTO.MatchRound.RoundState.WaitingForCategory;
+            }
+        }
+        // Returns error message or null
+        public string CalculateScore(List<string> words, int uniqueLetters, Category category)
+        {
+            var rounds = Match.UserRounds(User);
+            if (rounds.Any(r => r.CategoryName == category.name))
+            {
+                return "That category has already been used";
+            }
+
+            Score = category.GetScore(words, uniqueLetters);
+            CategoryName = category.name;
+
+            return null;
         }
     }
 }

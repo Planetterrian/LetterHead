@@ -100,4 +100,9 @@ public class ScoringManager : Singleton<ScoringManager>
     {
         return category.GetScore(Words(), UniqueLetterCount());
     }
+
+    public Category SelectedCategory()
+    {
+        return currentCategory;
+    }
 }

@@ -14,6 +14,7 @@ namespace LetterHeadServer.Models
         [Index]
         public virtual List<User> Users { get; set; }
         public virtual User Winner { get; set; }
+        public virtual User CurrentUserTurn { get; set; }
 
         [Index]
         public LetterHeadShared.DTO.Match.MatchState CurrentState { get; set; }
@@ -30,14 +31,22 @@ namespace LetterHeadServer.Models
 
         public static Match New(ApplicationDbContext db, List<User> users, int roundCount)
         {
-            var match = new Match()
+            var roundTime = 120;
+
+            if (System.Environment.UserName == "Pete")
+                roundTime = 20;
+
+                var match = new Match()
                    {
                        CurrentState = LetterHeadShared.DTO.Match.MatchState.Pregame,
                        CreatedOn = DateTime.Now,
-                       RoundTimeSeconds = 120,
+                       RoundTimeSeconds = roundTime,
                        Rounds = new List<MatchRound>(),
                        Users = users,
                    };
+
+            var rand = new Random();
+            match.CurrentUserTurn = users[rand.Next(0, users.Count)];
 
             db.Matches.Add(match);
             db.SaveChanges();
@@ -65,7 +74,7 @@ namespace LetterHeadServer.Models
                             {
                                 Match = this,
                                 User = user,
-                                CurrentState = MatchRound.RoundState.NotStarted,
+                                CurrentState = LetterHeadShared.DTO.MatchRound.RoundState.NotStarted,
                                 Number = i,
                                 Words = new List<string>()
                             };
@@ -87,6 +96,43 @@ namespace LetterHeadServer.Models
         public bool UserAuthorized(User currentUser)
         {
             return Users.Any(u => u.Id == currentUser.Id);
+        }
+
+        public void AdvanceRound()
+        {
+            var currentUserIndex = Users.IndexOf(CurrentUserTurn);
+            currentUserIndex++;
+            if (currentUserIndex >= Users.Count)
+            {
+                EndRound();
+            }
+            else
+            {
+                CurrentRoundForUser(CurrentUserTurn).CurrentState = LetterHeadShared.DTO.MatchRound.RoundState.Ended;
+                CurrentUserTurn = Users[currentUserIndex];
+            }
+        }
+
+        private void EndRound()
+        {
+            if (CurrentRoundNumber == Rounds.Count - 1)
+            {
+                EndMatch();
+                return;
+            }
+
+            CurrentUserTurn = Users[0];
+            CurrentRoundNumber++;
+        }
+
+        private void EndMatch()
+        {
+            CurrentState = LetterHeadShared.DTO.Match.MatchState.Ended;
+        }
+
+        public List<MatchRound> UserRounds(User user)
+        {
+            return Rounds.Where(r => r.User.Id == user.Id).ToList();
         }
     }
 }

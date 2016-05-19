@@ -23,6 +23,9 @@ public class AvatarBox : MonoBehaviour
 
     public void SetAvatarImage(string url)
     {
+        if(string.IsNullOrEmpty(url))
+            return;
+
         if (url.StartsWith("sprite:"))
         {
             // Using a built in sprite

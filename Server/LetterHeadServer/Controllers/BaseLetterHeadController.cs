@@ -17,6 +17,11 @@ namespace LetterHeadServer.Controllers
             db = ApplicationDbContext.Get();
         }
 
+        protected ActionResult Okay()
+        {
+            return Json(new { Status = "OK" });
+        }
+
         public ActionResult Error(string message)
         {
             return Json(new

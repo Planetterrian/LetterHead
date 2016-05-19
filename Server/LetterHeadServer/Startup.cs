@@ -2,6 +2,7 @@
 using AutoMapper;
 using Hangfire;
 using LetterHeadServer.Models;
+using LetterHeadShared;
 using Microsoft.Owin;
 using Owin;
 
@@ -11,6 +12,7 @@ namespace MyWebApplication
     public class Startup
     {
         public static IMapper Mapper;
+        public static CategoryManager CategoryManager;
 
         public void Configuration(IAppBuilder app)
         {
@@ -32,6 +34,8 @@ namespace MyWebApplication
                 cfg.CreateMap<MatchRound, LetterHeadShared.DTO.MatchRound>().
                     ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.User.Id));
             }).CreateMapper();
+
+            CategoryManager = new CategoryManager();
         }
     }
 }
