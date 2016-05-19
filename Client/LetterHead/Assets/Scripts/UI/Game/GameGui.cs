@@ -13,8 +13,12 @@ public class GameGui : Singleton<GameGui>
 
     public TimerElement timer;
 
+    public AvatarBox leftAvatarBox;
+    public AvatarBox rightAvatarBox;
+
     private void Start()
     {
+        GameManager.Instance.OnMatchDetailsLoadedEvent.AddListener(OnMatchDetailsLoaded);
     }
 
     public bool CanClickBoardTile()
@@ -70,5 +74,29 @@ public class GameGui : Singleton<GameGui>
             return true;
 
         return false;
+    }
+
+    public void OnMatchDetailsLoaded()
+    {
+        startButton.interactable = true;
+
+        SetAvatarBox(leftAvatarBox, 0);
+
+        if (GameManager.Instance.MatchDetails.Users.Count > 1)
+        {
+            rightAvatarBox.gameObject.SetActive(true);
+            SetAvatarBox(rightAvatarBox, 1);
+        }
+        else
+        {
+            rightAvatarBox.gameObject.SetActive(false);
+        }
+    }
+
+    private void SetAvatarBox(AvatarBox box, int userIndex)
+    {
+        box.score.text = GameManager.Instance.MatchDetails.UserScore(userIndex).ToString("N0");
+        box.SetAvatarImage(GameManager.Instance.MatchDetails.Users[userIndex].AvatarUrl);
+        box.SetName(GameManager.Instance.MatchDetails.Users[userIndex].Username);
     }
 }

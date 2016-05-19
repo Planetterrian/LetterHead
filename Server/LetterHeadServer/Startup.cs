@@ -20,9 +20,13 @@ namespace MyWebApplication
             app.UseHangfireDashboard();
             app.UseHangfireServer();
 
-            Mapper = new MapperConfiguration(cfg => {
+            Mapper = new MapperConfiguration(cfg =>
+            {
+
+                cfg.CreateMap<User, LetterHeadShared.DTO.UserInfo>();
+
                 cfg.CreateMap<Match, LetterHeadShared.DTO.Match>().
-                    ForMember(dest => dest.Users, opt => opt.MapFrom(src => src.Users.Select(s => s.Username))).
+                    
                     ForMember(dest => dest.Rounds, opt => opt.MapFrom(src => src.Rounds.Select(r => r.DTO())));
 
                 cfg.CreateMap<MatchRound, LetterHeadShared.DTO.MatchRound>().

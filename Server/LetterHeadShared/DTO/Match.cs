@@ -13,12 +13,16 @@ namespace LetterHeadShared.DTO
         }
 
         public MatchState CurrentState;
-        public List<string> Users;
+        public List<UserInfo> Users;
         public List<MatchRound> Rounds;
         public string Letters;
         public int Id;
         public int RoundTimeSeconds;
         public int CurrentRoundNumber;
-        public int MyUserId;
+
+        public int UserScore(int userIndex)
+        {
+            return Rounds.Where(r => r.UserId == Users[userIndex].Id).Sum(r => r.Score);
+        }
     }
 }

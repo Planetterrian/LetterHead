@@ -35,7 +35,7 @@ public class ScoringManager : Singleton<ScoringManager>
     {
         foreach (var tile in Speller.Instance.tiles)
         {
-            usedLetterIds.Add(tile.ID);
+            usedLetterIds.Add(tile.referencedTileID);
         }
 
         WordBox.Instance.AddWord(word);

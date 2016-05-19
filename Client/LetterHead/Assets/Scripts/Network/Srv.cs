@@ -8,15 +8,16 @@ public class Srv : REST
 {
     public static Srv Instance;
 
-    public string sessionId;
     public string baseUrl;
     public string editorUrl;
+
+    public bool ignoreEditorUrl;
 
     void Awake()
     {
         Instance = this;
 
-        if (Application.isEditor)
+        if (Application.isEditor && !ignoreEditorUrl)
         {
             if (System.Environment.UserName == "Pete")
             {
@@ -38,10 +39,10 @@ public class Srv : REST
 
     protected override Dictionary<string, string> GetAdditionalHeaders()
     {
-        if (!string.IsNullOrEmpty(sessionId))
+        if (!string.IsNullOrEmpty(ClientManager.Instance.sessionId))
         {
             return new Dictionary<string, string>() {
-                    { "SessionId", sessionId }};
+                    { "SessionId", ClientManager.Instance.sessionId }};
         }
 
         return null;

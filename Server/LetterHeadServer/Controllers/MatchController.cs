@@ -49,7 +49,6 @@ namespace LetterHeadServer.Controllers
             }
 
             var dto = match.DTO();
-            dto.MyUserId = currentUser.Id;
 
             return Json(dto);
         }

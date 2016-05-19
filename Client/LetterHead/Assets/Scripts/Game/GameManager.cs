@@ -6,6 +6,7 @@ using System.Linq;
 using LetterHeadShared;
 using LetterHeadShared.DTO;
 using Newtonsoft.Json;
+using UnityEngine.Events;
 
 public abstract class GameManager : Singleton<GameManager>
 {
@@ -33,9 +34,11 @@ public abstract class GameManager : Singleton<GameManager>
         }
     }
 
+    public UnityEvent OnMatchDetailsLoadedEvent;
+
     public MatchRound MyCurrentRound()
     {
-        return MatchDetails.Rounds.FirstOrDefault(m => m.UserId == MatchDetails.MyUserId && m.Number == MatchDetails.CurrentRoundNumber);
+        return MatchDetails.Rounds.FirstOrDefault(m => m.UserId == ClientManager.Instance.myUserInfo.Id && m.Number == MatchDetails.CurrentRoundNumber);
     }
 
     public List<MatchRound> MyRounds()
@@ -43,7 +46,7 @@ public abstract class GameManager : Singleton<GameManager>
         if(MatchDetails == null)
             return new List<MatchRound>();
 
-        return MatchDetails.Rounds.Where(m => m.UserId == MatchDetails.MyUserId).ToList();
+        return MatchDetails.Rounds.Where(m => m.UserId == ClientManager.Instance.myUserInfo.Id).ToList();
     }
 
     protected void LoadMatchDetails()
@@ -56,12 +59,11 @@ public abstract class GameManager : Singleton<GameManager>
         MatchDetails = JsonConvert.DeserializeObject<Match>(matchDetailsJson);
 
         OnMatchDetailsLoaded();
+        OnMatchDetailsLoadedEvent.Invoke();
     }
 
     protected virtual void OnMatchDetailsLoaded()
     {
-        GameGui.Instance.startButton.interactable = true;
-        CategoryBox.Instance.Refresh();
     }
 
     protected override void Awake()

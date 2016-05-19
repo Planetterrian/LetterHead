@@ -69,6 +69,7 @@ namespace LetterHeadServer.Classes
                 PasswordHash = Crypto.HashPassword(password),
                 Username = username,
                 SignupDate = DateTime.Now,
+                AvatarUrl = "sprite:Picture22"
             };
 
             db.Users.Add(user);

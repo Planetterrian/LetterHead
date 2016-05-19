@@ -15,7 +15,7 @@ namespace LetterHeadServer.Controllers
             return View(new UserRegistrationModel());
         }
 
-        public ActionResult RegisterEmail([Bind(Exclude = "Id")]UserRegistrationModel model)
+        public ActionResult RegisterEmail([Bind(Exclude = "Id")] UserRegistrationModel model)
         {
             if (ModelState.IsValid)
             {
@@ -34,7 +34,7 @@ namespace LetterHeadServer.Controllers
                 var errorList = ModelState.ToDictionary(
                     kvp => kvp.Key,
                     kvp => kvp.Value.Errors.Select(e => e.ErrorMessage).FirstOrDefault()
-                );
+                    );
 
                 return Json(new
                             {
@@ -43,19 +43,26 @@ namespace LetterHeadServer.Controllers
             }
         }
 
-        public ActionResult LoginEmail([Bind(Exclude = "Id")]UserRegistrationModel model)
+        public ActionResult LoginEmail([Bind(Exclude = "Id")] UserRegistrationModel model)
         {
             var user = UserManager.LoginUserWithEmail(db, model);
 
             if (user == null)
             {
-                    return Error("Invalid email / password");
+                return Error("Invalid email / password");
             }
 
             user.GenerateNewSessionId();
             db.SaveChanges();
 
             return Json(new {SessionId = user.SessionId}, JsonRequestBehavior.AllowGet);
+        }
+
+
+        [AuthenticationFilter]
+        public ActionResult MyInfo()
+        {
+            return Json(currentUser.DTO());
         }
     }
 }

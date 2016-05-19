@@ -19,6 +19,8 @@ class CategoryBox : Singleton<CategoryBox>
 
     void Start()
     {
+        GameManager.Instance.OnMatchDetailsLoadedEvent.AddListener(OnMatchDetailsLoaded);
+
         for (int index = 0; index < ScoringManager.Instance.categoryManager.Categories.Count; index++)
         {
             var category = ScoringManager.Instance.categoryManager.Categories[index];
@@ -27,6 +29,11 @@ class CategoryBox : Singleton<CategoryBox>
             categoryScoreFunctions[categoryValues[index]] = category;
         }
 
+        Refresh();
+    }
+
+    private void OnMatchDetailsLoaded()
+    {
         Refresh();
     }
 

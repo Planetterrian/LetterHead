@@ -15,5 +15,11 @@ namespace LetterHeadServer.Controllers
             RecurringJob.AddOrUpdate(() => DailyGame.CreateNewDailyGame(), Cron.Daily);
             return "Started Jobs";
         }
+
+        public string NewDailyGame()
+        {
+            DailyGame.CreateNewDailyGame();
+            return "New daily game created";
+        }
     }
 }
