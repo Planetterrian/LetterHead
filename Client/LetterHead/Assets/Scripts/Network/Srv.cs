@@ -16,25 +16,30 @@ public class Srv : REST
     void Awake()
     {
         Instance = this;
+    }
 
+
+    public string Url()
+    {
         if (Application.isEditor && !ignoreEditorUrl)
         {
             if (System.Environment.UserName == "Pete")
             {
-                baseUrl = editorUrl;
-                Debug.Log("Using Editor URL");
+                return editorUrl;
             }
         }
+
+        return baseUrl;
     }
 
     public override WWW GET(string url, Action<string> onComplete, Action<string> onError = null)
     {
-        return base.GET(baseUrl + url, onComplete, onError);  
+        return base.GET(Url() + url, onComplete, onError);  
     }
 
     public override WWW POST(string url, Dictionary<string, string> post, Action<string> onComplete, Action<string> onError = null)
     {
-        return base.POST(baseUrl + url, post, onComplete, onError);
+        return base.POST(Url() + url, post, onComplete, onError);
     }
 
     protected override Dictionary<string, string> GetAdditionalHeaders()
@@ -69,4 +74,5 @@ public class Srv : REST
 
         base.OnResults(results, onComplete, onError);
     }
+
 }
