@@ -11,18 +11,39 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
 using System.Web.WebSockets;
+using LetterHeadServer.Classes;
+using LetterHeadServer.Models;
 
 namespace LetterHeadServer.Controllers
 {
     public class RealTimeController : ApiController
     {
-        public HttpResponseMessage Get()
+        public HttpResponseMessage Get(string sessionId, int matchId)
         {
-            HttpContext.Current.AcceptWebSocketRequest(ProcessWSChat);
+            var db = new ApplicationDbContext();
+            var user = UserManager.GetUserBySession(db, sessionId);
+
+            if (user == null)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.Forbidden, "Invalid session");
+            }
+
+            var match = Match.GetById(db, matchId);
+            if (match == null)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.Forbidden, "Invalid Match");
+            }
+
+            if (!match.UserAuthorized(user))
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.Forbidden, "Can't access that match");
+            }
+            
+            HttpContext.Current.AcceptWebSocketRequest(context => ProcessSocket(context, db, user, match));
             return Request.CreateResponse(HttpStatusCode.SwitchingProtocols);
         }
 
-        private async Task ProcessWSChat(AspNetWebSocketContext context)
+        private async Task ProcessSocket(AspNetWebSocketContext context, ApplicationDbContext db, User user, Match match)
         {
             WebSocket socket = context.WebSocket;
             while (true)

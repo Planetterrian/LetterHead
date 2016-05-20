@@ -6,13 +6,12 @@ using System.Text;
 using UnityEngine;
 using WebSocketSharp;
 
-public class GameRealTime : MonoBehaviour
+public class GameRealTime : Singleton<GameRealTime>
 {
     private WebSocket socket;
 
     void Start()
     {
-        Connect();
     }
 
     public void Connect()
@@ -20,7 +19,8 @@ public class GameRealTime : MonoBehaviour
         System.Uri uri = new Uri(Srv.Instance.Url());
         string uriWithoutScheme = uri.Host + ":" + uri.Port + uri.PathAndQuery;
 
-        socket = WebSocketManager.Instance.MakeNew("ws://" + uriWithoutScheme + "api/RealTime");
+        socket = WebSocketManager.Instance.MakeNew("ws://" + uriWithoutScheme + "api/RealTime?sessionId=" 
+            + ClientManager.Instance.sessionId + "&matchId=" + GameManager.Instance.MatchId);
 
         socket.OnMessage += (sender, args) =>
         {
@@ -40,7 +40,7 @@ public class GameRealTime : MonoBehaviour
 
         socket.OnClose += (sender, args) =>
         {
-            Debug.Log("Disconnected fromn real time socket");
+            Debug.Log("Disconnected fromn real time socket: " + args.Code + " " + args.Reason);
         };
 
         socket.Connect();

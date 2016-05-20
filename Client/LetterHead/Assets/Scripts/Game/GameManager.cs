@@ -69,6 +69,7 @@ public abstract class GameManager : Singleton<GameManager>
 
     protected virtual void OnMatchDetailsLoaded()
     {
+        GameRealTime.Instance.Connect();
     }
 
     protected override void Awake()
