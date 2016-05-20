@@ -31,7 +31,7 @@ namespace LetterHeadServer.Models
 
         public DateTime EndTime()
         {
-            return StartedOn.Value.AddMinutes(2);
+            return StartedOn.Value.AddSeconds(Match.RoundTimeSeconds);
         }
 
         public void End()

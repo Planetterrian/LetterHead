@@ -12,13 +12,14 @@ namespace LetterHeadShared.DTO
             Pregame, Running, Ended
         }
 
+        public int Id;
         public MatchState CurrentState;
         public List<UserInfo> Users;
         public List<MatchRound> Rounds;
         public string Letters;
-        public int Id;
         public int RoundTimeSeconds;
         public int CurrentRoundNumber;
+        public int CurrentUserIndex;
 
         public int UserScore(int userIndex)
         {

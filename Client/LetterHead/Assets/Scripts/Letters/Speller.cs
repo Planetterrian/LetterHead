@@ -21,9 +21,24 @@ public class Speller : Singleton<Speller>
 
     public SpellerEvent onSpellerChangedEvent;
 
+    void Start()
+    {
+        GameScene.Instance.OnStateChanged.AddListener(OnStateChanged);
+        GameGui.Instance.timer.OnTimeExpired.AddListener(OnTimeExpired);
+    }
+
     void Update()
     {
-        CheckSubmitButtons();        
+        CheckSubmitButtons();
+    }
+
+    private void OnTimeExpired()
+    {
+        ClearTiles();
+    }
+
+    private void OnStateChanged()
+    {
     }
 
     public Tile AddTile(Tile originalTile)

@@ -58,6 +58,11 @@ public abstract class GameManager : Singleton<GameManager>
     {
         MatchDetails = JsonConvert.DeserializeObject<Match>(matchDetailsJson);
 
+        if (IsMyRound())
+        {
+            gameScene.CurrentState = GameScene.State.Pregame;
+        }
+
         OnMatchDetailsLoaded();
         OnMatchDetailsLoadedEvent.Invoke();
     }
@@ -74,8 +79,14 @@ public abstract class GameManager : Singleton<GameManager>
         GameGui.Instance.timer.OnTimeExpired.AddListener(OnTimerExpired);
     }
 
+    public bool IsMyRound()
+    {
+        return MatchDetails.Users[MatchDetails.CurrentUserIndex].Id == ClientManager.Instance.myUserInfo.Id;
+    }
+
     private void OnTimerExpired()
     {
+        GameScene.Instance.CurrentState = GameScene.State.WaitingForCategory;
         MyCurrentRound().CurrentState = MatchRound.RoundState.WaitingForCategory;
 
         if (ScoringManager.Instance.SelectedCategory() != null)
@@ -86,6 +97,9 @@ public abstract class GameManager : Singleton<GameManager>
 
     public void SubmitRound()
     {
+        MyCurrentRound().CurrentState = MatchRound.RoundState.Ended;
+        GameScene.Instance.CurrentState = GameScene.State.End;
+
         Srv.Instance.POST("Match/SubmitRound", new Dictionary<string, string>()
         {
             { "matchId", MatchId.ToString() },
@@ -124,5 +138,19 @@ public abstract class GameManager : Singleton<GameManager>
         CategoryBox.Instance.Refresh();
         CategoryBox.Instance.SetCurrentlySelectedCategory(category);
         
+    }
+
+    public void SetSelectedCategory(Category category)
+    {
+        MyCurrentRound().CategoryName = category.name;
+        if (MyCurrentRound().CurrentState == MatchRound.RoundState.WaitingForCategory)
+        {
+            SubmitRound();
+        }
+    }
+
+    public bool CanStart()
+    {
+        return IsMyRound() && GameScene.Instance.CurrentState == GameScene.State.Pregame;
     }
 }

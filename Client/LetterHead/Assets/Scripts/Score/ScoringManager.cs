@@ -80,7 +80,7 @@ public class ScoringManager : Singleton<ScoringManager>
     {
         currentCategory = category;
 
-        GameManager.Instance.MyCurrentRound().CategoryName = category.name;
+        GameManager.Instance.SetSelectedCategory(category);
         UpdateCurrentRoundScore();
     }
 

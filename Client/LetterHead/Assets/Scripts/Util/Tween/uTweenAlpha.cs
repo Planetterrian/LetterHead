@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using TMPro;
 
 namespace uTools {
 	[AddComponentMenu("uTools/Tween/Tween Alpha(uTools)")]
@@ -9,6 +10,7 @@ namespace uTools {
 		public bool includeChilds = false;
 
 		private Text mText;
+	    private TextMeshProUGUI mTextMesh;
 		private Light mLight;
 		private Material mMat;
         private Image mImage;
@@ -40,13 +42,15 @@ namespace uTools {
 		        mImage == null &&
 		        mCanvasGroup == null &&
 		        mSpriteRender == null &&
-		        mMat == null)
+		        mMat == null &&
+                mTextMesh == null)
 		    {
                 mText = _transform.GetComponent<Text>();
                 mLight = _transform.GetComponent<Light>();
                 mImage = _transform.GetComponent<Image>();
                 mCanvasGroup = _transform.GetComponent<CanvasGroup>();
                 mSpriteRender = _transform.GetComponent<SpriteRenderer>();
+		        mTextMesh = _transform.GetComponent<TextMeshProUGUI>();
 
                 if (_transform.GetComponent<Renderer>() != null)
                     mMat = _transform.GetComponent<Renderer>().material;
@@ -84,6 +88,12 @@ namespace uTools {
 				c.a = _alpha;
 				mMat.color = c;
 			}
+		    if (mTextMesh != null)
+		    {
+                c = mTextMesh.color;
+                c.a = _alpha;
+                mTextMesh.color = c;
+            }
 
 			if (includeChilds) {
 				for (int i = 0; i < _transform.childCount; ++i) {

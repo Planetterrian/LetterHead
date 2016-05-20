@@ -12,7 +12,7 @@ public class GameScene : Singleton<GameScene>
 
     public enum State
     {
-        Pregame, Active, End
+        Pregame, Active, WaitingForCategory, End
     }
 
     private State currentState;
@@ -56,6 +56,6 @@ public class GameScene : Singleton<GameScene>
 
     public bool IsGameActive()
     {
-        return true;
+        return CurrentState == State.Active;
     }
 }

@@ -28,8 +28,9 @@ namespace MyWebApplication
                 cfg.CreateMap<User, LetterHeadShared.DTO.UserInfo>();
 
                 cfg.CreateMap<Match, LetterHeadShared.DTO.Match>().
-                    
-                    ForMember(dest => dest.Rounds, opt => opt.MapFrom(src => src.Rounds.Select(r => r.DTO())));
+
+                    ForMember(dest => dest.Rounds, opt => opt.MapFrom(src => src.Rounds.Select(r => r.DTO()))).
+                    ForMember(dest => dest.CurrentUserIndex, opt => opt.MapFrom(src => src.Users.IndexOf(src.CurrentUserTurn)));
 
                 cfg.CreateMap<MatchRound, LetterHeadShared.DTO.MatchRound>().
                     ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.User.Id));

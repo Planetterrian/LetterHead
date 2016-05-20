@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using LetterHeadShared.DTO;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,6 +11,7 @@ public class GameGui : Singleton<GameGui>
     public Button clearWordButton;
     public Button shuffleButton;
     public Button startButton;
+    public GameObject selectCategoryHelper;
 
     public TimerElement timer;
 
@@ -19,6 +21,8 @@ public class GameGui : Singleton<GameGui>
     private void Start()
     {
         GameManager.Instance.OnMatchDetailsLoadedEvent.AddListener(OnMatchDetailsLoaded);
+
+        timer.OnTimeExpired.AddListener(OnTimeExpired);
     }
 
     public bool CanClickBoardTile()
@@ -57,28 +61,50 @@ public class GameGui : Singleton<GameGui>
         {
             startButton.interactable = false;
             shuffleButton.interactable = false;
-            startButton.interactable = false;
+            selectCategoryHelper.gameObject.SetActive(false);
         }
         else if (GameScene.Instance.CurrentState == GameScene.State.Active)
         {
             startButton.interactable = false;
             shuffleButton.interactable = true;
+
             timer.StartTimer(GameManager.Instance.MatchDetails.RoundTimeSeconds);
+        }
+        else if (GameScene.Instance.CurrentState == GameScene.State.End)
+        {
+            startButton.interactable = false;
+            shuffleButton.interactable = false;
+            selectCategoryHelper.gameObject.SetActive(false);
+        }
+        else if (GameScene.Instance.CurrentState == GameScene.State.WaitingForCategory)
+        {
+            startButton.interactable = false;
+            shuffleButton.interactable = false;
+            selectCategoryHelper.gameObject.SetActive(true);
         }
     }
 
 
+    private void OnTimeExpired()
+    {
+
+    }
+
     public static bool CanSelectCategory()
     {
-        if (GameScene.Instance.CurrentState == GameScene.State.Active)
-            return true;
+        if (GameScene.Instance.CurrentState == GameScene.State.Pregame || GameScene.Instance.CurrentState == GameScene.State.End)
+            return false;
 
-        return false;
+        if (GameManager.Instance.MyCurrentRound().CurrentState == MatchRound.RoundState.Ended || GameManager.Instance.MyCurrentRound().CurrentState == MatchRound.RoundState.NotStarted)
+            return false;
+
+        return true;
     }
 
     public void OnMatchDetailsLoaded()
     {
-        startButton.interactable = true;
+        if(GameManager.Instance.CanStart())
+            startButton.interactable = true;
 
         SetAvatarBox(leftAvatarBox, 0);
 
