@@ -25,6 +25,7 @@ public class WordBox : Singleton<WordBox>
         }
 
         ScrollToBottom();
+
     }
 
     private WordRow AddRow()

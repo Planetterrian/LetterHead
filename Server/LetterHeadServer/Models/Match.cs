@@ -34,7 +34,7 @@ namespace LetterHeadServer.Models
             var roundTime = 120;
 
             if (System.Environment.UserName == "Pete")
-                roundTime = 20;
+                roundTime = 30;
 
                 var match = new Match()
                    {

@@ -102,6 +102,9 @@ public class GameGui : Singleton<GameGui>
         if (GameScene.Instance.CurrentState == GameScene.State.Pregame || GameScene.Instance.CurrentState == GameScene.State.End)
             return false;
 
+        if (!GameManager.Instance.IsMyRound())
+            return false;
+
         if (GameManager.Instance.MyCurrentRound().CurrentState == MatchRound.RoundState.Ended || GameManager.Instance.MyCurrentRound().CurrentState == MatchRound.RoundState.NotStarted)
             return false;
 

@@ -11,6 +11,7 @@ namespace LetterHeadShared.DTO
         public int Number;
         public int Score;
         public int UserId;
+        public int UsedLetterIds;
         public List<string> Words;
         public string CategoryName;
         public RoundState CurrentState;

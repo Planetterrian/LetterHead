@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using AutoMapper;
 using Hangfire;
 using LetterHeadServer.Models;
@@ -19,8 +20,13 @@ namespace MyWebApplication
             GlobalConfiguration.Configuration
                 .UseSqlServerStorage("ApplicationDbContext");
 
+            var options = new BackgroundJobServerOptions
+            {
+                SchedulePollingInterval = TimeSpan.FromSeconds(5)
+            };
+
             app.UseHangfireDashboard();
-            app.UseHangfireServer();
+            app.UseHangfireServer(options);
 
             Mapper = new MapperConfiguration(cfg =>
             {

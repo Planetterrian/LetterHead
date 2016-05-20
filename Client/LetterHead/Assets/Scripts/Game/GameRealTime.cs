@@ -13,12 +13,13 @@ public class GameRealTime : Singleton<GameRealTime>
 
     void Start()
     {
+        var x = Loom.Current;
     }
 
     void OnDisable()
     {
         if(socket != null && socket.IsConnected)
-            socket.Close(CloseStatusCode.Normal);
+            socket.CloseAsync(CloseStatusCode.Normal);
     }
 
     public void Connect()
@@ -66,10 +67,13 @@ public class GameRealTime : Singleton<GameRealTime>
 
         Debug.Log(command);
 
-        theMethod.Invoke(this, new object[] { read });
+        Loom.QueueOnMainThread(() =>
+        {
+            theMethod.Invoke(this, new object[] {read});
 
-        read.Close();
-        stream.Close();
+            read.Close();
+            stream.Close();
+        });
     }
 
 
@@ -110,7 +114,6 @@ public class GameRealTime : Singleton<GameRealTime>
     void _StartRound(BinaryReader message)
     {
         var time = message.ReadSingle();
-
         
         GameManager.Instance.StartGame(time);
 
@@ -128,5 +131,19 @@ public class GameRealTime : Singleton<GameRealTime>
     public void RequestStart()
     {
         SendMsg("RequestStart");
+    }
+
+    public void AddWord(string word, int usedLetterIds)
+    {
+        using (var steam = new MemoryStream())
+        {
+            using (BinaryWriter bw = new BinaryWriter(steam))
+            {
+                bw.Write(word);
+                bw.Write(usedLetterIds);
+                SendMsg("AddWord", steam.ToByteArray());
+            }
+        }
+
     }
 }

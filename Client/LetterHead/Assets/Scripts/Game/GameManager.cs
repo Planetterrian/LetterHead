@@ -41,6 +41,11 @@ public abstract class GameManager : Singleton<GameManager>
         return MatchDetails.Rounds.FirstOrDefault(m => m.UserId == ClientManager.Instance.myUserInfo.Id && m.Number == MatchDetails.CurrentRoundNumber);
     }
 
+    public MatchRound CurrentRound()
+    {
+        return MatchDetails.Rounds.FirstOrDefault(matchRound => matchRound.UserId == MatchDetails.Users[MatchDetails.CurrentUserIndex].Id && matchRound.Number == MatchDetails.CurrentRoundNumber);
+    }
+
     public List<MatchRound> MyRounds()
     {
         if(MatchDetails == null)
@@ -98,20 +103,16 @@ public abstract class GameManager : Singleton<GameManager>
 
         if (ScoringManager.Instance.SelectedCategory() != null)
         {
-            SubmitRound();
+            MyCurrentRound().CurrentState = MatchRound.RoundState.Ended;
+            GameScene.Instance.CurrentState = GameScene.State.End;
         }
     }
 
-    public void SubmitRound()
+    public void SubmitCategory()
     {
-        MyCurrentRound().CurrentState = MatchRound.RoundState.Ended;
-        GameScene.Instance.CurrentState = GameScene.State.End;
-
-        Srv.Instance.POST("Match/SubmitRound", new Dictionary<string, string>()
+        Srv.Instance.POST("Match/SetCategory", new Dictionary<string, string>()
         {
             { "matchId", MatchId.ToString() },
-            { "wordsEncoded", string.Join("#", ScoringManager.Instance.Words().ToArray()) },
-            { "uniqueLetters", MatchId.ToString() },
             { "categoryName", ScoringManager.Instance.SelectedCategory().name }
         }, s => { });
     }
@@ -125,8 +126,8 @@ public abstract class GameManager : Singleton<GameManager>
     protected virtual void OnGameStarted()
     {
         gameScene.CurrentState = GameScene.State.Active;
+        GameManager.Instance.MyCurrentRound().CurrentState = MatchRound.RoundState.Active;
         BoardManager.Instance.RevealLetters();
-        Srv.Instance.POST("Match/OnStart", new Dictionary<string, string>() {{"matchId", MatchId.ToString()}}, s => { });
     }
 
     public void StartGame(float timeRemaining)
@@ -156,10 +157,7 @@ public abstract class GameManager : Singleton<GameManager>
     public void SetSelectedCategory(Category category)
     {
         MyCurrentRound().CategoryName = category.name;
-        if (MyCurrentRound().CurrentState == MatchRound.RoundState.WaitingForCategory)
-        {
-            SubmitRound();
-        }
+        SubmitCategory();
     }
 
     public bool CanStart()

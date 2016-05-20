@@ -7,10 +7,10 @@ using UnityEngine;
 public class ScoringManager : Singleton<ScoringManager>
 {
     private List<string> submittedWords = new List<string>();
-    private HashSet<int> usedLetterIds = new HashSet<int>();
 
     private Category currentCategory;
     public CategoryManager categoryManager = new CategoryManager();
+    public int usedLetterIds;
 
 
     public void OnWordSubmit()
@@ -31,16 +31,26 @@ public class ScoringManager : Singleton<ScoringManager>
         return true;
     }
 
-    private void OnValidWordSubmitted(string word)
+    private void OnValidWordSubmitted(string word, bool prepopulateWord = false)
     {
-        foreach (var tile in Speller.Instance.tiles)
+        if (!prepopulateWord)
         {
-            usedLetterIds.Add(tile.referencedTileID);
+            foreach (var tile in Speller.Instance.tiles)
+            {
+                usedLetterIds |= 1 << tile.referencedTileID;
+            }
+
+            GameRealTime.Instance.AddWord(word, usedLetterIds);
         }
 
         WordBox.Instance.AddWord(word);
         submittedWords.Add(word);
 
+        OnWordsChanged();
+    }
+
+    public void OnWordsChanged()
+    {
         UpdateCurrentRoundScore();
         WordCountBox.Instance.Refresh();
         CategoryBox.Instance.Refresh();
@@ -48,6 +58,18 @@ public class ScoringManager : Singleton<ScoringManager>
 
     private void Start()
     {
+        GameManager.Instance.OnMatchDetailsLoadedEvent.AddListener(OnMatchDetailsLoaded);
+    }
+
+
+    private void OnMatchDetailsLoaded()
+    {
+        foreach (var word in GameManager.Instance.CurrentRound().Words)
+        {
+            OnValidWordSubmitted(word, true);
+        }
+
+        usedLetterIds = GameManager.Instance.CurrentRound().UsedLetterIds;
     }
 
     public List<string> Words()
@@ -57,7 +79,16 @@ public class ScoringManager : Singleton<ScoringManager>
 
     public int UniqueLetterCount()
     {
-        return usedLetterIds.Count;
+        var ct = NumberOfSetBits(usedLetterIds);
+
+        return ct;
+    }
+
+    private int NumberOfSetBits(int i)
+    {
+        i = i - ((i >> 1) & 0x55555555);
+        i = (i & 0x33333333) + ((i >> 2) & 0x33333333);
+        return (((i + (i >> 4)) & 0x0F0F0F0F) * 0x01010101) >> 24;
     }
 
     public int TotalScore()

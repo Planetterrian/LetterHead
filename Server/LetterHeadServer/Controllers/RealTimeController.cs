@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -56,12 +57,21 @@ namespace LetterHeadServer.Controllers
             socket = context.WebSocket;
             while (true)
             {
-                ArraySegment<byte> buffer = new ArraySegment<byte>(new byte[1024]);
-                WebSocketReceiveResult result = await socket.ReceiveAsync(
-                    buffer, CancellationToken.None);
+                byte[] receiveBuffer = new byte[1024];
+
+                WebSocketReceiveResult result = await socket.ReceiveAsync(new ArraySegment<byte>(receiveBuffer), CancellationToken.None);
+
+                int count = result.Count;
+
+                while (result.EndOfMessage == false)
+                {
+                    result = await socket.ReceiveAsync(new ArraySegment<byte>(receiveBuffer, count, 1024 - count), CancellationToken.None);
+                    count += result.Count;
+                }
+
                 if (socket.State == WebSocketState.Open)
                 {
-                    await ProcessMessage(buffer.Array);
+                    await ProcessMessage(receiveBuffer);
                 }
                 else
                 {
@@ -109,8 +119,16 @@ namespace LetterHeadServer.Controllers
 
             var buffer = new ArraySegment<byte>(steam.ToArray());
 
-            await socket.SendAsync(
-                buffer, WebSocketMessageType.Text, true, CancellationToken.None);
+            try
+            {
+                await socket.SendAsync(buffer, WebSocketMessageType.Binary, true, CancellationToken.None);
+
+            }
+            catch (Exception e)
+            {
+                Trace.WriteLine(e);
+                throw;
+            }
 
             bw.Close();
             steam.Close();
@@ -133,6 +151,35 @@ namespace LetterHeadServer.Controllers
             stream.Close();
 
             //Console.WriteLine(command + " - " + data);
+        }
+
+        private async Task _AddWord(BinaryReader reader)
+        {
+            if (match.CurrentUserTurn != currentUser)
+            {
+                await Err("It's your opponents turn");
+                return;
+            }
+
+            if (match.CurrentState == LetterHeadShared.DTO.Match.MatchState.Ended)
+            {
+                await Err("That game has already ended");
+                return;
+            }
+
+            var round = match.CurrentRoundForUser(currentUser);
+            if (round.CurrentState != LetterHeadShared.DTO.MatchRound.RoundState.Active)
+            {
+                await Err("Round not active");
+                return;
+            }
+
+            var word = reader.ReadString();
+            var uniqueLetterCount = reader.ReadInt32();
+
+            round.Words.Add(word);
+            round.UsedLetterIds = uniqueLetterCount;
+            db.SaveChanges();
         }
 
         private async Task _RequestStart(BinaryReader reader)

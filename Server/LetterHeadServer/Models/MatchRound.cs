@@ -14,10 +14,34 @@ namespace LetterHeadServer.Models
         public virtual User User { get; set; }
         public int Number { get; set; }
         public int Score { get; set; }
+
         public List<string> Words { get; set; }
+
+        public string WordsJoined
+        {
+            get
+            {
+                return string.Join(",", Words);
+            }
+            set
+            {
+                if(string.IsNullOrEmpty(value))
+                    Words = new List<string>();
+                else
+                    Words = value.Split(',').ToList();
+            }
+        }
+
+        public int UsedLetterIds { get; set; }
         public string CategoryName { get; set; }
         public LetterHeadShared.DTO.MatchRound.RoundState CurrentState { get; set; }
         public DateTime? StartedOn { get; set; }
+
+        public MatchRound()
+        {
+            Words = new List<string>();
+        }
+        
 
         public Category Category(CategoryManager categoryManager)
         {
@@ -38,6 +62,7 @@ namespace LetterHeadServer.Models
         {
             if (!string.IsNullOrEmpty(CategoryName))
             {
+                Score = CalculateScore(Words, NumberOfSetBits(UsedLetterIds));
                 CurrentState = LetterHeadShared.DTO.MatchRound.RoundState.Ended;
                 Match.AdvanceRound();
             }
@@ -47,18 +72,31 @@ namespace LetterHeadServer.Models
             }
         }
         // Returns error message or null
-        public string CalculateScore(List<string> words, int uniqueLetters, Category category)
+        public int CalculateScore(List<string> words, int uniqueLetters)
         {
-            var rounds = Match.UserRounds(User);
-            if (rounds.Any(r => r.CategoryName == category.name))
-            {
-                return "That category has already been used";
-            }
+            var category = Startup.CategoryManager.GetCategory(CategoryName);
 
-            Score = category.GetScore(words, uniqueLetters);
+            return category.GetScore(words, uniqueLetters);
+        }
+
+        public void SetCategory(ApplicationDbContext db, Category category)
+        {
             CategoryName = category.name;
 
-            return null;
+            if (CurrentState == LetterHeadShared.DTO.MatchRound.RoundState.WaitingForCategory)
+            {
+                End();
+            }
+
+            db.SaveChanges();
         }
+
+        private int NumberOfSetBits(int i)
+        {
+            i = i - ((i >> 1) & 0x55555555);
+            i = (i & 0x33333333) + ((i >> 2) & 0x33333333);
+            return (((i + (i >> 4)) & 0x0F0F0F0F) * 0x01010101) >> 24;
+        }
+
     }
 }

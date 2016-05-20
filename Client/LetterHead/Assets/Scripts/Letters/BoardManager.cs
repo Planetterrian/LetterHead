@@ -109,6 +109,8 @@ public class BoardManager : Singleton<BoardManager>
                 {
                     var tile = AddNewTile(x, y, TileManager.Instance.CharToLetter(letters[letterNum]));
 
+                    tile.ID = letterNum + 1;
+
                     if (hidden)
                     {
                         tile.HideLetter();
