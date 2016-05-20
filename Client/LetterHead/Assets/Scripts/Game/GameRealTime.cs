@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using UnityEngine;
 using WebSocketSharp;
@@ -14,6 +15,12 @@ public class GameRealTime : Singleton<GameRealTime>
     {
     }
 
+    void OnDisable()
+    {
+        if(socket != null && socket.IsConnected)
+            socket.Close(CloseStatusCode.Normal);
+    }
+
     public void Connect()
     {
         System.Uri uri = new Uri(Srv.Instance.Url());
@@ -24,7 +31,8 @@ public class GameRealTime : Singleton<GameRealTime>
 
         socket.OnMessage += (sender, args) =>
         {
-            Debug.Log(args.Data);
+            ProcessMessage(args.RawData);
+            //Debug.Log(args.Data);
         };
 
         socket.OnError += (sender, args) =>
@@ -35,7 +43,7 @@ public class GameRealTime : Singleton<GameRealTime>
         socket.OnOpen += (sender, args) =>
         {
             Debug.Log("Connected to real time socket");
-            SendMessage("Test", "Yup this is a test!!!");
+            GameGui.Instance.OnRealTimeConnected();
         };
 
         socket.OnClose += (sender, args) =>
@@ -46,26 +54,71 @@ public class GameRealTime : Singleton<GameRealTime>
         socket.Connect();
     }
 
-    public void SendMessage(string command, string data)
+    private void ProcessMessage(byte[] rawData)
     {
-        SendMessage(command, Encoding.UTF8.GetBytes(data));
+        var stream = new MemoryStream(rawData);
+        BinaryReader read = new BinaryReader(stream);
+
+        var command = read.ReadString();
+
+        MethodInfo theMethod = GetType().GetMethod("_" + command, BindingFlags.NonPublic | BindingFlags.Instance);
+
+        Debug.Log(command);
+
+        theMethod.Invoke(this, new object[] { read });
+
+        read.Close();
+        stream.Close();
+
     }
 
-    public void SendMessage(string command, byte[] data)
+
+    public void SendMsg(string command, string data)
     {
         var steam = new MemoryStream();
         BinaryWriter bw = new BinaryWriter(steam);
         bw.Write(command);
-        //bw.Write(data.Length);
+
         bw.Write(data);
 
-        socket.SendAsync(steam.ToByteArray(), OnSendComplete);
+        socket.SendAsync(steam.ToByteArray(), b => { });
         bw.Close();
         steam.Close();
     }
 
-    private void OnSendComplete(bool status)
+    public void SendMsg(string command, byte[] data = null)
     {
-        
+        var steam = new MemoryStream();
+        BinaryWriter bw = new BinaryWriter(steam);
+        bw.Write(command);
+
+        if (data != null)
+            bw.Write(data);
+
+        socket.SendAsync(steam.ToByteArray(), b => { });
+        bw.Close();
+        steam.Close();
+    }
+
+    void _Err(BinaryReader message)
+    {
+        var msg = message.ReadString();
+        Debug.LogError(msg);
+    }
+
+
+    void _StartRound(BinaryReader message)
+    {
+        var time = message.ReadSingle();
+
+        Debug.Log("Start time = " + time);
+    }
+
+    public bool IsConnected()
+    {
+        if (socket == null)
+            return false;
+
+        return socket.IsConnected;
     }
 }

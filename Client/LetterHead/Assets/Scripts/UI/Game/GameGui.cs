@@ -30,6 +30,11 @@ public class GameGui : Singleton<GameGui>
         return GameScene.Instance.CurrentState == GameScene.State.Active;
     }
 
+    public void OnRealTimeConnected()
+    {
+        OnGameStateChanged();
+    }
+
     public bool CanClickSpellerTile()
     {
         return true;
@@ -37,6 +42,8 @@ public class GameGui : Singleton<GameGui>
 
     public void OnStartClicked()
     {
+        GameRealTime.Instance.SendMsg("RequestStart");
+
         GameManager.Instance.StartGame();
     }
 
@@ -62,6 +69,10 @@ public class GameGui : Singleton<GameGui>
             startButton.interactable = false;
             shuffleButton.interactable = false;
             selectCategoryHelper.gameObject.SetActive(false);
+
+            if (GameManager.Instance.CanStart())
+                startButton.interactable = true;
+
         }
         else if (GameScene.Instance.CurrentState == GameScene.State.Active)
         {
@@ -103,8 +114,7 @@ public class GameGui : Singleton<GameGui>
 
     public void OnMatchDetailsLoaded()
     {
-        if(GameManager.Instance.CanStart())
-            startButton.interactable = true;
+        OnGameStateChanged();
 
         SetAvatarBox(leftAvatarBox, 0);
 

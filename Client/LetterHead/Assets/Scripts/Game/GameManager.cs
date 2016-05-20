@@ -82,6 +82,9 @@ public abstract class GameManager : Singleton<GameManager>
 
     public bool IsMyRound()
     {
+        if (MatchDetails == null)
+            return false;
+
         return MatchDetails.Users[MatchDetails.CurrentUserIndex].Id == ClientManager.Instance.myUserInfo.Id;
     }
 
@@ -138,7 +141,6 @@ public abstract class GameManager : Singleton<GameManager>
         ScoringManager.Instance.OnCategorySelected(category);
         CategoryBox.Instance.Refresh();
         CategoryBox.Instance.SetCurrentlySelectedCategory(category);
-        
     }
 
     public void SetSelectedCategory(Category category)
@@ -152,6 +154,6 @@ public abstract class GameManager : Singleton<GameManager>
 
     public bool CanStart()
     {
-        return IsMyRound() && GameScene.Instance.CurrentState == GameScene.State.Pregame;
+        return IsMyRound() && GameScene.Instance.CurrentState == GameScene.State.Pregame && GameRealTime.Instance.IsConnected();
     }
 }

@@ -70,15 +70,53 @@ namespace LetterHeadServer.Controllers
             }
         }
 
-        private async Task SendMessage(string command, string json)
+
+
+        private async Task SendMessage(string command, int data)
         {
-            var buffer = new ArraySegment<byte>(
-                Encoding.UTF8.GetBytes(json));
+            await SendMessage(command, BitConverter.GetBytes(data));
+        }
+
+        private async Task SendMessage(string command, float data)
+        {
+            await SendMessage(command, BitConverter.GetBytes(data));
+        }
+
+        private async Task SendMessage(string command, string data)
+        {
+            var steam = new MemoryStream();
+            BinaryWriter bw = new BinaryWriter(steam);
+            bw.Write(command);
+            bw.Write(data);
+
+            var buffer = new ArraySegment<byte>(steam.ToArray());
 
             await socket.SendAsync(
                 buffer, WebSocketMessageType.Text, true, CancellationToken.None);
+
+            bw.Close();
+            steam.Close();
         }
 
+        private async Task SendMessage(string command, byte[] data = null)
+        {
+            var steam = new MemoryStream();
+            BinaryWriter bw = new BinaryWriter(steam);
+            bw.Write(command);
+
+            if(data != null)
+                bw.Write(data);
+
+            var buffer = new ArraySegment<byte>(steam.ToArray());
+
+            await socket.SendAsync(
+                buffer, WebSocketMessageType.Text, true, CancellationToken.None);
+
+            bw.Close();
+            steam.Close();
+        }
+
+        
         private async Task ProcessMessage(byte[] array)
         {
             var stream = new MemoryStream(array);
@@ -86,8 +124,11 @@ namespace LetterHeadServer.Controllers
 
             var command = read.ReadString();
 
-            MethodInfo theMethod = GetType().GetMethod("_" + command);
-            await (Task)theMethod.Invoke(this, new object[] { stream });
+            MethodInfo theMethod = GetType().GetMethod("_" + command, BindingFlags.NonPublic | BindingFlags.Instance);
+            if(theMethod == null)
+                throw new ArgumentException("Invalid command: " + command);
+
+            await (Task)theMethod.Invoke(this, new object[] { read });
             read.Close();
             stream.Close();
 
@@ -98,17 +139,24 @@ namespace LetterHeadServer.Controllers
         {
             if (match.CurrentUserTurn != currentUser)
             {
-                Err("It's your opponents turn");
+                await Err("It's your opponents turn");
                 return;
             }
 
             if (match.CurrentState == LetterHeadShared.DTO.Match.MatchState.Ended)
             {
-                Err("That game has already ended");
+                await Err("That game has already ended");
                 return;
             }
 
             var round = match.CurrentRoundForUser(currentUser);
+
+            if (round.CurrentState == LetterHeadShared.DTO.MatchRound.RoundState.WaitingForCategory)
+            {
+                await Err("Waiting for categories");
+                return;
+            }
+
             if (round.CurrentState == LetterHeadShared.DTO.MatchRound.RoundState.NotStarted)
             {
                 round.CurrentState = LetterHeadShared.DTO.MatchRound.RoundState.Active;
@@ -120,16 +168,14 @@ namespace LetterHeadServer.Controllers
             match.CurrentState = LetterHeadShared.DTO.Match.MatchState.Running;
             db.SaveChanges();
 
-            var json =
-                System.Web.Helpers.Json.Encode(new {TimeRemaining = (round.EndTime() - DateTime.Now).TotalSeconds});
 
-            await SendMessage("StartRound", json);
+            await SendMessage("StartRound", (float)((round.EndTime() - DateTime.Now).TotalSeconds));
         }
 
 
-        private void Err(string errMSg)
+        private async Task Err(string errMSg)
         {
-            
+            await SendMessage("Err", errMSg);
         }
     }
 
