@@ -56,7 +56,7 @@ public class GameRealTime : Singleton<GameRealTime>
         var steam = new MemoryStream();
         BinaryWriter bw = new BinaryWriter(steam);
         bw.Write(command);
-        bw.Write(data.Length);
+        //bw.Write(data.Length);
         bw.Write(data);
 
         socket.SendAsync(steam.ToByteArray(), OnSendComplete);
