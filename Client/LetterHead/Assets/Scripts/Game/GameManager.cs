@@ -60,7 +60,10 @@ public abstract class GameManager : Singleton<GameManager>
 
         if (IsMyRound())
         {
-            gameScene.CurrentState = GameScene.State.Pregame;
+            if (MyCurrentRound().CurrentState == MatchRound.RoundState.NotStarted)
+                gameScene.CurrentState = GameScene.State.Pregame;
+            else if (MyCurrentRound().CurrentState == MatchRound.RoundState.WaitingForCategory)
+                gameScene.CurrentState = GameScene.State.WaitingForCategory;
         }
 
         OnMatchDetailsLoaded();
@@ -126,9 +129,16 @@ public abstract class GameManager : Singleton<GameManager>
         Srv.Instance.POST("Match/OnStart", new Dictionary<string, string>() {{"matchId", MatchId.ToString()}}, s => { });
     }
 
-    public void StartGame()
+    public void StartGame(float timeRemaining)
     {
+        GameGui.Instance.timer.StartTimer(timeRemaining);
         OnGameStarted();
+    }
+
+    public void OnRealTimeConnected()
+    {
+        if(IsMyRound() && MyCurrentRound().CurrentState == MatchRound.RoundState.Active)
+            GameRealTime.Instance.RequestStart();
     }
 
     public bool HasCategoryBeenUsed(Category category)

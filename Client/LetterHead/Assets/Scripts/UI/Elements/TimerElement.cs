@@ -64,4 +64,9 @@ public class TimerElement : MonoBehaviour
         UpdateLabel();
     }
 
+    public void SetTimer(int roundTimeSeconds)
+    {
+        secondsRemaining = roundTimeSeconds;
+        UpdateLabel();
+    }
 }

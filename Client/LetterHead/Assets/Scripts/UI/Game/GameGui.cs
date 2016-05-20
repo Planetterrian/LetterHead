@@ -42,9 +42,7 @@ public class GameGui : Singleton<GameGui>
 
     public void OnStartClicked()
     {
-        GameRealTime.Instance.SendMsg("RequestStart");
-
-        GameManager.Instance.StartGame();
+        GameRealTime.Instance.RequestStart();
     }
 
     public void ShuffleClicked()
@@ -78,8 +76,6 @@ public class GameGui : Singleton<GameGui>
         {
             startButton.interactable = false;
             shuffleButton.interactable = true;
-
-            timer.StartTimer(GameManager.Instance.MatchDetails.RoundTimeSeconds);
         }
         else if (GameScene.Instance.CurrentState == GameScene.State.End)
         {
@@ -117,6 +113,9 @@ public class GameGui : Singleton<GameGui>
         OnGameStateChanged();
 
         SetAvatarBox(leftAvatarBox, 0);
+
+        timer.SetTimer(GameManager.Instance.MatchDetails.RoundTimeSeconds);
+
 
         if (GameManager.Instance.MatchDetails.Users.Count > 1)
         {

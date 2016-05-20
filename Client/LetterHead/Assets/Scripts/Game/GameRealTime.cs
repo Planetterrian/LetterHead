@@ -44,6 +44,7 @@ public class GameRealTime : Singleton<GameRealTime>
         {
             Debug.Log("Connected to real time socket");
             GameGui.Instance.OnRealTimeConnected();
+            GameManager.Instance.OnRealTimeConnected();
         };
 
         socket.OnClose += (sender, args) =>
@@ -69,11 +70,10 @@ public class GameRealTime : Singleton<GameRealTime>
 
         read.Close();
         stream.Close();
-
     }
 
 
-    public void SendMsg(string command, string data)
+    private void SendMsg(string command, string data)
     {
         var steam = new MemoryStream();
         BinaryWriter bw = new BinaryWriter(steam);
@@ -86,7 +86,7 @@ public class GameRealTime : Singleton<GameRealTime>
         steam.Close();
     }
 
-    public void SendMsg(string command, byte[] data = null)
+    private void SendMsg(string command, byte[] data = null)
     {
         var steam = new MemoryStream();
         BinaryWriter bw = new BinaryWriter(steam);
@@ -111,6 +111,9 @@ public class GameRealTime : Singleton<GameRealTime>
     {
         var time = message.ReadSingle();
 
+        
+        GameManager.Instance.StartGame(time);
+
         Debug.Log("Start time = " + time);
     }
 
@@ -120,5 +123,10 @@ public class GameRealTime : Singleton<GameRealTime>
             return false;
 
         return socket.IsConnected;
+    }
+
+    public void RequestStart()
+    {
+        SendMsg("RequestStart");
     }
 }
