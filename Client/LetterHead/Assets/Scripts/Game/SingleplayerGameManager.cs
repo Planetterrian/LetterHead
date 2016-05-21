@@ -9,11 +9,17 @@ public class SingleplayerGameManager : GameManager
 	{
         GameScene.Instance.CurrentState = GameScene.State.Pregame;
 
-        Srv.Instance.POST("Match/RequestDailyGameStart", null, s =>
-	    {
-            MatchId = JsonConvert.DeserializeObject<int>(s);
-	        LoadMatchDetails();
-	    });
+        ClientManager.Instance.RefreshMyInfo((b) =>
+        {
+            if (b)
+            {
+                Srv.Instance.POST("Match/RequestDailyGameStart", null, s =>
+                {
+                    MatchId = JsonConvert.DeserializeObject<int>(s);
+                    LoadMatchDetails();
+                });
+            }
+        });
 
         GameGui.Instance.HidePowerups();
 	}

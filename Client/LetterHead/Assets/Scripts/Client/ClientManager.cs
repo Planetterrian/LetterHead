@@ -16,15 +16,22 @@ public class ClientManager : Singleton<ClientManager>
 
     private void Start()
     {
-        if(!string.IsNullOrEmpty(sessionId))
-            RefreshMyInfo();
     }
 
-    public void RefreshMyInfo()
+    public void RefreshMyInfo(Action<bool> onInfoLoaded = null)
     {
         Srv.Instance.POST("User/MyInfo", null, s =>
         {
             myUserInfo = JsonConvert.DeserializeObject<UserInfo>(s);
+
+            if (onInfoLoaded != null)
+                onInfoLoaded(true);
+        }, s =>
+        {
+            myUserInfo = null;
+
+            if (onInfoLoaded != null)
+                onInfoLoaded(false);
         });
     }
 }
