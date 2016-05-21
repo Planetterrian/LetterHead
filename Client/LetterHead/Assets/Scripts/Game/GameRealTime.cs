@@ -28,7 +28,7 @@ public class GameRealTime : Singleton<GameRealTime>
         string uriWithoutScheme = uri.Host + ":" + uri.Port + uri.PathAndQuery;
 
         socket = WebSocketManager.Instance.MakeNew("ws://" + uriWithoutScheme + "api/RealTime?sessionId=" 
-            + ClientManager.Instance.sessionId + "&matchId=" + GameManager.Instance.MatchId);
+            + ClientManager.Instance.SessionId + "&matchId=" + GameManager.Instance.MatchId);
 
         socket.OnMessage += (sender, args) =>
         {

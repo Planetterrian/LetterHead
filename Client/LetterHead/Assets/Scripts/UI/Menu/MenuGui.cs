@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class MenuGui : MonoBehaviour
+public class MenuGui : Singleton<MenuGui>
 {
-     
 
-    private void Awake()
+    public void ShowDashboard()
     {
+        
     }
 
     private void Start()

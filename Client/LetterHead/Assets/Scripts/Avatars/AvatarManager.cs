@@ -6,6 +6,7 @@ using UnityEngine;
 public class AvatarManager : Singleton<AvatarManager>
 {
     public Texture2D[] avatars;
+    public Sprite[] avatars_sprites;
 
     public Texture2D GetAvatarImage(string avatarName)
     {

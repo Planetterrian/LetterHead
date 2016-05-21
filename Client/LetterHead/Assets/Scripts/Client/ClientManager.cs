@@ -8,15 +8,23 @@ using UnityEngine.Events;
 
 public class ClientManager : Singleton<ClientManager>
 {
-    public string sessionId;
 
     public UserInfo myUserInfo;
 
     public UnityEvent OnMyInfoUpdated;
 
+    private string sessionId;
+    public string SessionId
+    {
+        get { return sessionId; }
+        private set { sessionId = value; }
+    }
+
     private void Start()
     {
-        if(!string.IsNullOrEmpty(sessionId))
+        SessionId = PlayerPrefs.GetString("sessId", "");
+
+        if (!string.IsNullOrEmpty(SessionId))
             RefreshMyInfo();
     }
 
@@ -26,5 +34,11 @@ public class ClientManager : Singleton<ClientManager>
         {
             myUserInfo = JsonConvert.DeserializeObject<UserInfo>(s);
         });
+    }
+
+    public void SetSessionId(string sessId)
+    {
+        SessionId = sessId;
+        PlayerPrefs.SetString("sessId", sessId);
     }
 }

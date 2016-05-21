@@ -39,6 +39,20 @@ namespace LetterHeadServer.Controllers
             }
         }
 
+        [AuthenticationFilter()]
+        public ActionResult RegisterDetails(string username, string avatar)
+        {
+            if (username.Length < 3 || username.Length > 24)
+            {
+                return Error("Username must be between 3 and 24 characters");
+            }
+            
+            currentUser.Username = username;
+            currentUser.AvatarUrl = "sprite:" + avatar;
+            db.SaveChanges();
+            return Okay();
+        }
+
         public ActionResult LoginEmail([Bind(Exclude = "Id")] UserRegistrationModel model)
         {
             var user = UserManager.LoginUserWithEmail(db, model);
