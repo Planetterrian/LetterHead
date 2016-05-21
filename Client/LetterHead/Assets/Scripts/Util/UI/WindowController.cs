@@ -7,18 +7,37 @@ public class WindowController : MonoBehaviour
 {
     private CanvasFade fade;
 
-    protected virtual void Awake()
+    public GameObject modal;
+
+    private void Awake()
     {
         fade = GetComponent<CanvasFade>();
     }
 
-    public virtual void Show()
+    private void Start()
     {
+    }
+
+    public void Show()
+    {
+        modal.SetActive(false);
         fade.FadeIn();
     }
 
-    public virtual void Hide()
+    public void ShowModal()
     {
-        fade.FadeOut();
+        modal.SetActive(true);
+        fade.FadeIn();
+    }
+
+
+    public void Hide(bool instant = false)
+    {
+        fade.FadeOut(instant);
+    }
+
+    public bool IsShown()
+    {
+        return fade.IsShown();
     }
 }

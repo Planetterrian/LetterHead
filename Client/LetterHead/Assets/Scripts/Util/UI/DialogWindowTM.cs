@@ -1,20 +1,19 @@
 ﻿using System;
+using TMPro;
 using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine.UI;
 
-public class DialogWindow : Singleton<DialogWindow>
+public class DialogWindowTM : Singleton<DialogWindow>
 {
-    public Text mainText;
-    public Text title;
+    public TextMeshProUGUI mainText;
+    public TextMeshProUGUI title;
     public Button okayButton;
     public Button cancelButton;
     private Action okayCallback;
     private Action cancelCallback;
 
-    public Text cancelButtonText;
-    public Text okButtonText;
+    public TextMeshProUGUI cancelButtonText;
+    public TextMeshProUGUI okButtonText;
 
 
     private float okayStartingPos;
@@ -37,9 +36,9 @@ public class DialogWindow : Singleton<DialogWindow>
     public void Show(string titleText, string text, Action okCallback, Action cancelCallback = null, string okayText = "OK", string cancelText = "CANCEL")
     {
         gameObject.SetActive(true);
-        //transform.parent.gameObject.SetActive(true);
+        transform.parent.gameObject.SetActive(true);
 
-        okayCallback = okCallback; 
+        okayCallback = okCallback;
         okayButton.interactable = okCallback != null;
         mainText.text = text;
         title.text = titleText;
@@ -65,7 +64,7 @@ public class DialogWindow : Singleton<DialogWindow>
     public void Hide()
     {
         gameObject.SetActive(false);
-        //transform.parent.gameObject.SetActive(false);
+        transform.parent.gameObject.SetActive(false);
     }
 
     public void OKClicked()
