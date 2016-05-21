@@ -20,6 +20,9 @@ public class GameGui : Singleton<GameGui>
     public AvatarBox leftAvatarBox;
     public AvatarBox rightAvatarBox;
 
+    public GameObject leftPowerupsBox;
+    public GameObject rightPowerupsBox;
+
     private void Start()
     {
         GameManager.Instance.OnMatchDetailsLoadedEvent.AddListener(OnMatchDetailsLoaded);
@@ -137,5 +140,11 @@ public class GameGui : Singleton<GameGui>
         box.score.text = GameManager.Instance.MatchDetails.UserScore(userIndex).ToString("N0");
         box.SetAvatarImage(GameManager.Instance.MatchDetails.Users[userIndex].AvatarUrl);
         box.SetName(GameManager.Instance.MatchDetails.Users[userIndex].Username);
+    }
+
+    public void HidePowerups()
+    {
+        leftPowerupsBox.SetActive(false);
+        rightPowerupsBox.SetActive(false);
     }
 }

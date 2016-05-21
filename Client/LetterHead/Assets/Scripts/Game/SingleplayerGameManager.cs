@@ -14,6 +14,8 @@ public class SingleplayerGameManager : GameManager
             MatchId = JsonConvert.DeserializeObject<int>(s);
 	        LoadMatchDetails();
 	    });
+
+        GameGui.Instance.HidePowerups();
 	}
 
     protected override void OnMatchDetailsLoaded()
