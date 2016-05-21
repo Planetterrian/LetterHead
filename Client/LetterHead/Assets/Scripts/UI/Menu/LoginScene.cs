@@ -5,10 +5,11 @@ using UnityEngine;
 
 public class LoginScene : GuiScene
 {
+    public WindowController loginWindow;
 
     public void OnLoginEmailClicked()
     {
-
+        loginWindow.ShowModal();
     }
 
     public void OnLoginFacebookClicked()

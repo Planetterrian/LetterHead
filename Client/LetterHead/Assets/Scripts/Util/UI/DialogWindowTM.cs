@@ -3,7 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class DialogWindowTM : Singleton<DialogWindow>
+public class DialogWindowTM : Singleton<DialogWindowTM>
 {
     public TextMeshProUGUI mainText;
     public TextMeshProUGUI title;
@@ -36,7 +36,6 @@ public class DialogWindowTM : Singleton<DialogWindow>
     public void Show(string titleText, string text, Action okCallback, Action cancelCallback = null, string okayText = "OK", string cancelText = "CANCEL")
     {
         gameObject.SetActive(true);
-        transform.parent.gameObject.SetActive(true);
 
         okayCallback = okCallback;
         okayButton.interactable = okCallback != null;
@@ -64,7 +63,6 @@ public class DialogWindowTM : Singleton<DialogWindow>
     public void Hide()
     {
         gameObject.SetActive(false);
-        transform.parent.gameObject.SetActive(false);
     }
 
     public void OKClicked()

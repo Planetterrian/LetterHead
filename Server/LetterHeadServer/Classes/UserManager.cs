@@ -61,13 +61,12 @@ namespace LetterHeadServer.Classes
 */
 
 
-        public static User CreateUser(ApplicationDbContext db, string email, string password, string username)
+        public static User CreateUser(ApplicationDbContext db, string email, string password)
         {
             var user = new User()
             {
                 Email = email,
                 PasswordHash = Crypto.HashPassword(password),
-                Username = username,
                 SignupDate = DateTime.Now,
                 AvatarUrl = "sprite:Picture22"
             };

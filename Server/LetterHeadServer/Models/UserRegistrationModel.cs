@@ -19,11 +19,6 @@ namespace LetterHeadServer.Models
         [StringLength(100, ErrorMessage = "Password must be at least 6 characters", MinimumLength = 6)]
         public string Password { get; set; }
 
-        [Display(Name = "Choose a Username:")]
-        [Required(ErrorMessage = "Username is required")]
-        [StringLength(16, ErrorMessage = "Username must be at least 3 characters", MinimumLength = 3)]
-        public string Username { get; set; }
-
         public int ID { get; set; }
     }
 }

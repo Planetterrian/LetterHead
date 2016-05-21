@@ -24,22 +24,18 @@ namespace LetterHeadServer.Controllers
                     return Error("Email address already in use");
                 }
 
-                UserManager.CreateUser(db, model.Email, model.Password, model.Username);
-                UserManager.LoginUserWithEmail(db, model);
+                UserManager.CreateUser(db, model.Email, model.Password);
+                var user = UserManager.LoginUserWithEmail(db, model);
+                user.GenerateNewSessionId();
+                db.SaveChanges();
 
-                return Json("ok");
+
+                return Json(user.SessionId);
             }
             else
             {
-                var errorList = ModelState.ToDictionary(
-                    kvp => kvp.Key,
-                    kvp => kvp.Value.Errors.Select(e => e.ErrorMessage).FirstOrDefault()
-                    );
-
-                return Json(new
-                            {
-                                ErrorsList = errorList
-                            });
+                var err = ModelState.Select(x => x.Value.Errors).FirstOrDefault(y => y.Count > 0);
+                return Error(err[0].ErrorMessage);
             }
         }
 
@@ -55,7 +51,7 @@ namespace LetterHeadServer.Controllers
             user.GenerateNewSessionId();
             db.SaveChanges();
 
-            return Json(new {SessionId = user.SessionId}, JsonRequestBehavior.AllowGet);
+            return Json(user.SessionId, JsonRequestBehavior.AllowGet);
         }
 
 
