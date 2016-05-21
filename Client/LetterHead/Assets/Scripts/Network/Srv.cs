@@ -44,10 +44,10 @@ public class Srv : REST
 
     protected override Dictionary<string, string> GetAdditionalHeaders()
     {
-        if (!string.IsNullOrEmpty(ClientManager.Instance.sessionId))
+        if (!string.IsNullOrEmpty(ClientManager.Instance.SessionId))
         {
             return new Dictionary<string, string>() {
-                    { "SessionId", ClientManager.Instance.sessionId }};
+                    { "SessionId", ClientManager.Instance.SessionId }};
         }
 
         return null;

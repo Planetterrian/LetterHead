@@ -36,7 +36,7 @@ public class EmailLoginWindow : MonoBehaviour
                                         }, s =>
                                         {
                                             var sessionId = JsonConvert.DeserializeObject<string>(s);
-                                            Debug.Log(sessionId);
+                                            ClientManager.Instance.SetSessionId(sessionId);
                                             GetComponent<WindowController>().Hide();
                                         }, s =>
                                         {

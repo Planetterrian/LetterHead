@@ -6,7 +6,7 @@ using UnityEngine;
 public class MenuGui : Singleton<MenuGui>
 {
     private GuiSceneManager sceneManager;
-
+     
     public LoginScene loginScene;
 
     protected override void Awake()
