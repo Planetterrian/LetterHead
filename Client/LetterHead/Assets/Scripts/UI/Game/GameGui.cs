@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using LetterHeadShared.DTO;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,6 +13,7 @@ public class GameGui : Singleton<GameGui>
     public Button shuffleButton;
     public Button startButton;
     public GameObject selectCategoryHelper;
+    public TextMeshProUGUI roundNumberLabel;
 
     public TimerElement timer;
 
@@ -116,9 +118,8 @@ public class GameGui : Singleton<GameGui>
         OnGameStateChanged();
 
         SetAvatarBox(leftAvatarBox, 0);
-
         timer.SetTimer(GameManager.Instance.MatchDetails.RoundTimeSeconds);
-
+        roundNumberLabel.text = "Round " + (GameManager.Instance.MatchDetails.CurrentRoundNumber + 1) + "/" + GameManager.Instance.MatchDetails.TotalRoundsCount();
 
         if (GameManager.Instance.MatchDetails.Users.Count > 1)
         {

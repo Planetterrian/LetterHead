@@ -22,7 +22,7 @@ namespace MyWebApplication
 
             var options = new BackgroundJobServerOptions
             {
-                SchedulePollingInterval = TimeSpan.FromSeconds(5)
+                SchedulePollingInterval = TimeSpan.FromSeconds(3)
             };
 
             app.UseHangfireDashboard();

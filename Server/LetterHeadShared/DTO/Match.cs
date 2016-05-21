@@ -25,5 +25,11 @@ namespace LetterHeadShared.DTO
         {
             return Rounds.Where(r => r.UserId == Users[userIndex].Id).Sum(r => r.Score);
         }
+
+        public int TotalRoundsCount()
+        {
+            return Rounds.Count(r => r.UserId == Users[0].Id);
+        }
+
     }
 }

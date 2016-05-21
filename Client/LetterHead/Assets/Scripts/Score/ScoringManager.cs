@@ -110,8 +110,6 @@ public class ScoringManager : Singleton<ScoringManager>
     public void OnCategorySelected(Category category)
     {
         currentCategory = category;
-
-        GameManager.Instance.SetSelectedCategory(category);
         UpdateCurrentRoundScore();
     }
 

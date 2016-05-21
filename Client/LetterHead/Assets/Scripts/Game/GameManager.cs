@@ -119,7 +119,6 @@ public abstract class GameManager : Singleton<GameManager>
 
     public virtual void OnGameStateChanged()
     {
-        
     }
 
 
@@ -147,17 +146,23 @@ public abstract class GameManager : Singleton<GameManager>
         return MyRounds().Any(c => c.CategoryName == category.name);
     }
 
-    public void SelectCategory(Category category)
+    public void SelectCategory(Category category, bool prepopulateGategory = false)
     {
-        ScoringManager.Instance.OnCategorySelected(category);
+        if (!prepopulateGategory)
+        {
+            ScoringManager.Instance.OnCategorySelected(category);
+            MyCurrentRound().CategoryName = category.name;
+            SubmitCategory();
+
+            if (GameScene.Instance.CurrentState == GameScene.State.WaitingForCategory)
+            {
+                MyCurrentRound().CurrentState = MatchRound.RoundState.Ended;
+                GameScene.Instance.CurrentState = GameScene.State.End;
+            }
+        }
+
         CategoryBox.Instance.Refresh();
         CategoryBox.Instance.SetCurrentlySelectedCategory(category);
-    }
-
-    public void SetSelectedCategory(Category category)
-    {
-        MyCurrentRound().CategoryName = category.name;
-        SubmitCategory();
     }
 
     public bool CanStart()

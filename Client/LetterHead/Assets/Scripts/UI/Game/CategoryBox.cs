@@ -35,6 +35,12 @@ class CategoryBox : Singleton<CategoryBox>
     private void OnMatchDetailsLoaded()
     {
         Refresh();
+
+        if (!string.IsNullOrEmpty(GameManager.Instance.CurrentRound().CategoryName))
+        {
+            var category = ScoringManager.Instance.categoryManager.GetCategory(GameManager.Instance.CurrentRound().CategoryName);
+            GameManager.Instance.SelectCategory(category, true);
+        }
     }
 
     private void OnCategoryClicked(Category category)
