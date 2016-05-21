@@ -18,7 +18,7 @@ public class MenuGui : Singleton<MenuGui>
 
     private void Start()
     {
-        if (!string.IsNullOrEmpty(ClientManager.Instance.sessionId))
+        if (!string.IsNullOrEmpty(ClientManager.Instance.SessionId))
         {
             ClientManager.Instance.RefreshMyInfo((state) =>
             {
@@ -41,12 +41,12 @@ public class MenuGui : Singleton<MenuGui>
         }
     }
 
-    private void LoadLogin()
+    public void LoadLogin()
     {
         sceneManager.SetGuiScene("Login Scene");
     }
 
-    private void LoadDashboard()
+    public void LoadDashboard()
     {
         sceneManager.SetGuiScene("Dashboard Scene");
     }

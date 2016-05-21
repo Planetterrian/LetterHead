@@ -42,10 +42,15 @@ public class RegisterStep2Window : MonoBehaviour
                                                       {"Username", usernameInput.text}, {"Avatar", avatarDropdown.options[avatarDropdown.value].text}
                                                   }, s =>
                                                   {
-
+                                                      if (s == "1")
+                                                      {
+                                                          GetComponent<WindowController>().Hide();
+                                                          MenuGui.Instance.LoadDashboard();
+                                                      }
                                                   }, s =>
                                                   {
-                                                    submitButton.interactable = true;
+                                                      submitButton.interactable = true;
+                                                      DialogWindowTM.Instance.Show("Error", s, () => { });
                                                   });
     }
 }

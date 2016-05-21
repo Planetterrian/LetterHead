@@ -19,7 +19,7 @@ namespace LetterHeadServer.Controllers
 
         protected ActionResult Okay()
         {
-            return Json(new { Status = "OK" });
+            return Content("1");
         }
 
         public ActionResult Error(string message)

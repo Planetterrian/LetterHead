@@ -62,6 +62,8 @@ public class EmailLoginWindow : MonoBehaviour
                                         {
                                             var sessionId = JsonConvert.DeserializeObject<string>(s);
                                             GetComponent<WindowController>().Hide();
+                                            ClientManager.Instance.SetSessionId(sessionId);
+                                            MenuGui.Instance.loginScene.registerDetailsWindow.ShowModal();
                                         }, s =>
                                         {
                                             DialogWindowTM.Instance.Show("Error", s, () => { });
