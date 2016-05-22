@@ -8,6 +8,7 @@ public class MenuGui : Singleton<MenuGui>
     private GuiSceneManager sceneManager;
      
     public LoginScene loginScene;
+    public DashboardScene dashboardScene;
 
     protected override void Awake()
     {
@@ -43,11 +44,11 @@ public class MenuGui : Singleton<MenuGui>
 
     public void LoadLogin()
     {
-        sceneManager.SetGuiScene("Login Scene");
+        sceneManager.SetGuiScene(loginScene);
     }
 
     public void LoadDashboard()
     {
-        sceneManager.SetGuiScene("Dashboard Scene");
+        sceneManager.SetGuiScene(dashboardScene);
     }
 }
