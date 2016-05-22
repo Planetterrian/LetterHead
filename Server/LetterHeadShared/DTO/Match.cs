@@ -20,15 +20,11 @@ namespace LetterHeadShared.DTO
         public int RoundTimeSeconds;
         public int CurrentRoundNumber;
         public int CurrentUserIndex;
+        public int MaxRounds;
 
         public int UserScore(int userIndex)
         {
             return Rounds.Where(r => r.UserId == Users[userIndex].Id).Sum(r => r.Score);
-        }
-
-        public int TotalRoundsCount()
-        {
-            return Rounds.Count(r => r.UserId == Users[0].Id);
         }
 
         public int IndexOfUser(int userId)

@@ -46,6 +46,11 @@ namespace LetterHeadServer.Models
                    m.MapRightKey("UserId");
                    m.ToTable("MatchUsers");
                });
+
+            modelBuilder.Entity<Match>()
+        .HasMany(a => a.Rounds).
+        WithRequired()
+        .WillCascadeOnDelete(true);
         }
     }
 }

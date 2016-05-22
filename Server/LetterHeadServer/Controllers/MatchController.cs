@@ -51,6 +51,7 @@ namespace LetterHeadServer.Controllers
             {
                 existingMatch.Users.Add(currentUser);
                 existingMatch.CurrentState = LetterHeadShared.DTO.Match.MatchState.Pregame;
+                existingMatch.AddRounds(db);
                 existingMatch.ChooseRandomStartingUser();
             }
             else
@@ -66,7 +67,7 @@ namespace LetterHeadServer.Controllers
 
         public ActionResult List()
         {
-            var matches = currentUser.Matches;
+            var matches = currentUser.Matches.Where(m => m.CurrentState != LetterHeadShared.DTO.Match.MatchState.WaitingForPlayers);
             return Json(matches.Select(m => m.DTO()));
         }
 

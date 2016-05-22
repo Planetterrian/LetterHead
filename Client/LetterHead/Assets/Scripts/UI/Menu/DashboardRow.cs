@@ -13,6 +13,9 @@ public class DashboardRow : MonoBehaviour
     public TextMeshProUGUI myScoreLabel;
     public TextMeshProUGUI theirScoreLabel;
 
+    [HideInInspector]
+    public bool markForDelete;
+
     private Match matchInfo;
 
     public Match MatchInfo
@@ -33,7 +36,7 @@ public class DashboardRow : MonoBehaviour
         var opponentInfo = MatchInfo.Users.First(u => u.Id != ClientManager.Instance.UserId());
         usernameLabel.text = opponentInfo.Username;
         avatarBox.SetAvatarImage(opponentInfo.AvatarUrl);
-        roundLabel.text = "Round " + (MatchInfo.CurrentRoundNumber + 1) + "/" + MatchInfo.TotalRoundsCount();
+        roundLabel.text = "Round " + (MatchInfo.CurrentRoundNumber + 1) + "/" + MatchInfo.MaxRounds;
         myScoreLabel.text = "My Score: " + (MatchInfo.IndexOfUser(ClientManager.Instance.UserId()) == 0 ? score1.ToString() : score2.ToString());
         theirScoreLabel.text = "Their Score: " + (MatchInfo.IndexOfUser(ClientManager.Instance.UserId()) == 0 ? score2.ToString() : score1.ToString());
     }

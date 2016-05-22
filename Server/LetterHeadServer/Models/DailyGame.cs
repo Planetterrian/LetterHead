@@ -52,6 +52,10 @@ namespace LetterHeadServer.Models
 
             context.SaveChanges();
 
+            match.AddRounds(context);
+
+            context.SaveChanges();
+
             return match;
         }
     }

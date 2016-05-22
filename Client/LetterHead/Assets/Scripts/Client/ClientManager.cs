@@ -55,6 +55,7 @@ public class ClientManager : Singleton<ClientManager>
     {
         SessionId = sessId;
         PlayerPrefs.SetString("sessId", sessId);
+        RefreshMyInfo();
     }
 
     public int UserId()
@@ -65,5 +66,6 @@ public class ClientManager : Singleton<ClientManager>
     public void Logout()
     {
         PlayerPrefs.SetString("sessId", "");
+        myUserInfo = null;
     }
 }

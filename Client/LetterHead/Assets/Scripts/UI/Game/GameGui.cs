@@ -122,7 +122,7 @@ public class GameGui : Singleton<GameGui>
 
         SetAvatarBox(leftAvatarBox, 0);
         timer.SetTimer(GameManager.Instance.MatchDetails.RoundTimeSeconds);
-        roundNumberLabel.text = "Round " + (GameManager.Instance.MatchDetails.CurrentRoundNumber + 1) + "/" + GameManager.Instance.MatchDetails.TotalRoundsCount();
+        roundNumberLabel.text = "Round " + (GameManager.Instance.MatchDetails.CurrentRoundNumber + 1) + "/" + GameManager.Instance.MatchDetails.MaxRounds;
 
         if (GameManager.Instance.MatchDetails.Users.Count > 1)
         {

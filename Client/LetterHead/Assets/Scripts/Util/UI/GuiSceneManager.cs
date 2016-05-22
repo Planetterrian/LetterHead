@@ -64,7 +64,6 @@ public class GuiSceneManager : MonoBehaviour
     {
         lastGuiScene = CurrentGuiScene;
 
-        scene.OnBeginShow();
         if (CurrentGuiScene != null)
         {
             nextGuiScene = scene;
@@ -75,5 +74,7 @@ public class GuiSceneManager : MonoBehaviour
             currentGuiScene = scene;
             scene.FadeIn();
         }
+
+        scene.OnBeginShow();
     }
 }

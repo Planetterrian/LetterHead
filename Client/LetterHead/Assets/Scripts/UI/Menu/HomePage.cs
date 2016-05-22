@@ -14,9 +14,16 @@ public class HomePage : Page
     public Transform theirTurnHeader;
     public Transform completedHeader;
 
-    private List<DashboardRow> myMatchRows; 
-    private List<DashboardRow> theirMatchRows; 
-    private List<DashboardRow> completedMatchRows;
+    public Transform scrollParent;
+
+    private List<DashboardRow> myMatchRows = new List<DashboardRow>(); 
+    private List<DashboardRow> theirMatchRows = new List<DashboardRow>(); 
+    private List<DashboardRow> completedMatchRows = new List<DashboardRow>();
+
+    void Start()
+    {
+        RefreshMatches();
+    }
 
     public void RefreshMatches()
     {
@@ -25,16 +32,21 @@ public class HomePage : Page
             var matches = JsonConvert.DeserializeObject<List<Match>>(s);
 
             var myMatches = matches.Where(m => m.CurrentState != Match.MatchState.Ended && m.Users[m.CurrentUserIndex].Id == ClientManager.Instance.myUserInfo.Id).ToList();
-            var theirMatches = matches.Where(m => m.CurrentState != Match.MatchState.Ended && m.Users[m.CurrentUserIndex].Id == ClientManager.Instance.myUserInfo.Id).ToList();
+            var theirMatches = matches.Where(m => m.CurrentState != Match.MatchState.Ended && m.Users[m.CurrentUserIndex].Id != ClientManager.Instance.myUserInfo.Id).ToList();
             var completedMatches = matches.Where(m => m.CurrentState == Match.MatchState.Ended).ToList();
 
-            UpdateMatchSet(myMatchRows, myMatches);
-            UpdateMatchSet(theirMatchRows, theirMatches);
-            UpdateMatchSet(completedMatchRows, completedMatches);
+            UpdateMatchSet(myMatchRows, myMatches, myTurnHeader);
+            UpdateMatchSet(theirMatchRows, theirMatches, theirTurnHeader);
+            UpdateMatchSet(completedMatchRows, completedMatches, completedHeader);
         });
     }
 
-    private void UpdateMatchSet(List<DashboardRow> rows, List<Match> matches)
+    void OnShown()
+    {
+        RefreshMatches();
+    }
+
+    private void UpdateMatchSet(List<DashboardRow> rows, List<Match> matches, Transform header)
     {
         // Update and remove existing
         for (int index = rows.Count - 1; index >= 0; index--)
@@ -59,6 +71,15 @@ public class HomePage : Page
             if (row == null)
             {
                 var rowGo = GameObject.Instantiate(dashboardRowPrefab) as GameObject;
+                rowGo.transform.SetParent(scrollParent);
+                rowGo.transform.ResetToOrigin();
+
+                var parentIndex = header.GetSiblingIndex();
+                rowGo.transform.SetSiblingIndex(parentIndex + 1);
+
+                row = rowGo.GetComponent<DashboardRow>();
+                row.MatchInfo = match;
+                rows.Add(row);
             }
         }
     }

@@ -36,14 +36,16 @@ public class CanvasFade : MonoBehaviour
 	        enabled = false;
             return;
 	    }
-	}
 
-    protected virtual void Start()
-    {
         if (startsHidden)
         {
             FadeOut(true);
         }
+    }
+
+    protected virtual void Start()
+    {
+
     }
 
     public void FadeIn()

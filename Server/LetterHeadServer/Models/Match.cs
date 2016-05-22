@@ -25,6 +25,7 @@ namespace LetterHeadServer.Models
         public DateTime? StartedOn { get; set; }
         public string Letters { get; set; }
         public int RoundTimeSeconds { get; set; }
+        public int MaxRounds { get; set; }
 
         public virtual List<MatchRound> Rounds { get; set; }
         public int CurrentRoundNumber { get; set; }
@@ -43,22 +44,26 @@ namespace LetterHeadServer.Models
                        RoundTimeSeconds = roundTime,
                        Rounds = new List<MatchRound>(),
                        Users = users,
-                   };
+                    MaxRounds = roundCount
+                };
 
-            var rand = new Random();
-            match.CurrentUserTurn = users[rand.Next(0, users.Count)];
+            if(users.Count > 0)
+                match.CurrentUserTurn = users[0];
 
             db.Matches.Add(match);
             db.SaveChanges();
+            
+            return match;
+        }
 
-            foreach (var user in users)
+        public void AddRounds(ApplicationDbContext db)
+        {
+            foreach (var user in Users)
             {
-                match.AddRounds(user, roundCount);
+                AddUserRounds(user, MaxRounds);
             }
 
             db.SaveChanges();
-
-            return match;
         }
 
         public MatchRound CurrentRoundForUser(User user)
@@ -66,7 +71,7 @@ namespace LetterHeadServer.Models
             return Rounds.FirstOrDefault(r => r.User.Id == user.Id && r.Number == CurrentRoundNumber);
         }
 
-        private void AddRounds(User user, int roundCount)
+        private void AddUserRounds(User user, int roundCount)
         {
             for (int i = 0; i < roundCount; i++)
             {
