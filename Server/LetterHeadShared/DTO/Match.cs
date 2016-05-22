@@ -9,7 +9,7 @@ namespace LetterHeadShared.DTO
     {
         public enum MatchState
         {
-            Pregame, Running, Ended
+            Pregame, Running, Ended, WaitingForPlayers
         }
 
         public int Id;

@@ -23,6 +23,8 @@ namespace LetterHeadServer.Models
         public string DeviceGUID { get; set; }
         public DateTime SignupDate { get; set; }
 
+        public virtual List<Match> Matches { get; set; }
+
         [Index]
         [MaxLength(64)]
         public string SessionId { get; set; }

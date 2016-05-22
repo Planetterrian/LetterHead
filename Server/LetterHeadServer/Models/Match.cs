@@ -38,7 +38,7 @@ namespace LetterHeadServer.Models
 
                 var match = new Match()
                    {
-                       CurrentState = LetterHeadShared.DTO.Match.MatchState.Pregame,
+                       CurrentState = LetterHeadShared.DTO.Match.MatchState.WaitingForPlayers,
                        CreatedOn = DateTime.Now,
                        RoundTimeSeconds = roundTime,
                        Rounds = new List<MatchRound>(),
@@ -133,6 +133,12 @@ namespace LetterHeadServer.Models
         public List<MatchRound> UserRounds(User user)
         {
             return Rounds.Where(r => r.User.Id == user.Id).ToList();
+        }
+
+        public void ChooseRandomStartingUser()
+        {
+            var rand = new Random();
+            CurrentUserTurn = Users[rand.Next(0, Users.Count)];
         }
     }
 }

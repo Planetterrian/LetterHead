@@ -47,6 +47,7 @@ namespace LetterHeadServer.Models
         {
             var match = Match.New(context, new List<User>(){ currentUser }, 1);
             match.DailyGame = this;
+            match.CurrentState = LetterHeadShared.DTO.Match.MatchState.Pregame;
             match.Letters = Letters;
 
             context.SaveChanges();

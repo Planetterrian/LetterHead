@@ -37,6 +37,39 @@ namespace LetterHeadServer.Controllers
             return Json(match.Id);
         }
 
+        public ActionResult Random()
+        {
+            var curPending = currentUser.Matches.Count(m => m.CurrentState == LetterHeadShared.DTO.Match.MatchState.WaitingForPlayers);
+            if (curPending > 0)
+            {
+                return Error("You are already searching for a random opponent.");
+            }
+
+            var existingMatch = db.Matches.FirstOrDefault(m => m.CurrentState == LetterHeadShared.DTO.Match.MatchState.WaitingForPlayers && m.Users.Count == 1);
+
+            if (existingMatch != null)
+            {
+                existingMatch.Users.Add(currentUser);
+                existingMatch.CurrentState = LetterHeadShared.DTO.Match.MatchState.Pregame;
+                existingMatch.ChooseRandomStartingUser();
+            }
+            else
+            {
+                var match = Match.New(db, new List<User>() {currentUser}, 3);
+                match.Letters = BoardHelper.GenerateBoard();
+            }
+
+            db.SaveChanges();
+
+            return Okay();
+        }
+
+        public ActionResult List()
+        {
+            var matches = currentUser.Matches;
+            return Json(matches.Select(m => m.DTO()));
+        }
+
         public ActionResult MatchInfo(int matchId)
         {
             var match = Match.GetById(db, matchId);

@@ -61,4 +61,9 @@ public class ClientManager : Singleton<ClientManager>
     {
         return myUserInfo.Id;
     }
+
+    public void Logout()
+    {
+        PlayerPrefs.SetString("sessId", "");
+    }
 }

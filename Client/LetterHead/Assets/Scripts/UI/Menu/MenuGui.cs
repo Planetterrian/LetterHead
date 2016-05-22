@@ -40,6 +40,10 @@ public class MenuGui : Singleton<MenuGui>
                 }
             });
         }
+        else
+        {
+            LoadLogin();
+        }
     }
 
     public void LoadLogin()

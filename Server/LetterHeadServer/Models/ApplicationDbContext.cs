@@ -33,5 +33,19 @@ namespace LetterHeadServer.Models
 
             return context;
         }
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Match>().
+              HasMany(c => c.Users).
+              WithMany(p => p.Matches).
+              Map(
+               m =>
+               {
+                   m.MapLeftKey("MatchId");
+                   m.MapRightKey("UserId");
+                   m.ToTable("MatchUsers");
+               });
+        }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Web;
 using System.Web.Mvc;
 using Hangfire;
@@ -20,6 +21,11 @@ namespace LetterHeadServer.Controllers
         {
             DailyGame.CreateNewDailyGame();
             return "New daily game created";
+        }
+
+        public ActionResult Matchmaking()
+        {
+            return Content("Matchmaking complete");
         }
     }
 }

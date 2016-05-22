@@ -15,23 +15,26 @@ public class DashboardRow : MonoBehaviour
 
     private Match matchInfo;
 
-    public void Set(Match matchInfo)
+    public Match MatchInfo
     {
-        this.matchInfo = matchInfo;
-
-        Refresh();
+        get { return matchInfo; }
+        set
+        {
+            matchInfo = value;
+            Refresh();
+        }
     }
 
     private void Refresh()
     {
-        var score1 = matchInfo.UserScore(0);
-        var score2 = matchInfo.UserScore(1);
+        var score1 = MatchInfo.UserScore(0);
+        var score2 = MatchInfo.UserScore(1);
 
-        var opponentInfo = matchInfo.Users.First(u => u.Id != ClientManager.Instance.UserId());
+        var opponentInfo = MatchInfo.Users.First(u => u.Id != ClientManager.Instance.UserId());
         usernameLabel.text = opponentInfo.Username;
         avatarBox.SetAvatarImage(opponentInfo.AvatarUrl);
-        roundLabel.text = "Round " + (matchInfo.CurrentRoundNumber + 1) + "/" + matchInfo.TotalRoundsCount();
-        myScoreLabel.text = "My Score: " + (matchInfo.IndexOfUser(ClientManager.Instance.UserId()) == 0 ? score1.ToString() : score2.ToString());
-        theirScoreLabel.text = "Their Score: " + (matchInfo.IndexOfUser(ClientManager.Instance.UserId()) == 0 ? score2.ToString() : score1.ToString());
+        roundLabel.text = "Round " + (MatchInfo.CurrentRoundNumber + 1) + "/" + MatchInfo.TotalRoundsCount();
+        myScoreLabel.text = "My Score: " + (MatchInfo.IndexOfUser(ClientManager.Instance.UserId()) == 0 ? score1.ToString() : score2.ToString());
+        theirScoreLabel.text = "Their Score: " + (MatchInfo.IndexOfUser(ClientManager.Instance.UserId()) == 0 ? score2.ToString() : score1.ToString());
     }
 }
