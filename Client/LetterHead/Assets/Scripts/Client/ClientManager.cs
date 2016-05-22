@@ -8,7 +8,6 @@ using UnityEngine.Events;
 
 public class ClientManager : Singleton<ClientManager>
 {
-
     public UserInfo myUserInfo;
 
     public UnityEvent OnMyInfoUpdated;

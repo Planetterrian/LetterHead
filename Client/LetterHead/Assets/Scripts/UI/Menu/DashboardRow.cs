@@ -13,6 +13,8 @@ public class DashboardRow : MonoBehaviour
     public TextMeshProUGUI myScoreLabel;
     public TextMeshProUGUI theirScoreLabel;
 
+    public HomePage homePage;
+
     [HideInInspector]
     public bool markForDelete;
 
@@ -26,6 +28,11 @@ public class DashboardRow : MonoBehaviour
             matchInfo = value;
             Refresh();
         }
+    }
+
+    public void OnClicked()
+    {
+        homePage.OnRowClicked(this);
     }
 
     private void Refresh()

@@ -149,5 +149,19 @@ namespace LetterHeadServer.Models
             var rand = new Random();
             CurrentUserTurn = Users[rand.Next(0, Users.Count)];
         }
+
+        public List<int> GetScores()
+        {
+            var scores = new List<int>();
+
+            for (int index = 0; index < Users.Count; index++)
+            {
+                var user = Users[index];
+                var score = Rounds.Where(r => r.User.Id == user.Id).Sum(r => r.Score);
+                scores.Add(score);
+            }
+
+            return scores;
+        }
     }
 }

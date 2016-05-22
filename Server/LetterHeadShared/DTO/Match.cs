@@ -15,6 +15,7 @@ namespace LetterHeadShared.DTO
         public int Id;
         public MatchState CurrentState;
         public List<UserInfo> Users;
+        public List<int> Scores;
         public List<MatchRound> Rounds;
         public string Letters;
         public int RoundTimeSeconds;
@@ -24,7 +25,7 @@ namespace LetterHeadShared.DTO
 
         public int UserScore(int userIndex)
         {
-            return Rounds.Where(r => r.UserId == Users[userIndex].Id).Sum(r => r.Score);
+            return Scores[userIndex];
         }
 
         public int IndexOfUser(int userId)

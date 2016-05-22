@@ -36,6 +36,7 @@ namespace MyWebApplication
                 cfg.CreateMap<Match, LetterHeadShared.DTO.Match>().
 
                     ForMember(dest => dest.Rounds, opt => opt.MapFrom(src => src.Rounds.Select(r => r.DTO()))).
+                    ForMember(dest => dest.Scores, opt => opt.MapFrom(src => src.GetScores())).
                     ForMember(dest => dest.CurrentUserIndex, opt => opt.MapFrom(src => src.Users.IndexOf(src.CurrentUserTurn)));
 
                 cfg.CreateMap<MatchRound, LetterHeadShared.DTO.MatchRound>().

@@ -22,11 +22,12 @@ public class HomePage : Page
 
     void Start()
     {
-        RefreshMatches();
+        //RefreshMatches();
     }
 
     public void RefreshMatches()
     {
+        Debug.Log(1);
         Srv.Instance.POST("Match/List", null, s =>
         {
             var matches = JsonConvert.DeserializeObject<List<Match>>(s);
@@ -78,9 +79,15 @@ public class HomePage : Page
                 rowGo.transform.SetSiblingIndex(parentIndex + 1);
 
                 row = rowGo.GetComponent<DashboardRow>();
+                row.homePage = this;
                 row.MatchInfo = match;
                 rows.Add(row);
             }
         }
+    }
+
+    public void OnRowClicked(DashboardRow dashboardRow)
+    {
+        PersistManager.Instance.LoadMatch(dashboardRow.MatchInfo.Id, dashboardRow.MatchInfo.Users.Count == 1);
     }
 }

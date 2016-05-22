@@ -2,17 +2,31 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-public class PersistManager : MonoBehaviour
+public class PersistManager : Singleton<PersistManager>
 {
     public GameObject persistCanvas;
 
-    private void Awake()
-    {
-    }
+    public int matchToLoadId;
+    public bool matchToLoadIsDaily;
+    
 
     private void Start()
     {
         persistCanvas.SetActive(true);
+    }
+
+    public void LoadMatch(int matchId, bool isDaily)
+    {
+        matchToLoadId = matchId;
+        matchToLoadIsDaily = isDaily;
+
+        SceneManager.LoadScene("game");
+    }
+
+    public void LoadMenu()
+    {
+        SceneManager.LoadScene("menu");
     }
 }
