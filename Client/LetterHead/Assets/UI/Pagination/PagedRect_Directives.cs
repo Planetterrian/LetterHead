@@ -1,0 +1,7 @@
+﻿#define PAGEDRECT_PRESENT
+#define PAGEDRECT_102
+#define PAGEDRECT_110
+#define PAGEDRECT_111
+#define PAGEDRECT_112
+#define PAGEDRECT_113
+#define PAGEDRECT_114

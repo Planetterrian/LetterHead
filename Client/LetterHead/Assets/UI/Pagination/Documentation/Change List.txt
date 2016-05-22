@@ -1,0 +1,58 @@
+v1.15
+-----------------------------------------------------------------------------
+- Added an example with a nested ScrollRect
+- Fixed a bug with page positioning in a Vertical PagedRect with ScrollRect
+
+v1.14
+-----------------------------------------------------------------------------
+- Page animations can now optionally be overriden on a page-by-page basis (check the Page component for details)
+
+v1.13
+-----------------------------------------------------------------------------
+- Bug Fixes
+	- Fixed an issue introduced in v1.1 which caused the wrong page enter/exit animation to be played
+	- Rewrote the scrollrect positioning code, it should be more reliable now
+	- Fixed a bug where sometimes the scrollrect would sometimes stay in the position to which it was dragged instead of moving to the closest page
+
+v1.12
+-----------------------------------------------------------------------------
+- Bug Fixes
+	- Fixed an issue where pages would not be resized correctly when the PagedRect or its Viewport is resized
+	- Fixed an issue where the scrollrect would not be positioned correctly when the PagedRect or its Viewport is resized
+
+v1.11
+-----------------------------------------------------------------------------
+- Bug Fixes
+	- Fixed an issue where an exception would be triggered when attempting to remove the last page with RemovePage()
+	- Fixed an issue where Page components were destroyed by RemovePage() instead of the Page GameObjects when destroyPageObject is set to true
+
+v1.1 Major Update
+-----------------------------------------------------------------------------
+- Added Support for a new Continuous Scrolling mode (using a ScrollRect)
+	- Added new Prefabs which utilize the new mode (existing PagedRect instances can be updated to use this mode, but it involves some manual changes)
+	- Existing PagedRect instances will not be affected - they will continue to function as they did before
+- Examples:
+	- Added a new Slider - ScrollRect example which utilizes Continous Scrolling
+- Bug Fixes:
+	- Fixed an issue where the Editor would sometimes show the wrong page as being selected in the inspector
+
+V1.01
+------------------------------------------------------------------------------
+- Added Support for Scroll Wheel Input
+- Added option to highlight the PagedRect on MouseOver
+- 'Loop Endlessly' now works regardless of how you reach the next/previous page
+- Added a 'PageChanged' event to the PagedRect - triggered every time the page is changes (Arguments: New Page, Previous Page)
+- Examples:
+	- Added Scroll Wheel Input control to the Vertical Pagination Example
+	- Added Enable/Disable button control to the Dynamic Pages Example
+	- Added a new Fantasy-style "Character Creation" example
+- Bug Fixes:
+	- Fixed an issue with nested PagedRects
+	- Fixed a bug with the Fade animation type when rapidly changing pages
+------------------------------------------------------------------------------
+
+
+V1.00
+------------------------------------------------------------------------------
+- Initial Release
+------------------------------------------------------------------------------
