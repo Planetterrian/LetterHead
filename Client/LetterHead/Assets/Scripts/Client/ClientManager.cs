@@ -20,12 +20,18 @@ public class ClientManager : Singleton<ClientManager>
         private set { sessionId = value; }
     }
 
+    protected override void Awake()
+    {
+        base.Awake();
+
+        SessionId = PlayerPrefs.GetString("sessId", "");
+    }
+
     private void Start()
     {
-        SessionId = PlayerPrefs.GetString("sessId", "");
-
+/*
         if (!string.IsNullOrEmpty(SessionId))
-            RefreshMyInfo();
+            RefreshMyInfo();*/
     }
 
     public void RefreshMyInfo(Action<bool> onInfoLoaded = null)
