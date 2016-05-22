@@ -56,4 +56,9 @@ public class ClientManager : Singleton<ClientManager>
         SessionId = sessId;
         PlayerPrefs.SetString("sessId", sessId);
     }
+
+    public int UserId()
+    {
+        return myUserInfo.Id;
+    }
 }

@@ -12,8 +12,8 @@ public class AvatarBox : MonoBehaviour
     // Use this for initialization
     void Start ()
     {
-        //avatarImage.texture = null;
-        nameLabel.text = "";
+        if(nameLabel)
+            nameLabel.text = "";
     }
 
     public void SetName(string username)

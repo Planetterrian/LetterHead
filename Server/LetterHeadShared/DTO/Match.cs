@@ -31,5 +31,17 @@ namespace LetterHeadShared.DTO
             return Rounds.Count(r => r.UserId == Users[0].Id);
         }
 
+        public int IndexOfUser(int userId)
+        {
+            for (int index = 0; index < Users.Count; index++)
+            {
+                var userInfo = Users[index];
+
+                if (userInfo.Id == userId)
+                    return index;
+            }
+
+            return -1;
+        }
     }
 }
