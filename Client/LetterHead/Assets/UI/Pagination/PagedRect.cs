@@ -535,8 +535,12 @@ namespace UI.Pagination
             {
                 throw new UnityException("PagedRect.SetCurrentPage(int newPage) :: The value provided for 'newPage' is less than zero.");
             }
-         
-            if (CurrentPage == newPage && !UsingScrollRect) return;
+
+            if (CurrentPage == newPage && !UsingScrollRect)
+            {
+                Pages[CurrentPage-1].OnShow();
+                return;
+            }
 
             var previousPage = CurrentPage;
 

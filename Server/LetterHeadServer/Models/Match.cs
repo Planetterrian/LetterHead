@@ -88,9 +88,13 @@ namespace LetterHeadServer.Models
             }
         }
 
-        public LetterHeadShared.DTO.Match DTO()
+        public LetterHeadShared.DTO.Match DTO(bool sparse = false)
         {
-            return Startup.Mapper.Map<LetterHeadShared.DTO.Match>(this);
+            var dto = Startup.Mapper.Map<LetterHeadShared.DTO.Match>(this);
+            if (sparse)
+                dto.Rounds = null;
+
+            return dto;
         }
 
         public static Match GetById(ApplicationDbContext db, int matchId)
