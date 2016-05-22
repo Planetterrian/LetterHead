@@ -9,17 +9,25 @@ public class SingleplayerGameManager : GameManager
 	{
         GameScene.Instance.CurrentState = GameScene.State.Pregame;
 
-        ClientManager.Instance.RefreshMyInfo((b) =>
+        if (PersistManager.Instance.matchToLoadId <= 0)
         {
-            if (b)
+            ClientManager.Instance.RefreshMyInfo((b) =>
             {
-                Srv.Instance.POST("Match/RequestDailyGameStart", null, s =>
+                if (b)
                 {
-                    MatchId = JsonConvert.DeserializeObject<int>(s);
-                    LoadMatchDetails();
-                });
-            }
-        });
+                    Srv.Instance.POST("Match/RequestDailyGameStart", null, s =>
+                    {
+                        MatchId = JsonConvert.DeserializeObject<int>(s);
+                        LoadMatchDetails();
+                    });
+                }
+            });
+        }
+        else
+        {
+            MatchId = PersistManager.Instance.matchToLoadId;
+            LoadMatchDetails();
+        }
 
         GameGui.Instance.HidePowerups();
 	}

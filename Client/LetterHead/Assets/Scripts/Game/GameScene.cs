@@ -33,6 +33,16 @@ public class GameScene : Singleton<GameScene>
         base.Awake();
 
         SetForSingleplayer();
+/*
+
+        if (PersistManager.Instance.matchToLoadIsDaily)
+        {
+        }
+        else
+        {
+            SetForMultiplayer();
+        }
+*/
 
     }
 

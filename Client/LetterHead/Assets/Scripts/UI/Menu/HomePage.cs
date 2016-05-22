@@ -27,7 +27,6 @@ public class HomePage : Page
 
     public void RefreshMatches()
     {
-        Debug.Log(1);
         Srv.Instance.POST("Match/List", null, s =>
         {
             var matches = JsonConvert.DeserializeObject<List<Match>>(s);

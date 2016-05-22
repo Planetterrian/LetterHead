@@ -12,6 +12,6 @@ public class DashboardScene : GuiScene
     {
         base.OnBeginShow();
 
-        pagination.SetCurrentPage(1);
+        pagination.SetCurrentPage(1, true);
     }
 }

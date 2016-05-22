@@ -763,7 +763,7 @@ namespace UI.Pagination
         /// <param name="direction"></param>
         protected void PageExitAnimation(Page page, eDirection direction)
         {
-            if (!Application.isPlaying || AnimationType == eAnimationType.None)
+            if (!Application.isPlaying || AnimationType == eAnimationType.None || !gameObject.activeInHierarchy)
             {
                 page.gameObject.SetActive(false);
             }
