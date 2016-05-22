@@ -52,7 +52,7 @@ namespace LetterHeadServer.Controllers
                 existingMatch.Users.Add(currentUser);
                 existingMatch.CurrentState = LetterHeadShared.DTO.Match.MatchState.Pregame;
                 existingMatch.AddRounds(db);
-                existingMatch.ChooseRandomStartingUser();
+                existingMatch.RandomizeUsers();
             }
             else
             {

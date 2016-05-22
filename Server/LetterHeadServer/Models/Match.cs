@@ -44,7 +44,7 @@ namespace LetterHeadServer.Models
                        RoundTimeSeconds = roundTime,
                        Rounds = new List<MatchRound>(),
                        Users = users,
-                    MaxRounds = roundCount
+                        MaxRounds = roundCount,
                 };
 
             if(users.Count > 0)
@@ -144,10 +144,9 @@ namespace LetterHeadServer.Models
             return Rounds.Where(r => r.User.Id == user.Id).ToList();
         }
 
-        public void ChooseRandomStartingUser()
+        public void RandomizeUsers()
         {
-            var rand = new Random();
-            CurrentUserTurn = Users[rand.Next(0, Users.Count)];
+            CurrentUserTurn = Users[0];
         }
 
         public List<int> GetScores()

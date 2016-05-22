@@ -39,6 +39,11 @@ public class GameRealTime : Singleton<GameRealTime>
         socket.OnError += (sender, args) =>
         {
             Debug.LogError(args.Message);
+
+            DialogWindowTM.Instance.Show("Disconnected", "You have been disconnected from the server", () =>
+            {
+                PersistManager.Instance.LoadMenu();
+            });
         };
 
         socket.OnOpen += (sender, args) =>
@@ -51,6 +56,11 @@ public class GameRealTime : Singleton<GameRealTime>
         socket.OnClose += (sender, args) =>
         {
             Debug.Log("Disconnected fromn real time socket: " + args.Code + " " + args.Reason);
+
+            DialogWindowTM.Instance.Show("Disconnected", "You have been disconnected from the server", () =>
+            {
+                PersistManager.Instance.LoadMenu();
+            });
         };
 
         socket.Connect();
