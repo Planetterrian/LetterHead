@@ -46,8 +46,20 @@ namespace LetterHeadServer.Controllers
             {
                 return Error("Username must be between 3 and 24 characters");
             }
-            
+
+            if(db.Users.Count(u => u.Username == username) > 0)
+            {
+                return Error("Username already taken");
+            }
             currentUser.Username = username;
+            currentUser.AvatarUrl = "sprite:" + avatar;
+            db.SaveChanges();
+            return Okay();
+        }
+
+        [AuthenticationFilter()]
+        public ActionResult SetAvatar(string avatar)
+        {
             currentUser.AvatarUrl = "sprite:" + avatar;
             db.SaveChanges();
             return Okay();
