@@ -6,14 +6,13 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-class CategoryBox : Singleton<CategoryBox>
+public class CategoryBox : Singleton<CategoryBox>
 {
-    public TextMeshProUGUI[] categoryTitles;
-    public TextMeshProUGUI[] categoryValues;
+    public CategoryRow[] categoryRows;
 
     public TextMeshProUGUI totallabel;
 
-    private Dictionary<TextMeshProUGUI, Category> categoryScoreFunctions = new Dictionary<TextMeshProUGUI, Category>();
+    private Dictionary<CategoryRow, Category> categoryScoreFunctions = new Dictionary<CategoryRow, Category>();
 
     public Image currentSelectedCategoryImage;
 
@@ -24,14 +23,9 @@ class CategoryBox : Singleton<CategoryBox>
         for (int index = 0; index < ScoringManager.Instance.categoryManager.Categories.Count; index++)
         {
             var category = ScoringManager.Instance.categoryManager.Categories[index];
-            categoryTitles[index].text = category.name;
-            var index1 = index;
-            categoryTitles[index].GetComponentInParent<Button>().onClick.AddListener(() =>
-            {
-                Tooltip.Instance.Show(category.description, categoryTitles[index1].transform.parent.parent.position.y + 30);
-                OnCategoryClicked(category);
-            });
-            categoryScoreFunctions[categoryValues[index]] = category;
+            categoryRows[index].Set(category, this);
+
+            categoryScoreFunctions[categoryRows[index]] = category;
         }
 
         Refresh();
@@ -48,7 +42,7 @@ class CategoryBox : Singleton<CategoryBox>
         }
     }
 
-    private void OnCategoryClicked(Category category)
+    public void OnCategoryScoreClicked(Category category)
     {
         if (!GameGui.CanSelectCategory())
             return;
@@ -65,12 +59,7 @@ class CategoryBox : Singleton<CategoryBox>
         {
             var score = ScoringManager.Instance.GetCategoryScore(scoreFunc.Value);
 
-            if(score > 0)
-                scoreFunc.Key.text = score.ToString("N0");
-            else
-                scoreFunc.Key.text = "";
-
-            scoreFunc.Key.color = GameManager.Instance.MyRounds().Any(c => c.CategoryName == scoreFunc.Value.name) ? Color.black : new Color(0.42f, 0.42f, 0.42f);
+            scoreFunc.Key.SetScore(score, GameManager.Instance.MyRounds().Any(c => c.CategoryName == scoreFunc.Value.name));
         }
 
         totallabel.text = ScoringManager.Instance.TotalScore().ToString("N0");
@@ -80,7 +69,7 @@ class CategoryBox : Singleton<CategoryBox>
     {
         currentSelectedCategoryImage.gameObject.SetActive(true);
 
-        var box = categoryScoreFunctions.First(c => c.Value == category).Key.transform.parent.parent;
+        var box = categoryScoreFunctions.First(c => c.Value == category).Key.transform;
         currentSelectedCategoryImage.transform.position = box.position;
     }
 }
