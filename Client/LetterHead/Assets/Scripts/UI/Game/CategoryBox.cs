@@ -45,6 +45,7 @@ class CategoryBox : Singleton<CategoryBox>
 
     private void OnCategoryClicked(Category category)
     {
+        Tooltip.Instance.Show(category.description);
         if (!GameGui.CanSelectCategory())
             return;
 
