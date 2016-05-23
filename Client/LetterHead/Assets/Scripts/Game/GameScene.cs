@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine.Events;
 
 public class GameScene : Singleton<GameScene>
@@ -9,6 +10,8 @@ public class GameScene : Singleton<GameScene>
 
     [HideInInspector]
     public GameManager gameManager;
+
+    public List<IGameHandler> gameHandlers = new List<IGameHandler>();
 
     public enum State
     {
@@ -31,19 +34,12 @@ public class GameScene : Singleton<GameScene>
     protected override void Awake()
     {
         base.Awake();
-
         SetForSingleplayer();
-/*
+    }
 
-        if (PersistManager.Instance.matchToLoadIsDaily)
-        {
-        }
-        else
-        {
-            SetForMultiplayer();
-        }
-*/
-
+    public void AddGameManger(IGameHandler manager)
+    {
+        gameHandlers.Add(manager);
     }
 
     private void SetForSingleplayer()
@@ -62,10 +58,29 @@ public class GameScene : Singleton<GameScene>
     {
         gameManager.gameObject.SetActive(true);
         OnStateChanged.AddListener(gameManager.OnGameStateChanged);
+        gameManager.OnMatchDetailsLoadedEvent.AddListener(OnMatchDetailsLoaded);
+    }
+
+    void OnMatchDetailsLoaded()
+    {
+        ResetGame();
     }
 
     public bool IsGameActive()
     {
         return CurrentState == State.Active;
+    }
+
+    public void RefreshMatch()
+    {
+        gameManager.LoadMatchDetails();
+    }
+
+    public void ResetGame()
+    {
+        foreach (var manager in gameHandlers)
+        {
+            manager.OnReset();
+        }
     }
 }

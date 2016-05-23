@@ -4,7 +4,7 @@ using System.Linq;
 using LetterHeadShared;
 using UnityEngine;
 
-public class ScoringManager : Singleton<ScoringManager>
+public class ScoringManager : Singleton<ScoringManager>, IGameHandler
 {
     private List<string> submittedWords = new List<string>();
 
@@ -12,6 +12,18 @@ public class ScoringManager : Singleton<ScoringManager>
     public CategoryManager categoryManager = new CategoryManager();
     public int usedLetterIds;
 
+    private void Start()
+    {
+        GameScene.Instance.AddGameManger(this);
+        GameManager.Instance.OnMatchDetailsLoadedEvent.AddListener(OnMatchDetailsLoaded);
+    }
+
+    public void OnReset()
+    {
+        submittedWords.Clear();
+        usedLetterIds = 0;
+        OnWordsChanged();
+    }
 
     public void OnWordSubmit()
     {
@@ -56,10 +68,7 @@ public class ScoringManager : Singleton<ScoringManager>
         CategoryBox.Instance.Refresh();
     }
 
-    private void Start()
-    {
-        GameManager.Instance.OnMatchDetailsLoadedEvent.AddListener(OnMatchDetailsLoaded);
-    }
+
 
 
     private void OnMatchDetailsLoaded()
@@ -134,4 +143,5 @@ public class ScoringManager : Singleton<ScoringManager>
     {
         return currentCategory;
     }
+
 }

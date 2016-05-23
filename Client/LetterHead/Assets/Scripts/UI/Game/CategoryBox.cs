@@ -6,7 +6,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CategoryBox : Singleton<CategoryBox>
+public class CategoryBox : Singleton<CategoryBox>, IGameHandler
 {
     public CategoryRow[] categoryRows;
 
@@ -18,6 +18,7 @@ public class CategoryBox : Singleton<CategoryBox>
 
     void Start()
     {
+        GameScene.Instance.AddGameManger(this);
         GameManager.Instance.OnMatchDetailsLoadedEvent.AddListener(OnMatchDetailsLoaded);
 
         for (int index = 0; index < ScoringManager.Instance.categoryManager.Categories.Count; index++)
@@ -71,5 +72,10 @@ public class CategoryBox : Singleton<CategoryBox>
 
         var box = categoryScoreFunctions.First(c => c.Value == category).Key.transform;
         currentSelectedCategoryImage.transform.position = box.position;
+    }
+
+    public void OnReset()
+    {
+        currentSelectedCategoryImage.gameObject.SetActive(false);
     }
 }

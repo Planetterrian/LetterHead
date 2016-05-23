@@ -54,7 +54,7 @@ public abstract class GameManager : Singleton<GameManager>
         return MatchDetails.Rounds.Where(m => m.UserId == ClientManager.Instance.myUserInfo.Id).ToList();
     }
 
-    protected void LoadMatchDetails()
+    public void LoadMatchDetails()
     {
         Srv.Instance.POST("Match/MatchInfo", new Dictionary<string, string>() {{"matchId", MatchId.ToString()}}, MatchDetailsDownloaded);
     }
@@ -103,9 +103,25 @@ public abstract class GameManager : Singleton<GameManager>
 
         if (ScoringManager.Instance.SelectedCategory() != null)
         {
-            MyCurrentRound().CurrentState = MatchRound.RoundState.Ended;
-            GameScene.Instance.CurrentState = GameScene.State.End;
+            EndRound();
+            SubmitCategory();
         }
+    }
+
+    private void EndRound()
+    {
+        MyCurrentRound().CurrentState = MatchRound.RoundState.Ended;
+        GameScene.Instance.CurrentState = GameScene.State.End;
+
+        if (PlayerCount() == 1)
+        {
+            TimerManager.AddEvent(2, () => GameScene.Instance.RefreshMatch());
+        }
+    }
+
+    public int PlayerCount()
+    {
+        return MatchDetails.Users.Count;
     }
 
     public void SubmitCategory()
@@ -113,7 +129,8 @@ public abstract class GameManager : Singleton<GameManager>
         Srv.Instance.POST("Match/SetCategory", new Dictionary<string, string>()
         {
             { "matchId", MatchId.ToString() },
-            { "categoryName", ScoringManager.Instance.SelectedCategory().name }
+            { "categoryName", ScoringManager.Instance.SelectedCategory().name },
+            { "endMatch", (MyCurrentRound().CurrentState == MatchRound.RoundState.Ended) ? "True" : "False"}
         }, s => { });
     }
 
@@ -152,13 +169,13 @@ public abstract class GameManager : Singleton<GameManager>
         {
             ScoringManager.Instance.OnCategorySelected(category);
             MyCurrentRound().CategoryName = category.name;
-            SubmitCategory();
 
             if (GameScene.Instance.CurrentState == GameScene.State.WaitingForCategory)
             {
-                MyCurrentRound().CurrentState = MatchRound.RoundState.Ended;
-                GameScene.Instance.CurrentState = GameScene.State.End;
+                EndRound();
             }
+
+            SubmitCategory();
         }
 
         CategoryBox.Instance.Refresh();

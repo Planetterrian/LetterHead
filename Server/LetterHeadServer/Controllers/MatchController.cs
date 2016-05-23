@@ -90,7 +90,7 @@ namespace LetterHeadServer.Controllers
         }
         
 
-        public ActionResult SetCategory(int matchId, string categoryName)
+        public ActionResult SetCategory(int matchId, string categoryName, bool endMatch)
         {
             var match = Match.GetById(db, matchId);
             if (match == null)
@@ -126,10 +126,15 @@ namespace LetterHeadServer.Controllers
                 return Error("No category selected");
             }
 
-            var rounds = match.UserRounds(currentUser);
+            var rounds = match.UserRounds(currentUser).Where(r => r.Number != match.CurrentRoundNumber);
             if (rounds.Any(r => r.CategoryName == category.name))
             {
                 return Error("That category has already been used");
+            }
+
+            if (endMatch)
+            {
+                round.CurrentState = MatchRound.RoundState.WaitingForCategory;
             }
 
             round.SetCategory(db, category);

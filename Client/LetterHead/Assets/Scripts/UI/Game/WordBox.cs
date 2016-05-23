@@ -5,7 +5,7 @@ using PathologicalGames;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class WordBox : Singleton<WordBox>
+public class WordBox : Singleton<WordBox>, IGameHandler
 {
     public RectTransform contentBox;
     public GameObject rowPrefab;
@@ -19,13 +19,18 @@ public class WordBox : Singleton<WordBox>
 
     private void Start()
     {
+        GameScene.Instance.AddGameManger(this);
+        //AddStartingRows();
+
+        ScrollToBottom();
+    }
+
+    private void AddStartingRows()
+    {
         for (int i = 0; i < startingRows; i++)
         {
             AddRow();
         }
-
-        ScrollToBottom();
-
     }
 
     private WordRow AddRow()
@@ -67,5 +72,18 @@ public class WordBox : Singleton<WordBox>
     private void ScrollToBottom()
     {
         scroll.verticalNormalizedPosition = 0;
+    }
+
+    public void OnReset()
+    {
+        foreach (var wordRow in rows)
+        {
+            PoolManager.Pools["UI"].Despawn(wordRow.transform, PoolManager.Pools["UI"].transform);
+
+        }
+        rows.Clear();
+
+        AddStartingRows();
+        ScrollToBottom();
     }
 }

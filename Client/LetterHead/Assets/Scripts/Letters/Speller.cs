@@ -6,7 +6,7 @@ using System.Collections;
 using UnityEngine.Events;
 using uTools;
 
-public class Speller : Singleton<Speller>
+public class Speller : Singleton<Speller>, IGameHandler
 {
     public float maxTileScale = 1;
     public float padding;
@@ -23,6 +23,7 @@ public class Speller : Singleton<Speller>
 
     void Start()
     {
+        GameScene.Instance.AddGameManger(this);
         GameScene.Instance.OnStateChanged.AddListener(OnStateChanged);
         GameGui.Instance.timer.OnTimeExpired.AddListener(OnTimeExpired);
     }
@@ -182,5 +183,10 @@ public class Speller : Singleton<Speller>
         tiles.Clear();
 
         onSpellerChangedEvent.Invoke();
+    }
+
+    public void OnReset()
+    {
+        ClearTiles();
     }
 }

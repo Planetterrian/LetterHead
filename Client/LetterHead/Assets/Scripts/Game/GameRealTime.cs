@@ -12,6 +12,8 @@ public class GameRealTime : Singleton<GameRealTime>
     private WebSocket socket;
     private bool isShuttingDown;
 
+    private int currentMatchId;
+
     void Start()
     {
         var x = Loom.Current;
@@ -27,6 +29,14 @@ public class GameRealTime : Singleton<GameRealTime>
 
     public void Connect()
     {
+        // We're still connected
+        if (currentMatchId == GameManager.Instance.MatchId && socket.IsConnected)
+        {
+            SendMsg("RefreshRound");
+            return;
+        }
+
+        currentMatchId = GameManager.Instance.MatchId;
         System.Uri uri = new Uri(Srv.Instance.Url());
         string uriWithoutScheme = uri.Host + ":" + uri.Port + uri.PathAndQuery;
 

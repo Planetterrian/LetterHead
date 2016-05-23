@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity.Core.Objects;
+using System.Data.Entity.Infrastructure;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -189,6 +191,11 @@ namespace LetterHeadServer.Controllers
             round.Words.Add(word);
             round.UsedLetterIds = uniqueLetterCount;
             db.SaveChanges();
+        }
+
+        private async Task _RefreshRound(BinaryReader reader)
+        {
+            ((IObjectContextAdapter)db).ObjectContext.Refresh(RefreshMode.StoreWins, match);
         }
 
         private async Task _RequestStart(BinaryReader reader)

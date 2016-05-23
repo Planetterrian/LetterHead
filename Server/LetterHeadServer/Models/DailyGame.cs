@@ -59,7 +59,7 @@ namespace LetterHeadServer.Models
 
         public Match CreateMatchForUser(ApplicationDbContext context, User currentUser)
         {
-            var match = Match.New(context, new List<User>(){ currentUser }, 1);
+            var match = Match.New(context, new List<User>(){ currentUser }, 10);
             match.DailyGame = this;
             match.CurrentState = LetterHeadShared.DTO.Match.MatchState.Pregame;
             match.Letters = Letters;

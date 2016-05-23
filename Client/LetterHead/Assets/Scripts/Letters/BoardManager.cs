@@ -99,6 +99,11 @@ public class BoardManager : Singleton<BoardManager>
     {
         Initilize();
 
+        foreach (var tile in new List<Tile>(tiles))
+        {
+            RemoveTile(tile, RemoveEffect.None);
+        }
+
         var letterNum = 0;
 
         for (int y = 0; y < gridSize.y; y++)
