@@ -38,13 +38,33 @@ public class DashboardRow : MonoBehaviour
     private void Refresh()
     {
         var score1 = MatchInfo.UserScore(0);
-        var score2 = MatchInfo.UserScore(1);
+        var score2 = 0;
 
-        var opponentInfo = MatchInfo.Users.First(u => u.Id != ClientManager.Instance.UserId());
+        UserInfo opponentInfo;
+
+        if (MatchInfo.Users.Count > 1)
+        {
+            score2 = MatchInfo.UserScore(1);
+            opponentInfo = MatchInfo.Users.First(u => u.Id != ClientManager.Instance.UserId());
+        }
+        else
+        {
+            opponentInfo = MatchInfo.Users[0];
+        }
+
         usernameLabel.text = opponentInfo.Username;
         avatarBox.SetAvatarImage(opponentInfo.AvatarUrl);
         roundLabel.text = "Round " + (MatchInfo.CurrentRoundNumber + 1) + "/" + MatchInfo.MaxRounds;
         myScoreLabel.text = "My Score: " + (MatchInfo.IndexOfUser(ClientManager.Instance.UserId()) == 0 ? score1.ToString() : score2.ToString());
-        theirScoreLabel.text = "Their Score: " + (MatchInfo.IndexOfUser(ClientManager.Instance.UserId()) == 0 ? score2.ToString() : score1.ToString());
+
+        if (MatchInfo.Users.Count == 1)
+        {
+            theirScoreLabel.text = "";
+        }
+        else
+        {
+            theirScoreLabel.text = "Their Score: " + (MatchInfo.IndexOfUser(ClientManager.Instance.UserId()) == 0 ? score2.ToString() : score1.ToString());
+        }
+
     }
 }
