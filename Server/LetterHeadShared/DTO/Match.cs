@@ -17,7 +17,6 @@ namespace LetterHeadShared.DTO
         public List<UserInfo> Users;
         public List<int> Scores;
         public List<MatchRound> Rounds;
-        public string Letters;
         public int RoundTimeSeconds;
         public int CurrentRoundNumber;
         public int CurrentUserIndex;

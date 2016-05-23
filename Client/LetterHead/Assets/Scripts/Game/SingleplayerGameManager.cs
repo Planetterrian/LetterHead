@@ -36,6 +36,6 @@ public class SingleplayerGameManager : GameManager
     {
         base.OnMatchDetailsLoaded();
 
-        BoardManager.Instance.SetBoardLetters(MatchDetails.Letters, true);
+        BoardManager.Instance.SetBoardLetters(CurrentRound().Letters, true);
     }
 }

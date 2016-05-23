@@ -9,9 +9,16 @@ namespace LetterHeadServer.Models
     public class DailyGame
     {
         public int Id { get; set; }
-        public string Letters { get; set; }
+        public string LettersEncoded { get; set; }
         public DateTime StartDate;
         public DateTime? EndDate;
+
+        public string RoundLetters(int roundNumber)
+        {
+            return LettersEncoded.Split(',')[roundNumber];
+        }
+
+        private const int RoundCount = 10;
 
         public static void CreateNewDailyGame()
         {
@@ -20,12 +27,19 @@ namespace LetterHeadServer.Models
             var current = Current();
             current?.End(db);
 
-            db.DailyGames.Add(new DailyGame()
-                                                      {
-                                                          StartDate = DateTime.Now,
-                                                          Letters = BoardHelper.GenerateBoard()
-                                                      });
+            var letterArray = new List<string>();
 
+            for (int i = 0; i < RoundCount; i++)
+            {
+                letterArray.Add(BoardHelper.GenerateBoard());
+            }
+
+
+            db.DailyGames.Add(new DailyGame()
+            {
+                StartDate = DateTime.Now,
+                LettersEncoded =  String.Join(",", letterArray)
+            });
 
             db.SaveChanges();
         }
@@ -59,15 +73,20 @@ namespace LetterHeadServer.Models
 
         public Match CreateMatchForUser(ApplicationDbContext context, User currentUser)
         {
-            var match = Match.New(context, new List<User>(){ currentUser }, 10);
+            var match = Match.New(context, new List<User>(){ currentUser }, RoundCount);
             match.DailyGame = this;
             match.CurrentState = LetterHeadShared.DTO.Match.MatchState.Pregame;
-            match.Letters = Letters;
-
-            context.SaveChanges();
+                        context.SaveChanges();
 
             match.AddRounds(context);
 
+            context.SaveChanges();
+
+            for (int index = 0; index < match.Rounds.Count; index++)
+            {
+                var round = match.Rounds[index];
+                round.Letters = RoundLetters(index);
+            }
             context.SaveChanges();
 
             return match;

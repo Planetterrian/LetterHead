@@ -147,4 +147,14 @@ public class GameGui : Singleton<GameGui>
         leftPowerupsBox.SetActive(false);
         rightPowerupsBox.SetActive(false);
     }
+
+    public void OnBackClicked()
+    {
+        PersistManager.Instance.LoadMenu();
+    }
+
+    public void OnNextClicked()
+    {
+
+    }
 }

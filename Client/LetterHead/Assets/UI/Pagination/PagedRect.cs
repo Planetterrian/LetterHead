@@ -220,7 +220,7 @@ namespace UI.Pagination
 
         #region Unity Functions
 
-        void Awake()
+        private void Awake()
         {
             CurrentPage = DefaultPage;
             if (UsingScrollRect)
@@ -232,8 +232,14 @@ namespace UI.Pagination
 
                 CenterScrollRectOnCurrentPage(true);
             }
+
+            for (var i = 0; i < NumberOfPages; i++)
+            {
+                var page = Pages[i];
+                page.gameObject.SetActive(i == CurrentPage - 1);
+            }
         }
-        
+
         void LateUpdate()
         {            
             if (!firstPageSet)

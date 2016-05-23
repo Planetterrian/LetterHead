@@ -16,6 +16,7 @@ namespace LetterHeadShared.DTO
         public string CategoryName;
         public RoundState CurrentState;
         public DateTime? StartedOn;
+        public string Letters;
 
 
         public enum RoundState

@@ -24,7 +24,6 @@ namespace LetterHeadServer.Models
         public virtual DailyGame DailyGame { get; set; }
         public DateTime CreatedOn { get; set; }
         public DateTime? StartedOn { get; set; }
-        public string Letters { get; set; }
         public int RoundTimeSeconds { get; set; }
         public int MaxRounds { get; set; }
 
@@ -172,7 +171,10 @@ namespace LetterHeadServer.Models
 
         public void GenerateRandomBoard()
         {
-            Letters = BoardHelper.GenerateBoard();
+            foreach (var round in Rounds)
+            {
+                round.Letters = BoardHelper.GenerateBoard();
+            }
         }
     }
 }
