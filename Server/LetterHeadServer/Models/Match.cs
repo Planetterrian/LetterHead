@@ -14,20 +14,24 @@ namespace LetterHeadServer.Models
 
         [Index]
         public virtual List<User> Users { get; set; }
+
+
+        [Index]
         public virtual User Winner { get; set; }
-        public virtual User CurrentUserTurn { get; set; }
 
         [Index]
         public LetterHeadShared.DTO.Match.MatchState CurrentState { get; set; }
 
         [Index]
         public virtual DailyGame DailyGame { get; set; }
+
+        public virtual User CurrentUserTurn { get; set; }
         public DateTime CreatedOn { get; set; }
         public DateTime? StartedOn { get; set; }
         public int RoundTimeSeconds { get; set; }
         public int MaxRounds { get; set; }
 
-        public virtual List<MatchRound> Rounds { get; set; }
+        public virtual ICollection<MatchRound> Rounds { get; set; }
         public int CurrentRoundNumber { get; set; }
 
         public static Match New(ApplicationDbContext db, List<User> users, int roundCount)
@@ -135,11 +139,6 @@ namespace LetterHeadServer.Models
             GenerateRandomBoard();
         }
 
-        private void EndMatch()
-        {
-            CurrentState = LetterHeadShared.DTO.Match.MatchState.Ended;
-        }
-
         public List<MatchRound> UserRounds(User user)
         {
             return Rounds.Where(r => r.User.Id == user.Id).ToList();
@@ -164,9 +163,24 @@ namespace LetterHeadServer.Models
             return scores;
         }
 
-        public void Terminate()
+        public void EndMatch()
         {
             CurrentState = LetterHeadShared.DTO.Match.MatchState.Ended;
+
+            DetermineWinner();
+        }
+
+        private void DetermineWinner()
+        {
+            if (DailyGame != null)
+            {
+                Winner = Users[0];
+                return;
+            }
+
+            var scores = Rounds.GroupBy(r => r.User).Select(g => new {User = g.Key, Score = g.Sum(r => r.Score)});
+            var winner = scores.OrderByDescending(s => s.Score).First().User;
+            Winner = winner;
         }
 
         public void GenerateRandomBoard()

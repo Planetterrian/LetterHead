@@ -43,6 +43,7 @@
     <Compile Include="DTO\Match.cs" />
     <Compile Include="DTO\MatchRound.cs" />
     <Compile Include="DTO\UserInfo.cs" />
+    <Compile Include="DTO\UserStats.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

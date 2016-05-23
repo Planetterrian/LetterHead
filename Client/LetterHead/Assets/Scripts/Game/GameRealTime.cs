@@ -46,40 +46,48 @@ public class GameRealTime : Singleton<GameRealTime>
         socket.OnMessage += (sender, args) =>
         {
             ProcessMessage(args.RawData);
-            //Debug.Log(args.Data);
         };
 
         socket.OnError += (sender, args) =>
         {
-            Debug.LogError(args.Message);
-
-            if (!isShuttingDown)
+            Loom.QueueOnMainThread(() =>
             {
-                DialogWindowTM.Instance.Show("Disconnected", "You have been disconnected from the server", () =>
+                Debug.LogError(args.Message);
+
+                if (!isShuttingDown)
                 {
-                    PersistManager.Instance.LoadMenu();
-                });
-            }
+                    DialogWindowTM.Instance.Show("Disconnected", "You have been disconnected from the server", () =>
+                    {
+                        PersistManager.Instance.LoadMenu();
+                    });
+                }
+            });
         };
 
         socket.OnOpen += (sender, args) =>
         {
-            Debug.Log("Connected to real time socket");
-            GameGui.Instance.OnRealTimeConnected();
-            GameManager.Instance.OnRealTimeConnected();
+            Loom.QueueOnMainThread(() =>
+            {
+                Debug.Log("Connected to real time socket");
+                GameGui.Instance.OnRealTimeConnected();
+                GameManager.Instance.OnRealTimeConnected();
+            });
         };
 
         socket.OnClose += (sender, args) =>
         {
-            Debug.Log("Disconnected fromn real time socket: " + args.Code + " " + args.Reason);
-
-            if (!isShuttingDown)
+            Loom.QueueOnMainThread(() =>
             {
-                DialogWindowTM.Instance.Show("Disconnected", "You have been disconnected from the server", () =>
+                Debug.Log("Disconnected fromn real time socket: " + args.Code + " " + args.Reason);
+
+                if (!isShuttingDown)
                 {
-                    PersistManager.Instance.LoadMenu();
-                });
-            }
+                    DialogWindowTM.Instance.Show("Disconnected", "You have been disconnected from the server", () =>
+                    {
+                        PersistManager.Instance.LoadMenu();
+                    });
+                }
+            });
         };
 
         socket.Connect();

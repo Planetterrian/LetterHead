@@ -65,7 +65,7 @@ namespace LetterHeadServer.Models
 
             foreach (var game in games)
             {
-                game.Terminate();
+                game.EndMatch();
             }
 
             context.SaveChanges();
@@ -82,9 +82,10 @@ namespace LetterHeadServer.Models
 
             context.SaveChanges();
 
-            for (int index = 0; index < match.Rounds.Count; index++)
+            var roundsList = match.Rounds.ToList();
+            for (int index = 0; index < roundsList.Count; index++)
             {
-                var round = match.Rounds[index];
+                var round = roundsList[index];
                 round.Letters = RoundLetters(index);
             }
             context.SaveChanges();

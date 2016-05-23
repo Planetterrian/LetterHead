@@ -25,6 +25,7 @@ public class Loom : MonoBehaviour
     {
         _current = this;
         initialized = true;
+        DontDestroyOnLoad(gameObject);
     }
 
     static bool initialized;

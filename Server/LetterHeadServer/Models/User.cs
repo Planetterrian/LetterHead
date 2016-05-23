@@ -12,6 +12,7 @@ namespace LetterHeadServer.Models
     public class User
     {
         public int Id { get; set; }
+        public int MostWords { get; set; }
 
         public string Email { get; set; }
         public string PasswordHash { get; set; }
@@ -42,6 +43,22 @@ namespace LetterHeadServer.Models
         public UserInfo DTO()
         {
             return Startup.Mapper.Map<UserInfo>(this);
+        }
+
+        public UserStats Stats(ApplicationDbContext db)
+        {
+            var stats = new UserStats();
+            stats.gamesWon = Matches.Count(m => m.Winner != null && m.Winner.Id == Id);
+            stats.gamesLost = Matches.Count(m => m.Winner != null && m.Winner.Id != Id);
+            stats.gamesPlayed = stats.gamesWon + stats.gamesLost;
+
+            var rounds = db.MatchRounds.Where(m => m.User.Id == Id);
+
+            stats.averageScore = (int)(rounds.Sum(r => r.Score)/rounds.Count());
+            stats.bestScore = rounds.Max(r => r.Score);
+            stats.mostWords = MostWords;
+
+            return stats;
         }
     }
 }

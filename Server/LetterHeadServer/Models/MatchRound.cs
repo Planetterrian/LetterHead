@@ -71,6 +71,11 @@ namespace LetterHeadServer.Models
             {
                 CurrentState = LetterHeadShared.DTO.MatchRound.RoundState.WaitingForCategory;
             }
+
+            if (User.MostWords < Words.Count)
+            {
+                User.MostWords = Words.Count;
+            }
         }
         // Returns error message or null
         public int CalculateScore(List<string> words, int uniqueLetters)

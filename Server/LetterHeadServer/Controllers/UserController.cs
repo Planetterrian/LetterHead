@@ -42,28 +42,81 @@ namespace LetterHeadServer.Controllers
         [AuthenticationFilter()]
         public ActionResult RegisterDetails(string username, string avatar)
         {
-            if (username.Length < 3 || username.Length > 24)
-            {
-                return Error("Username must be between 3 and 24 characters");
-            }
+            ActionResult actionResult;
 
-            if(db.Users.Count(u => u.Username == username) > 0)
-            {
-                return Error("Username already taken");
-            }
+            if (UsernameIsInvalid(username, out actionResult))
+                return actionResult;
+
             currentUser.Username = username;
             currentUser.AvatarUrl = "sprite:" + avatar;
             db.SaveChanges();
             return Okay();
         }
 
-        [AuthenticationFilter()]
-        public ActionResult SetAvatar(string avatar)
+        private bool UsernameIsInvalid(string username, out ActionResult actionResult)
         {
-            currentUser.AvatarUrl = "sprite:" + avatar;
+            if (username.Length < 3 || username.Length > 24)
+            {
+                actionResult = Error("Username must be between 3 and 24 characters");
+                return true;
+            }
+
+            if (currentUser != null)
+            {
+                if (db.Users.Count(u => u.Username == username && u.Id != currentUser.Id) > 0)
+                {
+                    actionResult = Error("Username already taken");
+                    return true;
+                }
+            }
+            else
+            {
+                if (db.Users.Count(u => u.Username == username) > 0)
+                {
+                    actionResult = Error("Username already taken");
+                    return true;
+                }
+            }
+
+            if (username.Contains("<"))
+            {
+                actionResult = Error("Username contains invalid characters");
+                return true;
+            }
+
+            actionResult = null;
+            return false;
+        }
+
+        [AuthenticationFilter()]
+        public ActionResult SetAvatar(string sprite)
+        {
+            currentUser.AvatarUrl = "sprite:" + sprite;
             db.SaveChanges();
             return Okay();
         }
+
+        [AuthenticationFilter()]
+        public ActionResult SetUsername(string username)
+        {
+            ActionResult actionResult;
+            if (UsernameIsInvalid(username, out actionResult))
+                return actionResult;
+
+            currentUser.Username = username;
+            db.SaveChanges();
+            return Okay();
+        }
+
+        public ActionResult Stats(int userId)
+        {
+            var user = db.Users.Find(userId);
+            if (user == null)
+                return Error("Unable to locate user");
+
+            return Json(user.Stats(db));
+        }
+
 
         public ActionResult LoginEmail([Bind(Exclude = "Id")] UserRegistrationModel model)
         {

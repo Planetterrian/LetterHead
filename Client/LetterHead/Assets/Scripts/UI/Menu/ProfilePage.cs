@@ -1,8 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using LetterHeadShared.DTO;
+using Newtonsoft.Json;
 using TMPro;
 using UI.Pagination;
+using UnityEngine;
 using UnityEngine.UI;
 
 class ProfilePage : Page
@@ -79,5 +82,24 @@ class ProfilePage : Page
                 }
             }
         }
+
+        Srv.Instance.POST("User/Stats",
+            new Dictionary<string, string>() {{"userId", ClientManager.Instance.myUserInfo.Id.ToString()}}, s =>
+            {
+                var stats = JsonConvert.DeserializeObject<UserStats>(s);
+
+                stat_gamesPlayed.text = stats.gamesPlayed.ToString();
+                stat_wins.text = stats.gamesWon.ToString();
+                stat_losses.text = stats.gamesLost.ToString();
+
+                if (stats.gamesPlayed == 0)
+                    stat_winPct.text = "0%";
+                else
+                    stat_winPct.text = Mathf.RoundToInt(((float) stats.gamesWon/(float) stats.gamesPlayed)*100).ToString() + "%";
+
+                stat_bestScore.text = stats.bestScore.ToString();
+                stat_averageScore.text = stats.averageScore.ToString();
+                stat_mostWords.text = stats.mostWords.ToString();
+            });
     }
 }
