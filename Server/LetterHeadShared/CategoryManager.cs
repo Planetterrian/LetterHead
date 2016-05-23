@@ -22,28 +22,28 @@ namespace LetterHeadShared
             categories.Add(new Category()
             {
                 name = "3 & 4 Letters",
-                description = "",
+                description = "Make at least 15 3-letter and 4-letter words",
                 GetScore = (words, uniqueLetterCount) => words.Count(w => w.Length == 3 || w.Length == 4) >= 15 ? 30 : 0
             });
 
             categories.Add(new Category()
             {
                 name = "5 & 6 Letters",
-                description = "",
+                description = "Make at least 10 5-letter and 6-letter words.",
                 GetScore = (words, uniqueLetterCount) => words.Count(w => w.Length == 5 || w.Length == 6) >= 10 ? 30 : 0
             });
 
             categories.Add(new Category()
             {
                 name = "20 Words",
-                description = "",
+                description = "Make at least 20 words.",
                 GetScore = (words, uniqueLetterCount) => words.Count >= 20 ? 40 : 0
             });
 
             categories.Add(new Category()
             {
                 name = "Upper Bonus",
-                description = "",
+                description = "Successfully complete all of the above categories",
                 GetScore = (words, uniqueLetterCount) =>
                 {
                     var score = 35;
@@ -63,7 +63,7 @@ namespace LetterHeadShared
             categories.Add(new Category()
             {
                 name = "Starter",
-                description = "",
+                description = "Make at least 10 words that start with the same letter.",
                 GetScore = (words, uniqueLetterCount) =>
                 {
                     var leterDict = new Dictionary<char, int>();
@@ -91,7 +91,7 @@ namespace LetterHeadShared
             categories.Add(new Category()
             {
                 name = "Small Straight",
-                description = "",
+                description = "Make at least one 3, 4, 5, and 6 letter word.",
                 GetScore = (words, uniqueLetterCount) => words.Count(w => w.Length == 3) > 0 && words.Count(w => w.Length == 4) > 0 &&
                  words.Count(w => w.Length == 5) > 0 && words.Count(w => w.Length == 6) > 0 ? 30 : 0
             });
@@ -99,7 +99,7 @@ namespace LetterHeadShared
             categories.Add(new Category()
             {
                 name = "Large Straight",
-                description = "",
+                description = "Make at least one 3, 4, 5, 6, and 7 letter word.",
                 GetScore = (words, uniqueLetterCount) => words.Count(w => w.Length == 3) > 0 && words.Count(w => w.Length == 4) > 0 &&
                  words.Count(w => w.Length == 5) > 0 && words.Count(w => w.Length == 6) > 0 && words.Count(w => w.Length == 7) > 0 ? 40 : 0
             });
@@ -107,7 +107,7 @@ namespace LetterHeadShared
             categories.Add(new Category()
             {
                 name = "Weighted Words",
-                description = "",
+                description = "Score based on the words you make. 3&4-letter 1 points, 5&6-letter 2 points, 7+ letter 3 points",
                 GetScore = (words, uniqueLetterCount) => (words.Count(w => w.Length == 3 || w.Length == 4) * 1) +
                  (words.Count(w => w.Length == 5 || w.Length == 6) * 2) +
                  (words.Count(w => w.Length >= 7) * 3)
@@ -116,7 +116,7 @@ namespace LetterHeadShared
             categories.Add(new Category()
             {
                 name = "7+ Letters",
-                description = "",
+                description = "7+ letter words 25 points each. (Max 75 points)",
                 GetScore = (words, uniqueLetterCount) =>
                 {
                     var score = words.Count(w => w.Length >= 7) * 25;
@@ -130,7 +130,7 @@ namespace LetterHeadShared
             categories.Add(new Category()
             {
                 name = "Big Word Bonus",
-                description = "",
+                description = "8+ letter words 50 points each. No max!",
                 GetScore = (words, uniqueLetterCount) => words.Count(w => w.Length >= 8) * 50
             });
 

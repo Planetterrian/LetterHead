@@ -166,6 +166,8 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Classes\AuthenticationFilterAttribute.cs" />
     <Compile Include="Classes\BoardHelper.cs" />
+    <Compile Include="Classes\RealTimeMatch.cs" />
+    <Compile Include="Classes\RealTimeMatchManager.cs" />
     <Compile Include="Classes\UserManager.cs" />
     <Compile Include="Controllers\BackendController.cs" />
     <Compile Include="Controllers\BaseLetterHeadController.cs" />

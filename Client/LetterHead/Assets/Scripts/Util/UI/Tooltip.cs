@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using TMPro;
+using UnityEngine;
 
 public class Tooltip : Singleton<Tooltip>
 {
@@ -17,8 +18,9 @@ public class Tooltip : Singleton<Tooltip>
     }
 
 
-    public void Show(string text)
+    public void Show(string text, float yPos)
     {
+        transform.position = new Vector3(transform.position.x, yPos, transform.position.z);
         mainText.text = text;
         fade.FadeIn();
     }

@@ -25,7 +25,12 @@ class CategoryBox : Singleton<CategoryBox>
         {
             var category = ScoringManager.Instance.categoryManager.Categories[index];
             categoryTitles[index].text = category.name;
-            categoryTitles[index].GetComponentInParent<Button>().onClick.AddListener(() => OnCategoryClicked(category));
+            var index1 = index;
+            categoryTitles[index].GetComponentInParent<Button>().onClick.AddListener(() =>
+            {
+                Tooltip.Instance.Show(category.description, categoryTitles[index1].transform.parent.parent.position.y + 30);
+                OnCategoryClicked(category);
+            });
             categoryScoreFunctions[categoryValues[index]] = category;
         }
 
@@ -45,7 +50,6 @@ class CategoryBox : Singleton<CategoryBox>
 
     private void OnCategoryClicked(Category category)
     {
-        Tooltip.Instance.Show(category.description);
         if (!GameGui.CanSelectCategory())
             return;
 

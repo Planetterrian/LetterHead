@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class PersistManager : Singleton<PersistManager>
 {
-    public GameObject persistCanvas;
+    public Canvas persistCanvas;
 
     public int matchToLoadId;
     public bool matchToLoadIsDaily;
@@ -14,7 +14,7 @@ public class PersistManager : Singleton<PersistManager>
 
     private void Start()
     {
-        persistCanvas.SetActive(true);
+        persistCanvas.gameObject.SetActive(true);
     }
 
     public void LoadMatch(int matchId, bool isDaily)
