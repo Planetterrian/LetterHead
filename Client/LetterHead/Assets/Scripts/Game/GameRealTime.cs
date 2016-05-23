@@ -10,6 +10,7 @@ using WebSocketSharp;
 public class GameRealTime : Singleton<GameRealTime>
 {
     private WebSocket socket;
+    private bool isShuttingDown;
 
     void Start()
     {
@@ -18,6 +19,8 @@ public class GameRealTime : Singleton<GameRealTime>
 
     void OnDisable()
     {
+        isShuttingDown = true;
+
         if(socket != null && socket.IsConnected)
             socket.CloseAsync(CloseStatusCode.Normal);
     }
@@ -40,10 +43,13 @@ public class GameRealTime : Singleton<GameRealTime>
         {
             Debug.LogError(args.Message);
 
-            DialogWindowTM.Instance.Show("Disconnected", "You have been disconnected from the server", () =>
+            if (!isShuttingDown)
             {
-                PersistManager.Instance.LoadMenu();
-            });
+                DialogWindowTM.Instance.Show("Disconnected", "You have been disconnected from the server", () =>
+                {
+                    PersistManager.Instance.LoadMenu();
+                });
+            }
         };
 
         socket.OnOpen += (sender, args) =>
@@ -57,10 +63,13 @@ public class GameRealTime : Singleton<GameRealTime>
         {
             Debug.Log("Disconnected fromn real time socket: " + args.Code + " " + args.Reason);
 
-            DialogWindowTM.Instance.Show("Disconnected", "You have been disconnected from the server", () =>
+            if (!isShuttingDown)
             {
-                PersistManager.Instance.LoadMenu();
-            });
+                DialogWindowTM.Instance.Show("Disconnected", "You have been disconnected from the server", () =>
+                {
+                    PersistManager.Instance.LoadMenu();
+                });
+            }
         };
 
         socket.Connect();

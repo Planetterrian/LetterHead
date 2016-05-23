@@ -57,7 +57,7 @@ namespace LetterHeadServer.Controllers
             else
             {
                 var match = Match.New(db, new List<User>() {currentUser}, 3);
-                match.Letters = BoardHelper.GenerateBoard();
+                match.GenerateRandomBoard();
             }
 
             db.SaveChanges();

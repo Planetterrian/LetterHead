@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
+using LetterHeadServer.Classes;
 using MyWebApplication;
 
 namespace LetterHeadServer.Models
@@ -132,6 +133,7 @@ namespace LetterHeadServer.Models
 
             CurrentUserTurn = Users[0];
             CurrentRoundNumber++;
+            GenerateRandomBoard();
         }
 
         private void EndMatch()
@@ -166,6 +168,11 @@ namespace LetterHeadServer.Models
         public void Terminate()
         {
             CurrentState = LetterHeadShared.DTO.Match.MatchState.Ended;
+        }
+
+        public void GenerateRandomBoard()
+        {
+            Letters = BoardHelper.GenerateBoard();
         }
     }
 }
