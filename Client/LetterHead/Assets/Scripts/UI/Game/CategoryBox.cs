@@ -58,8 +58,19 @@ public class CategoryBox : Singleton<CategoryBox>, IGameHandler
     {
         foreach (var scoreFunc in categoryScoreFunctions)
         {
-            var score = ScoringManager.Instance.GetCategoryScore(scoreFunc.Value);
+            var score = 0;
 
+            var existingRound = GameManager.Instance.MyRounds().FirstOrDefault(r => r.CategoryName == scoreFunc.Value.name);
+            if (existingRound != null)
+            {
+                // This category has been used
+                score = existingRound.Score;
+            }
+            else
+            {
+                score = ScoringManager.Instance.GetCategoryScore(scoreFunc.Value);
+            }
+            
             scoreFunc.Key.SetScore(score, GameManager.Instance.MyRounds().Any(c => c.CategoryName == scoreFunc.Value.name));
         }
 
