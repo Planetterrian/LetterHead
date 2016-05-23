@@ -34,7 +34,7 @@ namespace LetterHeadServer.Models
         {
             var roundTime = 120;
 
-            if (System.Environment.UserName == "Pete")
+            if (Environment.UserName == "Pete")
                 roundTime = 30;
 
                 var match = new Match()
@@ -161,6 +161,11 @@ namespace LetterHeadServer.Models
             }
 
             return scores;
+        }
+
+        public void Terminate()
+        {
+            CurrentState = LetterHeadShared.DTO.Match.MatchState.Ended;
         }
     }
 }

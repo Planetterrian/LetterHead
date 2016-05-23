@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json;
 using UI.Pagination;
 using UnityEngine;
 
@@ -12,6 +13,15 @@ public class NewGamePage : Page
         {
             DialogWindowTM.Instance.Show("New Game", "We're searching for an opponent. You will receive a notification when one is found.", () => { });
         }, DialogWindowTM.Instance.Error );
+    }
+
+    public void DailyGameClicked()
+    {
+        Srv.Instance.POST("Match/RequestDailyGameStart", null, s =>
+        {
+            var matchId = JsonConvert.DeserializeObject<int>(s);
+            PersistManager.Instance.LoadMatch(matchId, true);
+        }, DialogWindowTM.Instance.Error);
     }
     
 }

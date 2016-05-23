@@ -41,6 +41,20 @@ namespace LetterHeadServer.Models
         {
             EndDate = DateTime.Now;
             context.SaveChanges();
+
+            EndExistingGames(context);
+        }
+
+        private void EndExistingGames(ApplicationDbContext context)
+        {
+            var games = context.Matches.Where(m => m.DailyGame.Id == Id).ToList();
+
+            foreach (var game in games)
+            {
+                game.Terminate();
+            }
+
+            context.SaveChanges();
         }
 
         public Match CreateMatchForUser(ApplicationDbContext context, User currentUser)

@@ -24,6 +24,7 @@ namespace LetterHeadServer.Controllers
     {
         private User currentUser;
         private Match match;
+        private RealTimeMatch rtm;
         private ApplicationDbContext db;
         private WebSocket socket;
 
@@ -47,12 +48,20 @@ namespace LetterHeadServer.Controllers
             {
                 return Request.CreateErrorResponse(HttpStatusCode.Forbidden, "Can't access that match");
             }
-            
-            HttpContext.Current.AcceptWebSocketRequest(context => ProcessSocket(context, db, currentUser, match));
+
+            rtm = RealTimeMatchManager.GetMatch(matchId);
+            rtm.OnNewMessage += OnMatchMessage;
+
+            HttpContext.Current.AcceptWebSocketRequest(ProcessSocket);
             return Request.CreateResponse(HttpStatusCode.SwitchingProtocols);
         }
 
-        private async Task ProcessSocket(AspNetWebSocketContext context, ApplicationDbContext db, User user, Match match)
+        private void OnMatchMessage(RealTimeMatch.Message message)
+        {
+            
+        }
+
+        private async Task ProcessSocket(AspNetWebSocketContext context)
         {
             socket = context.WebSocket;
             while (true)
