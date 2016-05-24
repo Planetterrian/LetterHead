@@ -33,9 +33,9 @@ public class ClientManager : Singleton<ClientManager>
             RefreshMyInfo();*/
     }
 
-    public void RefreshMyInfo(Action<bool> onInfoLoaded = null)
+    public void RefreshMyInfo(bool isFirstLoad, Action<bool> onInfoLoaded = null)
     {
-        Srv.Instance.POST("User/MyInfo", null, s =>
+        Srv.Instance.POST("User/MyInfo", new Dictionary<string, string>() { {"firstLoad", isFirstLoad ? "True" : "False"} }, s =>
         {
             myUserInfo = JsonConvert.DeserializeObject<UserInfo>(s);
 
@@ -54,7 +54,7 @@ public class ClientManager : Singleton<ClientManager>
     {
         SessionId = sessId;
         PlayerPrefs.SetString("sessId", sessId);
-        RefreshMyInfo();
+        RefreshMyInfo(false);
     }
 
     public int UserId()

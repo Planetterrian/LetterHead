@@ -10,5 +10,6 @@ namespace LetterHeadShared.DTO
         public int Id;
         public string Username;
         public string AvatarUrl;
+        public string FacebookPictureUrl;
     }
 }

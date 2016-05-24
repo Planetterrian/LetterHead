@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Web;
 using System.Web.Mvc;
+using Facebook;
 using Hangfire;
 using LetterHeadServer.Models;
 
@@ -40,6 +41,33 @@ namespace LetterHeadServer.Controllers
             db.SaveChanges();
 
             return "Deleted " + rounds.Count + " matches for " + userId;
+        }
+
+        public void RefreshFacebookInfo(int userId)
+        {
+            var user = db.Users.Find(userId);
+            if(user == null)
+                return;
+
+            if(string.IsNullOrEmpty(user.FacebookToken))
+                return;
+
+            var client = new FacebookClient(user.FacebookToken);
+            dynamic info = client.Get("me?fields=id,name,picture.type(large)", null);
+
+            if (info.error != null)
+            {
+                return;
+            }
+
+            if (user.AvatarUrl == user.FacebookPictureUrl)
+            {
+                user.AvatarUrl = info.picture.data.url;
+            }
+
+            user.FacebookPictureUrl = info.picture.data.url;
+
+            db.SaveChanges();
         }
     }
 }

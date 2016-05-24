@@ -11,7 +11,7 @@ public class SingleplayerGameManager : GameManager
 
         if (PersistManager.Instance.matchToLoadId <= 0)
         {
-            ClientManager.Instance.RefreshMyInfo((b) =>
+            ClientManager.Instance.RefreshMyInfo(false, (b) =>
             {
                 if (b)
                 {

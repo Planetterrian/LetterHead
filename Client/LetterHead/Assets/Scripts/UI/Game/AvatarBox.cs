@@ -9,11 +9,19 @@ public class AvatarBox : MonoBehaviour
     public TextMeshProUGUI nameLabel;
     public TextMeshProUGUI score;
 
+    private string pendingUrl;
+
     // Use this for initialization
     void Start ()
     {
         if(nameLabel)
             nameLabel.text = "";
+
+        if (!string.IsNullOrEmpty(pendingUrl))
+        {
+            StartCoroutine(LoadAvatarImage(pendingUrl));
+            pendingUrl = "";
+        }
     }
 
     public void SetName(string username)
@@ -26,6 +34,7 @@ public class AvatarBox : MonoBehaviour
         if(string.IsNullOrEmpty(url))
             return;
 
+
         if (url.StartsWith("sprite:"))
         {
             // Using a built in sprite
@@ -33,6 +42,11 @@ public class AvatarBox : MonoBehaviour
         }
         else
         {
+            if (!gameObject.activeInHierarchy)
+            {
+                pendingUrl = url;
+                return;
+            }
             StartCoroutine(LoadAvatarImage(url));
         }
     }

@@ -21,7 +21,7 @@ public class MenuGui : Singleton<MenuGui>
     {
         if (!string.IsNullOrEmpty(ClientManager.Instance.SessionId))
         {
-            ClientManager.Instance.RefreshMyInfo((state) =>
+            ClientManager.Instance.RefreshMyInfo(true, (state) =>
             {
                 if (state)
                 {

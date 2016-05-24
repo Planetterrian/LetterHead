@@ -27,23 +27,36 @@ public class LoginScene : GuiScene
 
     public void OnLoginFacebookClicked()
     {
-        FB.LogInWithReadPermissions(new List<string>() {"friends"}, FacebookLoginCallback);
+        FB.LogInWithReadPermissions(new List<string>() { "user_friends" }, FacebookLoginCallback);
+
     }
 
     private void FacebookLoginCallback(ILoginResult result)
     {
+        if (result.Cancelled)
+        {
+            DialogWindowTM.Instance.Hide();
+            return;
+        }
+
         if (!string.IsNullOrEmpty(result.Error))
         {
             DialogWindowTM.Instance.Error(result.Error);
             return;
         }
 
+        DialogWindowTM.Instance.Show("Facebook", "We're processing your Login... Please wait.", () => { }, () => { }, "");
+
         Srv.Instance.POST("User/FacebookLogin", new Dictionary<string, string>() {{"token", result.AccessToken.TokenString}}, (s) =>
         {
             var sessionId = JsonConvert.DeserializeObject<string>(s);
             ClientManager.Instance.SetSessionId(sessionId);
             MenuGui.Instance.LoadDashboard();
+            DialogWindowTM.Instance.Hide();
+        }, s =>
+        {
+            DialogWindowTM.Instance.Error(s);
         });
-        Debug.Log(result.AccessToken.TokenString);
+        //Debug.Log(result.AccessToken.TokenString);
     }
 }

@@ -30,6 +30,7 @@ namespace LetterHeadServer.Classes
                 FacebookId = facebookUser.Id,
                 SignupDate = DateTime.Now,
                 AvatarUrl = facebookUser.PictureUrl,
+                FacebookPictureUrl = facebookUser.PictureUrl,
                 Username = facebookUser.Name
             };
 

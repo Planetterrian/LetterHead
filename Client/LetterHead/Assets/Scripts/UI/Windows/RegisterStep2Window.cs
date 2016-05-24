@@ -46,7 +46,7 @@ public class RegisterStep2Window : MonoBehaviour
                                                       {
                                                           GetComponent<WindowController>().Hide();
                                                           MenuGui.Instance.LoadDashboard();
-                                                          ClientManager.Instance.RefreshMyInfo();
+                                                          ClientManager.Instance.RefreshMyInfo(false);
                                                       }
                                                   }, s =>
                                                   {

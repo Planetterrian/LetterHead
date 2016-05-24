@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Web;
 using LetterHeadShared.DTO;
 using MyWebApplication;
@@ -21,6 +22,7 @@ namespace LetterHeadServer.Models
         [MaxLength(32)]
         public string Username { get; set; }
         public string AvatarUrl { get; set; }
+        public string FacebookPictureUrl { get; set; }
         public string DeviceGUID { get; set; }
         public string FacebookId { get; set; }
         public string FacebookToken { get; set; }
@@ -59,12 +61,13 @@ namespace LetterHeadServer.Models
             if (rounds.Any())
             {
                 stats.averageScore = (int)(rounds.Sum(r => r.Score)/rounds.Count());
+                stats.bestScore = rounds.Max(r => r.Score);
             }
             else
             {
                 stats.averageScore = 0;
+                stats.bestScore = 0;
             }
-            stats.bestScore = rounds.Max(r => r.Score);
             stats.mostWords = MostWords;
 
             return stats;

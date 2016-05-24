@@ -53,13 +53,21 @@ public class DialogWindowTM : Singleton<DialogWindowTM>
 
         //GetComponent<Window>().Show();
 
-        if (cancelCallback == null)
+        if (okayText == "")
+        {
+            // Info box
+            cancelButton.gameObject.SetActive(false);
+            okayButton.gameObject.SetActive(false);
+        }
+        else if (cancelCallback == null)
         {
             okayButton.transform.localPosition = new Vector3(0, okayButton.transform.localPosition.y, okayButton.transform.localPosition.z);
             cancelButton.gameObject.SetActive(false);
+            okayButton.gameObject.SetActive(true);
         }
         else
         {
+            okayButton.gameObject.SetActive(true);
             okayButton.transform.localPosition = new Vector3(okayStartingPos, okayButton.transform.localPosition.y, okayButton.transform.localPosition.z);
             cancelButton.gameObject.SetActive(true);
         }

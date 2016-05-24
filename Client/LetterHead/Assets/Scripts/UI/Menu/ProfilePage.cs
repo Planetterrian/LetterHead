@@ -11,6 +11,9 @@ using UnityEngine.UI;
 class ProfilePage : Page
 {
     public Dropdown avatarDropdown;
+    public AvatarBox facebookAvatarBox;
+    public Toggle useFacebookImageToggle;
+
     public TMP_InputField usernameInput;
 
     public TextMeshProUGUI stat_gamesPlayed;
@@ -55,11 +58,30 @@ class ProfilePage : Page
 
     public void OnAvatarChanged()
     {
+        if(useFacebookImageToggle.isOn || avatarDropdown.value == -1)
+            return;
+
         Srv.Instance.POST("User/SetAvatar",
             new Dictionary<string, string>() {{"sprite", avatarDropdown.options[avatarDropdown.value].text}}, s =>
             {
                 // Silently accept it
             });
+    }
+
+    public void OnUseFacebookImageChanged()
+    {
+        avatarDropdown.gameObject.SetActive(!useFacebookImageToggle.isOn);
+        facebookAvatarBox.gameObject.SetActive(useFacebookImageToggle.isOn);
+
+        if (useFacebookImageToggle.isOn)
+        {
+            Srv.Instance.POST("User/UseFacebookImage", null, s => { });
+        }
+        else
+        {
+            avatarDropdown.value = -1;
+            avatarDropdown.value = Random.Range(0, avatarDropdown.options.Count);
+        }
     }
 
     public void Refresh()
@@ -68,8 +90,20 @@ class ProfilePage : Page
 
         usernameInput.text = ClientManager.Instance.myUserInfo.Username;
 
+        useFacebookImageToggle.isOn = ClientManager.Instance.myUserInfo.FacebookPictureUrl == ClientManager.Instance.myUserInfo.AvatarUrl;
+
+        useFacebookImageToggle.gameObject.SetActive(!string.IsNullOrEmpty(ClientManager.Instance.myUserInfo.FacebookPictureUrl));
+
+        if (!string.IsNullOrEmpty(ClientManager.Instance.myUserInfo.FacebookPictureUrl))
+        {
+            facebookAvatarBox.SetAvatarImage(ClientManager.Instance.myUserInfo.FacebookPictureUrl);
+        }
+
         if (ClientManager.Instance.myUserInfo.AvatarUrl.StartsWith("sprite:"))
         {
+            avatarDropdown.gameObject.SetActive(true);
+            facebookAvatarBox.gameObject.SetActive(false);
+
             var spriteName = ClientManager.Instance.myUserInfo.AvatarUrl.Substring(7);
             for (int index = 0; index < avatarDropdown.options.Count; index++)
             {
@@ -81,6 +115,11 @@ class ProfilePage : Page
                     break;
                 }
             }
+        }
+        else
+        {
+            avatarDropdown.gameObject.SetActive(false);
+            facebookAvatarBox.gameObject.SetActive(true);
         }
 
         Srv.Instance.POST("User/Stats",

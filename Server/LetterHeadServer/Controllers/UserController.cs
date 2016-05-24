@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Facebook;
+using Hangfire;
 using LetterHeadServer.Classes;
 using LetterHeadServer.Models;
 
@@ -40,10 +41,27 @@ namespace LetterHeadServer.Controllers
             }
         }
 
+        [AuthenticationFilter()]
+        public ActionResult UseFacebookImage()
+        {
+            if (!string.IsNullOrEmpty(currentUser.FacebookPictureUrl))
+            {
+                currentUser.AvatarUrl = currentUser.FacebookPictureUrl;
+                db.SaveChanges();
+            }
+
+            return Okay();
+        }
+
         public ActionResult FacebookLogin(string token)
         {
             var client = new FacebookClient(token);
-            dynamic info = client.Get("me?fields=id,name,picture", null);
+            dynamic info = client.Get("me?fields=id,name,picture.type(large)", null);
+
+            if (info.error != null)
+            {
+                return Error("Invalid token");
+            }
 
             var facebookUser = new FacebookUserInfo()
             {
@@ -156,8 +174,12 @@ namespace LetterHeadServer.Controllers
 
 
         [AuthenticationFilter]
-        public ActionResult MyInfo()
+        public ActionResult MyInfo(bool isFirstLoad)
         {
+            if (isFirstLoad)
+            {
+                BackgroundJob.Enqueue(() => new BackendController().RefreshFacebookInfo(currentUser.Id));
+            }
             return Json(currentUser.DTO());
         }
     }
