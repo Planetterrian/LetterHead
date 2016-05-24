@@ -21,6 +21,7 @@ public class ScoringManager : Singleton<ScoringManager>, IGameHandler
     public void OnReset()
     {
         submittedWords.Clear();
+        currentCategory = null;
         usedLetterIds = 0;
         OnWordsChanged();
     }
