@@ -37,8 +37,8 @@ public class ScoringManager : Singleton<ScoringManager>, IGameHandler
 
     private bool CanAcceptWord(string word)
     {
-        //if(submittedWords.Contains(word))
-        //return false;
+        if(submittedWords.Contains(word))
+            return false;
 
         return true;
     }
@@ -54,6 +54,9 @@ public class ScoringManager : Singleton<ScoringManager>, IGameHandler
 
             GameRealTime.Instance.AddWord(word, usedLetterIds);
         }
+
+        if(PersistManager.Instance.ClearWord)
+            BoardManager.Instance.ClearCurrentWord();
 
         WordBox.Instance.AddWord(word);
         submittedWords.Add(word);
