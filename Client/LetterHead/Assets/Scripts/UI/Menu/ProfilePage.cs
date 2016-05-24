@@ -47,7 +47,7 @@ class ProfilePage : Page
     public void OnNameChanged()
     {
         Srv.Instance.POST("User/SetUsername",
-            new Dictionary<string, string>() { { "sprite", usernameInput.text } }, s =>
+            new Dictionary<string, string>() { { "username", usernameInput.text } }, s =>
             {
                 // Silently accept it
             });
