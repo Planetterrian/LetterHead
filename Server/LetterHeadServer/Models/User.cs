@@ -22,6 +22,8 @@ namespace LetterHeadServer.Models
         public string Username { get; set; }
         public string AvatarUrl { get; set; }
         public string DeviceGUID { get; set; }
+        public string FacebookId { get; set; }
+        public string FacebookToken { get; set; }
         public DateTime SignupDate { get; set; }
 
         public virtual List<Match> Matches { get; set; }
@@ -54,7 +56,14 @@ namespace LetterHeadServer.Models
 
             var rounds = db.MatchRounds.Where(m => m.User.Id == Id);
 
-            stats.averageScore = (int)(rounds.Sum(r => r.Score)/rounds.Count());
+            if (rounds.Any())
+            {
+                stats.averageScore = (int)(rounds.Sum(r => r.Score)/rounds.Count());
+            }
+            else
+            {
+                stats.averageScore = 0;
+            }
             stats.bestScore = rounds.Max(r => r.Score);
             stats.mostWords = MostWords;
 

@@ -9,22 +9,35 @@ namespace LetterHeadServer.Classes
 {
     public static class UserManager
     {
-/*
 
-        public static User LoginUserFromFacebook(ApplicationDbContext db, FacebookUser facebookUser)
+        public static User LoginUserFromFacebook(ApplicationDbContext db, FacebookUserInfo facebookUser)
         {
             var user = db.Users.SingleOrDefault(u => u.FacebookId == facebookUser.Id);
 
             if (user == null)
-                user = CreateUser(db, facebookUser);
+                user = CreateFacebookUser(db, facebookUser);
 
-            user.facebookUser = facebookUser;
-
-            DoLogin(user);
+            user.FacebookToken = facebookUser.Token;
 
             return user;
         }
-*/
+
+        private static User CreateFacebookUser(ApplicationDbContext db, FacebookUserInfo facebookUser)
+        {
+            var user = new User()
+            {
+                FacebookToken = facebookUser.Token,
+                FacebookId = facebookUser.Id,
+                SignupDate = DateTime.Now,
+                AvatarUrl = facebookUser.PictureUrl,
+                Username = facebookUser.Name
+            };
+
+            db.Users.Add(user);
+            db.SaveChanges();
+
+            return user;
+        }
 
         public static User LoginUserWithEmail(ApplicationDbContext db, UserRegistrationModel model)
         {

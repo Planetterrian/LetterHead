@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Facebook;
 using LetterHeadServer.Classes;
 using LetterHeadServer.Models;
 
@@ -37,6 +38,26 @@ namespace LetterHeadServer.Controllers
                 var err = ModelState.Select(x => x.Value.Errors).FirstOrDefault(y => y.Count > 0);
                 return Error(err[0].ErrorMessage);
             }
+        }
+
+        public ActionResult FacebookLogin(string token)
+        {
+            var client = new FacebookClient(token);
+            dynamic info = client.Get("me?fields=id,name,picture", null);
+
+            var facebookUser = new FacebookUserInfo()
+            {
+                Id = info.id,
+                Token = token,
+                PictureUrl = info.picture.data.url,
+                Name = info.name,
+            };
+
+            var user = UserManager.LoginUserFromFacebook(db, facebookUser);
+            user.GenerateNewSessionId();
+            db.SaveChanges();
+
+            return Json(user.SessionId, JsonRequestBehavior.AllowGet);
         }
 
         [AuthenticationFilter()]

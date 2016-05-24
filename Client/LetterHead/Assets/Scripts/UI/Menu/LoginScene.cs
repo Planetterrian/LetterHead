@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Facebook.Unity;
+using Newtonsoft.Json;
 using UnityEngine;
 
 public class LoginScene : GuiScene
@@ -31,7 +32,18 @@ public class LoginScene : GuiScene
 
     private void FacebookLoginCallback(ILoginResult result)
     {
-        Debug.Log(result.Error);
+        if (!string.IsNullOrEmpty(result.Error))
+        {
+            DialogWindowTM.Instance.Error(result.Error);
+            return;
+        }
+
+        Srv.Instance.POST("User/FacebookLogin", new Dictionary<string, string>() {{"token", result.AccessToken.TokenString}}, (s) =>
+        {
+            var sessionId = JsonConvert.DeserializeObject<string>(s);
+            ClientManager.Instance.SetSessionId(sessionId);
+            MenuGui.Instance.LoadDashboard();
+        });
         Debug.Log(result.AccessToken.TokenString);
     }
 }
