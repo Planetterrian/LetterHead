@@ -182,5 +182,11 @@ namespace LetterHeadServer.Controllers
             }
             return Json(currentUser.DTO());
         }
+
+        [AuthenticationFilter]
+        public ActionResult Freinds()
+        {
+            return Json(currentUser.Friends.Select(f => f.DTO()));
+        }
     }
 }

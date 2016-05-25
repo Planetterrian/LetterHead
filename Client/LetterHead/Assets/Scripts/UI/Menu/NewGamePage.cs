@@ -7,6 +7,13 @@ using UnityEngine;
 
 public class NewGamePage : Page
 {
+    public WindowController friendsWindow;
+
+    public void OnInviteFriendClicked()
+    {
+        friendsWindow.ShowModal();
+    }
+
     public void OnRandomOpponentClicked()
     {
         Srv.Instance.POST("Match/Random", null, s =>

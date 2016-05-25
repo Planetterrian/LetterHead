@@ -22,12 +22,14 @@ public class WindowController : MonoBehaviour
     {
         modal.SetActive(false);
         fade.FadeIn();
+        SendMessage("OnWindowShown");
     }
 
     public void ShowModal()
     {
         modal.SetActive(true);
         fade.FadeIn();
+        SendMessage("OnWindowShown");
     }
 
 
