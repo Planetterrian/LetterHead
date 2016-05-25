@@ -16,6 +16,8 @@ namespace LetterHeadServer.Classes
 
         private static List<LetterDefinition> letters = new List<LetterDefinition>();
         private static float totalWeight;
+        private static Random rand = new Random();
+
 
         static BoardHelper()
         {
@@ -52,9 +54,7 @@ namespace LetterHeadServer.Classes
         public static string GenerateBoard()
         {
             var letterString = "";
-
-            var rand = new Random();
-
+            
             while (letterString.Length < 10)
             {
                 var arrow = (float)rand.NextDouble()*totalWeight;

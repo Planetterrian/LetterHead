@@ -35,7 +35,7 @@ public class ClientManager : Singleton<ClientManager>
 
     public void RefreshMyInfo(bool isFirstLoad, Action<bool> onInfoLoaded = null)
     {
-        Srv.Instance.POST("User/MyInfo", new Dictionary<string, string>() { {"firstLoad", isFirstLoad ? "True" : "False"} }, s =>
+        Srv.Instance.POST("User/MyInfo", new Dictionary<string, string>() { { "isFirstLoad", isFirstLoad ? "True" : "False"} }, s =>
         {
             myUserInfo = JsonConvert.DeserializeObject<UserInfo>(s);
 

@@ -63,7 +63,7 @@ namespace LetterHeadServer.Models
         {
             if (!string.IsNullOrEmpty(CategoryName))
             {
-                Score = CalculateScore(Words, NumberOfSetBits(UsedLetterIds));
+                Score = CalculateScore(Words, NumberOfSetBits(UsedLetterIds), ExistingCategoryScores());
                 CurrentState = LetterHeadShared.DTO.MatchRound.RoundState.Ended;
                 Match.AdvanceRound();
             }
@@ -77,12 +77,29 @@ namespace LetterHeadServer.Models
                 User.MostWords = Words.Count;
             }
         }
-        // Returns error message or null
-        public int CalculateScore(List<string> words, int uniqueLetters)
+
+        private List<int> ExistingCategoryScores()
+        {
+            var scores = new int[Startup.CategoryManager.Categories.Count];
+
+            var rounds = Match.Rounds.Where(m => m.User.Id == User.Id && m.Number < Match.CurrentRoundNumber);
+            foreach (var round in rounds)
+            {
+                if(string.IsNullOrEmpty(round.CategoryName))
+                    continue;
+
+                var categoryIndex = Startup.CategoryManager.GetCategoryIndex(round.CategoryName);
+                scores[categoryIndex] = round.Score;
+            }
+
+            return scores.ToList();
+        }
+
+        public int CalculateScore(List<string> words, int uniqueLetters, List<int> existingCategoryScores)
         {
             var category = Startup.CategoryManager.GetCategory(CategoryName);
 
-            return category.GetScore(words, uniqueLetters);
+            return category.GetScore(words, uniqueLetters, existingCategoryScores);
         }
 
         public void SetCategory(ApplicationDbContext db, Category category)

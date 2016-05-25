@@ -99,7 +99,7 @@ public class GameGui : Singleton<GameGui>
 
     private void OnTimeExpired()
     {
-
+        BoardManager.Instance.ClearCurrentWord();
     }
 
     public static bool CanSelectCategory()

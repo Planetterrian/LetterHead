@@ -35,7 +35,6 @@ public class Speller : Singleton<Speller>, IGameHandler
 
     private void OnTimeExpired()
     {
-        ClearTiles();
     }
 
     private void OnStateChanged()

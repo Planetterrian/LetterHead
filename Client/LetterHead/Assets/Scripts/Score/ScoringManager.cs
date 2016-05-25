@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using LetterHeadShared;
+using LetterHeadShared.DTO;
 using UnityEngine;
 
 public class ScoringManager : Singleton<ScoringManager>, IGameHandler
@@ -38,8 +39,11 @@ public class ScoringManager : Singleton<ScoringManager>, IGameHandler
 
     private bool CanAcceptWord(string word)
     {
-        if(submittedWords.Contains(word))
-            return false;
+        if (!Application.isEditor)
+        {
+            if (submittedWords.Contains(word))
+                return false;
+        }
 
         return true;
     }
@@ -140,7 +144,24 @@ public class ScoringManager : Singleton<ScoringManager>, IGameHandler
 
     public int GetCategoryScore(Category category)
     {
-        return category.GetScore(Words(), UniqueLetterCount());
+        return category.GetScore(Words(), UniqueLetterCount(), ExistingCategoryScores());
+    }
+
+    private List<int> ExistingCategoryScores()
+    {
+        var scores = new int[categoryManager.Categories.Count];
+
+        var rounds = GameManager.Instance.MyRounds().Where(m => m.Number < GameManager.Instance.MatchDetails.CurrentRoundNumber);
+        foreach (var round in rounds)
+        {
+            if (string.IsNullOrEmpty(round.CategoryName))
+                continue;
+
+            var categoryIndex = categoryManager.GetCategoryIndex(round.CategoryName);
+            scores[categoryIndex] = round.Score;
+        }
+
+        return scores.ToList();
     }
 
     public Category SelectedCategory()
