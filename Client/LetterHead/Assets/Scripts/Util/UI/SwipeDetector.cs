@@ -10,9 +10,10 @@ public class SwipeDetector : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     public float minSwipeLength = 100;
 
     private Vector2 dragOffset;
+    private Vector2 dragStartPos;
     private float canvasScale;
 
-
+    public bool horizontal;
 
     [Serializable]
     public class SwipeEvent : UnityEvent<bool> { };
@@ -25,7 +26,15 @@ public class SwipeDetector : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     {
         dragOffset += eventData.delta;
         eventData.eligibleForClick = false;
-        scrollRect.OnDrag(eventData);
+
+        if (horizontal && Mathf.Abs(dragOffset.x) < Mathf.Abs(dragOffset.y))
+        {
+            scrollRect.OnDrag(eventData);
+        }
+        if (!horizontal && Mathf.Abs(dragOffset.x) > Mathf.Abs(dragOffset.y))
+        {
+            scrollRect.OnDrag(eventData);
+        }
     }
 
     public void OnBeginDrag(PointerEventData eventData)
@@ -39,6 +48,7 @@ public class SwipeDetector : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         canvasScale = canvas.scaleFactor;
 
         dragOffset = Vector2.zero;
+        dragStartPos = eventData.position;
         eventData.eligibleForClick = false;
 
     }
