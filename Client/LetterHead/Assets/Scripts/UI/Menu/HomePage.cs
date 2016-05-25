@@ -35,9 +35,9 @@ public class HomePage : Page
             var theirMatches = matches.Where(m => m.CurrentState != Match.MatchState.Ended && m.Users[m.CurrentUserIndex].Id != ClientManager.Instance.myUserInfo.Id).ToList();
             var completedMatches = matches.Where(m => m.CurrentState == Match.MatchState.Ended).ToList();
 
-            UpdateMatchSet(myMatchRows, myMatches, myTurnHeader);
-            UpdateMatchSet(theirMatchRows, theirMatches, theirTurnHeader);
-            UpdateMatchSet(completedMatchRows, completedMatches, completedHeader);
+            UpdateMatchSet(myMatchRows, myMatches, myTurnHeader, DashboardRow.RowType.MyTurn);
+            UpdateMatchSet(theirMatchRows, theirMatches, theirTurnHeader, DashboardRow.RowType.TheirTurn);
+            UpdateMatchSet(completedMatchRows, completedMatches, completedHeader, DashboardRow.RowType.Completed);
         });
     }
 
@@ -46,7 +46,7 @@ public class HomePage : Page
         RefreshMatches();
     }
 
-    private void UpdateMatchSet(List<DashboardRow> rows, List<Match> matches, Transform header)
+    private void UpdateMatchSet(List<DashboardRow> rows, List<Match> matches, Transform header, DashboardRow.RowType rowType)
     {
         // Update and remove existing
         for (int index = rows.Count - 1; index >= 0; index--)
@@ -79,6 +79,7 @@ public class HomePage : Page
 
                 row = rowGo.GetComponent<DashboardRow>();
                 row.homePage = this;
+                row.type = rowType;
                 row.MatchInfo = match;
                 rows.Add(row);
             }

@@ -16,6 +16,10 @@ public class DashboardRow : MonoBehaviour
     public TextMeshProUGUI theirScoreLabel;
     public TextMeshProUGUI dailyGameLabel;
 
+    public GameObject backBoxMy;
+    public GameObject backBoxTheir;
+    public GameObject backBoxComplete;
+
     public Animator slideAnimator;
 
     [HideInInspector]
@@ -26,6 +30,13 @@ public class DashboardRow : MonoBehaviour
 
     private Match matchInfo;
     private bool backShown;
+
+    public enum RowType
+    {
+        MyTurn, TheirTurn, Completed
+    }
+
+    public RowType type;
 
     public Match MatchInfo
     {
@@ -88,6 +99,9 @@ public class DashboardRow : MonoBehaviour
             opponentInfo = MatchInfo.Users[0];
         }
 
+        backBoxMy.SetActive(type == RowType.MyTurn);
+        backBoxTheir.SetActive(type == RowType.TheirTurn);
+        backBoxComplete.SetActive(type == RowType.Completed);
 
         usernameLabel.text = opponentInfo.Username;
         avatarBox.SetAvatarImage(opponentInfo.AvatarUrl);
