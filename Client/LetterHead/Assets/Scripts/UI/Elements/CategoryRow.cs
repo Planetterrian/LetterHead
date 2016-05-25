@@ -35,10 +35,7 @@ public class CategoryRow : MonoBehaviour
 
     public void SetScore(int score, bool hasBeenUsed)
     {
-        if(score > 0 || hasBeenUsed)
-            scoreLabel.text = score.ToString("N0");
-        else
-            scoreLabel.text = "";
+        scoreLabel.text = score.ToString("N0");
 
         scoreLabel.color = hasBeenUsed ? Color.black : new Color(0.42f, 0.42f, 0.42f);
     }

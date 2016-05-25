@@ -12,6 +12,7 @@ public class DashboardRow : MonoBehaviour
     public TextMeshProUGUI roundLabel;
     public TextMeshProUGUI myScoreLabel;
     public TextMeshProUGUI theirScoreLabel;
+    public TextMeshProUGUI dailyGameLabel;
 
     public HomePage homePage;
 
@@ -52,6 +53,7 @@ public class DashboardRow : MonoBehaviour
             opponentInfo = MatchInfo.Users[0];
         }
 
+
         usernameLabel.text = opponentInfo.Username;
         avatarBox.SetAvatarImage(opponentInfo.AvatarUrl);
         roundLabel.text = "Round " + (MatchInfo.CurrentRoundNumber + 1) + "/" + MatchInfo.MaxRounds;
@@ -60,6 +62,7 @@ public class DashboardRow : MonoBehaviour
         if (MatchInfo.Users.Count == 1)
         {
             theirScoreLabel.text = "";
+            dailyGameLabel.gameObject.SetActive(true);
         }
         else
         {

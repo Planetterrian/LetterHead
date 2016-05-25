@@ -15,6 +15,6 @@ public class WordRow : MonoBehaviour
     public void SetWord(string word)
     {
         this.word = word;
-        label.text = word;
+        label.text = word.ToUpper();
     }
 }
