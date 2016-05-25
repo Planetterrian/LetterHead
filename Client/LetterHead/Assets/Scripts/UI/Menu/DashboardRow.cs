@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using LetterHeadShared.DTO;
 using TMPro;
+using UI.Pagination;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class DashboardRow : MonoBehaviour
 {
@@ -14,12 +16,16 @@ public class DashboardRow : MonoBehaviour
     public TextMeshProUGUI theirScoreLabel;
     public TextMeshProUGUI dailyGameLabel;
 
+    public Animator slideAnimator;
+
+    [HideInInspector]
     public HomePage homePage;
 
     [HideInInspector]
     public bool markForDelete;
 
     private Match matchInfo;
+    private bool backShown;
 
     public Match MatchInfo
     {
@@ -29,6 +35,35 @@ public class DashboardRow : MonoBehaviour
             matchInfo = value;
             Refresh();
         }
+    }
+
+    void Start()
+    {
+        GetComponent<SwipeDetector>().scrollRect = homePage.GetComponent<ScrollRect>();
+    }
+
+    public void OnSwipe(bool isRight)
+    {
+        if (!isRight && !backShown)
+        {
+            ShowBackBox();
+        }
+        else if (isRight && backShown)
+        {
+            HideBackBox();
+        }
+    }
+
+    private void ShowBackBox()
+    {
+        backShown = true;
+        slideAnimator.SetInteger("ShowBack", 1);
+    }
+
+    private void HideBackBox()
+    {
+        backShown = false;
+        slideAnimator.SetInteger("ShowBack", 0);
     }
 
     public void OnClicked()
