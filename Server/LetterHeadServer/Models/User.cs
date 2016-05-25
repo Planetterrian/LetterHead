@@ -34,7 +34,7 @@ namespace LetterHeadServer.Models
         public DateTime SignupDate { get; set; }
 
         public virtual ICollection<Match> Matches { get; set; }
-
+        public virtual ICollection<Invite> Invites { get; set; }
         public virtual ICollection<User> Friends { get; set; }
 
 

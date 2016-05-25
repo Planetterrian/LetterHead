@@ -184,7 +184,7 @@ namespace LetterHeadServer.Controllers
         }
 
         [AuthenticationFilter]
-        public ActionResult Freinds()
+        public ActionResult Friends()
         {
             return Json(currentUser.Friends.Select(f => f.DTO()));
         }

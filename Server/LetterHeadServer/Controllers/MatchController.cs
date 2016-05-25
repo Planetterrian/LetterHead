@@ -76,6 +76,11 @@ namespace LetterHeadServer.Controllers
             return Json(matches.Select(m => m.DTO(true)));
         }
 
+        public ActionResult Invite(int userId)
+        {
+            return Okay();
+        }
+
         public ActionResult Resign(int matchId)
         {
             var match = Match.GetById(db, matchId);

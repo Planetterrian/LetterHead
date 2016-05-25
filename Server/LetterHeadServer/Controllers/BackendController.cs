@@ -53,7 +53,17 @@ namespace LetterHeadServer.Controllers
                 return;
 
             var client = new FacebookClient(user.FacebookToken);
-            dynamic info = client.Get("me?fields=id,name,friends,picture.type(large)", null);
+            dynamic info;
+
+            try
+            {
+                info = client.Get("me?fields=id,name,friends,picture.type(large)", null);
+            }
+            catch (FacebookApiException)
+            {
+                return;
+                throw;
+            }
 
             if (info.error != null)
             {

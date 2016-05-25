@@ -54,6 +54,8 @@ namespace LetterHeadServer.Models
                 f.MapRightKey("Friend");
             });
 
+            modelBuilder.Entity<User>().HasMany(u => u.Invites).WithRequired(i => i.User);
+
             modelBuilder.Entity<Match>()
         .HasMany(a => a.Rounds).
         WithRequired()

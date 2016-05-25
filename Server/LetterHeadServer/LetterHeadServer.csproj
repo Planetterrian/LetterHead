@@ -186,6 +186,7 @@
     <Compile Include="Models\ApplicationDbContext.cs" />
     <Compile Include="Models\DailyGame.cs" />
     <Compile Include="Models\FacebookUserInfo.cs" />
+    <Compile Include="Models\Invite.cs" />
     <Compile Include="Models\Match.cs" />
     <Compile Include="Models\MatchRound.cs" />
     <Compile Include="Models\User.cs" />
