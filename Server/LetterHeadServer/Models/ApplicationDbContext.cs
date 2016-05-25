@@ -37,15 +37,22 @@ namespace LetterHeadServer.Models
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Match>().
-              HasMany(c => c.Users).
-              WithMany(p => p.Matches).
-              Map(
-               m =>
-               {
-                   m.MapLeftKey("MatchId");
-                   m.MapRightKey("UserId");
-                   m.ToTable("MatchUsers");
-               });
+                HasMany(c => c.Users).
+                WithMany(p => p.Matches).
+                Map(
+                    m =>
+                    {
+                        m.MapLeftKey("MatchId");
+                        m.MapRightKey("UserId");
+                        m.ToTable("MatchUsers");
+                    });
+
+            modelBuilder.Entity<User>().HasMany(u => u.Friends).WithMany().Map(f =>
+            {
+                f.ToTable("UserFriends");
+                f.MapLeftKey("User");
+                f.MapRightKey("Friend");
+            });
 
             modelBuilder.Entity<Match>()
         .HasMany(a => a.Rounds).

@@ -90,4 +90,20 @@ public class HomePage : Page
     {
         PersistManager.Instance.LoadMatch(dashboardRow.MatchInfo.Id, dashboardRow.MatchInfo.Users.Count == 1);
     }
+
+    public void ResignMatch(Match matchInfo)
+    {
+        Srv.Instance.POST("Match/Resign", new Dictionary<string, string>() {{"matchId", matchInfo.Id.ToString()}}, s =>
+        {
+            RefreshMatches();
+        });
+    }
+
+    public void ClearMatch(Match matchInfo)
+    {
+        Srv.Instance.POST("Match/Clear", new Dictionary<string, string>() { { "matchId", matchInfo.Id.ToString() } }, s =>
+        {
+            RefreshMatches();
+        });
+    }
 }

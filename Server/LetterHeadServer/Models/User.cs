@@ -12,6 +12,11 @@ namespace LetterHeadServer.Models
 {
     public class User
     {
+        public User()
+        {
+            Friends = new HashSet<User>();
+        }
+
         public int Id { get; set; }
         public int MostWords { get; set; }
 
@@ -28,7 +33,10 @@ namespace LetterHeadServer.Models
         public string FacebookToken { get; set; }
         public DateTime SignupDate { get; set; }
 
-        public virtual List<Match> Matches { get; set; }
+        public virtual ICollection<Match> Matches { get; set; }
+
+        public virtual ICollection<User> Friends { get; set; }
+
 
         [Index]
         [MaxLength(64)]

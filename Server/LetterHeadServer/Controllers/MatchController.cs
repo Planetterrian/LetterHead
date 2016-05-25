@@ -70,7 +70,55 @@ namespace LetterHeadServer.Controllers
         public ActionResult List()
         {
             var matches = currentUser.Matches.Where(m => m.CurrentState != LetterHeadShared.DTO.Match.MatchState.WaitingForPlayers);
+
+            // Remove cleared
+            matches = matches.Where(m => !m.ClearedUserIds.Contains(currentUser.Id)).ToList();
             return Json(matches.Select(m => m.DTO(true)));
+        }
+
+        public ActionResult Resign(int matchId)
+        {
+            var match = Match.GetById(db, matchId);
+            if (match == null)
+            {
+                return Error("Invalid Match");
+            }
+
+            if (!match.UserAuthorized(currentUser))
+            {
+                return Error("You can't access that match");
+            }
+
+            match.Resign(currentUser);
+            db.SaveChanges();
+
+            return Okay();
+        }
+
+        public ActionResult Clear(int matchId)
+        {
+            var match = Match.GetById(db, matchId);
+            if (match == null)
+            {
+                return Error("Invalid Match");
+            }
+
+            if (!match.UserAuthorized(currentUser))
+            {
+                return Error("You can't access that match");
+            }
+
+
+            if (match.CurrentState != LetterHeadShared.DTO.Match.MatchState.Ended)
+            {
+                return Error("Match isn't ended");
+            }
+
+
+            match.ClearMatch(currentUser);
+            db.SaveChanges();
+
+            return Okay();
         }
 
         public ActionResult MatchInfo(int matchId)

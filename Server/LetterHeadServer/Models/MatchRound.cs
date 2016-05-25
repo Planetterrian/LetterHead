@@ -16,8 +16,8 @@ namespace LetterHeadServer.Models
         public int Score { get; set; }
 
         public string Letters { get; set; }
-        public List<string> Words { get; set; }
 
+        public List<string> Words { get; set; }
         public string WordsJoined
         {
             get

@@ -22,6 +22,7 @@ namespace LetterHeadShared.DTO
         public int CurrentUserIndex;
         public int MaxRounds;
 
+
         public int UserScore(int userIndex)
         {
             return Scores[userIndex];

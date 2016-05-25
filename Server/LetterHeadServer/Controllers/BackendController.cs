@@ -53,7 +53,7 @@ namespace LetterHeadServer.Controllers
                 return;
 
             var client = new FacebookClient(user.FacebookToken);
-            dynamic info = client.Get("me?fields=id,name,picture.type(large)", null);
+            dynamic info = client.Get("me?fields=id,name,friends,picture.type(large)", null);
 
             if (info.error != null)
             {
@@ -63,6 +63,20 @@ namespace LetterHeadServer.Controllers
             if (user.AvatarUrl == user.FacebookPictureUrl)
             {
                 user.AvatarUrl = info.picture.data.url;
+            }
+
+            var friends = info.friends.data;
+            foreach (var friend in friends)
+            {
+                var fbId = (string) friend.id;
+                var friendUser = db.Users.FirstOrDefault(u => u.FacebookId == fbId);
+                if(friendUser == null)
+                    continue;
+                
+                if(!user.Friends.Contains(friendUser))
+                {
+                    user.Friends.Add(friendUser);
+                }
             }
 
             user.FacebookPictureUrl = info.picture.data.url;

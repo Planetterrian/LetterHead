@@ -65,6 +65,23 @@ public class DashboardRow : MonoBehaviour
         }
     }
 
+    public void OnResignClicked()
+    {
+        DialogWindowTM.Instance.Show("Resign", "Are you sure you want to resign from this game?", () =>
+        {
+            homePage.ResignMatch(MatchInfo);
+        }, () => { }, "Resign");
+    }
+
+    public void OnPokeClicked()
+    {
+    }
+
+    public void OnClearClicked()
+    {
+        homePage.ClearMatch(MatchInfo);
+    }
+
     private void ShowBackBox()
     {
         backShown = true;

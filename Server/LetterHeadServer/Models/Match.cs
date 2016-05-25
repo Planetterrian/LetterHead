@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
+using Hangfire;
 using LetterHeadServer.Classes;
 using MyWebApplication;
 
@@ -14,6 +15,23 @@ namespace LetterHeadServer.Models
 
         [Index]
         public virtual List<User> Users { get; set; }
+
+        public List<int> ClearedUserIds { get; set; }
+
+        public string ClearedUserIdsJoined
+        {
+            get
+            {
+                return string.Join(",", ClearedUserIds);
+            }
+            set
+            {
+                if (string.IsNullOrEmpty(value))
+                    ClearedUserIds = new List<int>();
+                else
+                    ClearedUserIds = value.Split(',').Select(int.Parse).ToList();
+            }
+        }
 
 
         [Index]
@@ -189,6 +207,20 @@ namespace LetterHeadServer.Models
             {
                 round.Letters = BoardHelper.GenerateBoard();
             }
+        }
+
+        public void Resign(User resigner)
+        {
+            CurrentState = LetterHeadShared.DTO.Match.MatchState.Ended;
+            Winner = Users.FirstOrDefault(u => u.Id != resigner.Id);
+        }
+
+        public void ClearMatch(User clearer)
+        {
+            if(ClearedUserIds.Contains(clearer.Id))
+                return;
+
+            ClearedUserIds.Add(clearer.Id);
         }
     }
 }
