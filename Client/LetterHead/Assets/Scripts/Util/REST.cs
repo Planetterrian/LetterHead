@@ -64,6 +64,7 @@ public class REST : MonoBehaviour
                 onError(www.error);
 
             Debug.Log(www.error);
+            Debug.Log(www.text);
         }
     }
 

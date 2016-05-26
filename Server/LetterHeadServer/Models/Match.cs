@@ -22,6 +22,9 @@ namespace LetterHeadServer.Models
         {
             get
             {
+                if (ClearedUserIds == null)
+                    return "";
+
                 return string.Join(",", ClearedUserIds);
             }
             set
