@@ -12,7 +12,7 @@ public class GameGui : Singleton<GameGui>
     public Button clearWordButton;
     public Button shuffleButton;
     public Button startButton;
-    public Animator leverAnimator;
+    public Lever lever;
     public GameObject selectCategoryHelper;
     public TextMeshProUGUI roundNumberLabel;
 
@@ -24,6 +24,10 @@ public class GameGui : Singleton<GameGui>
 
     public GameObject leftPowerupsBox;
     public GameObject rightPowerupsBox;
+
+    public GameObject topLightOn;
+    public GameObject topLightOff;
+
 
     private void Start()
     {
@@ -74,31 +78,40 @@ public class GameGui : Singleton<GameGui>
             startButton.interactable = false;
             shuffleButton.interactable = false;
             selectCategoryHelper.gameObject.SetActive(false);
-            
-            if (GameManager.Instance.CanStart())
-                startButton.interactable = true;
 
+            if (GameManager.Instance.CanStart())
+            {
+                startButton.interactable = true;
+                lever.SetState(Lever.State.Top);
+            }
+            else
+            {
+                lever.SetState(Lever.State.Middle);
+            }
         }
         else if (GameScene.Instance.CurrentState == GameScene.State.Active)
         {
             startButton.interactable = false;
             shuffleButton.interactable = true;
+            lever.SetState(Lever.State.Bottom);
         }
         else if (GameScene.Instance.CurrentState == GameScene.State.End)
         {
             startButton.interactable = false;
             shuffleButton.interactable = false;
             selectCategoryHelper.gameObject.SetActive(false);
+            lever.SetState(Lever.State.Middle);
         }
         else if (GameScene.Instance.CurrentState == GameScene.State.WaitingForCategory)
         {
             startButton.interactable = false;
             shuffleButton.interactable = false;
             selectCategoryHelper.gameObject.SetActive(true);
+            lever.SetState(Lever.State.Middle);
         }
 
-        leverAnimator.SetInteger("state", GameScene.Instance.CurrentState == GameScene.State.Active ? 1 : 0);
-
+        topLightOn.SetActive(GameScene.Instance.CurrentState == GameScene.State.Active);
+        topLightOff.SetActive(GameScene.Instance.CurrentState != GameScene.State.Active);
     }
 
 
