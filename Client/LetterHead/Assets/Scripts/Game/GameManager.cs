@@ -184,6 +184,6 @@ public abstract class GameManager : Singleton<GameManager>
 
     public bool CanStart()
     {
-        return IsMyRound() && GameScene.Instance.CurrentState == GameScene.State.Pregame && GameRealTime.Instance.IsConnected();
+        return IsMyRound() && GameScene.Instance.CurrentState == GameScene.State.Pregame && GameManager.Instance.MatchDetails.CurrentState != Match.MatchState.Ended && GameRealTime.Instance.IsConnected();
     }
 }
