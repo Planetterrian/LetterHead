@@ -129,6 +129,7 @@ namespace LetterHeadShared
 
             categories.Add(new Category()
             {
+                alwaysActive = true,
                 name = "Big Word Bonus",
                 description = "8+ letter words 50 points each. No max!",
                 GetScore = (words, uniqueLetterCount, existingScores) => words.Count(w => w.Length >= 8) * 50
@@ -165,6 +166,7 @@ namespace LetterHeadShared
     {
         public string name;
         public string description;
+        public bool alwaysActive = false;
 
         /// <summary>
         /// Word list, Unique Letter Count, List of existing scores. Returns score

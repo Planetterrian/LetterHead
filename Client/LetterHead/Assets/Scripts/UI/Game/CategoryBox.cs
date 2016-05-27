@@ -51,17 +51,30 @@ public class CategoryBox : Singleton<CategoryBox>, IGameHandler
         if(GameManager.Instance.HasCategoryBeenUsed(category))
             return;
 
+        if(category.alwaysActive)
+            return;
+
         GameManager.Instance.SelectCategory(category);
     }
 
     public void Refresh()
     {
+        var totalScore = 0;
+
         foreach (var scoreFunc in categoryScoreFunctions)
         {
             var score = 0;
 
             var existingRound = GameManager.Instance.MyRounds().FirstOrDefault(r => r.CategoryName == scoreFunc.Value.name);
-            if (existingRound != null)
+
+            if (scoreFunc.Value.name == "Big Word Bonus")
+            {
+                foreach (var matchRound in GameManager.Instance.MyRounds())
+                {
+                    score += scoreFunc.Value.GetScore(matchRound.Words, 0, new List<int>());
+                }
+            }
+            else if (existingRound != null)
             {
                 // This category has been used
                 score = existingRound.Score;
@@ -70,11 +83,12 @@ public class CategoryBox : Singleton<CategoryBox>, IGameHandler
             {
                 score = ScoringManager.Instance.GetCategoryScore(scoreFunc.Value);
             }
-            
-            scoreFunc.Key.SetScore(score, GameManager.Instance.MyRounds().Any(c => c.CategoryName == scoreFunc.Value.name));
+
+            scoreFunc.Key.SetScore(score, scoreFunc.Value.alwaysActive || GameManager.Instance.MyRounds().Any(c => c.CategoryName == scoreFunc.Value.name));
+            totalScore += score;
         }
 
-        totallabel.text = ScoringManager.Instance.TotalScore().ToString("N0");
+        totallabel.text = totalScore.ToString("N0");
     }
 
     public void SetCurrentlySelectedCategory(Category category)

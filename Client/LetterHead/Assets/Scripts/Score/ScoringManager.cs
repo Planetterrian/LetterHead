@@ -65,6 +65,7 @@ public class ScoringManager : Singleton<ScoringManager>, IGameHandler
 
         WordBox.Instance.AddWord(word);
         submittedWords.Add(word);
+        GameManager.Instance.CurrentRound().Words.Add(word);
 
         OnWordsChanged();
     }
@@ -75,9 +76,6 @@ public class ScoringManager : Singleton<ScoringManager>, IGameHandler
         WordCountBox.Instance.Refresh();
         CategoryBox.Instance.Refresh();
     }
-
-
-
 
     private void OnMatchDetailsLoaded()
     {
@@ -106,22 +104,6 @@ public class ScoringManager : Singleton<ScoringManager>, IGameHandler
         i = i - ((i >> 1) & 0x55555555);
         i = (i & 0x33333333) + ((i >> 2) & 0x33333333);
         return (((i + (i >> 4)) & 0x0F0F0F0F) * 0x01010101) >> 24;
-    }
-
-    public int TotalScore()
-    {
-        if (!GameManager.Instance)
-            return 0;
-
-        var score = 0;
-        var rounds = GameManager.Instance.MyRounds();
-
-        foreach (var matchRound in rounds)
-        {
-            score += matchRound.Score;
-        }
-
-        return score;
     }
 
     public void OnCategorySelected(Category category)

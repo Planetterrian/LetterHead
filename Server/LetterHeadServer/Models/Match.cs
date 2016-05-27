@@ -60,7 +60,7 @@ namespace LetterHeadServer.Models
             var roundTime = 120;
 
             if (Environment.UserName == "Pete")
-                roundTime = 30;
+                roundTime = 15;
 
                 var match = new Match()
                    {
@@ -177,17 +177,26 @@ namespace LetterHeadServer.Models
             for (int index = 0; index < Users.Count; index++)
             {
                 var user = Users[index];
-                var score = Rounds.Where(r => r.User.Id == user.Id).Sum(r => r.Score);
+                var score = Rounds.Where(r => r.User.Id == user.Id).Sum(r => r.Score) + BigWordBonus(user);
                 scores.Add(score);
             }
 
             return scores;
         }
 
+
+        public int BigWordBonus(User user)
+        {
+            var bigWord = Startup.CategoryManager.GetCategory("Big Word Bonus");
+            var rounds = Rounds.Where(r => r.User.Id == user.Id);
+
+            return rounds.Sum(round => bigWord.GetScore(round.Words, 0, new List<int>()));
+        }
+
+
         public void EndMatch()
         {
             CurrentState = LetterHeadShared.DTO.Match.MatchState.Ended;
-
             DetermineWinner();
         }
 
@@ -199,7 +208,7 @@ namespace LetterHeadServer.Models
                 return;
             }
 
-            var scores = Rounds.GroupBy(r => r.User).Select(g => new {User = g.Key, Score = g.Sum(r => r.Score)});
+            var scores = Rounds.GroupBy(r => r.User).Select(g => new {User = g.Key, Score = g.Sum(r => r.Score) + BigWordBonus(g.Key)}).ToList();
             var winner = scores.OrderByDescending(s => s.Score).First().User;
             Winner = winner;
         }

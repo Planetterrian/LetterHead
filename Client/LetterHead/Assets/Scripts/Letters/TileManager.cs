@@ -31,6 +31,8 @@ public class TileManager : Singleton<TileManager>
         var tile = tileGo.GetComponent<Tile>();
         tile.SetLetter(letter, tileSprites[Random.Range(0, tileSprites.Length)]);
 
+        tile.GetComponent<RectTransform>().SetSize(BoardManager.Instance.tileSize);
+
         return tile;
     }
 

@@ -176,9 +176,14 @@ namespace LetterHeadServer.Controllers
             }
 
             var category = Startup.CategoryManager.GetCategory(categoryName);
-            if(category == null)
+            if (category == null)
             {
                 return Error("No category selected");
+            }
+
+            if (category.alwaysActive)
+            {
+                return Error("Category selected (Err 20)");
             }
 
             var rounds = match.UserRounds(currentUser).Where(r => r.Number != match.CurrentRoundNumber);

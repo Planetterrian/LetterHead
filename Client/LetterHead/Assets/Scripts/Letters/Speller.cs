@@ -13,6 +13,7 @@ public class Speller : Singleton<Speller>, IGameHandler
     public Color tileColor;
     public LinkedList<Tile> tiles = new LinkedList<Tile>();
 
+    private float tileWidthDivider = 1.75f;
 
     [Serializable]
     public class SpellerEvent : UnityEvent
@@ -43,9 +44,11 @@ public class Speller : Singleton<Speller>, IGameHandler
 
     public Tile AddTile(Tile originalTile)
     {
+        var tileOriginalSize = BoardManager.Instance.tileSize;
         var tile = TileManager.Instance.GetTile(originalTile.letterDefinition);
         
         tile.transform.SetParent(transform);
+        tile.GetComponent<RectTransform>().SetWidth(tileOriginalSize.x / tileWidthDivider);
         tile.SetColor(tileColor);
         tile.Mode = Tile.TileMode.SpelledWord;
         tile.referencedTileID = originalTile.ID;
@@ -65,12 +68,15 @@ public class Speller : Singleton<Speller>, IGameHandler
     {
         var rect = GetComponent<RectTransform>().rect;
 
-        var tileScale = rect.width / (BoardManager.Instance.tileSize.x * tiles.Count);
+        var tileOriginalSize = BoardManager.Instance.tileSize;
+        tileOriginalSize.x /= tileWidthDivider;
+
+        var tileScale = rect.width / (tileOriginalSize.x * tiles.Count);
 
         if (tileScale > maxTileScale)
             tileScale = maxTileScale;
 
-        var tileSize = BoardManager.Instance.tileSize.x * tileScale;
+        var tileSize = tileOriginalSize.x * tileScale;
         var xPos = -(((tiles.Count - 1) * ((tileSize) + padding)) / 2);
         var scale = new Vector3(tileScale, tileScale, tileScale);
 
