@@ -58,14 +58,14 @@ public class ScoringManager : Singleton<ScoringManager>, IGameHandler
             }
 
             GameRealTime.Instance.AddWord(word, usedLetterIds);
+            GameManager.Instance.CurrentRound().Words.Add(word);
         }
 
-        if(PersistManager.Instance.ClearWord)
+        if (PersistManager.Instance.ClearWord)
             BoardManager.Instance.ClearCurrentWord();
 
         WordBox.Instance.AddWord(word);
         submittedWords.Add(word);
-        GameManager.Instance.CurrentRound().Words.Add(word);
 
         OnWordsChanged();
     }
