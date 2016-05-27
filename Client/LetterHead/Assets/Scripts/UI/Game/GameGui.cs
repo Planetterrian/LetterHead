@@ -12,10 +12,12 @@ public class GameGui : Singleton<GameGui>
     public Button clearWordButton;
     public Button shuffleButton;
     public Button startButton;
+    public Animator leverAnimator;
     public GameObject selectCategoryHelper;
     public TextMeshProUGUI roundNumberLabel;
 
     public TimerElement timer;
+
 
     public AvatarBox leftAvatarBox;
     public AvatarBox rightAvatarBox;
@@ -72,7 +74,7 @@ public class GameGui : Singleton<GameGui>
             startButton.interactable = false;
             shuffleButton.interactable = false;
             selectCategoryHelper.gameObject.SetActive(false);
-
+            
             if (GameManager.Instance.CanStart())
                 startButton.interactable = true;
 
@@ -94,6 +96,9 @@ public class GameGui : Singleton<GameGui>
             shuffleButton.interactable = false;
             selectCategoryHelper.gameObject.SetActive(true);
         }
+
+        leverAnimator.SetInteger("state", GameScene.Instance.CurrentState == GameScene.State.Active ? 1 : 0);
+
     }
 
 
