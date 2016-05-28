@@ -33,6 +33,10 @@ namespace LetterHeadServer.Models
         public string FacebookToken { get; set; }
         public DateTime SignupDate { get; set; }
 
+        public string AndroidNotificationToken { get; set; }
+        public string IosNotificationToken { get; set; }
+
+
         public virtual ICollection<Match> Matches { get; set; }
         public virtual ICollection<Invite> Invites { get; set; }
         public virtual ICollection<User> Friends { get; set; }
