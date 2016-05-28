@@ -20,6 +20,7 @@ public class WindowController : MonoBehaviour
 
     public void Show()
     {
+        gameObject.SetActive(true);
         modal.SetActive(false);
         fade.FadeIn();
         SendMessage("OnWindowShown", SendMessageOptions.DontRequireReceiver);

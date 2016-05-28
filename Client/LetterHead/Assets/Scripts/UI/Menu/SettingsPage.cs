@@ -10,6 +10,7 @@ public class SettingsPage : Page
     public Toggle musicEnabledToggle;
     public Toggle soundEnabledToggle;
     public Toggle clearWordToggle;
+    public Toggle notificationsToggle;
 
     private void Awake()
     {
@@ -24,6 +25,7 @@ public class SettingsPage : Page
         musicEnabledToggle.isOn = PersistManager.Instance.MusicEnabled;
         clearWordToggle.isOn = PersistManager.Instance.ClearWord;
         soundEnabledToggle.isOn = PersistManager.Instance.SoundEnabled;
+        notificationsToggle.isOn = PersistManager.Instance.NotificationsEnabled;
     }
 
     public void OnMusicToggleChanged()
@@ -39,6 +41,20 @@ public class SettingsPage : Page
     public void OnClearWordToggleChanged()
     {
         PersistManager.Instance.ClearWord = clearWordToggle.isOn;
+    }
+
+    public void OnNotificationsToggleChanged()
+    {
+        PersistManager.Instance.NotificationsEnabled = notificationsToggle.isOn;
+
+        if (PersistManager.Instance.NotificationsEnabled)
+        {
+            NotificationManager.Instance.RegisterForNotifications();
+        }
+        else
+        {
+            NotificationManager.Instance.UnregisterForNotifications();
+        }
     }
 
     public void UpgradeToPremiumClicked()

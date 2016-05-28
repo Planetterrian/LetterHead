@@ -13,5 +13,9 @@ public class DashboardScene : GuiScene
         base.OnBeginShow();
 
         pagination.SetCurrentPage(1, true);
+
+
+        if (PersistManager.Instance.NotificationsEnabled)
+            NotificationManager.Instance.RegisterForNotifications();
     }
 }

@@ -21,6 +21,15 @@ public class PersistManager : Singleton<PersistManager>
         }
     }
 
+    public bool NotificationsEnabled
+    {
+        get { return PlayerPrefs.GetInt("NotificationsEnabled", 1) == 1; }
+        set
+        {
+            PlayerPrefs.SetInt("NotificationsEnabled", value ? 1 : 0);
+        }
+    }
+
     private void OnMusicEnabledChanged()
     {
         MusicManager.Instance.SetMusicVolume(MusicEnabled ? MusicManager.Instance.volume : 0);

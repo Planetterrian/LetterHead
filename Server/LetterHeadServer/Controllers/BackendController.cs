@@ -43,6 +43,11 @@ namespace LetterHeadServer.Controllers
             return "Deleted " + rounds.Count + " matches for " + userId;
         }
 
+        public void SendNotification(int userId, string message, int matchId)
+        {
+            
+        }
+
         public void RefreshFacebookInfo(int userId)
         {
             var user = db.Users.Find(userId);
