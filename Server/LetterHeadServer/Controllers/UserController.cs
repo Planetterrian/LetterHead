@@ -92,6 +92,14 @@ namespace LetterHeadServer.Controllers
             return Okay();
         }
 
+        [AuthenticationFilter()]
+        public ActionResult AndroidNotificationToken(string token)
+        {
+            currentUser.AndroidNotificationToken = token;
+            db.SaveChanges();
+            return Okay();
+        }
+
         private bool UsernameIsInvalid(string username, out ActionResult actionResult)
         {
             if (username.Length < 3 || username.Length > 24)

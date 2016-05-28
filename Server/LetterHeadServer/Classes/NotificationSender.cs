@@ -92,7 +92,9 @@ namespace LetterHeadServer.Classes
                 RegistrationIds = new List<string> {
                         user.AndroidNotificationToken
                     },
-                Data = JObject.Parse("{ \"somekey\" : \"somevalue\" }")
+                Data = JObject.Parse("{\"content_title\" : \"Title here\" \"content_text\":\"Content text here....\" \"ticker_text\" : \"Ticker text shown in status bar goes here\" " +
+                                     "\"tag\" : \"OptionalTag -  This needs to be diff if you want to overwrite previous notification\" " +
+                                     "\"user_info\": { \"key1\"  : \"value1\" \"key2\"  : \"value2\" } }")
             });
             // Stop the broker, wait for it to finish   
             // This isn't done after every message, but after you're

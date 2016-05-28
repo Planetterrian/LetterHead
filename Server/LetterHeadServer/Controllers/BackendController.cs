@@ -43,7 +43,7 @@ namespace LetterHeadServer.Controllers
             return "Deleted " + rounds.Count + " matches for " + userId;
         }
 
-        public void SendNotification(int userId, string message, int matchId)
+        public void SendNotification(int userId, string title, string message, string tag)
         {
             
         }
