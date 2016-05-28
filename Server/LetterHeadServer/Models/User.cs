@@ -5,6 +5,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Web;
+using Hangfire;
+using LetterHeadServer.Controllers;
 using LetterHeadShared.DTO;
 using MyWebApplication;
 
@@ -83,6 +85,13 @@ namespace LetterHeadServer.Models
             stats.mostWords = MostWords;
 
             return stats;
+        }
+
+        public void SendNotification(string title, string message, string tag)
+        {
+            if(string.IsNullOrEmpty(AndroidNotificationToken) && string.IsNullOrEmpty(IosNotificationToken))
+                return;
+
         }
     }
 }

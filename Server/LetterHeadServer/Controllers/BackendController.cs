@@ -6,6 +6,7 @@ using System.Web;
 using System.Web.Mvc;
 using Facebook;
 using Hangfire;
+using LetterHeadServer.Classes;
 using LetterHeadServer.Models;
 
 namespace LetterHeadServer.Controllers
@@ -45,7 +46,14 @@ namespace LetterHeadServer.Controllers
 
         public void SendNotification(int userId, string title, string message, string tag)
         {
-            
+            var user = db.Users.Find(userId);
+            if (user == null)
+                return;
+
+            var sender = new NotificationSender();
+
+            if(!string.IsNullOrEmpty(user.AndroidNotificationToken))
+                sender.Send(user, message);
         }
 
         public void RefreshFacebookInfo(int userId)

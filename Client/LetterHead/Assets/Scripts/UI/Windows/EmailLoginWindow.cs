@@ -30,11 +30,15 @@ public class EmailLoginWindow : MonoBehaviour
         loginButton.interactable = false;
         registerButton.interactable = false;
 
+        DialogWindowTM.Instance.Show("Login", "Loggin in...", () => { }, () => { }, "");
+
         Srv.Instance.POST("User/LoginEmail", new Dictionary<string, string>()
                                         {
                                             {"Email", email}, {"Password", password}
                                         }, s =>
                                         {
+                                            DialogWindowTM.Instance.Hide();
+
                                             var sessionId = JsonConvert.DeserializeObject<string>(s);
                                             ClientManager.Instance.SetSessionId(sessionId);
                                             GetComponent<WindowController>().Hide();
@@ -42,7 +46,6 @@ public class EmailLoginWindow : MonoBehaviour
                                         }, s =>
                                         {
                                             DialogWindowTM.Instance.Show("Error", s, () => { });
-
                                             loginButton.interactable = true;
                                             registerButton.interactable = true;
                                         });
@@ -56,11 +59,16 @@ public class EmailLoginWindow : MonoBehaviour
         loginButton.interactable = false;
         registerButton.interactable = false;
 
+        DialogWindowTM.Instance.Show("Register", "Registering...", () => { }, () => { }, "");
+
+
         Srv.Instance.POST("User/RegisterEmail", new Dictionary<string, string>()
                                         {
                                             {"Email", email}, {"Password", password}
                                         }, s =>
                                         {
+                                            DialogWindowTM.Instance.Hide();
+
                                             var sessionId = JsonConvert.DeserializeObject<string>(s);
                                             GetComponent<WindowController>().Hide();
                                             ClientManager.Instance.SetSessionId(sessionId);
@@ -68,7 +76,6 @@ public class EmailLoginWindow : MonoBehaviour
                                         }, s =>
                                         {
                                             DialogWindowTM.Instance.Show("Error", s, () => { });
-
                                             loginButton.interactable = true;
                                             registerButton.interactable = true;
                                         });
