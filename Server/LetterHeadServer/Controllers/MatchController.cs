@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -50,12 +51,7 @@ namespace LetterHeadServer.Controllers
             if (existingMatch != null)
             {
                 existingMatch.Users.Add(currentUser);
-                existingMatch.CurrentState = LetterHeadShared.DTO.Match.MatchState.Pregame;
-                existingMatch.AddRounds(db);
-                db.SaveChanges();
-
-                existingMatch.GenerateRandomBoard();
-                existingMatch.RandomizeUsers();
+                InitilizeMatch(existingMatch);
             }
             else
             {
@@ -67,17 +63,69 @@ namespace LetterHeadServer.Controllers
             return Okay();
         }
 
+        private void InitilizeMatch(Match existingMatch)
+        {
+            existingMatch.CurrentState = LetterHeadShared.DTO.Match.MatchState.Pregame;
+            existingMatch.AddRounds(db);
+            db.SaveChanges();
+
+            existingMatch.GenerateRandomBoard();
+            existingMatch.RandomizeUsers();
+        }
+
         public ActionResult List()
         {
             var matches = currentUser.Matches.Where(m => m.CurrentState != LetterHeadShared.DTO.Match.MatchState.WaitingForPlayers);
 
             // Remove cleared
             matches = matches.Where(m => !m.ClearedUserIds.Contains(currentUser.Id)).ToList();
-            return Json(matches.Select(m => m.DTO(true)));
+            return Json(new { Matches = matches.Select(m => m.DTO(true)), Invites = currentUser.Invites.Select(i => i.DTO()) } );
+        }
+
+        public ActionResult AcceptInvite(int inviteId)
+        {
+            var invite = currentUser.Invites.FirstOrDefault(i => i.Id == inviteId);
+            if (invite == null)
+            {
+                return Error("Invalid Invite");
+            }
+
+            var users = new List<User>() {currentUser, invite.Inviter};
+            users = users.OrderBy(u => Guid.NewGuid()).ToList();
+
+            var match = Match.New(db, users, 10);
+            InitilizeMatch(match);
+            currentUser.Invites.Remove(invite);
+            db.Entry(invite).State = EntityState.Deleted;
+
+            db.SaveChanges();
+
+            return Okay();
         }
 
         public ActionResult Invite(int userId)
         {
+            var targetUser = db.Users.Find(userId);
+            if (targetUser == null)
+            {
+                return Error("Invalid User");
+            }
+
+            if (targetUser.Invites.Any(i => i.Inviter.Id == currentUser.Id))
+            {
+                return Error("You have already sent an invite to that user");
+            }
+
+            var invite = new Invite()
+            {
+                InviteSentOn = DateTime.Now,
+                Inviter = currentUser,
+                User = targetUser
+            };
+
+            targetUser.Invites.Add(invite);
+            db.SaveChanges();
+
             return Okay();
         }
 

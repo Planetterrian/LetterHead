@@ -20,16 +20,26 @@ public class HomePage : Page
     private List<DashboardRow> theirMatchRows = new List<DashboardRow>(); 
     private List<DashboardRow> completedMatchRows = new List<DashboardRow>();
 
+    private List<Invite> invites = new List<Invite>(); 
+
     void Start()
     {
         //RefreshMatches();
+    }
+
+    private class ListInfo
+    {
+        public List<Match> Matches;
+        public List<Invite> Invites;
     }
 
     public void RefreshMatches()
     {
         Srv.Instance.POST("Match/List", null, s =>
         {
-            var matches = JsonConvert.DeserializeObject<List<Match>>(s);
+            var list = JsonConvert.DeserializeObject<ListInfo>(s);
+            var matches = list.Matches;
+            invites = list.Invites;
 
             var myMatches = matches.Where(m => m.CurrentState != Match.MatchState.Ended && m.Users[m.CurrentUserIndex].Id == ClientManager.Instance.myUserInfo.Id).ToList();
             var theirMatches = matches.Where(m => m.CurrentState != Match.MatchState.Ended && m.Users[m.CurrentUserIndex].Id != ClientManager.Instance.myUserInfo.Id).ToList();
@@ -44,6 +54,32 @@ public class HomePage : Page
     void OnShown()
     {
         RefreshMatches();
+    }
+
+    void Update()
+    {
+        if (invites.Count > 0 && !DialogWindowTM.Instance.gameObject.activeInHierarchy)
+        {
+            var invite = invites[0];
+            invites.RemoveAt(0);
+
+            DialogWindowTM.Instance.Show("Invite", "You have a match invite from " + invite.Inviter.Username + ". Do you want to accept?",
+                () =>
+                {
+                    Srv.Instance.POST("Match/AcceptInvite",
+                        new Dictionary<string, string>() {{"inviteId", invite.Id.ToString()}},
+                        s =>
+                        {
+                            RefreshMatches();
+                        }, DialogWindowTM.Instance.Error);
+                }, () =>
+                {
+                    Srv.Instance.POST("Match/DeclineInvite",
+                        new Dictionary<string, string>() {{"inviteId", invite.Id.ToString()}}, s =>
+                        {
+                        });
+                }, "Accept", "Decline");
+        }
     }
 
     private void UpdateMatchSet(List<DashboardRow> rows, List<Match> matches, Transform header, DashboardRow.RowType rowType)

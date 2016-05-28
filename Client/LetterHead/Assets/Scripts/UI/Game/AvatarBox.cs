@@ -14,9 +14,6 @@ public class AvatarBox : MonoBehaviour
     // Use this for initialization
     void Start ()
     {
-        if(nameLabel)
-            nameLabel.text = "";
-
         if (!string.IsNullOrEmpty(pendingUrl))
         {
             StartCoroutine(LoadAvatarImage(pendingUrl));

@@ -41,6 +41,8 @@ namespace MyWebApplication
 
                 cfg.CreateMap<MatchRound, LetterHeadShared.DTO.MatchRound>().
                     ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.User.Id));
+
+                cfg.CreateMap<Invite, LetterHeadShared.DTO.Invite>();
             }).CreateMapper();
 
             CategoryManager = new CategoryManager();
