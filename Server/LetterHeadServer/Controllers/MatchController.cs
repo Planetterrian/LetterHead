@@ -90,7 +90,7 @@ namespace LetterHeadServer.Controllers
                 return Error("Invalid Invite");
             }
 
-            var users = new List<User>() {currentUser, invite.Inviter};
+            var users = new List<User>() { currentUser, invite.Inviter };
             users = users.OrderBy(u => Guid.NewGuid()).ToList();
 
             var match = Match.New(db, users, 10);
@@ -98,6 +98,21 @@ namespace LetterHeadServer.Controllers
             currentUser.Invites.Remove(invite);
             db.Entry(invite).State = EntityState.Deleted;
 
+            db.SaveChanges();
+
+            return Okay();
+        }
+
+        public ActionResult DeclineInvite(int inviteId)
+        {
+            var invite = currentUser.Invites.FirstOrDefault(i => i.Id == inviteId);
+            if (invite == null)
+            {
+                return Error("Invalid Invite");
+            }
+
+            currentUser.Invites.Remove(invite);
+            db.Entry(invite).State = EntityState.Deleted;
             db.SaveChanges();
 
             return Okay();
