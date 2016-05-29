@@ -100,6 +100,14 @@ namespace LetterHeadServer.Controllers
             return Okay();
         }
 
+        [AuthenticationFilter()]
+        public ActionResult IosNotificationToken(string token)
+        {
+            currentUser.IosNotificationToken = token;
+            db.SaveChanges();
+            return Okay();
+        }
+
         private bool UsernameIsInvalid(string username, out ActionResult actionResult)
         {
             if (username.Length < 3 || username.Length > 24)

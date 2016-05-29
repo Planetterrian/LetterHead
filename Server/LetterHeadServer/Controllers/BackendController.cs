@@ -63,8 +63,11 @@ namespace LetterHeadServer.Controllers
 
             var sender = new NotificationSender();
 
-            if(!string.IsNullOrEmpty(user.AndroidNotificationToken))
-                sender.Send(user, message);
+            if (!string.IsNullOrEmpty(user.AndroidNotificationToken))
+                sender.SendAndroid(user, message);
+
+            if (!string.IsNullOrEmpty(user.IosNotificationToken))
+                sender.SendIOS(user, message);
         }
 
         public void RefreshFacebookInfo(int userId)

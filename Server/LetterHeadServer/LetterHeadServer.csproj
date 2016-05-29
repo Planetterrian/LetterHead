@@ -240,6 +240,7 @@
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
+    <Content Include="Certificates\letterhead-push.p12" />
     <None Include="Properties\PublishProfiles\Azure.pubxml" />
     <None Include="Properties\PublishProfiles\letterhead %282%29.pubxml" />
     <None Include="Properties\PublishProfiles\letterhead.pubxml" />

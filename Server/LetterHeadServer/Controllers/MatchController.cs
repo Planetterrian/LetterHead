@@ -63,14 +63,17 @@ namespace LetterHeadServer.Controllers
             return Okay();
         }
 
-        private void InitilizeMatch(Match existingMatch)
+        private void InitilizeMatch(Match match)
         {
-            existingMatch.CurrentState = LetterHeadShared.DTO.Match.MatchState.Pregame;
-            existingMatch.AddRounds(db);
+            match.CurrentState = LetterHeadShared.DTO.Match.MatchState.Pregame;
+            match.AddRounds(db);
             db.SaveChanges();
 
-            existingMatch.GenerateRandomBoard();
-            existingMatch.RandomizeUsers();
+            match.GenerateRandomBoard();
+            match.RandomizeUsers();
+            db.SaveChanges();
+
+            match.NotifyNewTurn();
         }
 
         public ActionResult List()
@@ -140,6 +143,14 @@ namespace LetterHeadServer.Controllers
 
             targetUser.Invites.Add(invite);
             db.SaveChanges();
+
+            targetUser.SendNotification(new NotificationDetails()
+                                        {
+                                            content = "You have a LetterHead match invitation from " + currentUser.Username,
+                                            tag = "",
+                                            title = "LeterHead Match Invite",
+                                            type = NotificationDetails.Type.Invite
+                                        });
 
             return Okay();
         }

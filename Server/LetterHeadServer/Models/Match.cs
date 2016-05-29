@@ -144,7 +144,23 @@ namespace LetterHeadServer.Models
             {
                 CurrentRoundForUser(CurrentUserTurn).CurrentState = LetterHeadShared.DTO.MatchRound.RoundState.Ended;
                 CurrentUserTurn = Users[currentUserIndex];
+
+                NotifyNewTurn();
             }
+        }
+
+        public void NotifyNewTurn()
+        {
+            if (DailyGame != null)
+                return;
+
+            CurrentUserTurn.SendNotification(new NotificationDetails()
+            {
+                content = "It's your turn in your match against " + Users.First(u => u.Id != CurrentUserTurn.Id).Username,
+                tag = "match" + Id,
+                title = "LetterHead - Your turn",
+                type = NotificationDetails.Type.YourTurn
+            });
         }
 
         private void EndRound()
@@ -157,7 +173,7 @@ namespace LetterHeadServer.Models
 
             CurrentUserTurn = Users[0];
             CurrentRoundNumber++;
-            GenerateRandomBoard();
+            NotifyNewTurn();
         }
 
         public List<MatchRound> UserRounds(User user)

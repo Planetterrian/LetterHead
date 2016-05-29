@@ -7,6 +7,7 @@ using UnityEngine;
 public class DashboardScene : GuiScene
 {
     public PagedRect pagination;
+    public HomePage homePage;
 
     public override void OnBeginShow()
     {

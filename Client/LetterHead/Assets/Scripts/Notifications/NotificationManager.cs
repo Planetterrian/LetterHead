@@ -10,6 +10,7 @@ public class NotificationManager : Singleton<NotificationManager>
     private void Start()
     {
         NPBinding.NotificationService.RegisterNotificationTypes(NotificationType.Alert | NotificationType.Badge | NotificationType.Sound);
+        NPBinding.NotificationService.ClearNotifications();
     }
 
     // Register for callbacks
@@ -34,6 +35,11 @@ public class NotificationManager : Singleton<NotificationManager>
     private void DidReceiveRemoteNotificationEvent(CrossPlatformNotification _notification)
     {
         Debug.Log("Recieved notification: " + _notification.AlertBody);
+
+        if (MenuGui.Instance && MenuGui.Instance.dashboardScene.IsShown())
+        {
+            MenuGui.Instance.dashboardScene.homePage.RefreshMatches();
+        }
     }
 
     private void DidReceiveLocalNotificationEvent(CrossPlatformNotification _notification)
@@ -60,7 +66,12 @@ public class NotificationManager : Singleton<NotificationManager>
         }
 
         Debug.Log("Got GSM token: " + _devicetoken);
+
+#if UNITY_ANDROID
         Srv.Instance.POST("User/AndroidNotificationToken", new Dictionary<string, string>() {{"token", _devicetoken}}, s => { });
+#elif UNITY_IOS
+        Srv.Instance.POST("User/IosNotificationToken", new Dictionary<string, string>() { { "token", _devicetoken } }, s => { });
+#endif
     }
 
     //Un-Registering once done.    
@@ -77,13 +88,21 @@ public class NotificationManager : Singleton<NotificationManager>
     {
         //Register for remote notification
 
-        if(!Application.isEditor)
+        if (!Application.isEditor)
+        {
             NPBinding.NotificationService.RegisterForRemoteNotifications();
+        }
     }
 
     public void UnregisterForNotifications()
     {
         //Unregister for remote notification
         NPBinding.NotificationService.UnregisterForRemoteNotifications();
+
+#if UNITY_ANDROID
+        Srv.Instance.POST("User/AndroidNotificationToken", new Dictionary<string, string>() { { "token", "" } }, s => { });
+#elif UNITY_IOS
+        Srv.Instance.POST("User/IosNotificationToken", new Dictionary<string, string>() { { "token", "" } }, s => { });
+#endif
     }
 }

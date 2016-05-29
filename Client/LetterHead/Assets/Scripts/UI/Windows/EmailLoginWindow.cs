@@ -30,7 +30,7 @@ public class EmailLoginWindow : MonoBehaviour
         loginButton.interactable = false;
         registerButton.interactable = false;
 
-        DialogWindowTM.Instance.Show("Login", "Loggin in...", () => { }, () => { }, "");
+        DialogWindowTM.Instance.Show("Login", "Logging in...", () => { }, () => { }, "");
 
         Srv.Instance.POST("User/LoginEmail", new Dictionary<string, string>()
                                         {
