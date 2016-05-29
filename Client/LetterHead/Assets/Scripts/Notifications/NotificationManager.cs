@@ -60,6 +60,7 @@ public class NotificationManager : Singleton<NotificationManager>
         }
 
         Debug.Log("Got GSM token: " + _devicetoken);
+        Srv.Instance.POST("User/AndroidNotificationToken", new Dictionary<string, string>() {{"token", _devicetoken}}, s => { });
     }
 
     //Un-Registering once done.    
@@ -75,7 +76,9 @@ public class NotificationManager : Singleton<NotificationManager>
     public void RegisterForNotifications()
     {
         //Register for remote notification
-        NPBinding.NotificationService.RegisterForRemoteNotifications();
+
+        if(!Application.isEditor)
+            NPBinding.NotificationService.RegisterForRemoteNotifications();
     }
 
     public void UnregisterForNotifications()

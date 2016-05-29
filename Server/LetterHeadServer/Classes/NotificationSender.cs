@@ -14,10 +14,12 @@ namespace LetterHeadServer.Classes
         private static string senderId = "773989279545";
         private static string token = "AIzaSyBRL9PxVgTT9LtqKaTL_1ZvJdtJETEm4xc";
 
-        public void Send(User user, string message)
+        public void Send(User user, NotificationDetails message)
         {
             // Configuration
             var config = new GcmConfiguration(senderId, token, null);
+
+            //System.Diagnostics.Trace.TraceInformation("Sending notification to " + user.Id + " token = " + user.AndroidNotificationToken);
 
             // Create a new broker
             var gcmBroker = new GcmServiceBroker(config);
@@ -36,7 +38,7 @@ namespace LetterHeadServer.Classes
                         var gcmNotification = notificationException.Notification;
                         var description = notificationException.Description;
 
-                        Console.WriteLine($"GCM Notification Failed: ID={gcmNotification.MessageId}, Desc={description}");
+                        System.Diagnostics.Trace.TraceError($"GCM Notification Failed: ID={gcmNotification.MessageId}, Desc={description}");
                     }
                     else if (ex is GcmMulticastResultException)
                     {
@@ -44,7 +46,7 @@ namespace LetterHeadServer.Classes
 
                         foreach (var succeededNotification in multicastException.Succeeded)
                         {
-                            Console.WriteLine($"GCM Notification Failed: ID={succeededNotification.MessageId}");
+                            System.Diagnostics.Trace.TraceError($"GCM Notification Failed: ID={succeededNotification.MessageId}");
                         }
 
                     }
@@ -55,23 +57,23 @@ namespace LetterHeadServer.Classes
                         var oldId = expiredException.OldSubscriptionId;
                         var newId = expiredException.NewSubscriptionId;
 
-                        Console.WriteLine($"Device RegistrationId Expired: {oldId}");
+                        System.Diagnostics.Trace.TraceError($"Device RegistrationId Expired: {oldId}");
 
                         if (!string.IsNullOrEmpty(newId))
                         {
                             // If this value isn't null, our subscription changed and we should update our database
-                            Console.WriteLine($"Device RegistrationId Changed To: {newId}");
+                            System.Diagnostics.Trace.TraceError($"Device RegistrationId Changed To: {newId}");
                         }
                     }
                     else if (ex is RetryAfterException)
                     {
                         var retryException = (RetryAfterException)ex;
                         // If you get rate limited, you should stop sending messages until after the RetryAfterUtc date
-                        Console.WriteLine($"GCM Rate Limited, don't send more until after {retryException.RetryAfterUtc}");
+                        System.Diagnostics.Trace.TraceError($"GCM Rate Limited, don't send more until after {retryException.RetryAfterUtc}");
                     }
                     else
                     {
-                        Console.WriteLine("GCM Notification Failed for some unknown reason");
+                        System.Diagnostics.Trace.TraceError("GCM Notification Failed for some unknown reason");
                     }
 
                     // Mark it as handled
@@ -80,7 +82,7 @@ namespace LetterHeadServer.Classes
             };
 
             gcmBroker.OnNotificationSucceeded += (notification) => {
-                Console.WriteLine("GCM Notification Sent!");
+                //System.Diagnostics.Trace.TraceInformation("GCM Notification Sent!");
             };
 
             // Start the broker
@@ -92,14 +94,27 @@ namespace LetterHeadServer.Classes
                 RegistrationIds = new List<string> {
                         user.AndroidNotificationToken
                     },
-                Data = JObject.Parse("{\"content_title\" : \"Title here\" \"content_text\":\"Content text here....\" \"ticker_text\" : \"Ticker text shown in status bar goes here\" " +
-                                     "\"tag\" : \"OptionalTag -  This needs to be diff if you want to overwrite previous notification\" " +
-                                     "\"user_info\": { \"key1\"  : \"value1\" \"key2\"  : \"value2\" } }")
+                Data = JObject.Parse("{\"content_title\" : \"" + message.title.Replace("\"", "\\\"") + "\", \"content_text\":\"" + message.content.Replace("\"", "\\\"") + "\", \"ticker_text\" : \"" + message.content.Replace("\"", "\\\"") + "\", " +
+                                     "\"tag\" : \"" + message.tag.Replace("\"", "\\\"") + "\", " +
+                                     "\"user_info\": { \"key1\"  : \"value1\", \"key2\"  : \"value2\" } }")
             });
             // Stop the broker, wait for it to finish   
             // This isn't done after every message, but after you're
             // done with the broker
             gcmBroker.Stop();
         }
+    }
+}
+
+public struct NotificationDetails
+{
+    public string title;
+    public string content;
+    public string tag;
+    public Type type;
+
+    public enum Type
+    {
+        Invite, Buzz, YourTurn
     }
 }

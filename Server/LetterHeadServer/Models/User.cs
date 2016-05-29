@@ -87,11 +87,12 @@ namespace LetterHeadServer.Models
             return stats;
         }
 
-        public void SendNotification(string title, string message, string tag)
+        public void SendNotification(NotificationDetails message)
         {
             if(string.IsNullOrEmpty(AndroidNotificationToken) && string.IsNullOrEmpty(IosNotificationToken))
                 return;
 
+            BackgroundJob.Enqueue(() => new BackendController().SendNotification(Id, message));
         }
     }
 }

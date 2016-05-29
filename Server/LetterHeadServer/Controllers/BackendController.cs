@@ -44,7 +44,18 @@ namespace LetterHeadServer.Controllers
             return "Deleted " + rounds.Count + " matches for " + userId;
         }
 
-        public void SendNotification(int userId, string title, string message, string tag)
+        public void TestNotification(int userId, string title, string message)
+        {
+            SendNotification(userId, new NotificationDetails()
+                                     {
+                                         type = NotificationDetails.Type.Invite,
+                                         title = title,
+                                         content = message,
+                                         tag = "invite123"
+                                     });
+        }
+
+        public void SendNotification(int userId, NotificationDetails message)
         {
             var user = db.Users.Find(userId);
             if (user == null)
