@@ -73,7 +73,7 @@ namespace LetterHeadServer.Controllers
             match.RandomizeUsers();
             db.SaveChanges();
 
-            match.NotifyNewTurn();
+            match.OnNewTurn();
         }
 
         public ActionResult List()
@@ -173,6 +173,57 @@ namespace LetterHeadServer.Controllers
 
             return Okay();
         }
+
+        public ActionResult Buzz(int matchId)
+        {
+            var match = Match.GetById(db, matchId);
+            if (match == null)
+            {
+                return Error("Invalid Match");
+            }
+
+            if (!match.UserAuthorized(currentUser))
+            {
+                return Error("You can't access that match");
+            }
+
+            if (match.CurrentUserTurn == currentUser)
+            {
+                return Error("It's your turn!");
+            }
+
+            var lastBuzz = match.Buzzes.Where(b => b.SourceUser.Id == currentUser.Id).OrderByDescending(b => b.date).FirstOrDefault();
+            if (lastBuzz != null && (DateTime.Now - lastBuzz.date).TotalHours < 12)
+            {
+                return Error("Please wait before buzzing again");
+            }
+
+            if ((DateTime.Now - match.CurrentRound().ActivatedOn.Value).TotalHours < 12)
+            {
+                return Error("Please wait before buzzing");
+            }
+            
+            match.Buzzes.Add(new MatchBuzz()
+                             {
+                                 match = match,
+                                 DestinationUser = match.CurrentUserTurn,
+                                 SourceUser = currentUser,
+                                 date = DateTime.Now
+                             });
+
+            db.SaveChanges();
+
+            match.CurrentUserTurn.SendNotification(new NotificationDetails()
+                                                   {
+                                                       content = currentUser.Username + " buzzed you! It's your turn.",
+                                                       title = "LetterHead - Buzz",
+                                                       tag = "buzz" + currentUser.Username,
+                                                       type = NotificationDetails.Type.Buzz
+                                                   });
+
+            return Okay();
+        }
+
 
         public ActionResult Clear(int matchId)
         {

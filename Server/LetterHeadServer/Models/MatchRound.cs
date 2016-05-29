@@ -37,6 +37,7 @@ namespace LetterHeadServer.Models
         public string CategoryName { get; set; }
         public LetterHeadShared.DTO.MatchRound.RoundState CurrentState { get; set; }
         public DateTime? StartedOn { get; set; }
+        public DateTime? ActivatedOn { get; set; }
 
         public MatchRound()
         {

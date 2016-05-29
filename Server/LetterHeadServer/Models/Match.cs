@@ -53,6 +53,8 @@ namespace LetterHeadServer.Models
         public int MaxRounds { get; set; }
 
         public virtual ICollection<MatchRound> Rounds { get; set; }
+        public virtual ICollection<MatchBuzz> Buzzes { get; set; }
+
         public int CurrentRoundNumber { get; set; }
 
         public static Match New(ApplicationDbContext db, List<User> users, int roundCount)
@@ -144,13 +146,15 @@ namespace LetterHeadServer.Models
             {
                 CurrentRoundForUser(CurrentUserTurn).CurrentState = LetterHeadShared.DTO.MatchRound.RoundState.Ended;
                 CurrentUserTurn = Users[currentUserIndex];
-
-                NotifyNewTurn();
+                OnNewTurn();
             }
         }
 
-        public void NotifyNewTurn()
+        public void OnNewTurn()
         {
+            var round = CurrentRound();
+            round.ActivatedOn = DateTime.Now;
+
             if (DailyGame != null)
                 return;
 
@@ -163,6 +167,11 @@ namespace LetterHeadServer.Models
             });
         }
 
+        public MatchRound CurrentRound()
+        {
+            return Rounds.FirstOrDefault(r => r.User.Id == CurrentUserTurn.Id && r.Number == CurrentRoundNumber);
+        }
+
         private void EndRound()
         {
             if (CurrentRoundNumber == Rounds.Count - 1)
@@ -173,7 +182,7 @@ namespace LetterHeadServer.Models
 
             CurrentUserTurn = Users[0];
             CurrentRoundNumber++;
-            NotifyNewTurn();
+            OnNewTurn();
         }
 
         public List<MatchRound> UserRounds(User user)

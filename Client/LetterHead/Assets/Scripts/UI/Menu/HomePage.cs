@@ -20,7 +20,8 @@ public class HomePage : Page
     private List<DashboardRow> theirMatchRows = new List<DashboardRow>(); 
     private List<DashboardRow> completedMatchRows = new List<DashboardRow>();
 
-    private List<Invite> invites = new List<Invite>(); 
+    private List<Invite> invites = new List<Invite>();
+    private bool matchesRefreshing;
 
     void Start()
     {
@@ -35,6 +36,11 @@ public class HomePage : Page
 
     public void RefreshMatches()
     {
+        if(matchesRefreshing)
+            return;
+
+        matchesRefreshing = true;
+
         Srv.Instance.POST("Match/List", null, s =>
         {
             var list = JsonConvert.DeserializeObject<ListInfo>(s);
@@ -48,6 +54,11 @@ public class HomePage : Page
             UpdateMatchSet(myMatchRows, myMatches, myTurnHeader, DashboardRow.RowType.MyTurn);
             UpdateMatchSet(theirMatchRows, theirMatches, theirTurnHeader, DashboardRow.RowType.TheirTurn);
             UpdateMatchSet(completedMatchRows, completedMatches, completedHeader, DashboardRow.RowType.Completed);
+
+            matchesRefreshing = false;
+        }, s =>
+        {
+            matchesRefreshing = false;
         });
     }
 
@@ -141,5 +152,13 @@ public class HomePage : Page
         {
             RefreshMatches();
         });
+    }
+
+    public void BuzzMatch(Match matchInfo)
+    {
+        Srv.Instance.POST("Match/Buzz", new Dictionary<string, string>() { { "matchId", matchInfo.Id.ToString() } }, s =>
+        {
+            DialogWindowTM.Instance.Show("Buzz", "You buzzed your opponent.", () => { });
+        }, DialogWindowTM.Instance.Error);
     }
 }

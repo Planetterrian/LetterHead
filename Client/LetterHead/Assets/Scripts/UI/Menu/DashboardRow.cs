@@ -75,6 +75,7 @@ public class DashboardRow : MonoBehaviour
 
     public void OnPokeClicked()
     {
+        homePage.BuzzMatch(matchInfo);
     }
 
     public void OnClearClicked()
