@@ -9,6 +9,7 @@ public class DialogWindowTM : Singleton<DialogWindowTM>
     public TextMeshProUGUI title;
     public Button okayButton;
     public Button cancelButton;
+    public Button closeButton;
     private Action okayCallback;
     private Action cancelCallback;
 
@@ -58,18 +59,28 @@ public class DialogWindowTM : Singleton<DialogWindowTM>
             // Info box
             cancelButton.gameObject.SetActive(false);
             okayButton.gameObject.SetActive(false);
+            closeButton.gameObject.SetActive(false);
         }
         else if (cancelCallback == null)
         {
-            okayButton.transform.localPosition = new Vector3(0, okayButton.transform.localPosition.y, okayButton.transform.localPosition.z);
-            cancelButton.gameObject.SetActive(false);
             okayButton.gameObject.SetActive(true);
+            closeButton.gameObject.SetActive(false);
+            cancelButton.gameObject.SetActive(false);
         }
         else
         {
             okayButton.gameObject.SetActive(true);
-            okayButton.transform.localPosition = new Vector3(okayStartingPos, okayButton.transform.localPosition.y, okayButton.transform.localPosition.z);
-            cancelButton.gameObject.SetActive(true);
+
+            if (cancelText == "CANCEL")
+            {
+                closeButton.gameObject.SetActive(true);
+                cancelButton.gameObject.SetActive(false);
+            }
+            else
+            {
+                cancelButton.gameObject.SetActive(true);
+                closeButton.gameObject.SetActive(false);
+            }
         }
     }
 

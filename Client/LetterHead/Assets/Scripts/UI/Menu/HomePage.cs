@@ -47,6 +47,9 @@ public class HomePage : Page
         if(matchesRefreshing)
             return;
 
+        if(!ClientManager.Instance.PlayerDataLoaded())
+            return;
+
         matchesRefreshing = true;
 
         Srv.Instance.POST("Match/List", null, s =>

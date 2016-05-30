@@ -31,6 +31,11 @@ public class ClientManager : Singleton<ClientManager>
 
     }
 
+    public bool PlayerDataLoaded()
+    {
+        return myUserInfo != null;
+    }
+
 
     public int PowerupCount(LetterHeadShared.Powerup.Type powerupType)
     {
