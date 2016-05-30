@@ -53,6 +53,7 @@ class ProfilePage : Page
             new Dictionary<string, string>() { { "username", usernameInput.text } }, s =>
             {
                 // Silently accept it
+                ClientManager.Instance.RefreshMyInfo(false);
             });
     }
 
@@ -65,6 +66,7 @@ class ProfilePage : Page
             new Dictionary<string, string>() {{"sprite", avatarDropdown.options[avatarDropdown.value].text}}, s =>
             {
                 // Silently accept it
+                ClientManager.Instance.RefreshMyInfo(false);
             });
     }
 
@@ -75,7 +77,10 @@ class ProfilePage : Page
 
         if (useFacebookImageToggle.isOn)
         {
-            Srv.Instance.POST("User/UseFacebookImage", null, s => { });
+            Srv.Instance.POST("User/UseFacebookImage", null, s =>
+            {
+                ClientManager.Instance.RefreshMyInfo(false);
+            });
         }
         else
         {

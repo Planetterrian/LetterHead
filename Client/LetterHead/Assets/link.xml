@@ -10,7 +10,6 @@
     <namespace fullname="VoxelBusters.NativePlugins.Internal" preserve="all" />
   </assembly>
   <assembly fullname="System">
-    <type fullname="System.ComponentModel.ByteConverter" preserve="all"/>
+    <type fullname="System.ComponentModel.ByteConverter" preserve="all" />
   </assembly>
-  
 </linker>
