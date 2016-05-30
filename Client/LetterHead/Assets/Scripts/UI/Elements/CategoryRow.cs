@@ -14,9 +14,20 @@ public class CategoryRow : MonoBehaviour
     public TextMeshProUGUI nameLabel;
     public TextMeshProUGUI scoreLabel;
 
+    private GameObject tooltipAnchor;
+
+    void Awake()
+    {
+        tooltipAnchor = new GameObject("anchor", typeof(RectTransform));
+        tooltipAnchor.transform.SetParent(transform);
+        tooltipAnchor.transform.ResetToOrigin();
+
+        tooltipAnchor.GetComponent<RectTransform>().anchoredPosition = new Vector2(tooltipAnchor.GetComponent<RectTransform>().anchoredPosition.x, tooltipAnchor.GetComponent<RectTransform>().anchoredPosition.y + 45);
+    }
+
     public void OnNameClicked()
     {
-        Tooltip.Instance.Show(category.description, transform.position.y + 35 * PersistManager.Instance.persistCanvas.GetComponent<Transform>().localScale.y);
+        Tooltip.Instance.Show(category.description, tooltipAnchor.transform.position.y);
     }
 
     public void OnScoreClicked()
