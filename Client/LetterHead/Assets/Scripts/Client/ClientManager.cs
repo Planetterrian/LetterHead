@@ -28,9 +28,19 @@ public class ClientManager : Singleton<ClientManager>
 
     private void Start()
     {
-/*
-        if (!string.IsNullOrEmpty(SessionId))
-            RefreshMyInfo();*/
+
+    }
+
+
+    public int PowerupCount(LetterHeadShared.Powerup.Type powerupType)
+    {
+        if (myUserInfo == null)
+            return 0;
+
+        if ((int)powerupType >= myUserInfo.PowerupCountList.Count)
+            return 0;
+
+        return myUserInfo.PowerupCountList[(int)powerupType];
     }
 
     public void RefreshMyInfo(bool isFirstLoad, Action<bool> onInfoLoaded = null)

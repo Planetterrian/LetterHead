@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class PowerupManager : MonoBehaviour
+public class PowerupManager : Singleton<PowerupManager>
 {
-     
-
     private void Awake()
     {
     }

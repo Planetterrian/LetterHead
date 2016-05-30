@@ -11,5 +11,6 @@ namespace LetterHeadShared.DTO
         public string Username;
         public string AvatarUrl;
         public string FacebookPictureUrl;
+        public List<int> PowerupCountList;
     }
 }

@@ -44,9 +44,41 @@ namespace LetterHeadServer.Models
         public virtual ICollection<User> Friends { get; set; }
 
 
+        public List<int> PowerupCountList { get; set; }
+        public string PowerupCountListJoined
+        {
+            get
+            {
+                if (PowerupCountList == null)
+                    return "";
+
+                return string.Join(",", PowerupCountList);
+            }
+            set
+            {
+                if (string.IsNullOrEmpty(value))
+                    PowerupCountList = new List<int>() { 2, 2, 2, 2};
+                else
+                    PowerupCountList = value.Split(',').Select(int.Parse).ToList();
+            }
+        }
+        
         [Index]
         [MaxLength(64)]
         public string SessionId { get; set; }
+
+        public int PowerupCount(LetterHeadShared.Powerup.Type powerupType)
+        {
+            if ((int)powerupType >= PowerupCountList.Count)
+                return 0;
+
+            return PowerupCountList[(int)powerupType];
+        }
+
+        public void ConsumePowerup(LetterHeadShared.Powerup.Type powerupType)
+        {
+            PowerupCountList[(int)powerupType]--;
+        }
 
         public void GenerateNewSessionId()
         {
