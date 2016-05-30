@@ -44,6 +44,7 @@ namespace LetterHeadShared
             {
                 name = "Upper Bonus",
                 description = "Successfully complete all of the above categories",
+                alwaysActive = true,
                 GetScore = (words, uniqueLetterCount, existingScores) =>
                 {
                     var score = 35;

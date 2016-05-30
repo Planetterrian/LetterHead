@@ -18,7 +18,7 @@ namespace LetterHeadServer.Models
             return LettersEncoded.Split(',')[roundNumber];
         }
 
-        private const int RoundCount = 10;
+        private const int RoundCount = 9;
 
         public static void CreateNewDailyGame()
         {
@@ -73,7 +73,7 @@ namespace LetterHeadServer.Models
 
         public Match CreateMatchForUser(ApplicationDbContext context, User currentUser)
         {
-            var match = Match.New(context, new List<User>(){ currentUser }, RoundCount);
+            var match = Match.New(context, new List<User>(){ currentUser });
             match.DailyGame = this;
             match.CurrentState = LetterHeadShared.DTO.Match.MatchState.Pregame;
                         context.SaveChanges();

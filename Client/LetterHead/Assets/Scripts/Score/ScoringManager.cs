@@ -133,7 +133,7 @@ public class ScoringManager : Singleton<ScoringManager>, IGameHandler
     {
         var scores = new int[categoryManager.Categories.Count];
 
-        var rounds = GameManager.Instance.MyRounds().Where(m => m.Number < GameManager.Instance.MatchDetails.CurrentRoundNumber);
+        var rounds = GameManager.Instance.MyRounds().Where(m => m.Number <= GameManager.Instance.MatchDetails.CurrentRoundNumber);
         foreach (var round in rounds)
         {
             if (string.IsNullOrEmpty(round.CategoryName))

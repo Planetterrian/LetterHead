@@ -55,7 +55,7 @@ namespace LetterHeadServer.Controllers
             }
             else
             {
-                var match = Match.New(db, new List<User>() {currentUser}, 10);
+                var match = Match.New(db, new List<User>() {currentUser});
             }
 
             db.SaveChanges();
@@ -96,7 +96,7 @@ namespace LetterHeadServer.Controllers
             var users = new List<User>() { currentUser, invite.Inviter };
             users = users.OrderBy(u => Guid.NewGuid()).ToList();
 
-            var match = Match.New(db, users, 10);
+            var match = Match.New(db, users);
             InitilizeMatch(match);
             currentUser.Invites.Remove(invite);
             db.Entry(invite).State = EntityState.Deleted;

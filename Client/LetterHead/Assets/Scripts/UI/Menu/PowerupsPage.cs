@@ -17,4 +17,14 @@ public class PowerupsPage : Page
             powerupRow.SetCount(ClientManager.Instance.PowerupCount((Powerup.Type)index));
         }
     }
+
+    public void DailyBoosterClicked()
+    {
+        
+    }
+
+    public void WatchAdClicked()
+    {
+        
+    }
 }

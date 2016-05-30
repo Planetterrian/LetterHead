@@ -81,19 +81,7 @@ namespace LetterHeadServer.Models
 
         private List<int> ExistingCategoryScores()
         {
-            var scores = new int[Startup.CategoryManager.Categories.Count];
-
-            var rounds = Match.Rounds.Where(m => m.User.Id == User.Id && m.Number < Match.CurrentRoundNumber);
-            foreach (var round in rounds)
-            {
-                if(string.IsNullOrEmpty(round.CategoryName))
-                    continue;
-
-                var categoryIndex = Startup.CategoryManager.GetCategoryIndex(round.CategoryName);
-                scores[categoryIndex] = round.Score;
-            }
-
-            return scores.ToList();
+            return Match.CategoryScores(User);
         }
 
         public int CalculateScore(List<string> words, int uniqueLetters, List<int> existingCategoryScores)

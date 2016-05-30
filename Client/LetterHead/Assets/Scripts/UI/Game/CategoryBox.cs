@@ -73,19 +73,24 @@ public class CategoryBox : Singleton<CategoryBox>, IGameHandler
                 {
                     score += scoreFunc.Value.GetScore(matchRound.Words, 0, new List<int>());
                 }
+
+                totalScore += score;
             }
             else if (existingRound != null)
             {
                 // This category has been used
                 score = existingRound.Score;
+                totalScore += score;
             }
             else
             {
                 score = ScoringManager.Instance.GetCategoryScore(scoreFunc.Value);
+
+                if (scoreFunc.Value.alwaysActive)
+                    totalScore += score;
             }
 
             scoreFunc.Key.SetScore(score, scoreFunc.Value.alwaysActive || GameManager.Instance.MyRounds().Any(c => c.CategoryName == scoreFunc.Value.name));
-            totalScore += score;
         }
 
         totallabel.text = totalScore.ToString("N0");

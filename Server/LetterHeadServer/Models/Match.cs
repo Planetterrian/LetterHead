@@ -57,7 +57,7 @@ namespace LetterHeadServer.Models
 
         public int CurrentRoundNumber { get; set; }
 
-        public static Match New(ApplicationDbContext db, List<User> users, int roundCount)
+        public static Match New(ApplicationDbContext db, List<User> users, int roundCount = 9)
         {
             var roundTime = 120;
 
@@ -202,7 +202,7 @@ namespace LetterHeadServer.Models
             for (int index = 0; index < Users.Count; index++)
             {
                 var user = Users[index];
-                var score = Rounds.Where(r => r.User.Id == user.Id).Sum(r => r.Score) + BigWordBonus(user);
+                var score = Rounds.Where(r => r.User.Id == user.Id).Sum(r => r.Score) + MatchBonus(user);
                 scores.Add(score);
             }
 
@@ -210,12 +210,15 @@ namespace LetterHeadServer.Models
         }
 
 
-        public int BigWordBonus(User user)
+        public int MatchBonus(User user)
         {
             var bigWord = Startup.CategoryManager.GetCategory("Big Word Bonus");
             var rounds = Rounds.Where(r => r.User.Id == user.Id);
 
-            return rounds.Sum(round => bigWord.GetScore(round.Words, 0, new List<int>()));
+            var bigWordBonus = rounds.Sum(round => bigWord.GetScore(round.Words, 0, new List<int>()));
+            var upperBonus = Startup.CategoryManager.GetCategory("Upper Bonus").GetScore(null, 0, CategoryScores(user));
+
+            return bigWordBonus + upperBonus;
         }
 
 
@@ -233,7 +236,7 @@ namespace LetterHeadServer.Models
                 return;
             }
 
-            var scores = Rounds.GroupBy(r => r.User).Select(g => new {User = g.Key, Score = g.Sum(r => r.Score) + BigWordBonus(g.Key)}).ToList();
+            var scores = Rounds.GroupBy(r => r.User).Select(g => new {User = g.Key, Score = g.Sum(r => r.Score) + MatchBonus(g.Key)}).ToList();
             var winner = scores.OrderByDescending(s => s.Score).First().User;
             Winner = winner;
         }
@@ -258,6 +261,23 @@ namespace LetterHeadServer.Models
                 return;
 
             ClearedUserIds.Add(clearer.Id);
+        }
+
+        public List<int> CategoryScores(User user)
+        {
+            var scores = new int[Startup.CategoryManager.Categories.Count];
+
+            var rounds = Rounds.Where(m => m.User.Id == user.Id && m.Number <= CurrentRoundNumber);
+            foreach (var round in rounds)
+            {
+                if (string.IsNullOrEmpty(round.CategoryName))
+                    continue;
+
+                var categoryIndex = Startup.CategoryManager.GetCategoryIndex(round.CategoryName);
+                scores[categoryIndex] = round.Score;
+            }
+
+            return scores.ToList();
         }
     }
 }
