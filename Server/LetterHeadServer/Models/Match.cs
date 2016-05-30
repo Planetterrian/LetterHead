@@ -50,6 +50,7 @@ namespace LetterHeadServer.Models
         public DateTime CreatedOn { get; set; }
         public DateTime? StartedOn { get; set; }
         public int RoundTimeSeconds { get; set; }
+
         public int MaxRounds { get; set; }
 
         public virtual ICollection<MatchRound> Rounds { get; set; }
@@ -278,6 +279,19 @@ namespace LetterHeadServer.Models
             }
 
             return scores.ToList();
+        }
+
+        public void Initizile(ApplicationDbContext db)
+        {
+            CurrentState = LetterHeadShared.DTO.Match.MatchState.Pregame;
+            AddRounds(db);
+            db.SaveChanges();
+
+            GenerateRandomBoard();
+            RandomizeUsers();
+            db.SaveChanges();
+
+            OnNewTurn();
         }
     }
 }

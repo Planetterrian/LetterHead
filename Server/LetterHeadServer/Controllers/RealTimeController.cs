@@ -18,7 +18,9 @@ using System.Web.WebSockets;
 using Hangfire;
 using LetterHeadServer.Classes;
 using LetterHeadServer.Models;
+using LetterHeadShared;
 using Microsoft.Ajax.Utilities;
+using MatchRound = LetterHeadShared.DTO.MatchRound;
 
 namespace LetterHeadServer.Controllers
 {
@@ -51,8 +53,8 @@ namespace LetterHeadServer.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.Forbidden, "Can't access that match");
             }
 
-            rtm = RealTimeMatchManager.GetMatch(matchId);
-            rtm.OnNewMessage += OnMatchMessage;
+            //rtm = RealTimeMatchManager.GetMatch(matchId);
+            //rtm.OnNewMessage += OnMatchMessage;
 
             HttpContext.Current.AcceptWebSocketRequest(ProcessSocket);
             return Request.CreateResponse(HttpStatusCode.SwitchingProtocols);
@@ -225,14 +227,62 @@ namespace LetterHeadServer.Controllers
                 round.CurrentState = LetterHeadShared.DTO.MatchRound.RoundState.Active;
                 round.StartedOn = DateTime.Now;
 
-                BackgroundJob.Schedule(() => new MatchController().ManuallyEndRound(match.Id, round.Id), round.EndTime());
+                round.EndRoundJobId = BackgroundJob.Schedule(() => new MatchController().ManuallyEndRound(match.Id, round.Id), round.EndTime());
             }
 
             match.CurrentState = LetterHeadShared.DTO.Match.MatchState.Running;
             db.SaveChanges();
 
 
-            await SendMessage("StartRound", (float)((round.EndTime() - DateTime.Now).TotalSeconds));
+            await SendMessage("StartRound", round.TimeRemaining());
+        }
+
+
+        private async Task _UseDoOver(BinaryReader reader)
+        {
+            if (match.CurrentUserTurn != currentUser)
+            {
+                await Err("It's your opponents turn");
+                return;
+            }
+
+            if (match.CurrentState == LetterHeadShared.DTO.Match.MatchState.Ended)
+            {
+                await Err("That game has already ended");
+                return;
+            }
+
+            var round = match.CurrentRoundForUser(currentUser);
+            if (round.CurrentState != MatchRound.RoundState.Active)
+            {
+                await Err("Waiting for categories");
+                return;
+            }
+
+            round.Letters = BoardHelper.GenerateBoard();
+            round.StartedOn = DateTime.Now;
+            round.Words = new List<string>();
+            round.UsedLetterIds = 0;
+            round.Score = 0;
+            round.CategoryName = "";
+            round.DoOverUsed = true;
+
+            BackgroundJob.Delete(round.EndRoundJobId);
+            round.EndRoundJobId = BackgroundJob.Schedule(() => new MatchController().ManuallyEndRound(match.Id, round.Id), round.EndTime());
+
+            currentUser.ConsumePowerup(Powerup.Type.DoOver);
+
+            db.SaveChanges();
+
+            var steam = new MemoryStream();
+            BinaryWriter bw = new BinaryWriter(steam);
+            bw.Write(round.Letters);
+            bw.Write(round.TimeRemaining());
+
+
+            await SendMessage("DoOver", steam.ToArray());
+            bw.Close();
+            steam.Close();
         }
 
 

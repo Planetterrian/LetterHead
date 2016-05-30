@@ -30,6 +30,16 @@ namespace LetterHeadServer.Controllers
             return Content("Matchmaking complete");
         }
 
+        public string TestGame(int userId, int userId2)
+        {
+            var match = Match.New(db, new List<User>() {db.Users.Find(userId), db.Users.Find(userId2) });
+            match.Initizile(db);
+
+            db.SaveChanges();
+
+            return "Match created!";
+        }
+
         public string DeleteUserMatches(int userId)
         {
             var rounds = db.Users.Find(userId).Matches.ToList();

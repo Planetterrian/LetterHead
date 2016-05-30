@@ -33,6 +33,7 @@ namespace LetterHeadServer.Models
             }
         }
 
+        public string EndRoundJobId { get; set; }
         public int UsedLetterIds { get; set; }
         public string CategoryName { get; set; }
         public LetterHeadShared.DTO.MatchRound.RoundState CurrentState { get; set; }
@@ -110,5 +111,9 @@ namespace LetterHeadServer.Models
             return (((i + (i >> 4)) & 0x0F0F0F0F) * 0x01010101) >> 24;
         }
 
+        public float TimeRemaining()
+        {
+            return (float) ((EndTime() - DateTime.Now).TotalSeconds);
+        }
     }
 }

@@ -18,6 +18,8 @@ namespace LetterHeadShared.DTO
         public DateTime? StartedOn;
         public string Letters;
 
+        public bool DoOverUsed;
+
 
         public enum RoundState
         {

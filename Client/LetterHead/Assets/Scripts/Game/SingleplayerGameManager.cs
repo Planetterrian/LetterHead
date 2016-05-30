@@ -28,8 +28,6 @@ public class SingleplayerGameManager : GameManager
             MatchId = PersistManager.Instance.matchToLoadId;
             LoadMatchDetails();
         }
-
-        GameGui.Instance.HidePowerups();
 	}
 
     protected override void OnMatchDetailsLoaded()

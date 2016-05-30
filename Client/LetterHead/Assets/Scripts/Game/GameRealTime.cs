@@ -157,6 +157,21 @@ public class GameRealTime : Singleton<GameRealTime>
         Debug.Log("Start time = " + time);
     }
 
+
+    void _DoOver(BinaryReader message)
+    {
+        var letters = message.ReadString();
+        var time = message.ReadSingle();
+
+        GameManager.Instance.CurrentRound().DoOverUsed = true;
+
+        GameScene.Instance.ResetGame();
+        BoardManager.Instance.SetBoardLetters(letters, false);
+        GameManager.Instance.StartGame(time);
+
+        Debug.Log("Start time = " + time);
+    }
+
     public bool IsConnected()
     {
         if (socket == null)
@@ -182,5 +197,10 @@ public class GameRealTime : Singleton<GameRealTime>
             }
         }
 
+    }
+
+    public void OnDoOverUsed()
+    {
+        SendMsg("UseDoOver");
     }
 }

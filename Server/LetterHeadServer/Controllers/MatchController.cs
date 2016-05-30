@@ -51,7 +51,7 @@ namespace LetterHeadServer.Controllers
             if (existingMatch != null)
             {
                 existingMatch.Users.Add(currentUser);
-                InitilizeMatch(existingMatch);
+                existingMatch.Initizile(db);
             }
             else
             {
@@ -61,19 +61,6 @@ namespace LetterHeadServer.Controllers
             db.SaveChanges();
 
             return Okay();
-        }
-
-        private void InitilizeMatch(Match match)
-        {
-            match.CurrentState = LetterHeadShared.DTO.Match.MatchState.Pregame;
-            match.AddRounds(db);
-            db.SaveChanges();
-
-            match.GenerateRandomBoard();
-            match.RandomizeUsers();
-            db.SaveChanges();
-
-            match.OnNewTurn();
         }
 
         public ActionResult List()
@@ -97,7 +84,7 @@ namespace LetterHeadServer.Controllers
             users = users.OrderBy(u => Guid.NewGuid()).ToList();
 
             var match = Match.New(db, users);
-            InitilizeMatch(match);
+            match.Initizile(db);
             currentUser.Invites.Remove(invite);
             db.Entry(invite).State = EntityState.Deleted;
 

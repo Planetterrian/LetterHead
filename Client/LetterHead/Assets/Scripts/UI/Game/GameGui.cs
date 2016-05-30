@@ -146,10 +146,12 @@ public class GameGui : Singleton<GameGui>
         {
             rightAvatarBox.gameObject.SetActive(true);
             SetAvatarBox(rightAvatarBox, 1);
+            ShowPowerups();
         }
         else
         {
             rightAvatarBox.gameObject.SetActive(false);
+            HidePowerups();
         }
     }
 
@@ -160,10 +162,16 @@ public class GameGui : Singleton<GameGui>
         box.SetName(GameManager.Instance.MatchDetails.Users[userIndex].Username);
     }
 
-    public void HidePowerups()
+    private void HidePowerups()
     {
         leftPowerupsBox.SetActive(false);
         rightPowerupsBox.SetActive(false);
+    }
+
+    private void ShowPowerups()
+    {
+        leftPowerupsBox.SetActive(true);
+        rightPowerupsBox.SetActive(true);
     }
 
     public void OnBackClicked()
