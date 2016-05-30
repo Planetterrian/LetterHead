@@ -34,6 +34,14 @@ public class HomePage : Page
         public List<Invite> Invites;
     }
 
+    void OnApplicationFocus(bool state)
+    {
+        if (state)
+        {
+            RefreshMatches();
+        }
+    }
+
     public void RefreshMatches()
     {
         if(matchesRefreshing)
