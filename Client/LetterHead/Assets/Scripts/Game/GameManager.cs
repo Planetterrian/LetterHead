@@ -89,6 +89,10 @@ public abstract class GameManager : Singleton<GameManager>
 
         gameScene = GameScene.Instance;
         GameGui.Instance.timer.OnTimeExpired.AddListener(OnTimerExpired);
+        if (IsMyRound())
+        {
+            SoundManager.Instance.PlayClip("Time Up");
+        }
     }
 
     public bool IsMyRound()

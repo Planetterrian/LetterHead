@@ -58,23 +58,31 @@ namespace LetterHeadServer.Classes
             // Start the broker
             apnsBroker.Start();
 
-            // Queue a notification to send
-            apnsBroker.QueueNotification(new ApnsNotification
-            {
-                DeviceToken = user.IosNotificationToken,
-                Payload = JObject.Parse("{\n"+
+            var payload = "{\n" +
 "\t\"aps\": {\n" +
 "\t\t\"alert\": {\n" +
 "\t\t\t\"title\": \"" + message.title.Replace("\"", "\\\"") + "\",\n" +
 "\t\t\t\"body\": \"" + message.content.Replace("\"", "\\\"") + "\",\n" +
 "\t\t\t\"action-loc-key\": \"VIEW\"\n" +
 "\t\t},\n" +
-"\t\t\"badge\": 1\n" +
-"\t},\n" +
-"\t\"user_info\": {\n" +
-"\t\t\"alertType\": \"" + (int)message.type + "\"\n" +
-"\t}\n" +
-"}")
+"\t\t\"badge\": 1\n";
+
+            if (message.type == NotificationDetails.Type.YourTurn)
+                payload += "\t\t\",sound\": \"TurnNotification.wav\"\n";
+
+            payload += "\t},\n" +
+            "\t\"user_info\": {\n" +
+            "\t\t\"alertType\": \"" + (int)message.type + "\"\n" +
+            "\t}\n" +
+            "}";
+            // Queue a notification to send
+            apnsBroker.QueueNotification(new ApnsNotification
+            {
+                DeviceToken = user.IosNotificationToken,
+
+                
+
+                Payload = JObject.Parse(payload)
             });
             
 

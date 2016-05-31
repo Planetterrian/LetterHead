@@ -63,7 +63,16 @@ public class ScoringManager : Singleton<ScoringManager>, IGameHandler
 
             GameRealTime.Instance.AddWord(word, usedLetterIds);
             GameManager.Instance.CurrentRound().Words.Add(word);
-            SoundManager.Instance.PlayClip("Accept Word");
+
+            if (word.Length >= 8)
+            {
+                SoundManager.Instance.PlayClip("Big Word");
+            }
+            else
+            {
+                SoundManager.Instance.PlayClip("Accept Word");
+            }
+
         }
 
         if (PersistManager.Instance.ClearWord)

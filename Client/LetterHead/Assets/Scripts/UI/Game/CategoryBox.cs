@@ -55,6 +55,7 @@ public class CategoryBox : Singleton<CategoryBox>, IGameHandler
             return;
 
         GameManager.Instance.SelectCategory(category);
+        SoundManager.Instance.PlayClip("Circle Score");
     }
 
     public void Refresh()

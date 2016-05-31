@@ -85,6 +85,8 @@ public class HomePage : Page
             var invite = invites[0];
             invites.RemoveAt(0);
 
+            SoundManager.Instance.PlayClip("Invite");
+
             DialogWindowTM.Instance.Show("Invite", "You have a match invite from " + invite.Inviter.Username + ". Do you want to accept?",
                 () =>
                 {

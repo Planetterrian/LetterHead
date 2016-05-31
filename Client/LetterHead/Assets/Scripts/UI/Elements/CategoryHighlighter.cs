@@ -37,6 +37,7 @@ public class CategoryHighlighter : MonoBehaviour
     public void StartAnimation()
     {
         animatePct = 0;
+        image.fillAmount = animatePct;
         animating = true;
     }
 }
