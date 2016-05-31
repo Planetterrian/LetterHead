@@ -43,6 +43,9 @@ public abstract class GameManager : Singleton<GameManager>
 
     public MatchRound CurrentRound()
     {
+        if (MatchDetails == null)
+            return null;
+
         return MatchDetails.Rounds.FirstOrDefault(matchRound => matchRound.UserId == MatchDetails.Users[MatchDetails.CurrentUserIndex].Id && matchRound.Number == MatchDetails.CurrentRoundNumber);
     }
 

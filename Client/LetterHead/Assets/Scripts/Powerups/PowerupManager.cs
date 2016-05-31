@@ -21,7 +21,7 @@ public class PowerupManager : Singleton<PowerupManager>
 
     private void RefreshOpponentButtons()
     {
-        var doOverActive = !GameManager.Instance.IsMyRound() && GameManager.Instance.CurrentRound().DoOverUsed;
+        var doOverActive = !GameManager.Instance.IsMyRound() && GameManager.Instance.CurrentRound() != null && GameManager.Instance.CurrentRound().DoOverUsed;
         powerupButtons[(int)Powerup.Type.DoOver].SetState(doOverActive);
     }
 
