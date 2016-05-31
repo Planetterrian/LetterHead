@@ -50,9 +50,11 @@ public class LoginScene : GuiScene
         Srv.Instance.POST("User/FacebookLogin", new Dictionary<string, string>() {{"token", result.AccessToken.TokenString}}, (s) =>
         {
             var sessionId = JsonConvert.DeserializeObject<string>(s);
-            ClientManager.Instance.SetSessionId(sessionId, true);
-            MenuGui.Instance.LoadDashboard();
-            DialogWindowTM.Instance.Hide();
+            ClientManager.Instance.SetSessionId(sessionId, true, b =>
+            {
+                MenuGui.Instance.LoadDashboard();
+                DialogWindowTM.Instance.Hide();
+            });
         }, s =>
         {
             DialogWindowTM.Instance.Error(s);

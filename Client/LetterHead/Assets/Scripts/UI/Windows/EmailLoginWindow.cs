@@ -37,12 +37,14 @@ public class EmailLoginWindow : MonoBehaviour
                                             {"Email", email}, {"Password", password}
                                         }, s =>
                                         {
-                                            DialogWindowTM.Instance.Hide();
 
                                             var sessionId = JsonConvert.DeserializeObject<string>(s);
-                                            ClientManager.Instance.SetSessionId(sessionId);
-                                            GetComponent<WindowController>().Hide();
-                                            MenuGui.Instance.LoadDashboard();
+                                            ClientManager.Instance.SetSessionId(sessionId, true, b =>
+                                            {
+                                                DialogWindowTM.Instance.Hide();
+                                                GetComponent<WindowController>().Hide();
+                                                MenuGui.Instance.LoadDashboard();
+                                            });
                                         }, s =>
                                         {
                                             DialogWindowTM.Instance.Show("Error", s, () => { });

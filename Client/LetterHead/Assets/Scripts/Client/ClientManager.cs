@@ -65,11 +65,11 @@ public class ClientManager : Singleton<ClientManager>
         });
     }
 
-    public void SetSessionId(string sessId, bool isFirstLoad = false)
+    public void SetSessionId(string sessId, bool isFirstLoad = false, Action<bool> onInfoLoaded = null)
     {
         SessionId = sessId;
         PlayerPrefs.SetString("sessId", sessId);
-        RefreshMyInfo(isFirstLoad);
+        RefreshMyInfo(isFirstLoad, onInfoLoaded);
     }
 
     public int UserId()

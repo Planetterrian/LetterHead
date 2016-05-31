@@ -14,5 +14,4 @@
     <namespace fullname="LetterHeadShared" preserve="all" />
     <namespace fullname="LetterHeadShared.DTO" preserve="all" />
   </assembly>
-  
 </linker>

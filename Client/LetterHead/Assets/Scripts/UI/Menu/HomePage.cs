@@ -25,7 +25,7 @@ public class HomePage : Page
 
     void Start()
     {
-        //RefreshMatches();
+        RefreshMatches();
     }
 
     private class ListInfo
