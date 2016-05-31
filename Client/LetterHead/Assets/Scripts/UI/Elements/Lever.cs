@@ -2,9 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Lever : MonoBehaviour
 {
+    public Image leverBase;
+    public Image leverHandle;
+
+    public Sprite handleNormal;
+    public Sprite handleGlow;
+
+    public Sprite baseNormal;
+    public Sprite baseGlow;
+
     public float speed;
 
     public enum State
@@ -19,6 +29,7 @@ public class Lever : MonoBehaviour
     private void Awake()
     {
         rect = GetComponent<RectTransform>();
+        leverHandle = GetComponent<Image>();
     }
 
     void Update()
@@ -35,12 +46,18 @@ public class Lever : MonoBehaviour
         {
             case State.Top:
                 destRotation = -65;
+                leverHandle.sprite = handleGlow;
+                leverBase.sprite = baseGlow;
                 break;
             case State.Middle:
                 destRotation = 0;
+                leverHandle.sprite = handleNormal;
+                leverBase.sprite = baseNormal;
                 break;
             case State.Bottom:
                 destRotation = 65;
+                leverHandle.sprite = handleNormal;
+                leverBase.sprite = baseNormal;
                 break;
             default:
                 throw new ArgumentOutOfRangeException("state", state, null);

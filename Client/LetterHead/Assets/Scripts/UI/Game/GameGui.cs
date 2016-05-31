@@ -12,12 +12,12 @@ public class GameGui : Singleton<GameGui>
     public Button clearWordButton;
     public Button shuffleButton;
     public Button startButton;
-    public Lever lever;
     public GameObject selectCategoryHelper;
     public TextMeshProUGUI roundNumberLabel;
 
     public TimerElement timer;
 
+    public Lever lever;
 
     public AvatarBox leftAvatarBox;
     public AvatarBox rightAvatarBox;
