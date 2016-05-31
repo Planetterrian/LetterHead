@@ -23,12 +23,18 @@ public class PowerupManager : Singleton<PowerupManager>
     {
         var doOverActive = !GameManager.Instance.IsMyRound() && GameManager.Instance.CurrentRound() != null && GameManager.Instance.CurrentRound().DoOverUsed;
         powerupButtons[(int)Powerup.Type.DoOver].SetState(doOverActive);
+
+        var shieldActive = !GameManager.Instance.IsMyRound() && GameManager.Instance.CurrentRound() != null && GameManager.Instance.CurrentRound().ShieldUsed;
+        powerupButtons[(int)Powerup.Type.Shield].SetState(shieldActive);
     }
 
     private void RefreshMyButtons()
     {
         var doOverActive = GameScene.Instance.CurrentState == GameScene.State.Active && GameManager.Instance.IsMyRound() && !GameManager.Instance.CurrentRound().DoOverUsed;
         powerupButtons[(int)Powerup.Type.DoOver].SetState(doOverActive);
+
+        var shieldActive = GameScene.Instance.CurrentState == GameScene.State.Active && GameManager.Instance.IsMyRound() && !GameManager.Instance.CurrentRound().ShieldUsed;
+        powerupButtons[(int)Powerup.Type.Shield].SetState(shieldActive);
     }
 
     public void RequestUsePowerup(int typeId)

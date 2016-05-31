@@ -14,7 +14,10 @@ namespace LetterHeadServer.Models
         public virtual User User { get; set; }
         public int Number { get; set; }
         public int Score { get; set; }
+
         public bool DoOverUsed { get; set; }
+        public bool ShieldUsed { get; set; }
+
         public string Letters { get; set; }
 
         public List<string> Words { get; set; }

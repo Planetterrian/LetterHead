@@ -89,10 +89,6 @@ public abstract class GameManager : Singleton<GameManager>
 
         gameScene = GameScene.Instance;
         GameGui.Instance.timer.OnTimeExpired.AddListener(OnTimerExpired);
-        if (IsMyRound())
-        {
-            SoundManager.Instance.PlayClip("Time Up");
-        }
     }
 
     public bool IsMyRound()
@@ -105,6 +101,11 @@ public abstract class GameManager : Singleton<GameManager>
 
     private void OnTimerExpired()
     {
+        if (IsMyRound())
+        {
+            SoundManager.Instance.PlayClip("Time Up");
+        }
+
         GameScene.Instance.CurrentState = GameScene.State.WaitingForCategory;
         MyCurrentRound().CurrentState = MatchRound.RoundState.WaitingForCategory;
 
