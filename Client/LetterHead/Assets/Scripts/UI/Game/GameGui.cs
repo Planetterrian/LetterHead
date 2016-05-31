@@ -28,6 +28,7 @@ public class GameGui : Singleton<GameGui>
     public GameObject topLightOn;
     public GameObject topLightOff;
 
+    public AudioClip gameplayMusic;
 
     private void Start()
     {
@@ -112,6 +113,8 @@ public class GameGui : Singleton<GameGui>
 
         topLightOn.SetActive(GameScene.Instance.CurrentState == GameScene.State.Active);
         topLightOff.SetActive(GameScene.Instance.CurrentState != GameScene.State.Active);
+
+        MusicManager.Instance.PlayMusic(GameScene.Instance.CurrentState == GameScene.State.Active ? gameplayMusic : null);
     }
 
 
@@ -176,6 +179,7 @@ public class GameGui : Singleton<GameGui>
 
     public void OnBackClicked()
     {
+        MusicManager.Instance.StopMusic();
         PersistManager.Instance.LoadMenu();
     }
 
