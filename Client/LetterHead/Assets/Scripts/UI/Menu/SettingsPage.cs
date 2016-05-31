@@ -12,6 +12,9 @@ public class SettingsPage : Page
     public Toggle clearWordToggle;
     public Toggle notificationsToggle;
 
+    public GameObject linkFacebookButton;
+    public GameObject unLinkFacebookButton;
+
     private void Awake()
     {
     }
@@ -22,6 +25,9 @@ public class SettingsPage : Page
 
     public void Refresh()
     {
+        linkFacebookButton.SetActive(string.IsNullOrEmpty(ClientManager.Instance.myUserInfo.FacebookPictureUrl));
+        unLinkFacebookButton.SetActive(!string.IsNullOrEmpty(ClientManager.Instance.myUserInfo.FacebookPictureUrl));
+
         musicEnabledToggle.isOn = PersistManager.Instance.MusicEnabled;
         clearWordToggle.isOn = PersistManager.Instance.ClearWord;
         soundEnabledToggle.isOn = PersistManager.Instance.SoundEnabled;
@@ -70,7 +76,12 @@ public class SettingsPage : Page
 
     public void DisconnectFacebookClicked()
     {
-        
+
+    }
+
+    public void CconnectFacebookClicked()
+    {
+
     }
 
     public void AboutClicked()

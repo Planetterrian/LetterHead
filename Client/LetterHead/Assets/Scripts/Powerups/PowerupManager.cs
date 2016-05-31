@@ -7,6 +7,7 @@ using UnityEngine;
 public class PowerupManager : Singleton<PowerupManager>
 {
     public PowerupButton[] powerupButtons;
+    public PowerupButton[] opponentpowerupButtons;
 
     private void Start()
     {
@@ -14,9 +15,20 @@ public class PowerupManager : Singleton<PowerupManager>
 
     public void OnRoundStateChanged()
     {
-        var doOverActive = GameScene.Instance.CurrentState == GameScene.State.Active && GameManager.Instance.IsMyRound() && !GameManager.Instance.CurrentRound().DoOverUsed;
+        RefreshMyButtons();
+        RefreshOpponentButtons();
+    }
 
-        powerupButtons[(int) Powerup.Type.DoOver].SetState(doOverActive);
+    private void RefreshOpponentButtons()
+    {
+        var doOverActive = !GameManager.Instance.IsMyRound() && GameManager.Instance.CurrentRound().DoOverUsed;
+        powerupButtons[(int)Powerup.Type.DoOver].SetState(doOverActive);
+    }
+
+    private void RefreshMyButtons()
+    {
+        var doOverActive = GameScene.Instance.CurrentState == GameScene.State.Active && GameManager.Instance.IsMyRound() && !GameManager.Instance.CurrentRound().DoOverUsed;
+        powerupButtons[(int)Powerup.Type.DoOver].SetState(doOverActive);
     }
 
     public void RequestUsePowerup(int typeId)

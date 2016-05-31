@@ -14,7 +14,7 @@ public class CategoryBox : Singleton<CategoryBox>, IGameHandler
 
     private Dictionary<CategoryRow, Category> categoryScoreFunctions = new Dictionary<CategoryRow, Category>();
 
-    public Image currentSelectedCategoryImage;
+    public CategoryHighlighter currentSelectedCategoryImage;
 
     void Start()
     {
@@ -100,8 +100,9 @@ public class CategoryBox : Singleton<CategoryBox>, IGameHandler
     {
         currentSelectedCategoryImage.gameObject.SetActive(true);
 
-        var box = categoryScoreFunctions.First(c => c.Value == category).Key.transform;
-        currentSelectedCategoryImage.transform.position = box.position;
+        var box = categoryScoreFunctions.First(c => c.Value == category).Key;
+        currentSelectedCategoryImage.transform.position = box.scoreLabel.transform.position;
+        currentSelectedCategoryImage.StartAnimation();
     }
 
     public void OnReset()
