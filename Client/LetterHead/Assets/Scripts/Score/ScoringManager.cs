@@ -35,6 +35,10 @@ public class ScoringManager : Singleton<ScoringManager>, IGameHandler
         {
             OnValidWordSubmitted(word);
         }
+        else
+        {
+            SoundManager.Instance.PlayClip("Reject Word");
+        }
     }
 
     private bool CanAcceptWord(string word)
@@ -59,6 +63,7 @@ public class ScoringManager : Singleton<ScoringManager>, IGameHandler
 
             GameRealTime.Instance.AddWord(word, usedLetterIds);
             GameManager.Instance.CurrentRound().Words.Add(word);
+            SoundManager.Instance.PlayClip("Accept Word");
         }
 
         if (PersistManager.Instance.ClearWord)

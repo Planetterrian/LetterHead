@@ -55,6 +55,7 @@ public class GameGui : Singleton<GameGui>
     public void OnStartClicked()
     {
         GameRealTime.Instance.RequestStart();
+        SoundManager.Instance.PlayClip("Lever Start");
     }
 
     public void ShuffleClicked()
