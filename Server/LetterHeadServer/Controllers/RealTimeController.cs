@@ -259,7 +259,7 @@ namespace LetterHeadServer.Controllers
                 return;
             }
 
-            if (round.DoOverUsed)
+            if (match.HasDoOverBeenUsed(currentUser))
             {
                 await Err("Do over already used");
                 return;
@@ -318,7 +318,7 @@ namespace LetterHeadServer.Controllers
                 return;
             }
 
-            if (round.ShieldUsed)
+            if (match.HasShieldBeenUsed(currentUser))
             {
                 await Err("Shield already used");
                 return;

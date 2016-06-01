@@ -20,7 +20,8 @@ namespace LetterHeadShared.DTO
 
         public bool DoOverUsed;
         public bool ShieldUsed;
-        
+        public bool StealTimeUsed;
+        public bool StealLetterUsed;
 
         public enum RoundState
         {

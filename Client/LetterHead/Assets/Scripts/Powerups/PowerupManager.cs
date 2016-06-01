@@ -41,11 +41,41 @@ public class PowerupManager : Singleton<PowerupManager>
         powerupButtons[(int)type].SetQty(ClientManager.Instance.PowerupCount(type));
     }
 
+    public bool CanUsePowerup(Powerup.Type type)
+    {
+        if (ClientManager.Instance.PowerupCount(type) < 1)
+            return false;
+
+        switch (type)
+        {
+            case Powerup.Type.DoOver:
+                if (GameManager.Instance.MatchDetails.HasDoOverBeenUsed(ClientManager.Instance.myUserInfo.Id))
+                    return false;
+                break;
+            case Powerup.Type.Shield:
+                if (GameManager.Instance.MatchDetails.HasShieldBeenUsed(ClientManager.Instance.myUserInfo.Id))
+                    return false;
+                break;
+            case Powerup.Type.StealTime:
+                if (GameManager.Instance.MatchDetails.HasStealTimeBeenUsed(ClientManager.Instance.myUserInfo.Id))
+                    return false;
+                break;
+            case Powerup.Type.StealLetter:
+                if (GameManager.Instance.MatchDetails.HasStealLetterBeenUsed(ClientManager.Instance.myUserInfo.Id))
+                    return false;
+                break;
+            default:
+                throw new ArgumentOutOfRangeException("type", type, null);
+        }
+
+        return true;
+    }
+
     public void RequestUsePowerup(int typeId)
     {
         var powerupType = (Powerup.Type) typeId;
 
-        if(ClientManager.Instance.PowerupCount(powerupType) < 1)
+        if(!CanUsePowerup(powerupType))
             return;
 
         switch (powerupType)
@@ -57,6 +87,7 @@ public class PowerupManager : Singleton<PowerupManager>
                 GameRealTime.Instance.OnShieldUsed();
                 break;
             case Powerup.Type.StealTime:
+                DoStealTime();
                 break;
             case Powerup.Type.StealLetter:
                 break;
@@ -65,5 +96,17 @@ public class PowerupManager : Singleton<PowerupManager>
         }
 
         OnRoundStateChanged();
+    }
+
+    private void DoStealTime()
+    {
+        Srv.Instance.POST("Match/UseStealTime", new Dictionary<string, string>() { {"matchId", GameManager.Instance.MatchDetails.Id.ToString()} }, s =>
+        {
+            ClientManager.Instance.RefreshMyInfo(false, b =>
+            {
+                if (b)
+                    OnRoundStateChanged();
+            });
+        });
     }
 }

@@ -17,6 +17,11 @@ namespace LetterHeadServer.Models
 
         public bool DoOverUsed { get; set; }
         public bool ShieldUsed { get; set; }
+        public bool StealTimeUsed { get; set; }
+        public bool StealLetterUsed { get; set; }
+
+        public float StealTimeDelay { get; set; }
+
 
         public string Letters { get; set; }
 

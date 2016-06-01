@@ -40,5 +40,26 @@ namespace LetterHeadShared.DTO
 
             return -1;
         }
+
+        public bool HasShieldBeenUsed(int userId)
+        {
+            return Rounds.Any(r => r.ShieldUsed && r.UserId == userId);
+        }
+
+        public bool HasDoOverBeenUsed(int userId)
+        {
+            return Rounds.Any(r => r.DoOverUsed && r.UserId == userId);
+        }
+
+        public bool HasStealTimeBeenUsed(int userId)
+        {
+            return Rounds.Any(r => r.StealTimeUsed && r.UserId == userId);
+        }
+
+        public bool HasStealLetterBeenUsed(int userId)
+        {
+            return Rounds.Any(r => r.StealLetterUsed && r.UserId == userId);
+        }
     }
+
 }

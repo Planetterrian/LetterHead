@@ -17,7 +17,6 @@ namespace LetterHeadServer.Models
         public virtual List<User> Users { get; set; }
 
         public List<int> ClearedUserIds { get; set; }
-
         public string ClearedUserIdsJoined
         {
             get
@@ -292,6 +291,27 @@ namespace LetterHeadServer.Models
             db.SaveChanges();
 
             OnNewTurn();
+        }
+
+
+        public bool HasShieldBeenUsed(User user)
+        {
+            return Rounds.Any(r => r.ShieldUsed && r.User.Id == user.Id);
+        }
+
+        public bool HasDoOverBeenUsed(User user)
+        {
+            return Rounds.Any(r => r.DoOverUsed && r.User.Id == user.Id);
+        }
+
+        public bool HasStealTimeBeenUsed(User user)
+        {
+            return Rounds.Any(r => r.StealTimeUsed && r.User.Id == user.Id);
+        }
+
+        public bool HasStealLetterBeenUsed(User user)
+        {
+            return Rounds.Any(r => r.StealLetterUsed && r.User.Id == user.Id);
         }
     }
 }

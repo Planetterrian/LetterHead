@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using Hangfire;
 using LetterHeadServer.Classes;
 using LetterHeadServer.Models;
+using LetterHeadShared;
 using MyWebApplication;
 using MatchRound = LetterHeadShared.DTO.MatchRound;
 
@@ -324,6 +325,49 @@ namespace LetterHeadServer.Controllers
                 round.End();
                 db.SaveChanges();
             }
+        }
+
+        public ActionResult UseStealTime(int matchId)
+        {
+            var match = Match.GetById(db, matchId);
+            if (match == null)
+            {
+                return Error("Invalid Match");
+            }
+
+            if (!match.UserAuthorized(currentUser))
+            {
+                return Error("You can't access that match");
+            }
+
+            if (match.CurrentUserTurn != currentUser)
+            {
+                return Error("It's your opponents turn");
+            }
+
+            if (match.CurrentState == LetterHeadShared.DTO.Match.MatchState.Ended)
+            {
+                return Error("That game has already ended");
+            }
+
+            var round = match.CurrentRoundForUser(currentUser);
+
+            if (match.HasShieldBeenUsed(currentUser))
+            {
+                return Error("Shield already used");
+            }
+
+
+            if (currentUser.PowerupCount(Powerup.Type.StealTime) < 1)
+            {
+                return Error("No boost available");
+            }
+
+            round.StealTimeUsed = true;
+            currentUser.ConsumePowerup(Powerup.Type.StealTime);
+            db.SaveChanges();
+
+            return Okay();
         }
     }
 }
