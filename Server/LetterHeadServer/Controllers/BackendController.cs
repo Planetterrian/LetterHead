@@ -32,7 +32,18 @@ namespace LetterHeadServer.Controllers
 
         public string TestGame(int userId, int userId2)
         {
-            var match = Match.New(db, new List<User>() {db.Users.Find(userId), db.Users.Find(userId2) });
+            var match = Match.New(db, new List<User>() { db.Users.Find(userId), db.Users.Find(userId2) });
+            match.Initizile(db);
+
+            db.SaveChanges();
+
+            return "Match created!";
+        }
+
+        public string TestRtmMessage(int matchId)
+        {
+            var match = db.Matches.Find(matchId);
+
             match.Initizile(db);
 
             db.SaveChanges();

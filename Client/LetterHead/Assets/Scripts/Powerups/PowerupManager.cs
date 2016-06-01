@@ -32,12 +32,18 @@ public class PowerupManager : Singleton<PowerupManager>
     {
         var type = Powerup.Type.DoOver;
         var doOverActive = GameScene.Instance.CurrentState == GameScene.State.Active && GameManager.Instance.IsMyRound() && !GameManager.Instance.CurrentRound().DoOverUsed && ClientManager.Instance.PowerupCount(type) > 0;
+
         powerupButtons[(int)type].SetState(doOverActive);
         powerupButtons[(int)type].SetQty(ClientManager.Instance.PowerupCount(type));
 
         type = Powerup.Type.Shield;
         var shieldActive = GameScene.Instance.CurrentState == GameScene.State.Active && GameManager.Instance.IsMyRound() && !GameManager.Instance.CurrentRound().ShieldUsed && ClientManager.Instance.PowerupCount(type) > 0;
         powerupButtons[(int)type].SetState(shieldActive);
+        powerupButtons[(int)type].SetQty(ClientManager.Instance.PowerupCount(type));
+
+        type = Powerup.Type.StealTime;
+        var stealTimeActive = GameScene.Instance.CurrentState == GameScene.State.Active && GameManager.Instance.IsMyRound() && !GameManager.Instance.CurrentRound().StealTimeUsed && ClientManager.Instance.PowerupCount(type) > 0;
+        powerupButtons[(int)type].SetState(stealTimeActive);
         powerupButtons[(int)type].SetQty(ClientManager.Instance.PowerupCount(type));
     }
 
@@ -94,8 +100,6 @@ public class PowerupManager : Singleton<PowerupManager>
             default:
                 throw new ArgumentOutOfRangeException();
         }
-
-        OnRoundStateChanged();
     }
 
     private void DoStealTime()

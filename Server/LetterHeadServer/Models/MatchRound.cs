@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
+using Hangfire;
+using LetterHeadServer.Classes;
+using LetterHeadServer.Controllers;
 using LetterHeadShared;
 using MyWebApplication;
 
@@ -21,7 +25,7 @@ namespace LetterHeadServer.Models
         public bool StealLetterUsed { get; set; }
 
         public float StealTimeDelay { get; set; }
-
+        public bool StealActivated { get; set; }
 
         public string Letters { get; set; }
 
@@ -122,6 +126,37 @@ namespace LetterHeadServer.Models
         public float TimeRemaining()
         {
             return (float) ((EndTime() - DateTime.Now).TotalSeconds);
+        }
+
+        public void Start(ApplicationDbContext db)
+        {
+            CurrentState = LetterHeadShared.DTO.MatchRound.RoundState.Active;
+            StartedOn = DateTime.Now;
+            EndRoundJobId = BackgroundJob.Schedule(() => new MatchController().ManuallyEndRound(Id, Id), EndTime());
+
+            if (StealTimeDelay > 0)
+            {
+                // Steal Time
+                ScheduleStealTime(db);
+            }
+        }
+
+        public async Task ScheduleStealTime(ApplicationDbContext db)
+        {
+            await Task.Delay((int)(StealTimeDelay * 1000));
+
+            var matchRtm = RealTimeMatchManager.GetMatch(Match.Id);
+
+            matchRtm.AddMessage(new RealTimeMatch.Message(controller =>
+            {
+                controller.DoStealTime();
+            }));
+
+            StartedOn = StartedOn.Value.AddSeconds(-20);
+
+            BackgroundJob.Delete(EndRoundJobId);
+            EndRoundJobId = BackgroundJob.Schedule(() => new MatchController().ManuallyEndRound(Id, Id), EndTime());
+            db.SaveChanges();
         }
     }
 }

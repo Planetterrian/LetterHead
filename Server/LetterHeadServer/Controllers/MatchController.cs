@@ -351,21 +351,36 @@ namespace LetterHeadServer.Controllers
             }
 
             var round = match.CurrentRoundForUser(currentUser);
-
-            if (match.HasShieldBeenUsed(currentUser))
+            if (match.HasStealTimeBeenUsed(currentUser))
             {
-                return Error("Shield already used");
+                return Error("Steal time already used");
             }
-
 
             if (currentUser.PowerupCount(Powerup.Type.StealTime) < 1)
             {
                 return Error("No boost available");
             }
 
+            var nextRound = match.NextOpponentRound(currentUser);
+            if (nextRound == null)
+            {
+                return Error("This is the last round!");
+            }
+
+            if (nextRound.CurrentState != MatchRound.RoundState.NotStarted)
+            {
+                return Error("Their round has started!");
+            }
+
             round.StealTimeUsed = true;
+            nextRound.StealTimeDelay = (float)(BoardHelper.rand.NextDouble() * 20f) + 10f;
             currentUser.ConsumePowerup(Powerup.Type.StealTime);
             db.SaveChanges();
+/*
+            if (nextRound.CurrentState == MatchRound.RoundState.Active)
+            {
+                nextRound.ScheduleStealTime(db);
+            }*/
 
             return Okay();
         }

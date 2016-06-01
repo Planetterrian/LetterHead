@@ -28,9 +28,10 @@ namespace LetterHeadServer.Controllers
     {
         private User currentUser;
         private Match match;
-        private RealTimeMatch rtm;
+        private RealTimeMatch.RealTimeListener rtm;
         private ApplicationDbContext db;
         private WebSocket socket;
+        private SemaphoreSlim sendSemaphore = new SemaphoreSlim(1);
 
         public HttpResponseMessage Get(string sessionId, int matchId)
         {
@@ -53,46 +54,73 @@ namespace LetterHeadServer.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.Forbidden, "Can't access that match");
             }
 
-            //rtm = RealTimeMatchManager.GetMatch(matchId);
-            //rtm.OnNewMessage += OnMatchMessage;
-
             HttpContext.Current.AcceptWebSocketRequest(ProcessSocket);
             return Request.CreateResponse(HttpStatusCode.SwitchingProtocols);
         }
-
-        private void OnMatchMessage(RealTimeMatch.Message message)
-        {
-            
-        }
+        
 
         private async Task ProcessSocket(AspNetWebSocketContext context)
         {
+            var matchRtm = RealTimeMatchManager.GetMatch(match.Id);
+            rtm = matchRtm.AddListener(this);
+
+            Task<WebSocketReceiveResult> socketReceive = null;
+            Task<RealTimeMatch.Message> rtmReceive = null;
+
             socket = context.WebSocket;
             while (true)
             {
                 byte[] receiveBuffer = new byte[1024];
 
-                WebSocketReceiveResult result = await socket.ReceiveAsync(new ArraySegment<byte>(receiveBuffer), CancellationToken.None);
+                if(socketReceive == null || socketReceive.IsCompleted)
+                    socketReceive = socket.ReceiveAsync(new ArraySegment<byte>(receiveBuffer), CancellationToken.None);
 
-                int count = result.Count;
+                if (rtmReceive == null || rtmReceive.IsCompleted)
+                    rtmReceive = rtm.ReceiveMessage();
 
-                while (result.EndOfMessage == false)
+                await Task.WhenAny(new Task[] {socketReceive, rtmReceive});
+
+                if (socketReceive.IsCompleted)
                 {
-                    result = await socket.ReceiveAsync(new ArraySegment<byte>(receiveBuffer, count, 1024 - count), CancellationToken.None);
-                    count += result.Count;
+                    var isConnected = await ProcessSocketMessage(socketReceive.Result, receiveBuffer);
+                    if (!isConnected)
+                        break;
                 }
 
-                if (socket.State == WebSocketState.Open)
+                if (rtmReceive.IsCompleted)
                 {
-                    await ProcessMessage(receiveBuffer);
-                }
-                else
-                {
-                    break;
+                    ProcessRtmMessage(rtmReceive.Result);
                 }
             }
+
+            matchRtm.RemoveListener(this);
         }
 
+        private void ProcessRtmMessage(RealTimeMatch.Message message)
+        {
+            message.Payload(this);
+        }
+
+        private async Task<bool> ProcessSocketMessage(WebSocketReceiveResult socketReceiveResult, byte[] receiveBuffer)
+        {
+            int count = socketReceiveResult.Count;
+
+            while (socketReceiveResult.EndOfMessage == false)
+            {
+                socketReceiveResult = await socket.ReceiveAsync(new ArraySegment<byte>(receiveBuffer, count, 1024 - count), CancellationToken.None);
+                count += socketReceiveResult.Count;
+            }
+
+            if (socket.State == WebSocketState.Open)
+            {
+                await ProcessMessage(receiveBuffer);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
 
 
         private async Task SendMessage(string command, int data)
@@ -105,8 +133,11 @@ namespace LetterHeadServer.Controllers
             await SendMessage(command, BitConverter.GetBytes(data));
         }
 
+
         private async Task SendMessage(string command, string data)
         {
+            await sendSemaphore.WaitAsync();
+
             var steam = new MemoryStream();
             BinaryWriter bw = new BinaryWriter(steam);
             bw.Write(command);
@@ -119,6 +150,8 @@ namespace LetterHeadServer.Controllers
 
             bw.Close();
             steam.Close();
+
+            sendSemaphore.Release();
         }
 
         private async Task SendMessage(string command, byte[] data = null)
@@ -224,10 +257,7 @@ namespace LetterHeadServer.Controllers
 
             if (round.CurrentState == LetterHeadShared.DTO.MatchRound.RoundState.NotStarted)
             {
-                round.CurrentState = LetterHeadShared.DTO.MatchRound.RoundState.Active;
-                round.StartedOn = DateTime.Now;
-
-                round.EndRoundJobId = BackgroundJob.Schedule(() => new MatchController().ManuallyEndRound(match.Id, round.Id), round.EndTime());
+                round.Start(db);
             }
 
             match.CurrentState = LetterHeadShared.DTO.Match.MatchState.Running;
@@ -342,6 +372,11 @@ namespace LetterHeadServer.Controllers
         private async Task Err(string errMSg)
         {
             await SendMessage("Err", errMSg);
+        }
+
+        public async Task DoStealTime()
+        {
+            await SendMessage("StealTimeStart");
         }
     }
 

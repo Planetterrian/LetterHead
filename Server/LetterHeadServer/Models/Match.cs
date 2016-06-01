@@ -62,7 +62,7 @@ namespace LetterHeadServer.Models
             var roundTime = 120;
 
             if (Environment.UserName == "Pete")
-                roundTime = 15;
+                roundTime = 50;
 
                 var match = new Match()
                    {
@@ -312,6 +312,44 @@ namespace LetterHeadServer.Models
         public bool HasStealLetterBeenUsed(User user)
         {
             return Rounds.Any(r => r.StealLetterUsed && r.User.Id == user.Id);
+        }
+
+        public MatchRound NextRound()
+        {
+            var roundNumber = CurrentRoundNumber;
+
+            var currentUserIndex = Users.IndexOf(CurrentUserTurn);
+            currentUserIndex++;
+            if (currentUserIndex >= Users.Count)
+            {
+                currentUserIndex = 0;
+                roundNumber++;
+            }
+
+            if (roundNumber > MaxRounds)
+            {
+                return null;
+            }
+
+            return Rounds.First(r => r.Number == roundNumber && r.User.Id == Users[currentUserIndex].Id);
+        }
+
+
+        // Returns the next round that is an opponent's (or the current one if it's the opponent's turn)
+        public MatchRound NextOpponentRound(User fromUser)
+        {
+            if (CurrentUserTurn != fromUser)
+            {
+                return CurrentRound();
+            }
+
+            return NextRound();
+        }
+
+        public void SendRtmMessage(RealTimeMatch.Message message)
+        {
+            var matchRtm = RealTimeMatchManager.GetMatch(Id);
+            matchRtm.AddMessage(message);
         }
     }
 }

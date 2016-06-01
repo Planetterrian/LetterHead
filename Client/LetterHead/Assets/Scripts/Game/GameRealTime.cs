@@ -178,6 +178,11 @@ public class GameRealTime : Singleton<GameRealTime>
         ClientManager.Instance.RefreshMyInfo(false, b => PowerupManager.Instance.OnRoundStateChanged());
     }
 
+    void _StealTimeStart(BinaryReader message)
+    {
+        Debug.Log("STEAL TIME!!!");
+    }
+
     public bool IsConnected()
     {
         if (socket == null)

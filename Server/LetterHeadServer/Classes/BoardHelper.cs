@@ -16,7 +16,7 @@ namespace LetterHeadServer.Classes
 
         private static List<LetterDefinition> letters = new List<LetterDefinition>();
         private static float totalWeight;
-        private static Random rand = new Random();
+        public static Random rand = new Random();
 
 
         static BoardHelper()
