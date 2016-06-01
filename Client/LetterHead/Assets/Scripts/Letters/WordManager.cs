@@ -23,7 +23,13 @@ public class WordManager : Singleton<WordManager>
         public int score;
     }
 
-	// Use this for initialization
+    public Dawg<bool> DawgObj
+    {
+        get { return dawg; }
+        set { dawg = value; }
+    }
+
+    // Use this for initialization
 	void Start ()
 	{
         //BuildDawg();
@@ -70,7 +76,7 @@ public class WordManager : Singleton<WordManager>
         else
             result = System.IO.File.ReadAllBytes(filePath);
 
-        dawg = Dawg<bool>.Load(new MemoryStream(result), reader => reader.ReadBoolean());           // explained below
+        DawgObj = Dawg<bool>.Load(new MemoryStream(result), reader => reader.ReadBoolean());           // explained below
     }
     
 
@@ -81,12 +87,12 @@ public class WordManager : Singleton<WordManager>
             return true;
 
         word = word.ToUpper();
-        return dawg[word];
+        return DawgObj[word];
     }
 
     internal IEnumerator GetLongestWord(Action<string> callback)
     {
-        var yoDawn = dawg;
+        var yoDawn = DawgObj;
 
         var letters = new List<char>();
 

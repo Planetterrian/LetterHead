@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using LetterHeadShared.DTO;
 using TMPro;
+using uTools;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,6 +15,7 @@ public class GameGui : Singleton<GameGui>
     public Button startButton;
     public GameObject selectCategoryHelper;
     public TextMeshProUGUI roundNumberLabel;
+    public EndRoundWindow endRoundWindow;
 
     public TimerElement timer;
 
@@ -29,6 +31,8 @@ public class GameGui : Singleton<GameGui>
     public GameObject topLightOff;
 
     public AudioClip gameplayMusic;
+
+    public uTweenScale shieldTween;
 
     private void Start()
     {
@@ -187,5 +191,15 @@ public class GameGui : Singleton<GameGui>
     public void OnNextClicked()
     {
 
+    }
+
+    public void OnShieldUsed()
+    {
+        shieldTween.gameObject.SetActive(true);
+        shieldTween.ResetToInitialState();
+        shieldTween.Play();
+
+        TimerManager.AddEvent(1.2f, () => shieldTween.Play(PlayDirection.Reverse));
+        TimerManager.AddEvent(3f, () => shieldTween.gameObject.SetActive(false));
     }
 }

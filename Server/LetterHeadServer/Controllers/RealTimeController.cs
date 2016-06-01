@@ -255,7 +255,19 @@ namespace LetterHeadServer.Controllers
             var round = match.CurrentRoundForUser(currentUser);
             if (round.CurrentState != MatchRound.RoundState.Active)
             {
-                await Err("Waiting for categories");
+                await Err("Round not active");
+                return;
+            }
+
+            if (round.DoOverUsed)
+            {
+                await Err("Do over already used");
+                return;
+            }
+
+            if(currentUser.PowerupCount(Powerup.Type.DoOver) < 1)
+            {
+                await Err("No boost available");
                 return;
             }
 
@@ -283,6 +295,47 @@ namespace LetterHeadServer.Controllers
             await SendMessage("DoOver", steam.ToArray());
             bw.Close();
             steam.Close();
+        }
+
+        private async Task _UseShield(BinaryReader reader)
+        {
+            if (match.CurrentUserTurn != currentUser)
+            {
+                await Err("It's your opponents turn");
+                return;
+            }
+
+            if (match.CurrentState == LetterHeadShared.DTO.Match.MatchState.Ended)
+            {
+                await Err("That game has already ended");
+                return;
+            }
+
+            var round = match.CurrentRoundForUser(currentUser);
+            if (round.CurrentState != MatchRound.RoundState.Active)
+            {
+                await Err("Round not active");
+                return;
+            }
+
+            if (round.ShieldUsed)
+            {
+                await Err("Shield already used");
+                return;
+            }
+
+
+            if (currentUser.PowerupCount(Powerup.Type.Shield) < 1)
+            {
+                await Err("No boost available");
+                return;
+            }
+
+            round.ShieldUsed = true;
+            currentUser.ConsumePowerup(Powerup.Type.Shield);
+            db.SaveChanges();
+
+            await SendMessage("ShieldUsed");
         }
 
 

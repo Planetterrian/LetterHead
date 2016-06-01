@@ -22,31 +22,39 @@ public class PowerupManager : Singleton<PowerupManager>
     private void RefreshOpponentButtons()
     {
         var doOverActive = !GameManager.Instance.IsMyRound() && GameManager.Instance.CurrentRound() != null && GameManager.Instance.CurrentRound().DoOverUsed;
-        powerupButtons[(int)Powerup.Type.DoOver].SetState(doOverActive);
+        opponentpowerupButtons[(int)Powerup.Type.DoOver].SetState(doOverActive);
 
         var shieldActive = !GameManager.Instance.IsMyRound() && GameManager.Instance.CurrentRound() != null && GameManager.Instance.CurrentRound().ShieldUsed;
-        powerupButtons[(int)Powerup.Type.Shield].SetState(shieldActive);
+        opponentpowerupButtons[(int)Powerup.Type.Shield].SetState(shieldActive);
     }
 
     private void RefreshMyButtons()
     {
-        var doOverActive = GameScene.Instance.CurrentState == GameScene.State.Active && GameManager.Instance.IsMyRound() && !GameManager.Instance.CurrentRound().DoOverUsed;
-        powerupButtons[(int)Powerup.Type.DoOver].SetState(doOverActive);
+        var type = Powerup.Type.DoOver;
+        var doOverActive = GameScene.Instance.CurrentState == GameScene.State.Active && GameManager.Instance.IsMyRound() && !GameManager.Instance.CurrentRound().DoOverUsed && ClientManager.Instance.PowerupCount(type) > 0;
+        powerupButtons[(int)type].SetState(doOverActive);
+        powerupButtons[(int)type].SetQty(ClientManager.Instance.PowerupCount(type));
 
-        var shieldActive = GameScene.Instance.CurrentState == GameScene.State.Active && GameManager.Instance.IsMyRound() && !GameManager.Instance.CurrentRound().ShieldUsed;
-        powerupButtons[(int)Powerup.Type.Shield].SetState(shieldActive);
+        type = Powerup.Type.Shield;
+        var shieldActive = GameScene.Instance.CurrentState == GameScene.State.Active && GameManager.Instance.IsMyRound() && !GameManager.Instance.CurrentRound().ShieldUsed && ClientManager.Instance.PowerupCount(type) > 0;
+        powerupButtons[(int)type].SetState(shieldActive);
+        powerupButtons[(int)type].SetQty(ClientManager.Instance.PowerupCount(type));
     }
 
     public void RequestUsePowerup(int typeId)
     {
         var powerupType = (Powerup.Type) typeId;
 
+        if(ClientManager.Instance.PowerupCount(powerupType) < 1)
+            return;
+
         switch (powerupType)
         {
             case Powerup.Type.DoOver:
-                DialogWindowTM.Instance.Show("Do-Over", "Activate Do-Over booster?", UseDoOver, () => { });
+                DialogWindowTM.Instance.Show("Do-Over", "Activate Do-Over booster?", GameRealTime.Instance.OnDoOverUsed, () => { });
                 break;
             case Powerup.Type.Shield:
+                GameRealTime.Instance.OnShieldUsed();
                 break;
             case Powerup.Type.StealTime:
                 break;
@@ -57,10 +65,5 @@ public class PowerupManager : Singleton<PowerupManager>
         }
 
         OnRoundStateChanged();
-    }
-
-    private void UseDoOver()
-    {
-        GameRealTime.Instance.OnDoOverUsed();
     }
 }

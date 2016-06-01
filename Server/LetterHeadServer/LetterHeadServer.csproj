@@ -278,7 +278,6 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\User\RegisterEmail.cshtml" />
     <Content Include="Views\User\RegisterEmailWeb.cshtml" />
-    <Content Include="ServiceDefinition.csdef" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Certificates\" />

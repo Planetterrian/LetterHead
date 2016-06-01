@@ -134,6 +134,8 @@ public abstract class GameManager : Singleton<GameManager>
 
     public void SubmitCategory()
     {
+        TimerManager.AddEvent(1, () => GameGui.Instance.endRoundWindow.ShowModal());
+
         Srv.Instance.POST("Match/SetCategory", new Dictionary<string, string>()
         {
             { "matchId", MatchId.ToString() },

@@ -10,8 +10,6 @@ public class ClientManager : Singleton<ClientManager>
 {
     public UserInfo myUserInfo;
 
-    public UnityEvent OnMyInfoUpdated;
-
     private string sessionId;
     public string SessionId
     {

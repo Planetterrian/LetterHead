@@ -1,7 +1,0 @@
-﻿<ServiceDefinition name="MyServiceName" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition">
-<WorkerRole name="WorkerApp" vmsize="ExtraSmall">
-    <Certificates>
-      <Certificate name="Apple Development IOS Push Services" storeLocation="LocalMachine" storeName="My" permissionLevel="limitedOrElevated" />
-    </Certificates>
-</WorkerRole>
-</ServiceDefinition>

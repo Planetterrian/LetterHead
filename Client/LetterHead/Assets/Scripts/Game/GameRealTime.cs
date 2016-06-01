@@ -164,12 +164,18 @@ public class GameRealTime : Singleton<GameRealTime>
         var time = message.ReadSingle();
 
         GameManager.Instance.CurrentRound().DoOverUsed = true;
-
         GameScene.Instance.ResetGame();
         BoardManager.Instance.SetBoardLetters(letters, false);
         GameManager.Instance.StartGame(time);
+        ClientManager.Instance.RefreshMyInfo(false, b => PowerupManager.Instance.OnRoundStateChanged());
+    }
 
-        Debug.Log("Start time = " + time);
+    void _ShieldUsed(BinaryReader message)
+    {
+        GameManager.Instance.CurrentRound().ShieldUsed = true;
+        GameGui.Instance.OnShieldUsed();
+        PowerupManager.Instance.OnRoundStateChanged();
+        ClientManager.Instance.RefreshMyInfo(false, b => PowerupManager.Instance.OnRoundStateChanged());
     }
 
     public bool IsConnected()
@@ -202,5 +208,10 @@ public class GameRealTime : Singleton<GameRealTime>
     public void OnDoOverUsed()
     {
         SendMsg("UseDoOver");
+    }
+
+    public void OnShieldUsed()
+    {
+        SendMsg("UseShield");
     }
 }
