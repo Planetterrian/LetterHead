@@ -13,7 +13,8 @@ public class DashboardScene : GuiScene
     {
         base.OnBeginShow();
 
-        pagination.SetCurrentPage(1, true);
+        pagination.DefaultPage = PersistManager.Instance.initialDashPage;
+        pagination.SetCurrentPage(PersistManager.Instance.initialDashPage, true);
 
 
         if (PersistManager.Instance.NotificationsEnabled)

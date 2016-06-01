@@ -533,6 +533,7 @@ namespace UI.Pagination
         /// <param name="initial"></param>
         public virtual void SetCurrentPage(int newPage, bool initial = false)
         {            
+            Debug.Log("SP " + newPage);
             if (newPage > NumberOfPages)
             {
                 throw new UnityException("PagedRect.SetCurrentPage(int newPage) :: The value provided for 'newPage' is greater than the number of pages.");

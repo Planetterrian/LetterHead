@@ -38,6 +38,15 @@ public class EndRoundWindow : WindowController
         }));
     }
 
+    public void OkClicked()
+    {
+        Hide();
+    }
+
+    public void ShopClicked()
+    {
+        PersistManager.Instance.LoadMenu(5);
+    }
 
     internal IEnumerator GetLongWords(int minLength, List<string> existingWords, Action<List<string>> callback)
     {

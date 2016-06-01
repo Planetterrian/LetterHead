@@ -11,6 +11,9 @@ public class PersistManager : Singleton<PersistManager>
     public int matchToLoadId;
     public bool matchToLoadIsDaily;
 
+    [HideInInspector]
+    public int initialDashPage = 1;
+
     public bool MusicEnabled
     {
         get { return PlayerPrefs.GetInt("MusicEnabled", 1) == 1; }
@@ -71,8 +74,9 @@ public class PersistManager : Singleton<PersistManager>
         SceneManager.LoadScene("game");
     }
 
-    public void LoadMenu()
+    public void LoadMenu(int _initialDashPage = 1)
     {
+        initialDashPage = _initialDashPage;
         SceneManager.LoadScene("menu");
     }
 }
