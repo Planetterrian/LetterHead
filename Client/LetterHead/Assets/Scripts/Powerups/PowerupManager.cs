@@ -4,6 +4,9 @@ using System.Linq;
 using LetterHeadShared;
 using UnityEngine;
 
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 public class PowerupManager : Singleton<PowerupManager>
 {
     public PowerupButton[] powerupButtons;
@@ -112,5 +115,18 @@ public class PowerupManager : Singleton<PowerupManager>
                     OnRoundStateChanged();
             });
         });
+    }
+
+#if UNITY_EDITOR
+    [MenuItem("LetterHead/Steal Time")]
+    private static void x()
+    {
+        Instance.OnStealTimeActivated();
+    }
+#endif
+
+    public void OnStealTimeActivated()
+    {
+        GameGui.Instance.chomper.Begin(GameGui.Instance.timer.transform);
     }
 }

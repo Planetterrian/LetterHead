@@ -16,6 +16,7 @@ public class GameGui : Singleton<GameGui>
     public GameObject selectCategoryHelper;
     public TextMeshProUGUI roundNumberLabel;
     public EndRoundWindow endRoundWindow;
+    public Chomper chomper;
 
     public TimerElement timer;
 
