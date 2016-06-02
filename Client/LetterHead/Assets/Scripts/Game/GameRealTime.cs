@@ -184,6 +184,13 @@ public class GameRealTime : Singleton<GameRealTime>
         PowerupManager.Instance.OnStealTimeActivated();
     }
 
+    void _StealLetterStart(BinaryReader message)
+    {
+        PowerupManager.Instance.OnStealLetterActivated(message.ReadString());
+    }
+
+    
+
     public bool IsConnected()
     {
         if (socket == null)

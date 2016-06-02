@@ -371,11 +371,54 @@ namespace LetterHeadServer.Controllers
             nextRound.StealTimeDelay = (float)(BoardHelper.rand.NextDouble() * 20f) + 10f;
             currentUser.ConsumePowerup(Powerup.Type.StealTime);
             db.SaveChanges();
-/*
-            if (nextRound.CurrentState == MatchRound.RoundState.Active)
+
+            return Okay();
+        }
+
+        public ActionResult UseStealLetter(int matchId)
+        {
+            var match = Match.GetById(db, matchId);
+            if (match == null)
             {
-                nextRound.ScheduleStealTime(db);
-            }*/
+                return Error("Invalid Match");
+            }
+
+            if (!match.UserAuthorized(currentUser))
+            {
+                return Error("You can't access that match");
+            }
+
+            if (match.CurrentState == LetterHeadShared.DTO.Match.MatchState.Ended)
+            {
+                return Error("That game has already ended");
+            }
+
+            var round = match.CurrentRoundForUser(currentUser);
+            if (match.HasStealLetterBeenUsed(currentUser))
+            {
+                return Error("Steal letter already used");
+            }
+
+            if (currentUser.PowerupCount(Powerup.Type.StealLetter) < 1)
+            {
+                return Error("No boost available");
+            }
+
+            var nextRound = match.NextOpponentRound(currentUser);
+            if (nextRound == null)
+            {
+                return Error("This is the last round!");
+            }
+
+            if (nextRound.CurrentState != MatchRound.RoundState.NotStarted)
+            {
+                return Error("Their round has already started!");
+            }
+
+            round.StealLetterUsed = true;
+            nextRound.StealLetterDelay = (float)(BoardHelper.rand.NextDouble() * 20f) + 10f;
+            currentUser.ConsumePowerup(Powerup.Type.StealLetter);
+            db.SaveChanges();
 
             return Okay();
         }

@@ -373,6 +373,10 @@ namespace LetterHeadServer.Controllers
                 round.StartedOn = round.StartedOn.Value.AddSeconds(20);
                 round.ScheduleRoundEnd();
             }
+            if (round.StealLetterDelay > 0)
+            {
+                round.Letters += round.LetterStolen;
+            }
 
             db.SaveChanges();
 
@@ -388,6 +392,11 @@ namespace LetterHeadServer.Controllers
         public async Task StartStealTime()
         {
             await SendMessage("StealTimeStart");
+        }
+
+        public async Task StartStealLetter(string stolenLetter)
+        {
+            await SendMessage("StealLetterStart", stolenLetter);
         }
     }
 

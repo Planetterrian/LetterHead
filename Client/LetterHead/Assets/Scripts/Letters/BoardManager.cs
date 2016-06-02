@@ -25,7 +25,7 @@ public class BoardManager : Singleton<BoardManager>
 
     public enum RemoveEffect
     {
-        None, Starburst
+        None, Starburst, Keep
     }
 
     protected override void Awake()
@@ -110,7 +110,7 @@ public class BoardManager : Singleton<BoardManager>
         {
             for (int x = 0; x < gridSize.x; x++)
             {
-                if (!GetTile(x, y))
+                if (!GetTile(x, y) && letterNum < letters.Length)
                 {
                     var tile = AddNewTile(x, y, TileManager.Instance.CharToLetter(letters[letterNum]));
 
@@ -299,6 +299,10 @@ public class BoardManager : Singleton<BoardManager>
         {
             tile.StarburstFadeout();
         }
+        else if (effect == RemoveEffect.Keep)
+        {
+            
+        }
 
         tiles.Remove(tile);
     }
@@ -471,4 +475,16 @@ public class BoardManager : Singleton<BoardManager>
         }
     }
 
+    public Tile GetTileWithLetter(string letter)
+    {
+        foreach (var tile in tiles)
+        {
+            if (tile.letterDefinition.letter.ToLower() == letter.ToLower())
+            {
+                return tile;
+            }
+        }
+
+        return null;
+    }
 }

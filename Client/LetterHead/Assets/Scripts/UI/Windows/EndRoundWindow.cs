@@ -75,7 +75,7 @@ public class EndRoundWindow : WindowController
             }
             else if (stealLetterToggle.isOn)
             {
-                
+                RequestStealLetter();
             }
             else
             {
@@ -92,7 +92,7 @@ public class EndRoundWindow : WindowController
         }
         else if (stealLetterToggle.isOn)
         {
-
+            RequestStealLetter();
         }
         else
         {
@@ -104,6 +104,22 @@ public class EndRoundWindow : WindowController
     private void RequestStealTime()
     {
         PowerupManager.Instance.DoStealTime((b) =>
+        {
+            if (b)
+            {
+                PersistManager.Instance.LoadMenu();
+            }
+            else
+            {
+                okButton.interactable = true;
+                shopButton.interactable = true;
+            }
+        });
+    }
+
+    private void RequestStealLetter()
+    {
+        PowerupManager.Instance.DoStealLetter((b) =>
         {
             if (b)
             {

@@ -18,6 +18,8 @@ public class PowerupManager : Singleton<PowerupManager>
     [HideInInspector]
     public bool stealLetterActive;
 
+    private Tile tileToSteal;
+
     private void Start()
     {
     }
@@ -53,6 +55,11 @@ public class PowerupManager : Singleton<PowerupManager>
         type = Powerup.Type.StealTime;
         var stealTimeActive = GameScene.Instance.CurrentState == GameScene.State.Active && GameManager.Instance.IsMyRound() && !GameManager.Instance.CurrentRound().StealTimeUsed && ClientManager.Instance.PowerupCount(type) > 0;
         powerupButtons[(int)type].SetState(stealTimeActive);
+        powerupButtons[(int)type].SetQty(ClientManager.Instance.PowerupCount(type));
+
+        type = Powerup.Type.StealLetter;
+        var stealLetterActive = GameScene.Instance.CurrentState == GameScene.State.Active && GameManager.Instance.IsMyRound() && !GameManager.Instance.CurrentRound().StealLetterUsed && ClientManager.Instance.PowerupCount(type) > 0;
+        powerupButtons[(int)type].SetState(stealLetterActive);
         powerupButtons[(int)type].SetQty(ClientManager.Instance.PowerupCount(type));
     }
 
@@ -106,6 +113,7 @@ public class PowerupManager : Singleton<PowerupManager>
                 DoStealTime();
                 break;
             case Powerup.Type.StealLetter:
+                DoStealLetter();
                 break;
             default:
                 throw new ArgumentOutOfRangeException();
@@ -114,7 +122,31 @@ public class PowerupManager : Singleton<PowerupManager>
 
     public void DoStealTime(Action<bool> onUsed = null)
     {
-        Srv.Instance.POST("Match/UseStealTime", new Dictionary<string, string>() { {"matchId", GameManager.Instance.MatchDetails.Id.ToString()} }, s =>
+        Srv.Instance.POST("Match/UseStealTime", new Dictionary<string, string>() { { "matchId", GameManager.Instance.MatchDetails.Id.ToString() } }, s =>
+        {
+            ClientManager.Instance.RefreshMyInfo(false, b =>
+            {
+                if (b)
+                    OnRoundStateChanged();
+            });
+
+            if (onUsed != null)
+            {
+                onUsed(true);
+            }
+        },
+            s =>
+            {
+                DialogWindowTM.Instance.Error(s);
+                if (onUsed != null)
+                    onUsed(false);
+            }
+        );
+    }
+
+    public void DoStealLetter(Action<bool> onUsed = null)
+    {
+        Srv.Instance.POST("Match/UseStealLetter", new Dictionary<string, string>() { { "matchId", GameManager.Instance.MatchDetails.Id.ToString() } }, s =>
         {
             ClientManager.Instance.RefreshMyInfo(false, b =>
             {
@@ -144,6 +176,15 @@ public class PowerupManager : Singleton<PowerupManager>
     }
 #endif
 
+
+    public void OnStealLetterActivated(string letterStolen)
+    {
+        var tile = BoardManager.Instance.GetTileWithLetter(letterStolen);
+        stealLetterActive = true;
+        tileToSteal = tile;
+        GameGui.Instance.chomper.Begin(tile.transform);
+    }
+
     public void OnStealTimeActivated()
     {
         GameGui.Instance.chomper.Begin(GameGui.Instance.timer.transform);
@@ -171,8 +212,16 @@ public class PowerupManager : Singleton<PowerupManager>
         {
             GameManager.Instance.ReduceTime(20);
         }
+        if (stealLetterActive)
+        {
+            Speller.Instance.RemoveTile(tileToSteal);
+            BoardManager.Instance.RemoveTile(tileToSteal, BoardManager.RemoveEffect.Keep);
+            tileToSteal.transform.SetParent(GameGui.Instance.chomper.transform, true);
+            tileToSteal.transform.SetAsFirstSibling();
+        }
 
         stealTimeActive = false;
         stealLetterActive = false;
     }
+
 }

@@ -23,9 +23,10 @@ namespace LetterHeadServer.Models
         public bool ShieldUsed { get; set; }
         public bool StealTimeUsed { get; set; }
         public bool StealLetterUsed { get; set; }
+        public string LetterStolen { get; set; }
 
         public float StealTimeDelay { get; set; }
-        public bool StealActivated { get; set; }
+        public float StealLetterDelay { get; set; }
 
         public string Letters { get; set; }
 
@@ -139,6 +140,11 @@ namespace LetterHeadServer.Models
                 // Steal Time
                 ScheduleStealTime(db);
             }
+            if (StealLetterDelay > 0)
+            {
+                // Steal Time
+                ScheduleStealLetter(db);
+            }
         }
 
         public async Task ScheduleStealTime(ApplicationDbContext db)
@@ -158,6 +164,28 @@ namespace LetterHeadServer.Models
             db.SaveChanges();
         }
 
+        public async Task ScheduleStealLetter(ApplicationDbContext db)
+        {
+            await Task.Delay((int)(StealLetterDelay * 1000));
+
+            var matchRtm = RealTimeMatchManager.GetMatch(Match.Id);
+
+            var letterToSteal = BoardHelper.rand.Next(0, 10);
+            LetterStolen = Letters.Substring(letterToSteal, 1);
+
+            matchRtm.AddMessage(new RealTimeMatch.Message(controller =>
+            {
+                controller.StartStealLetter(LetterStolen);
+            }));
+
+            var newLetters = Letters.Substring(0, letterToSteal);
+            if (letterToSteal < 9)
+                newLetters += Letters.Substring(letterToSteal + 1, Letters.Length - (letterToSteal + 1));
+
+            Letters = newLetters;
+
+            db.SaveChanges();
+        }
         public void ScheduleRoundEnd()
         {
             if(!string.IsNullOrEmpty(EndRoundJobId))
