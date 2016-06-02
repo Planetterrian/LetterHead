@@ -16,6 +16,10 @@ public class DialogWindowTM : Singleton<DialogWindowTM>
     public TextMeshProUGUI cancelButtonText;
     public TextMeshProUGUI okButtonText;
 
+    public Transform butLeft;
+    public Transform butRight;
+    public Transform butBottom;
+
 
     private float okayStartingPos;
 
@@ -60,16 +64,32 @@ public class DialogWindowTM : Singleton<DialogWindowTM>
             cancelButton.gameObject.SetActive(false);
             okayButton.gameObject.SetActive(false);
             closeButton.gameObject.SetActive(false);
+
+            butLeft.gameObject.SetActive(false);
+            butRight.gameObject.SetActive(false);
+            butBottom.gameObject.SetActive(false);
         }
         else if (cancelCallback == null)
         {
             okayButton.gameObject.SetActive(true);
             closeButton.gameObject.SetActive(false);
             cancelButton.gameObject.SetActive(false);
+
+            butLeft.gameObject.SetActive(false);
+            butRight.gameObject.SetActive(false);
+            butBottom.gameObject.SetActive(true);
+
+            okayButton.transform.SetParent(butBottom, false);
         }
         else
         {
             okayButton.gameObject.SetActive(true);
+
+            butLeft.gameObject.SetActive(true);
+            butRight.gameObject.SetActive(true);
+            butBottom.gameObject.SetActive(false);
+
+            okayButton.transform.SetParent(butRight, false);
 
             if (cancelText == "CANCEL")
             {

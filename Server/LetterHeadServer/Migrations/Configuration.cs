@@ -12,6 +12,7 @@ namespace LetterHeadServer.Migrations
         public Configuration()
         {
             AutomaticMigrationsEnabled = true;
+            AutomaticMigrationDataLossAllowed = true;
         }
 
         protected override void Seed(LetterHeadServer.Models.ApplicationDbContext context)
