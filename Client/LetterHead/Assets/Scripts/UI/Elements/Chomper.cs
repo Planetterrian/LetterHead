@@ -47,6 +47,11 @@ public class Chomper : MonoBehaviour
         startingXpos = transform.position.x;
     }
 
+    public void OnClicked()
+    {
+        PowerupManager.Instance.OnChompedClicked();
+    }
+
     void Update()
     {
         var speed = 0f;
@@ -113,8 +118,14 @@ public class Chomper : MonoBehaviour
         }
     }
 
+    public void Hide()
+    {
+        currentMode = Mode.Hide;
+    }
+
     private void OnBiteComplete()
     {
         TimerManager.AddEvent(0.5f, () => currentMode = Mode.Hide);
+        PowerupManager.Instance.stealActive = false;
     }
 }

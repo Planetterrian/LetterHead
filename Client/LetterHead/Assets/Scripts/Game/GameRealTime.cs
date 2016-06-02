@@ -175,12 +175,13 @@ public class GameRealTime : Singleton<GameRealTime>
         GameManager.Instance.CurrentRound().ShieldUsed = true;
         GameGui.Instance.OnShieldUsed();
         PowerupManager.Instance.OnRoundStateChanged();
+        PowerupManager.Instance.CancelSteal();
         ClientManager.Instance.RefreshMyInfo(false, b => PowerupManager.Instance.OnRoundStateChanged());
     }
 
     void _StealTimeStart(BinaryReader message)
     {
-        Debug.Log("STEAL TIME!!!");
+        GameGui.Instance.chomper.Begin(GameGui.Instance.timer.transform);
     }
 
     public bool IsConnected()
@@ -215,7 +216,7 @@ public class GameRealTime : Singleton<GameRealTime>
         SendMsg("UseDoOver");
     }
 
-    public void OnShieldUsed()
+    public void RequestUseShield()
     {
         SendMsg("UseShield");
     }

@@ -12,6 +12,12 @@ public class PowerupManager : Singleton<PowerupManager>
     public PowerupButton[] powerupButtons;
     public PowerupButton[] opponentpowerupButtons;
 
+    [HideInInspector]
+    public bool stealActive;
+
+    [HideInInspector]
+    public bool stealLetterActive;
+
     private void Start()
     {
     }
@@ -93,7 +99,8 @@ public class PowerupManager : Singleton<PowerupManager>
                 DialogWindowTM.Instance.Show("Do-Over", "Activate Do-Over booster?", GameRealTime.Instance.OnDoOverUsed, () => { });
                 break;
             case Powerup.Type.Shield:
-                GameRealTime.Instance.OnShieldUsed();
+                if(stealActive)
+                    GameRealTime.Instance.RequestUseShield();
                 break;
             case Powerup.Type.StealTime:
                 DoStealTime();
@@ -128,5 +135,24 @@ public class PowerupManager : Singleton<PowerupManager>
     public void OnStealTimeActivated()
     {
         GameGui.Instance.chomper.Begin(GameGui.Instance.timer.transform);
+        stealActive = true;
+    }
+
+    public void OnChompedClicked()
+    {
+        if(!GameManager.Instance.IsMyRound())
+            return;
+
+        if (stealActive)
+        {
+            RequestUsePowerup((int) Powerup.Type.Shield);
+        }
+    }
+
+    public void CancelSteal()
+    {
+        stealActive = false;
+
+        GameGui.Instance.chomper.Hide();
     }
 }

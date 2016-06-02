@@ -132,7 +132,7 @@ namespace LetterHeadServer.Models
         {
             CurrentState = LetterHeadShared.DTO.MatchRound.RoundState.Active;
             StartedOn = DateTime.Now;
-            EndRoundJobId = BackgroundJob.Schedule(() => new MatchController().ManuallyEndRound(Id, Id), EndTime());
+            ScheduleRoundEnd();
 
             if (StealTimeDelay > 0)
             {
@@ -149,14 +149,19 @@ namespace LetterHeadServer.Models
 
             matchRtm.AddMessage(new RealTimeMatch.Message(controller =>
             {
-                controller.DoStealTime();
+                controller.StartStealTime();
             }));
 
             StartedOn = StartedOn.Value.AddSeconds(-20);
 
+            ScheduleRoundEnd();
+            db.SaveChanges();
+        }
+
+        private void ScheduleRoundEnd()
+        {
             BackgroundJob.Delete(EndRoundJobId);
             EndRoundJobId = BackgroundJob.Schedule(() => new MatchController().ManuallyEndRound(Id, Id), EndTime());
-            db.SaveChanges();
         }
     }
 }

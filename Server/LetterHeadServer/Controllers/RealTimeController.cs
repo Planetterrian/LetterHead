@@ -374,7 +374,7 @@ namespace LetterHeadServer.Controllers
             await SendMessage("Err", errMSg);
         }
 
-        public async Task DoStealTime()
+        public async Task StartStealTime()
         {
             await SendMessage("StealTimeStart");
         }
