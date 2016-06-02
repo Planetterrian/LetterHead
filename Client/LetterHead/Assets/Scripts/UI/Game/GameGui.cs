@@ -65,6 +65,9 @@ public class GameGui : Singleton<GameGui>
 
     public void ShuffleClicked()
     {
+        if(PowerupManager.Instance.stealLetterActive)
+            return;
+
         BoardManager.Instance.Shuffle();
     }
 

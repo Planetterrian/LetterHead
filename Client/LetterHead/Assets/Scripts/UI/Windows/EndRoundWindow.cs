@@ -65,7 +65,14 @@ public class EndRoundWindow : WindowController
 
         if (GameManager.Instance.IsDailyMatch())
         {
-            Hide();
+            if (GameManager.Instance.MatchDetails.CurrentRoundNumber == GameManager.Instance.MatchDetails.MaxRounds - 1)
+            {
+                PersistManager.Instance.LoadMenu();
+            }
+            else
+            {
+                Hide();
+            }
         }
         else
         {

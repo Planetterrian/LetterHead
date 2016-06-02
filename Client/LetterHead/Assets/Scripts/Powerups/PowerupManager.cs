@@ -54,12 +54,12 @@ public class PowerupManager : Singleton<PowerupManager>
 
         type = Powerup.Type.StealTime;
         var stealTimeActive = GameScene.Instance.CurrentState == GameScene.State.Active && GameManager.Instance.IsMyRound() && !GameManager.Instance.CurrentRound().StealTimeUsed && ClientManager.Instance.PowerupCount(type) > 0;
-        powerupButtons[(int)type].SetState(stealTimeActive);
+        powerupButtons[(int)type].SetState(false);
         powerupButtons[(int)type].SetQty(ClientManager.Instance.PowerupCount(type));
 
         type = Powerup.Type.StealLetter;
         var stealLetterActive = GameScene.Instance.CurrentState == GameScene.State.Active && GameManager.Instance.IsMyRound() && !GameManager.Instance.CurrentRound().StealLetterUsed && ClientManager.Instance.PowerupCount(type) > 0;
-        powerupButtons[(int)type].SetState(stealLetterActive);
+        powerupButtons[(int)type].SetState(false);
         powerupButtons[(int)type].SetQty(ClientManager.Instance.PowerupCount(type));
     }
 
