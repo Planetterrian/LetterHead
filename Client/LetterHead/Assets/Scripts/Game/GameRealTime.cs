@@ -189,7 +189,6 @@ public class GameRealTime : Singleton<GameRealTime>
         PowerupManager.Instance.OnStealLetterActivated(message.ReadString());
     }
 
-    
 
     public bool IsConnected()
     {

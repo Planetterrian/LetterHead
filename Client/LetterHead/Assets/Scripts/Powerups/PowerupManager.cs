@@ -48,7 +48,7 @@ public class PowerupManager : Singleton<PowerupManager>
         powerupButtons[(int)type].SetQty(ClientManager.Instance.PowerupCount(type));
 
         type = Powerup.Type.Shield;
-        var shieldActive = GameScene.Instance.CurrentState == GameScene.State.Active && GameManager.Instance.IsMyRound() && !GameManager.Instance.CurrentRound().ShieldUsed && ClientManager.Instance.PowerupCount(type) > 0;
+        var shieldActive = GameScene.Instance.CurrentState == GameScene.State.Active && GameManager.Instance.IsMyRound() && !GameManager.Instance.CurrentRound().ShieldUsed && ClientManager.Instance.PowerupCount(type) > 0 && StealActive();
         powerupButtons[(int)type].SetState(shieldActive);
         powerupButtons[(int)type].SetQty(ClientManager.Instance.PowerupCount(type));
 
@@ -61,6 +61,11 @@ public class PowerupManager : Singleton<PowerupManager>
         var stealLetterActive = GameScene.Instance.CurrentState == GameScene.State.Active && GameManager.Instance.IsMyRound() && !GameManager.Instance.CurrentRound().StealLetterUsed && ClientManager.Instance.PowerupCount(type) > 0;
         powerupButtons[(int)type].SetState(stealLetterActive);
         powerupButtons[(int)type].SetQty(ClientManager.Instance.PowerupCount(type));
+    }
+
+    private bool StealActive()
+    {
+        return stealLetterActive || stealTimeActive;
     }
 
     public bool CanUsePowerup(Powerup.Type type)
@@ -106,7 +111,7 @@ public class PowerupManager : Singleton<PowerupManager>
                 DialogWindowTM.Instance.Show("Do-Over", "Activate Do-Over booster?", GameRealTime.Instance.OnDoOverUsed, () => { });
                 break;
             case Powerup.Type.Shield:
-                if(stealTimeActive || stealLetterActive)
+                if(StealActive())
                     GameRealTime.Instance.RequestUseShield();
                 break;
             case Powerup.Type.StealTime:
@@ -183,12 +188,14 @@ public class PowerupManager : Singleton<PowerupManager>
         stealLetterActive = true;
         tileToSteal = tile;
         GameGui.Instance.chomper.Begin(tile.transform);
+        RefreshMyButtons();
     }
 
     public void OnStealTimeActivated()
     {
         GameGui.Instance.chomper.Begin(GameGui.Instance.timer.transform);
         stealTimeActive = true;
+        RefreshMyButtons();
     }
 
     public void OnChompedClicked()
@@ -197,6 +204,7 @@ public class PowerupManager : Singleton<PowerupManager>
             return;
 
         RequestUsePowerup((int)Powerup.Type.Shield);
+        RefreshMyButtons();
     }
 
     public void CancelSteal()
@@ -204,6 +212,7 @@ public class PowerupManager : Singleton<PowerupManager>
         stealTimeActive = false;
         stealLetterActive = false;
         GameGui.Instance.chomper.Hide();
+        RefreshMyButtons();
     }
 
     public void ChomperBite()
@@ -222,6 +231,7 @@ public class PowerupManager : Singleton<PowerupManager>
 
         stealTimeActive = false;
         stealLetterActive = false;
+        RefreshMyButtons();
     }
 
 }
