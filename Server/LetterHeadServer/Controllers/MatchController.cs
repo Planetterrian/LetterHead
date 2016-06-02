@@ -340,11 +340,6 @@ namespace LetterHeadServer.Controllers
                 return Error("You can't access that match");
             }
 
-            if (match.CurrentUserTurn != currentUser)
-            {
-                return Error("It's your opponents turn");
-            }
-
             if (match.CurrentState == LetterHeadShared.DTO.Match.MatchState.Ended)
             {
                 return Error("That game has already ended");
@@ -369,7 +364,7 @@ namespace LetterHeadServer.Controllers
 
             if (nextRound.CurrentState != MatchRound.RoundState.NotStarted)
             {
-                return Error("Their round has started!");
+                return Error("Their round has already started!");
             }
 
             round.StealTimeUsed = true;

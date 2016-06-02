@@ -39,10 +39,11 @@ public class Chomper : MonoBehaviour
 
     public void Begin(Transform target)
     {
+        gameObject.SetActive(true);
+
         this.target = target;
         rectTransform.anchoredPosition = new Vector2(1.1f, 0);
         transform.position = new Vector3(transform.position.x, target.position.y, transform.position.z);
-        gameObject.SetActive(true);
         currentMode = Mode.Idle;
         startingXpos = transform.position.x;
     }

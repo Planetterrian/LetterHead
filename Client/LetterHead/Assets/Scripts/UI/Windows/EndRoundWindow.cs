@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using LetterHeadShared;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,12 +12,31 @@ public class EndRoundWindow : WindowController
     public GridLayoutGroup longWordGrid;
     public GameObject longWordPrefab;
 
+    public GameObject stealText;
+    public Toggle stealTimeToggle;
+    public Toggle stealLetterToggle;
+
+    public Button okButton;
+    public Button shopButton;
+
     private void Start()
     {
     }
 
     void OnWindowShown()
     {
+        if (GameManager.Instance.IsDailyMatch())
+        {
+            stealTimeToggle.gameObject.SetActive(false);
+            stealLetterToggle.gameObject.SetActive(false);
+            stealText.SetActive(false);
+        }
+        else
+        {
+            stealTimeToggle.interactable = PowerupManager.Instance.CanUsePowerup(Powerup.Type.StealTime);
+            stealLetterToggle.interactable = PowerupManager.Instance.CanUsePowerup(Powerup.Type.StealLetter);
+        }
+
         longWordGrid.transform.DeleteChildren();
 
         StartCoroutine(GetLongWords(5, ScoringManager.Instance.Words(), wordList =>
@@ -40,12 +60,61 @@ public class EndRoundWindow : WindowController
 
     public void OkClicked()
     {
-        Hide();
+        okButton.interactable = false;
+        shopButton.interactable = false;
+
+        if (GameManager.Instance.IsDailyMatch())
+        {
+            Hide();
+        }
+        else
+        {
+            if (stealTimeToggle.isOn)
+            {
+                RequestStealTime();
+            }
+            else if (stealLetterToggle.isOn)
+            {
+                
+            }
+            else
+            {
+                PersistManager.Instance.LoadMenu();
+            }
+        }
     }
 
     public void ShopClicked()
     {
-        PersistManager.Instance.LoadMenu(5);
+        if (stealTimeToggle.isOn)
+        {
+            RequestStealTime();
+        }
+        else if (stealLetterToggle.isOn)
+        {
+
+        }
+        else
+        {
+            PersistManager.Instance.LoadMenu(5);
+
+        }
+    }
+
+    private void RequestStealTime()
+    {
+        PowerupManager.Instance.DoStealTime((b) =>
+        {
+            if (b)
+            {
+                PersistManager.Instance.LoadMenu();
+            }
+            else
+            {
+                okButton.interactable = true;
+                shopButton.interactable = true;
+            }
+        });
     }
 
     internal IEnumerator GetLongWords(int minLength, List<string> existingWords, Action<List<string>> callback)

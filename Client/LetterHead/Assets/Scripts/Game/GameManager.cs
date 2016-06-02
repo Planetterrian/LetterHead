@@ -201,4 +201,9 @@ public abstract class GameManager : Singleton<GameManager>
     {
         GameGui.Instance.timer.AddTime(-seconds);
     }
+
+    public bool IsDailyMatch()
+    {
+        return MatchDetails.Users.Count == 1;
+    }
 }

@@ -112,7 +112,7 @@ public class PowerupManager : Singleton<PowerupManager>
         }
     }
 
-    private void DoStealTime()
+    public void DoStealTime(Action<bool> onUsed = null)
     {
         Srv.Instance.POST("Match/UseStealTime", new Dictionary<string, string>() { {"matchId", GameManager.Instance.MatchDetails.Id.ToString()} }, s =>
         {
@@ -121,7 +121,19 @@ public class PowerupManager : Singleton<PowerupManager>
                 if (b)
                     OnRoundStateChanged();
             });
-        });
+
+            if (onUsed != null)
+            {
+                onUsed(true);
+            }
+        },
+            s =>
+            {
+                DialogWindowTM.Instance.Error(s);
+                if (onUsed != null)
+                    onUsed(false);
+            }
+        );
     }
 
 #if UNITY_EDITOR
