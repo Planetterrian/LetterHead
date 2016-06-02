@@ -158,9 +158,11 @@ namespace LetterHeadServer.Models
             db.SaveChanges();
         }
 
-        private void ScheduleRoundEnd()
+        public void ScheduleRoundEnd()
         {
-            BackgroundJob.Delete(EndRoundJobId);
+            if(!string.IsNullOrEmpty(EndRoundJobId))
+                BackgroundJob.Delete(EndRoundJobId);
+
             EndRoundJobId = BackgroundJob.Schedule(() => new MatchController().ManuallyEndRound(Id, Id), EndTime());
         }
     }

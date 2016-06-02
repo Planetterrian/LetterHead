@@ -50,6 +50,12 @@ public class TimerElement : MonoBehaviour
         }
     }
 
+    public void AddTime(float seconds)
+    {
+        secondsRemaining += seconds;
+        UpdateLabel();
+    }
+
     private void UpdateLabel()
     {
         var timespan = new TimeSpan(0, 0, Mathf.CeilToInt(secondsRemaining));

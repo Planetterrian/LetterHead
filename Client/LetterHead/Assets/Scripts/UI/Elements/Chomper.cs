@@ -62,8 +62,10 @@ public class Chomper : MonoBehaviour
                 speed = idleSpeed;
                 break;
             case Mode.Open:
-            case Mode.Close:
                 speed = bitepeed;
+                break;
+            case Mode.Close:
+                speed = bitepeed * 2;
                 break;
         }
 
@@ -126,6 +128,6 @@ public class Chomper : MonoBehaviour
     private void OnBiteComplete()
     {
         TimerManager.AddEvent(0.5f, () => currentMode = Mode.Hide);
-        PowerupManager.Instance.stealActive = false;
+        PowerupManager.Instance.ChomperBite();
     }
 }

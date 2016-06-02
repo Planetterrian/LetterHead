@@ -196,4 +196,9 @@ public abstract class GameManager : Singleton<GameManager>
     {
         return IsMyRound() && GameScene.Instance.CurrentState == GameScene.State.Pregame && GameManager.Instance.MatchDetails.CurrentState != Match.MatchState.Ended && GameRealTime.Instance.IsConnected();
     }
+
+    public void ReduceTime(float seconds)
+    {
+        GameGui.Instance.timer.AddTime(-seconds);
+    }
 }

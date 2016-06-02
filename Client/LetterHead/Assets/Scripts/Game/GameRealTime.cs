@@ -181,7 +181,7 @@ public class GameRealTime : Singleton<GameRealTime>
 
     void _StealTimeStart(BinaryReader message)
     {
-        GameGui.Instance.chomper.Begin(GameGui.Instance.timer.transform);
+        PowerupManager.Instance.OnStealTimeActivated();
     }
 
     public bool IsConnected()

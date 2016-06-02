@@ -68,12 +68,15 @@ namespace LetterHeadServer.Controllers
             Task<RealTimeMatch.Message> rtmReceive = null;
 
             socket = context.WebSocket;
+            byte[] receiveBuffer = new byte[0];
             while (true)
             {
-                byte[] receiveBuffer = new byte[1024];
 
-                if(socketReceive == null || socketReceive.IsCompleted)
+                if (socketReceive == null || socketReceive.IsCompleted)
+                {
+                    receiveBuffer = new byte[1024];
                     socketReceive = socket.ReceiveAsync(new ArraySegment<byte>(receiveBuffer), CancellationToken.None);
+                }
 
                 if (rtmReceive == null || rtmReceive.IsCompleted)
                     rtmReceive = rtm.ReceiveMessage();
@@ -363,6 +366,14 @@ namespace LetterHeadServer.Controllers
 
             round.ShieldUsed = true;
             currentUser.ConsumePowerup(Powerup.Type.Shield);
+
+            if (round.StealTimeDelay > 0)
+            {
+                // Shielding a steal time
+                round.StartedOn = round.StartedOn.Value.AddSeconds(20);
+                round.ScheduleRoundEnd();
+            }
+
             db.SaveChanges();
 
             await SendMessage("ShieldUsed");

@@ -13,7 +13,7 @@ public class PowerupManager : Singleton<PowerupManager>
     public PowerupButton[] opponentpowerupButtons;
 
     [HideInInspector]
-    public bool stealActive;
+    public bool stealTimeActive;
 
     [HideInInspector]
     public bool stealLetterActive;
@@ -90,7 +90,7 @@ public class PowerupManager : Singleton<PowerupManager>
     {
         var powerupType = (Powerup.Type) typeId;
 
-        if(!CanUsePowerup(powerupType))
+        if (!CanUsePowerup(powerupType))
             return;
 
         switch (powerupType)
@@ -99,7 +99,7 @@ public class PowerupManager : Singleton<PowerupManager>
                 DialogWindowTM.Instance.Show("Do-Over", "Activate Do-Over booster?", GameRealTime.Instance.OnDoOverUsed, () => { });
                 break;
             case Powerup.Type.Shield:
-                if(stealActive)
+                if(stealTimeActive || stealLetterActive)
                     GameRealTime.Instance.RequestUseShield();
                 break;
             case Powerup.Type.StealTime:
@@ -135,7 +135,7 @@ public class PowerupManager : Singleton<PowerupManager>
     public void OnStealTimeActivated()
     {
         GameGui.Instance.chomper.Begin(GameGui.Instance.timer.transform);
-        stealActive = true;
+        stealTimeActive = true;
     }
 
     public void OnChompedClicked()
@@ -143,16 +143,24 @@ public class PowerupManager : Singleton<PowerupManager>
         if(!GameManager.Instance.IsMyRound())
             return;
 
-        if (stealActive)
-        {
-            RequestUsePowerup((int) Powerup.Type.Shield);
-        }
+        RequestUsePowerup((int)Powerup.Type.Shield);
     }
 
     public void CancelSteal()
     {
-        stealActive = false;
-
+        stealTimeActive = false;
+        stealLetterActive = false;
         GameGui.Instance.chomper.Hide();
+    }
+
+    public void ChomperBite()
+    {
+        if (stealTimeActive)
+        {
+            GameManager.Instance.ReduceTime(20);
+        }
+
+        stealTimeActive = false;
+        stealLetterActive = false;
     }
 }
