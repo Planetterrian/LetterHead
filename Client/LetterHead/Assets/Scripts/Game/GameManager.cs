@@ -151,8 +151,9 @@ public abstract class GameManager : Singleton<GameManager>
 
     protected virtual void OnGameStarted()
     {
-        gameScene.CurrentState = GameScene.State.Active;
         GameManager.Instance.MyCurrentRound().CurrentState = MatchRound.RoundState.Active;
+        gameScene.CurrentState = GameScene.State.Active;
+
         BoardManager.Instance.RevealLetters();
     }
 
