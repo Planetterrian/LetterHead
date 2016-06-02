@@ -154,7 +154,9 @@ public class Speller : Singleton<Speller>, IGameHandler
     public void RemoveTile(Tile originalTile)
     {
         var tile = GetReferencedTile(originalTile.ID);
-        DoTileRemove(tile);
+
+        if(tile)
+            DoTileRemove(tile);
     }
 
     public void DoTileRemove(Tile tile)

@@ -140,6 +140,9 @@ public class BoardManager : Singleton<BoardManager>
         {
             for (int x = 0; x < gridSize.x; x++)
             {
+                if(letterNum >= tiles.Count)
+                    break;
+
                 tiles[letterNum].xBoardPos = x;
                 tiles[letterNum].yBoardPos = y;
                 RepositionTile(tiles[letterNum]);
