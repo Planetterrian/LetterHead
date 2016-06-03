@@ -10,9 +10,8 @@ using UnityEngine.Events;
 
 public abstract class GameManager : Singleton<GameManager>
 {
-    protected GameScene gameScene;
-
     private int matchId;
+    protected GameScene gameScene;
 
     protected Match matchDetails;
     public Match MatchDetails
@@ -57,23 +56,31 @@ public abstract class GameManager : Singleton<GameManager>
         return MatchDetails.Rounds.Where(m => m.UserId == ClientManager.Instance.myUserInfo.Id).ToList();
     }
 
-    public void LoadMatchDetails()
+    public void LoadMatchDetails(Action onLoadOverrideAction = null)
     {
-        Srv.Instance.POST("Match/MatchInfo", new Dictionary<string, string>() {{"matchId", MatchId.ToString()}}, MatchDetailsDownloaded);
+        Srv.Instance.POST("Match/MatchInfo", new Dictionary<string, string>() {{"matchId", MatchId.ToString()}}, (matchDetailsJson) =>
+        {
+            MatchDetails = JsonConvert.DeserializeObject<Match>(matchDetailsJson);
+
+            if (IsMyRound())
+            {
+                if (MyCurrentRound().CurrentState == MatchRound.RoundState.NotStarted)
+                    gameScene.CurrentState = GameScene.State.Pregame;
+                else if (MyCurrentRound().CurrentState == MatchRound.RoundState.WaitingForCategory)
+                    gameScene.CurrentState = GameScene.State.WaitingForCategory;
+            }
+
+            if (onLoadOverrideAction == null)
+            {
+                MatchDetailsDownloaded();
+            }
+            else
+                onLoadOverrideAction();
+        });
     }
 
-    protected virtual void MatchDetailsDownloaded(string matchDetailsJson)
+    protected virtual void MatchDetailsDownloaded()
     {
-        MatchDetails = JsonConvert.DeserializeObject<Match>(matchDetailsJson);
-
-        if (IsMyRound())
-        {
-            if (MyCurrentRound().CurrentState == MatchRound.RoundState.NotStarted)
-                gameScene.CurrentState = GameScene.State.Pregame;
-            else if (MyCurrentRound().CurrentState == MatchRound.RoundState.WaitingForCategory)
-                gameScene.CurrentState = GameScene.State.WaitingForCategory;
-        }
-
         OnMatchDetailsLoaded();
         OnMatchDetailsLoadedEvent.Invoke();
     }
@@ -120,9 +127,7 @@ public abstract class GameManager : Singleton<GameManager>
     {
         MyCurrentRound().CurrentState = MatchRound.RoundState.Ended;
         GameScene.Instance.CurrentState = GameScene.State.End;
-
-        TimerManager.AddEvent(1, () => GameGui.Instance.endRoundWindow.ShowModal());
-
+        
         if (PlayerCount() == 1)
         {
             TimerManager.AddEvent(2, () => GameScene.Instance.RefreshMatch());
@@ -141,7 +146,15 @@ public abstract class GameManager : Singleton<GameManager>
             { "matchId", MatchId.ToString() },
             { "categoryName", ScoringManager.Instance.SelectedCategory().name },
             { "endMatch", (MyCurrentRound().CurrentState == MatchRound.RoundState.Ended) ? "True" : "False"}
-        }, s => { });
+        }, s =>
+        {
+            if (CurrentRound().CurrentState == MatchRound.RoundState.Ended)
+            {
+                LoadMatchDetails(() =>
+                    TimerManager.AddEvent(1, () => GameGui.Instance.endRoundWindow.ShowModal())
+                );
+            }
+        });
     }
 
     public virtual void OnGameStateChanged()

@@ -174,7 +174,7 @@ namespace LetterHeadServer.Models
 
         private void EndRound()
         {
-            if (CurrentRoundNumber == Rounds.Count - 1)
+            if (CurrentRoundNumber == MaxRounds - 1)
             {
                 EndMatch();
                 return;

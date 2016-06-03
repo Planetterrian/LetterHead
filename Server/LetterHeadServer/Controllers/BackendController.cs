@@ -32,7 +32,7 @@ namespace LetterHeadServer.Controllers
 
         public string TestGame(int userId, int userId2)
         {
-            var match = Match.New(db, new List<User>() { db.Users.Find(userId), db.Users.Find(userId2) });
+            var match = Match.New(db, new List<User>() { db.Users.Find(userId), db.Users.Find(userId2) }, 1);
             match.Initizile(db);
 
             db.SaveChanges();

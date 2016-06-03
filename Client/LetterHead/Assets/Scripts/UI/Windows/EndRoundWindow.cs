@@ -3,7 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using LetterHeadShared;
+using LetterHeadShared.DTO;
 using TMPro;
+using uTools;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,12 +14,18 @@ public class EndRoundWindow : WindowController
     public GridLayoutGroup longWordGrid;
     public GameObject longWordPrefab;
 
-    public GameObject stealText;
     public Toggle stealTimeToggle;
     public Toggle stealLetterToggle;
 
     public Button okButton;
     public Button shopButton;
+
+    public GameObject endTurnBottom;
+    public GameObject endMatchBottom;
+
+    public uTweenTransform crownTween;
+    public AvatarBox leftAvatarBox;
+    public AvatarBox rightAvatarBox;
 
     private void Start()
     {
@@ -27,14 +35,40 @@ public class EndRoundWindow : WindowController
     {
         if (GameManager.Instance.IsDailyMatch())
         {
-            stealTimeToggle.gameObject.SetActive(false);
-            stealLetterToggle.gameObject.SetActive(false);
-            stealText.SetActive(false);
+            endTurnBottom.SetActive(false);
+            endMatchBottom.SetActive(false);
         }
         else
         {
-            stealTimeToggle.interactable = PowerupManager.Instance.CanUsePowerup(Powerup.Type.StealTime);
-            stealLetterToggle.interactable = PowerupManager.Instance.CanUsePowerup(Powerup.Type.StealLetter);
+            if (GameManager.Instance.MatchDetails.CurrentState == Match.MatchState.Ended)
+            {
+                endMatchBottom.SetActive(true);
+                endTurnBottom.SetActive(false);
+
+                leftAvatarBox.SetAvatarImage(GameManager.Instance.MatchDetails.Users[0].AvatarUrl);
+                leftAvatarBox.SetName(GameManager.Instance.MatchDetails.Users[0].Username);
+                leftAvatarBox.score.text = GameManager.Instance.MatchDetails.UserScore(0).ToString("N0");
+
+                rightAvatarBox.SetAvatarImage(GameManager.Instance.MatchDetails.Users[1].AvatarUrl);
+                rightAvatarBox.SetName(GameManager.Instance.MatchDetails.Users[1].Username);
+                rightAvatarBox.score.text = GameManager.Instance.MatchDetails.UserScore(1).ToString("N0");
+
+                var leftWon = GameManager.Instance.MatchDetails.UserScore(0) > GameManager.Instance.MatchDetails.UserScore(1);
+
+                crownTween.gameObject.SetActive(true);
+                crownTween.from = new Vector3(leftWon ? leftAvatarBox.transform.localPosition.x : rightAvatarBox.transform.localPosition.x, crownTween.from.y, crownTween.from.z);
+                crownTween.to = new Vector3(leftWon ? leftAvatarBox.transform.localPosition.x : rightAvatarBox.transform.localPosition.x, crownTween.to.y, crownTween.to.z);
+                crownTween.ResetToInitialState();
+                crownTween.Play();
+            }
+            else
+            {
+                endMatchBottom.SetActive(false);
+                endTurnBottom.SetActive(true);
+
+                stealTimeToggle.interactable = PowerupManager.Instance.CanUsePowerup(Powerup.Type.StealTime);
+                stealLetterToggle.interactable = PowerupManager.Instance.CanUsePowerup(Powerup.Type.StealLetter);
+            }
         }
 
         longWordGrid.transform.DeleteChildren();
