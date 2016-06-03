@@ -36,6 +36,25 @@ namespace LetterHeadServer.Models
         }
 
 
+        public List<int> TurnOrderUserIds { get; set; }
+        public string TurnOrderUserIdJoined
+        {
+            get
+            {
+                if (TurnOrderUserIds == null)
+                    return "";
+
+                return string.Join(",", TurnOrderUserIds);
+            }
+            set
+            {
+                if (string.IsNullOrEmpty(value))
+                    TurnOrderUserIds = new List<int>();
+                else
+                    TurnOrderUserIds = value.Split(',').Select(int.Parse).ToList();
+            }
+        }
+
         [Index]
         public virtual User Winner { get; set; }
 
@@ -56,6 +75,11 @@ namespace LetterHeadServer.Models
         public virtual ICollection<MatchBuzz> Buzzes { get; set; }
 
         public int CurrentRoundNumber { get; set; }
+
+        public Match()
+        {
+            TurnOrderUserIds = new List<int>();
+        }
 
         public static Match New(ApplicationDbContext db, List<User> users, int roundCount = 9)
         {
@@ -136,7 +160,7 @@ namespace LetterHeadServer.Models
 
         public void AdvanceRound()
         {
-            var currentUserIndex = Users.IndexOf(CurrentUserTurn);
+            var currentUserIndex = TurnOrderUserIds.IndexOf(CurrentUserTurn.Id);
             currentUserIndex++;
             if (currentUserIndex >= Users.Count)
             {
@@ -145,7 +169,7 @@ namespace LetterHeadServer.Models
             else
             {
                 CurrentRoundForUser(CurrentUserTurn).CurrentState = LetterHeadShared.DTO.MatchRound.RoundState.Ended;
-                CurrentUserTurn = Users[currentUserIndex];
+                CurrentUserTurn = Users.First(u => u.Id == TurnOrderUserIds[currentUserIndex]);
                 OnNewTurn();
             }
         }
@@ -180,7 +204,7 @@ namespace LetterHeadServer.Models
                 return;
             }
 
-            CurrentUserTurn = Users[0];
+            CurrentUserTurn = Users.First(u => u.Id == TurnOrderUserIds[0]);
             CurrentRoundNumber++;
             OnNewTurn();
         }
@@ -192,7 +216,9 @@ namespace LetterHeadServer.Models
 
         public void RandomizeUsers()
         {
-            CurrentUserTurn = Users[0];
+            TurnOrderUserIds.AddRange(Users.Select(u => u.Id));
+            TurnOrderUserIds = TurnOrderUserIds.OrderBy(u => Guid.NewGuid()).ToList();
+            CurrentUserTurn = Users.First(u => u.Id == TurnOrderUserIds[0]);
         }
 
         public List<int> GetScores()
@@ -318,7 +344,7 @@ namespace LetterHeadServer.Models
         {
             var roundNumber = CurrentRoundNumber;
 
-            var currentUserIndex = Users.IndexOf(CurrentUserTurn);
+            var currentUserIndex = TurnOrderUserIds.IndexOf(CurrentUserTurn.Id);
             currentUserIndex++;
             if (currentUserIndex >= Users.Count)
             {

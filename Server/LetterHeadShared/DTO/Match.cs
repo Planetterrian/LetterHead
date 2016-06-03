@@ -19,7 +19,7 @@ namespace LetterHeadShared.DTO
         public List<MatchRound> Rounds;
         public int RoundTimeSeconds;
         public int CurrentRoundNumber;
-        public int CurrentUserIndex;
+        public int CurrentUserId;
         public int MaxRounds;
 
 

@@ -55,6 +55,11 @@ public class EndRoundWindow : WindowController
 
                 var leftWon = GameManager.Instance.MatchDetails.UserScore(0) > GameManager.Instance.MatchDetails.UserScore(1);
 
+                if(leftWon && ClientManager.Instance.UserId() == GameManager.Instance.MatchDetails.Users[0].Id || !leftWon && ClientManager.Instance.UserId() == GameManager.Instance.MatchDetails.Users[1].Id)
+                    SoundManager.Instance.PlayClip("MatchWin");
+                else
+                    SoundManager.Instance.PlayClip("MatchLoss");
+
                 crownTween.gameObject.SetActive(true);
                 crownTween.from = new Vector3(leftWon ? leftAvatarBox.transform.localPosition.x : rightAvatarBox.transform.localPosition.x, crownTween.from.y, crownTween.from.z);
                 crownTween.to = new Vector3(leftWon ? leftAvatarBox.transform.localPosition.x : rightAvatarBox.transform.localPosition.x, crownTween.to.y, crownTween.to.z);

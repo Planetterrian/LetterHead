@@ -13,8 +13,10 @@ public class TimerElement : MonoBehaviour
     private TextMeshProUGUI label;
     private uTweenAlpha tweenAlpha;
     private bool active;
+    private AudioSource audio;
 
     public float flashUnderTime = -1;
+    public float soundUnderTime = -1;
 
     public UnityEvent OnTimeExpired;
 
@@ -22,6 +24,7 @@ public class TimerElement : MonoBehaviour
     {
         label = GetComponent<TextMeshProUGUI>();
         tweenAlpha = GetComponent<uTweenAlpha>();
+        audio = GetComponent<AudioSource>();
         tweenAlpha.enabled = false;
 
         StartTimer(120);
@@ -34,12 +37,16 @@ public class TimerElement : MonoBehaviour
         {
             secondsRemaining -= Time.deltaTime;
 
-            if(flashUnderTime != -1 && secondsRemaining < flashUnderTime && !tweenAlpha.enabled)
+            if (flashUnderTime != -1 && secondsRemaining < flashUnderTime && !tweenAlpha.enabled)
+            {
                 tweenAlpha.Play();
+                audio.Play();
+            }
 
             if (secondsRemaining <= 0)
             {
                 active = false;
+                audio.Stop();
                 secondsRemaining = 0;
                 OnTimeExpired.Invoke();
                 tweenAlpha.enabled = false;

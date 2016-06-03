@@ -21,6 +21,9 @@ public class Chomper : MonoBehaviour
     private Transform target;
     private Mode currentMode;
 
+    public AudioSource warningSound;
+    public AudioSource chompSound;
+
     private float startingXpos;
 
     private enum Mode
@@ -46,6 +49,7 @@ public class Chomper : MonoBehaviour
         transform.position = new Vector3(transform.position.x, target.position.y, transform.position.z);
         currentMode = Mode.Idle;
         startingXpos = transform.position.x;
+        warningSound.enabled = true;
     }
 
     public void OnClicked()
@@ -130,5 +134,7 @@ public class Chomper : MonoBehaviour
     {
         TimerManager.AddEvent(0.5f, () => currentMode = Mode.Hide);
         PowerupManager.Instance.ChomperBite();
+        warningSound.enabled = false;
+        chompSound.Play();
     }
 }

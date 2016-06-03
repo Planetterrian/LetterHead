@@ -58,9 +58,9 @@ public class HomePage : Page
             var matches = list.Matches;
             invites = list.Invites;
 
-            var myMatches = matches.Where(m => m.CurrentState != Match.MatchState.Ended && m.Users[m.CurrentUserIndex].Id == ClientManager.Instance.myUserInfo.Id).ToList();
-            var theirMatches = matches.Where(m => m.CurrentState != Match.MatchState.Ended && m.Users[m.CurrentUserIndex].Id != ClientManager.Instance.myUserInfo.Id).ToList();
-            var completedMatches = matches.Where(m => m.CurrentState == Match.MatchState.Ended).ToList();
+            var myMatches = matches.Where(m => m.CurrentState != Match.MatchState.Ended && m.CurrentUserId == ClientManager.Instance.myUserInfo.Id).ToList();
+            var theirMatches = matches.Where(m => m.CurrentState != Match.MatchState.Ended && m.CurrentUserId != ClientManager.Instance.myUserInfo.Id).ToList();
+            var completedMatches = matches.Where(m =>m.CurrentState == Match.MatchState.Ended).ToList();
 
             UpdateMatchSet(myMatchRows, myMatches, myTurnHeader, DashboardRow.RowType.MyTurn);
             UpdateMatchSet(theirMatchRows, theirMatches, theirTurnHeader, DashboardRow.RowType.TheirTurn);

@@ -45,7 +45,7 @@ public abstract class GameManager : Singleton<GameManager>
         if (MatchDetails == null)
             return null;
 
-        return MatchDetails.Rounds.FirstOrDefault(matchRound => matchRound.UserId == MatchDetails.Users[MatchDetails.CurrentUserIndex].Id && matchRound.Number == MatchDetails.CurrentRoundNumber);
+        return MatchDetails.Rounds.FirstOrDefault(matchRound => matchRound.UserId == MatchDetails.CurrentUserId && matchRound.Number == MatchDetails.CurrentRoundNumber);
     }
 
     public List<MatchRound> MyRounds()
@@ -103,7 +103,7 @@ public abstract class GameManager : Singleton<GameManager>
         if (MatchDetails == null)
             return false;
 
-        return MatchDetails.Users[MatchDetails.CurrentUserIndex].Id == ClientManager.Instance.myUserInfo.Id;
+        return MatchDetails.CurrentUserId == ClientManager.Instance.myUserInfo.Id;
     }
 
     private void OnTimerExpired()
