@@ -80,6 +80,11 @@ namespace LetterHeadServer.Models
             PowerupCountList[(int)powerupType]--;
         }
 
+        public void AddPowerup(LetterHeadShared.Powerup.Type powerupType, int qty)
+        {
+            PowerupCountList[(int)powerupType] += qty;
+        }
+
         public void GenerateNewSessionId()
         {
             SessionId = Guid.NewGuid().ToString();

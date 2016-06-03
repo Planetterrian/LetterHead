@@ -7,6 +7,7 @@ using Facebook;
 using Hangfire;
 using LetterHeadServer.Classes;
 using LetterHeadServer.Models;
+using LetterHeadShared;
 
 namespace LetterHeadServer.Controllers
 {
@@ -108,6 +109,55 @@ namespace LetterHeadServer.Controllers
             return Okay();
         }
 
+
+        [AuthenticationFilter()]
+        public ActionResult IapPurchase(string productId, string receipt)
+        {
+            switch (productId)
+            {
+                case "com.we3workshop.letterhead.doover_small":
+                    currentUser.AddPowerup(Powerup.Type.DoOver, 5);
+                    break;
+                case "com.we3workshop.letterhead.doover_large":
+                    currentUser.AddPowerup(Powerup.Type.DoOver, 25);
+                    break;
+                case "com.we3workshop.letterhead.shield_small":
+                    currentUser.AddPowerup(Powerup.Type.Shield, 5);
+                    break;
+                case "com.we3workshop.letterhead.shield_large":
+                    currentUser.AddPowerup(Powerup.Type.Shield, 25);
+                    break;
+                case "com.we3workshop.letterhead.stealtime_small":
+                    currentUser.AddPowerup(Powerup.Type.StealTime, 5);
+                    break;
+                case "com.we3workshop.letterhead.stealtime_large":
+                    currentUser.AddPowerup(Powerup.Type.StealTime, 25);
+                    break;
+                case "com.we3workshop.letterhead.stealletter_small":
+                    currentUser.AddPowerup(Powerup.Type.StealLetter, 5);
+                    break;
+                case "com.we3workshop.letterhead.stealletter_large":
+                    currentUser.AddPowerup(Powerup.Type.StealLetter, 25);
+                    break;
+                case "com.we3workshop.letterhead.boosterpack_small":
+                    currentUser.AddPowerup(Powerup.Type.DoOver, 5);
+                    currentUser.AddPowerup(Powerup.Type.Shield, 5);
+                    currentUser.AddPowerup(Powerup.Type.StealTime, 5);
+                    currentUser.AddPowerup(Powerup.Type.StealLetter, 5);
+                    break;
+                case "com.we3workshop.letterhead.boosterpack_large":
+                    currentUser.AddPowerup(Powerup.Type.DoOver, 15);
+                    currentUser.AddPowerup(Powerup.Type.Shield, 15);
+                    currentUser.AddPowerup(Powerup.Type.StealTime, 15);
+                    currentUser.AddPowerup(Powerup.Type.StealLetter, 15);
+                    break;
+            }
+
+            db.SaveChanges();
+            return Okay();
+        }
+
+
         private bool UsernameIsInvalid(string username, out ActionResult actionResult)
         {
             if (username.Length < 3 || username.Length > 24)
@@ -141,6 +191,18 @@ namespace LetterHeadServer.Controllers
 
             actionResult = null;
             return false;
+        }
+
+
+        [AuthenticationFilter()]
+        public ActionResult DailyPowerup(int type)
+        {
+            var powerupType = (Powerup.Type) type;
+            currentUser.AddPowerup(powerupType, 1);
+
+            db.SaveChanges();
+
+            return Okay();
         }
 
         [AuthenticationFilter()]

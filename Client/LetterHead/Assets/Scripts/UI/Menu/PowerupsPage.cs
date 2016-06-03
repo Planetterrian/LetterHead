@@ -4,9 +4,14 @@ using System.Linq;
 using System.Text;
 using LetterHeadShared;
 using UI.Pagination;
+using UnityEngine;
+using UnityEngine.UI;
 
 public class PowerupsPage : Page
 {
+    public LotteryGui lottetyGui;
+    public Button dailyPowerupButton;
+
     public PowerupRow[] powerupRows;
 
     public void Refresh()
@@ -16,11 +21,38 @@ public class PowerupsPage : Page
             var powerupRow = powerupRows[index];
             powerupRow.SetCount(ClientManager.Instance.PowerupCount((Powerup.Type)index));
         }
+
+        var lastPowerup = DateTime.Now.AddDays(-30);
+        var lastDailyStr = PlayerPrefs.GetString("LastDailyPowerup", null);
+        if (!string.IsNullOrEmpty(lastDailyStr))
+            lastPowerup = DateTime.Parse(lastDailyStr);
+
+        dailyPowerupButton.interactable = (DateTime.Now - lastPowerup).TotalHours > 23.5f;
     }
+
+
+    void OnApplicationFocus(bool state)
+    {
+        if (state)
+        {
+            Refresh();
+        }
+    }
+
+    void Start()
+    {
+        IapManager.Instance.OnItemsUpdated.AddListener(OnIapsUpdated);
+    }
+
+    private void OnIapsUpdated()
+    {
+        ClientManager.Instance.RefreshMyInfo(false, b => Refresh());
+    }
+
 
     public void DailyBoosterClicked()
     {
-        
+        lottetyGui.ShowModal();
     }
 
     public void WatchAdClicked()
