@@ -88,6 +88,9 @@ namespace LetterHeadServer.Models
                 var round = roundsList[index];
                 round.Letters = RoundLetters(index);
             }
+
+            match.RandomizeUsers();
+
             context.SaveChanges();
 
             return match;

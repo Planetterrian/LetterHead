@@ -258,7 +258,7 @@ namespace LetterHeadServer.Controllers
         }
         
 
-        public ActionResult SetCategory(int matchId, string categoryName, bool endMatch)
+        public ActionResult SetCategory(int matchId, string categoryName)
         {
             var match = Match.GetById(db, matchId);
             if (match == null)
@@ -285,7 +285,7 @@ namespace LetterHeadServer.Controllers
             if (round.CurrentState == LetterHeadShared.DTO.MatchRound.RoundState.Ended ||
                 round.CurrentState == LetterHeadShared.DTO.MatchRound.RoundState.NotStarted)
             {
-                return Error("Invalid round Err 19");
+                return Okay();
             }
 
             var category = Startup.CategoryManager.GetCategory(categoryName);
@@ -305,10 +305,8 @@ namespace LetterHeadServer.Controllers
                 return Error("That category has already been used");
             }
 
-            if (endMatch)
-            {
-                round.CurrentState = MatchRound.RoundState.WaitingForCategory;
-            }
+
+            round.CurrentState = MatchRound.RoundState.WaitingForCategory;
 
             round.SetCategory(db, category);
 

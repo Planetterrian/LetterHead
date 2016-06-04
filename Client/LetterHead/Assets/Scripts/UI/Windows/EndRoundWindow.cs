@@ -33,6 +33,9 @@ public class EndRoundWindow : WindowController
 
     void OnWindowShown()
     {
+        okButton.interactable = true;
+        shopButton.interactable = true;
+
         if (GameManager.Instance.IsDailyMatch())
         {
             endTurnBottom.SetActive(false);

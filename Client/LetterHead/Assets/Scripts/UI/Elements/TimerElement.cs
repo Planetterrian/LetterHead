@@ -71,6 +71,10 @@ public class TimerElement : MonoBehaviour
 
     public void StartTimer(float time)
     {
+        tweenAlpha.ResetToInitialState();
+        tweenAlpha.enabled = false;
+        audio.Stop();
+
         secondsRemaining = time;
         active = true;
 
@@ -81,5 +85,13 @@ public class TimerElement : MonoBehaviour
     {
         secondsRemaining = roundTimeSeconds;
         UpdateLabel();
+    }
+
+    public void Stop()
+    {
+        tweenAlpha.ResetToInitialState();
+        tweenAlpha.enabled = false;
+        audio.Stop();
+        active = false;
     }
 }

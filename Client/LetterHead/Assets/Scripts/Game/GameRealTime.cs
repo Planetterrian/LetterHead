@@ -164,6 +164,7 @@ public class GameRealTime : Singleton<GameRealTime>
         var time = message.ReadSingle();
 
         GameManager.Instance.CurrentRound().DoOverUsed = true;
+        GameManager.Instance.CurrentRound().Words = new List<string>();
         GameScene.Instance.ResetGame();
         BoardManager.Instance.SetBoardLetters(letters, false);
         GameManager.Instance.StartGame(time);

@@ -31,16 +31,12 @@ public class ScoringManager : Singleton<ScoringManager>, IGameHandler
     {
         var word = Speller.Instance.CurrentWord();
 
-        Debug.Log("Word Submit: 2");
-
         if (WordManager.Instance.IsWordValid(word) && CanAcceptWord(word))
         {
-            Debug.Log("Word Submit: 3");
             OnValidWordSubmitted(word);
         }
         else
         {
-            Debug.Log("Word Submit: 4");
             SoundManager.Instance.PlayClip("Reject Word");
         }
     }
@@ -78,8 +74,6 @@ public class ScoringManager : Singleton<ScoringManager>, IGameHandler
             }
 
         }
-
-        Debug.Log("Word Submit: 5");
 
         if (PersistManager.Instance.ClearWord)
             BoardManager.Instance.ClearCurrentWord();
