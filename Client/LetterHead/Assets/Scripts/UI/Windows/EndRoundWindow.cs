@@ -115,7 +115,7 @@ public class EndRoundWindow : WindowController
 
         if (GameManager.Instance.PlayerCount() == 1)
         {
-            if (GameManager.Instance.MatchDetails.CurrentRoundNumber == GameManager.Instance.MatchDetails.MaxRounds - 1)
+            if (GameManager.Instance.MatchDetails.CurrentState == Match.MatchState.Ended)
             {
                 PersistManager.Instance.LoadMenu();
             }

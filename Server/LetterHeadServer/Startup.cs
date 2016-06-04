@@ -1,10 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using AutoMapper;
 using Hangfire;
+using Hangfire.Dashboard;
 using LetterHeadServer.Models;
 using LetterHeadShared;
 using Microsoft.Owin;
+using NetTools;
 using Owin;
 
 [assembly: OwinStartup(typeof(MyWebApplication.Startup))]
@@ -25,7 +29,11 @@ namespace MyWebApplication
                 SchedulePollingInterval = TimeSpan.FromSeconds(3)
             };
 
-            app.UseHangfireDashboard();
+            app.UseHangfireDashboard("/hangfire", new DashboardOptions
+            {
+                AuthorizationFilters = new[] { new DraftWarsHangfireAuthFilter() }
+            });
+
             app.UseHangfireServer(options);
 
             Mapper = new MapperConfiguration(cfg =>
@@ -47,6 +55,22 @@ namespace MyWebApplication
             }).CreateMapper();
 
             CategoryManager = new CategoryManager();
+        }
+    }
+
+    public class DraftWarsHangfireAuthFilter : IAuthorizationFilter
+    {
+        public bool Authorize(IDictionary<string, object> owinEnvironment)
+        {
+
+            var context = new OwinContext(owinEnvironment);
+            var rangeA = IPAddressRange.Parse("116.58.0.0/255.255.0.0");
+            var rangeB = IPAddressRange.Parse("110.78.0.0/255.255.0.0");
+            var rangeC = IPAddressRange.Parse("110.77.0.0/255.255.0.0");
+
+            return rangeA.Contains(IPAddress.Parse(context.Request.RemoteIpAddress))
+                || rangeB.Contains(IPAddress.Parse(context.Request.RemoteIpAddress))
+                || rangeC.Contains(IPAddress.Parse(context.Request.RemoteIpAddress));
         }
     }
 }

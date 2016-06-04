@@ -186,12 +186,13 @@ namespace LetterHeadServer.Models
 
             db.SaveChanges();
         }
+
         public void ScheduleRoundEnd()
         {
             if(!string.IsNullOrEmpty(EndRoundJobId))
                 BackgroundJob.Delete(EndRoundJobId);
 
-            EndRoundJobId = BackgroundJob.Schedule(() => new MatchController().ManuallyEndRound(Id, Id), EndTime());
+            EndRoundJobId = BackgroundJob.Schedule(() => new MatchController().ManuallyEndRound(Match.Id, Id), EndTime());
         }
     }
 }

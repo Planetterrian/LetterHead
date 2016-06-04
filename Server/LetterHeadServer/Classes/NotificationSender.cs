@@ -80,7 +80,7 @@ namespace LetterHeadServer.Classes
 "\t\t\"badge\": 1\n";
 
             if (message.type == NotificationDetails.Type.YourTurn)
-                payload += "\t\t\",sound\": \"TurnNotification.wav\"\n";
+                payload += "\t\t,\"sound\": \"TurnNotification.wav\"\n";
 
             payload += "\t},\n" +
             "\t\"user_info\": {\n" +
