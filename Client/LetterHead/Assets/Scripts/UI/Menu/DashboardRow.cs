@@ -15,6 +15,7 @@ public class DashboardRow : MonoBehaviour
     public TextMeshProUGUI myScoreLabel;
     public TextMeshProUGUI theirScoreLabel;
     public TextMeshProUGUI dailyGameLabel;
+    public TextMeshProUGUI soloGameLabel;
 
     public GameObject backBoxMy;
     public GameObject backBoxTheir;
@@ -129,7 +130,11 @@ public class DashboardRow : MonoBehaviour
         if (MatchInfo.Users.Count == 1)
         {
             theirScoreLabel.text = "";
-            dailyGameLabel.gameObject.SetActive(true);
+
+            if(MatchInfo.IsDaily)
+                dailyGameLabel.gameObject.SetActive(true);
+            else
+                soloGameLabel.gameObject.SetActive(true);
         }
         else
         {

@@ -179,7 +179,7 @@ namespace LetterHeadServer.Models
             var round = CurrentRound();
             round.ActivatedOn = DateTime.Now;
 
-            if (DailyGame != null)
+            if (Users.Count == 1)
                 return;
 
             CurrentUserTurn.SendNotification(new NotificationDetails()

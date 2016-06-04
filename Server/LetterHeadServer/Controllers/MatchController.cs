@@ -39,6 +39,18 @@ namespace LetterHeadServer.Controllers
             return Json(match.Id);
         }
 
+        public ActionResult RequestSoloGameStart()
+        {
+            var match = Match.New(db, new List<User>() {currentUser});
+            match.Initizile(db);
+
+            db.SaveChanges();
+
+            return Json(match.Id);
+        }
+
+        
+
         public ActionResult Random()
         {
             var curPending = currentUser.Matches.Count(m => m.CurrentState == LetterHeadShared.DTO.Match.MatchState.WaitingForPlayers);

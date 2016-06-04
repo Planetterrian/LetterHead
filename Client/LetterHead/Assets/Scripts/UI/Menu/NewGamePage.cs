@@ -30,5 +30,14 @@ public class NewGamePage : Page
             PersistManager.Instance.LoadMatch(matchId, true);
         }, DialogWindowTM.Instance.Error);
     }
-    
+
+    public void SoloGameClicked()
+    {
+        Srv.Instance.POST("Match/RequestSoloGameStart", null, s =>
+        {
+            var matchId = JsonConvert.DeserializeObject<int>(s);
+            PersistManager.Instance.LoadMatch(matchId, true);
+        }, DialogWindowTM.Instance.Error);
+    }
+
 }

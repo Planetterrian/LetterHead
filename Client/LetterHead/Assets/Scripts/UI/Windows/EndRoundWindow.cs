@@ -36,7 +36,7 @@ public class EndRoundWindow : WindowController
         okButton.interactable = true;
         shopButton.interactable = true;
 
-        if (GameManager.Instance.IsDailyMatch())
+        if (GameManager.Instance.PlayerCount() == 1)
         {
             endTurnBottom.SetActive(false);
             endMatchBottom.SetActive(false);
@@ -105,7 +105,7 @@ public class EndRoundWindow : WindowController
         okButton.interactable = false;
         shopButton.interactable = false;
 
-        if (GameManager.Instance.IsDailyMatch())
+        if (GameManager.Instance.PlayerCount() == 1)
         {
             if (GameManager.Instance.MatchDetails.CurrentRoundNumber == GameManager.Instance.MatchDetails.MaxRounds - 1)
             {

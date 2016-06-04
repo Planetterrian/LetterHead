@@ -214,7 +214,7 @@ public abstract class GameManager : Singleton<GameManager>
 
     public bool IsDailyMatch()
     {
-        return MatchDetails.Users.Count == 1;
+        return MatchDetails.IsDaily;
     }
 
     public int OpponentUserId()
