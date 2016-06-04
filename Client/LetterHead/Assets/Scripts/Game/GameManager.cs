@@ -62,14 +62,6 @@ public abstract class GameManager : Singleton<GameManager>
         {
             MatchDetails = JsonConvert.DeserializeObject<Match>(matchDetailsJson);
 
-            if (IsMyRound())
-            {
-                if (MyCurrentRound().CurrentState == MatchRound.RoundState.NotStarted)
-                    gameScene.CurrentState = GameScene.State.Pregame;
-                else if (MyCurrentRound().CurrentState == MatchRound.RoundState.WaitingForCategory)
-                    gameScene.CurrentState = GameScene.State.WaitingForCategory;
-            }
-
             if (onLoadOverrideAction == null)
             {
                 MatchDetailsDownloaded();
@@ -81,6 +73,14 @@ public abstract class GameManager : Singleton<GameManager>
 
     protected virtual void MatchDetailsDownloaded()
     {
+        if (IsMyRound())
+        {
+            if (MyCurrentRound().CurrentState == MatchRound.RoundState.NotStarted)
+                gameScene.CurrentState = GameScene.State.Pregame;
+            else if (MyCurrentRound().CurrentState == MatchRound.RoundState.WaitingForCategory)
+                gameScene.CurrentState = GameScene.State.WaitingForCategory;
+        }
+
         OnMatchDetailsLoaded();
         OnMatchDetailsLoadedEvent.Invoke();
     }
@@ -127,11 +127,7 @@ public abstract class GameManager : Singleton<GameManager>
     {
         MyCurrentRound().CurrentState = MatchRound.RoundState.Ended;
         GameScene.Instance.CurrentState = GameScene.State.End;
-        
-        if (PlayerCount() == 1)
-        {
-            TimerManager.AddEvent(2, () => GameScene.Instance.RefreshMatch());
-        }
+        GameGui.Instance.timer.Stop();
     }
 
     public int PlayerCount()
@@ -144,15 +140,19 @@ public abstract class GameManager : Singleton<GameManager>
         Srv.Instance.POST("Match/SetCategory", new Dictionary<string, string>()
         {
             { "matchId", MatchId.ToString() },
-            { "categoryName", ScoringManager.Instance.SelectedCategory().name },
-            { "endMatch", (MyCurrentRound().CurrentState == MatchRound.RoundState.Ended) ? "True" : "False"}
+            { "categoryName", ScoringManager.Instance.SelectedCategory().name }
         }, s =>
         {
             if (CurrentRound().CurrentState == MatchRound.RoundState.Ended)
             {
                 LoadMatchDetails(() =>
-                    TimerManager.AddEvent(1, () => GameGui.Instance.endRoundWindow.ShowModal())
-                );
+                {
+                    if (PlayerCount() == 1)
+                    {
+                        TimerManager.AddEvent(1, () => GameScene.Instance.RefreshMatch());
+                    }
+                    TimerManager.AddEvent(1, () => GameGui.Instance.endRoundWindow.ShowModal());
+                });
             }
         });
     }
@@ -194,11 +194,7 @@ public abstract class GameManager : Singleton<GameManager>
             ScoringManager.Instance.OnCategorySelected(category);
             MyCurrentRound().CategoryName = category.name;
 
-            if (GameScene.Instance.CurrentState == GameScene.State.WaitingForCategory)
-            {
-                EndRound();
-            }
-
+            EndRound();
             SubmitCategory();
         }
 
