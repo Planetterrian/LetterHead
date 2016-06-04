@@ -40,6 +40,14 @@ public class EndRoundWindow : WindowController
         {
             endTurnBottom.SetActive(false);
             endMatchBottom.SetActive(false);
+
+            if (GameManager.Instance.MatchDetails.IsDaily)
+            {
+                if (GameManager.Instance.MatchDetails.CurrentRoundNumber == GameManager.Instance.MatchDetails.MaxRounds - 1)
+                {
+                    AchievementManager.Instance.ReportScore(GameManager.Instance.MatchDetails.UserScore(0), "daily");
+                }
+            }
         }
         else
         {

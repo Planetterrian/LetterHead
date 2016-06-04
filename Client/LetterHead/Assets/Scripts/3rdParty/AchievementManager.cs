@@ -1,0 +1,132 @@
+﻿using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using VoxelBusters.NativePlugins;
+using VoxelBusters.NativePlugins.Internal;
+
+public class AchievementManager : Singleton<AchievementManager>
+{
+    private Dictionary<string, AchievementDescription> achievements = new Dictionary<string, AchievementDescription>();
+    // Use this for initialization
+    void Start()
+    {
+        if(!Application.isEditor)
+            Authenticate();
+    }
+
+    private void Authenticate()
+    {
+        NPBinding.GameServices.LocalUser.Authenticate((bool _success, string _error) => 
+        {
+            if (_success)
+            {
+                Debug.Log("Sign-In Successfully");
+                Debug.Log("Local User Details : " + NPBinding.GameServices.LocalUser.ToString());
+
+                LoadAchievementDescriptions();
+            }
+            else
+            {
+                Debug.Log("Sign-In Failed");
+            }
+        });
+    }
+
+    private float GetAchievementProgress(string id)
+    {
+        return PlayerPrefs.GetFloat("ach_" + id, 0);
+    }
+
+    public void Add(string _achievementID, float qty = 1)
+    {
+        SetProgress(_achievementID, GetAchievementProgress(_achievementID) + qty);
+    }
+
+
+    public void ReportScore(int score, string _leaderboardID)
+    {
+        if (!NPBinding.GameServices.LocalUser.IsAuthenticated)
+        {
+            return;
+        }
+
+        NPBinding.GameServices.ReportScoreWithGlobalID(_leaderboardID, score, (bool _status, string error) => {
+            if (_status)
+                Debug.Log(string.Format("Successfully reported score={0} to leaderboard with ID={1}.", score, _leaderboardID));
+            else
+                Debug.Log(string.Format("Failed to report score to leaderboard with ID={0} Err {1}.", _leaderboardID, error));
+        });
+    }
+
+
+    private void LoadAchievementDescriptions()
+    {
+        achievements.Clear();
+
+        NPBinding.GameServices.LoadAchievementDescriptions((AchievementDescription[] _descriptions, string _error) => 
+        {
+            Debug.Log("Achivements loaded");
+
+            if (_descriptions != null)
+            {
+                int _descriptionCount = _descriptions.Length;
+
+                for (int _iter = 0; _iter < _descriptionCount; _iter++)
+                {
+                    var ach = _descriptions[_iter];
+                    achievements[ach.Identifier] = ach;
+                }
+            }
+        });
+    }
+
+    private AchievementDescription GetAchievementDescription(string id)
+    {
+        string _achievementID = GameServicesUtils.GetAchievementID(id);
+        return achievements[_achievementID];
+    }
+
+    void SetProgress(string _achievementID, float pct)
+    {
+        if(GetAchievementProgress(_achievementID) == pct)
+            return;
+
+        PlayerPrefs.SetFloat("ach_" + _achievementID, pct);
+
+        if (!NPBinding.GameServices.LocalUser.IsAuthenticated)
+        {
+            return;
+        }
+
+        var desc = GetAchievementDescription(_achievementID);
+        pct = desc.MaximumPoints*pct;
+
+        NPBinding.GameServices.ReportProgressWithGlobalID(_achievementID, pct, (bool _status, string _error) => {
+
+            if (_status)
+                Debug.Log(string.Format("Successfully reported points={0} to achievement with ID={1}.", pct, _achievementID));
+            else
+                Debug.Log(string.Format("Failed to report progress of achievement with ID={0}.", _achievementID));
+        });
+    }
+
+    public void Set(string _achievementID, int qty = 1)
+    { 
+        SetProgress(_achievementID, qty);
+    }
+
+    public void ShowAchievements()
+    {
+        if (!NPBinding.GameServices.LocalUser.IsAuthenticated)
+        {
+            Authenticate();
+            return;
+        }
+
+        NPBinding.GameServices.ShowAchievementsUI((string _error) =>
+        {
+            Debug.Log("Closed achievements UI.");
+        });
+    }
+}
