@@ -25,6 +25,7 @@ class ProfilePage : Page
     public TextMeshProUGUI stat_mostWords;
 
     private bool initDone;
+    private bool dontAllowAvatarChange;
 
     void Init()
     {
@@ -59,8 +60,10 @@ class ProfilePage : Page
 
     public void OnAvatarChanged()
     {
-        if(useFacebookImageToggle.isOn || avatarDropdown.value == -1)
+        if(useFacebookImageToggle.isOn || avatarDropdown.value == -1 || dontAllowAvatarChange)
             return;
+
+        ClientManager.Instance.myUserInfo.AvatarUrl = "sprite:" + avatarDropdown.options[avatarDropdown.value].text;
 
         Srv.Instance.POST("User/SetAvatar",
             new Dictionary<string, string>() {{"sprite", avatarDropdown.options[avatarDropdown.value].text}}, s =>
@@ -91,6 +94,8 @@ class ProfilePage : Page
 
     public void Refresh()
     {
+        dontAllowAvatarChange = true;
+        TimerManager.AddEvent(0.2f, () => dontAllowAvatarChange = false);
         Init();
 
         usernameInput.text = ClientManager.Instance.myUserInfo.Username;
