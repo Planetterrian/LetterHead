@@ -32,6 +32,8 @@ public class IapManager : Singleton<IapManager>
         {
             OnPurchaseMade();
         }
+
+        DialogWindowTM.Instance.Show("Restore Purchases", "Purchases have been restored", () => { });
     }
 
     private void OnPurchaseMade()

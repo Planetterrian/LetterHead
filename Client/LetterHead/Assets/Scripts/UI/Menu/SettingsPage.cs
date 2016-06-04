@@ -32,7 +32,7 @@ public class SettingsPage : Page
         linkFacebookButton.SetActive(string.IsNullOrEmpty(ClientManager.Instance.myUserInfo.FacebookPictureUrl));
         unLinkFacebookButton.SetActive(!string.IsNullOrEmpty(ClientManager.Instance.myUserInfo.FacebookPictureUrl));
 
-        premiumUpgradeButton.gameObject.SetActive(false);
+        premiumUpgradeButton.gameObject.SetActive(PlayerPrefs.GetInt("PurchaseMade", 0) == 0);
 
         musicEnabledToggle.isOn = PersistManager.Instance.MusicEnabled;
         clearWordToggle.isOn = PersistManager.Instance.ClearWord;
@@ -131,5 +131,11 @@ public class SettingsPage : Page
     public void HowToPlayClicked()
     {
         
+    }
+
+    public void RestorePurchasesClicked()
+    {
+        NPBinding.Billing.RestorePurchases();
+
     }
 }
