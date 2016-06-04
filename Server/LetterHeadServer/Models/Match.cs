@@ -360,16 +360,47 @@ namespace LetterHeadServer.Models
             return Rounds.First(r => r.Number == roundNumber && r.User.Id == Users[currentUserIndex].Id);
         }
 
+        public MatchRound GetRoundByIndex(int index)
+        {
+            var userIndexOffset = index%Users.Count;
+            var roundNumber = index/Users.Count;
+
+            if (roundNumber >= MaxRounds)
+                return null;
+
+            return Rounds.FirstOrDefault(r => r.Number == roundNumber && r.User.Id == TurnOrderUserIds[userIndexOffset]);
+        }
+
+        private int RoundIndex(MatchRound round)
+        {
+            var roundNumber = round.Number;
+            var userIndexOffset = TurnOrderUserIds.IndexOf(round.User.Id);
+
+            return roundNumber + userIndexOffset;
+        }
 
         // Returns the next round that is an opponent's (or the current one if it's the opponent's turn)
-        public MatchRound NextOpponentRound(User fromUser)
+        public MatchRound NextOpponentRoundNotStarted(User fromUser)
         {
             if (CurrentUserTurn != fromUser)
             {
-                return CurrentRound();
+                // It's currently the fromUser's turn
+                if (CurrentRound().CurrentState == LetterHeadShared.DTO.MatchRound.RoundState.NotStarted)
+                    return CurrentRound();
+
+                var nextRound = GetRoundByIndex(RoundIndex(CurrentRound()) + 2);
+                if (nextRound != null)
+                    return nextRound;
             }
 
-            return NextRound();
+            if (NextRound() == null)
+                return null;
+
+            if (NextRound().CurrentState == LetterHeadShared.DTO.MatchRound.RoundState.NotStarted)
+                return NextRound();
+
+            var nextRound2 = GetRoundByIndex(RoundIndex(NextRound()) + 2);
+            return nextRound2;
         }
 
         public void SendRtmMessage(RealTimeMatch.Message message)

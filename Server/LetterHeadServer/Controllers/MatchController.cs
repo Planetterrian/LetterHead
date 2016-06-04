@@ -366,7 +366,7 @@ namespace LetterHeadServer.Controllers
                 return Error("No boost available");
             }
 
-            var nextRound = match.NextOpponentRound(currentUser);
+            var nextRound = match.NextOpponentRoundNotStarted(currentUser);
             if (nextRound == null)
             {
                 return Error("This is the last round!");
@@ -414,7 +414,7 @@ namespace LetterHeadServer.Controllers
                 return Error("No boost available");
             }
 
-            var nextRound = match.NextOpponentRound(currentUser);
+            var nextRound = match.NextOpponentRoundNotStarted(currentUser);
             if (nextRound == null)
             {
                 return Error("This is the last round!");

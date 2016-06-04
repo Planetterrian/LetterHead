@@ -128,6 +128,7 @@ public abstract class GameManager : Singleton<GameManager>
         MyCurrentRound().CurrentState = MatchRound.RoundState.Ended;
         GameScene.Instance.CurrentState = GameScene.State.End;
         GameGui.Instance.timer.Stop();
+        PowerupManager.Instance.CancelSteal();
     }
 
     public int PlayerCount()
