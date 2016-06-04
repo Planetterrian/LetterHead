@@ -8,6 +8,7 @@ using TMPro;
 using uTools;
 using UnityEngine;
 using UnityEngine.UI;
+using VoxelBusters.NativePlugins;
 
 public class EndRoundWindow : WindowController
 {
@@ -19,6 +20,7 @@ public class EndRoundWindow : WindowController
 
     public Button okButton;
     public Button shopButton;
+    public Button leaderboardButton;
 
     public GameObject endTurnBottom;
     public GameObject endMatchBottom;
@@ -36,6 +38,8 @@ public class EndRoundWindow : WindowController
         okButton.interactable = true;
         shopButton.interactable = true;
 
+        leaderboardButton.gameObject.SetActive(false);
+
         if (GameManager.Instance.PlayerCount() == 1)
         {
             endTurnBottom.SetActive(false);
@@ -43,8 +47,9 @@ public class EndRoundWindow : WindowController
 
             if (GameManager.Instance.MatchDetails.IsDaily)
             {
-                if (GameManager.Instance.MatchDetails.CurrentRoundNumber == GameManager.Instance.MatchDetails.MaxRounds - 1)
+                if (GameManager.Instance.MatchDetails.CurrentState == Match.MatchState.Ended)
                 {
+                    leaderboardButton.gameObject.SetActive(true);
                     AchievementManager.Instance.ReportScore(GameManager.Instance.MatchDetails.UserScore(0), "daily");
                 }
             }
@@ -271,5 +276,10 @@ public class EndRoundWindow : WindowController
         }
 
         callback(longWords);
+    }
+
+    public void LeaderboardClicked()
+    {
+        NPBinding.GameServices.ShowLeaderboardUIWithGlobalID("daily", eLeaderboardTimeScope.WEEK, error => { });
     }
 }
