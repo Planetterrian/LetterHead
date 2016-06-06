@@ -68,6 +68,7 @@ namespace LetterHeadServer.Models
         public DateTime CreatedOn { get; set; }
         public DateTime? StartedOn { get; set; }
         public int RoundTimeSeconds { get; set; }
+        public int SingleScore { get; set; }
 
         public int MaxRounds { get; set; }
 
@@ -256,6 +257,11 @@ namespace LetterHeadServer.Models
 
         private void DetermineWinner()
         {
+            if (Users.Count == 1)
+            {
+                SingleScore = GetScores()[0];
+            }
+
             if (DailyGame != null)
             {
                 Winner = Users[0];

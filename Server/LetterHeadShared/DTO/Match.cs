@@ -21,6 +21,7 @@ namespace LetterHeadShared.DTO
         public int CurrentRoundNumber;
         public int CurrentUserId;
         public int MaxRounds;
+        public int SingleScore;
         public bool IsDaily;
 
 

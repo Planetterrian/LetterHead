@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using LetterHeadShared;
 using LetterHeadShared.DTO;
+using Newtonsoft.Json;
 using TMPro;
 using uTools;
 using UnityEngine;
@@ -24,12 +25,21 @@ public class EndRoundWindow : WindowController
 
     public GameObject endTurnBottom;
     public GameObject endMatchBottom;
+    public GameObject leaderboardBottom;
+    public GameObject soloBottom;
 
     public uTweenTransform crownTween;
     public AvatarBox leftAvatarBox;
     public AvatarBox rightAvatarBox;
     public TextMeshProUGUI topText;
     public TextMeshProUGUI longWordsLabel;
+
+    public TextMeshProUGUI soloScore;
+    public Transform highScoreLabel;
+
+
+    public Transform leaderboardParent;
+    public GameObject leaderboardRow;
 
     public float shortHeight;
     public string[] topMessages;
@@ -53,6 +63,7 @@ public class EndRoundWindow : WindowController
     {
         okButton.interactable = true;
         shopButton.interactable = true;
+        highScoreLabel.gameObject.SetActive(false);
 
         var isShort = false;
         var myScore = ScoringManager.Instance.currentRoundScore;
@@ -63,7 +74,7 @@ public class EndRoundWindow : WindowController
         }
         else
         {
-            if(myScore > 0)
+            if (myScore > 0)
                 topText.text = topMessages[UnityEngine.Random.Range(0, topMessages.Length)];
             else
                 topText.text = topMessages[UnityEngine.Random.Range(0, topMessages_noPoints.Length)];
@@ -84,7 +95,28 @@ public class EndRoundWindow : WindowController
                 {
                     isShort = false;
                     leaderboardButton.gameObject.SetActive(true);
+                    leaderboardBottom.SetActive(true);
                     AchievementManager.Instance.ReportScore(GameManager.Instance.MatchDetails.UserScore(0), "daily");
+
+                    LoadDailyLeaderboard();
+                }
+            }
+            else
+            {
+                if (GameManager.Instance.MatchDetails.CurrentState == Match.MatchState.Ended)
+                {
+                    isShort = false;
+                    soloBottom.gameObject.SetActive(true);
+                    soloScore.text = GameManager.Instance.MatchDetails.SingleScore.ToString("N0");
+
+                    Srv.Instance.POST("Match/IsSoloHighScore", new Dictionary<string, string>() {{"matchId", GameManager.Instance.MatchDetails.Id.ToString()}}, s =>
+                    {
+                        var res = JsonConvert.DeserializeObject<string>(s);
+                        if (res == "Y")
+                        {
+                            highScoreLabel.gameObject.SetActive(true);
+                        }
+                    });
                 }
             }
         }
@@ -105,7 +137,7 @@ public class EndRoundWindow : WindowController
 
                 var leftWon = GameManager.Instance.MatchDetails.UserScore(0) > GameManager.Instance.MatchDetails.UserScore(1);
 
-                if(leftWon && ClientManager.Instance.UserId() == GameManager.Instance.MatchDetails.Users[0].Id || !leftWon && ClientManager.Instance.UserId() == GameManager.Instance.MatchDetails.Users[1].Id)
+                if (leftWon && ClientManager.Instance.UserId() == GameManager.Instance.MatchDetails.Users[0].Id || !leftWon && ClientManager.Instance.UserId() == GameManager.Instance.MatchDetails.Users[1].Id)
                     SoundManager.Instance.PlayClip("MatchWin");
                 else
                     SoundManager.Instance.PlayClip("MatchLoss");
@@ -153,7 +185,7 @@ public class EndRoundWindow : WindowController
                 wordGo.GetComponent<TextMeshProUGUI>().text = word.ToUpper();
 
                 ct++;
-                if(ct == 9)
+                if (ct == 9)
                     break;
             }
         }));
@@ -166,6 +198,44 @@ public class EndRoundWindow : WindowController
         {
             GetComponent<RectTransform>().SetHeight(normalHeight);
         }
+    }
+
+    private class LeaderboardRowData
+    {
+        public int Score;
+        public int Rank;
+        public string Username;
+    }
+
+    private void LoadDailyLeaderboard()
+    {
+        Srv.Instance.POST("Match/DailyLeaderbaord", null, s =>
+        {
+            var scores = JsonConvert.DeserializeObject<List<LeaderboardRowData>>(s);
+
+            foreach (var score in scores)
+            {
+                var row = GameObject.Instantiate(leaderboardRow) as GameObject;
+                row.transform.SetParent(leaderboardParent);
+                row.transform.ResetToOrigin();
+                var isMine = score.Username == ClientManager.Instance.myUserInfo.Username;
+
+                row.GetComponent<TextMeshProUGUI>().text = score.Rank + ". " + score.Username;
+                if(isMine)
+                    row.GetComponent<TextMeshProUGUI>().color = new Color(0.3f, 0.6f, 0.3f);
+
+                var comps = row.GetComponentsInChildren<TextMeshProUGUI>();
+                foreach (TextMeshProUGUI comp in comps)
+                {
+                    if (comp.gameObject.GetInstanceID() != row.GetInstanceID())
+                    {
+                        comp.text = score.Score.ToString("N0");
+                        if (isMine)
+                            comp.color = new Color(0.3f, 0.6f, 0.3f);
+                    }
+                }
+            }
+        });
     }
 
     public void OkClicked()

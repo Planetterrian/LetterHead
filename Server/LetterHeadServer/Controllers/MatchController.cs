@@ -41,7 +41,9 @@ namespace LetterHeadServer.Controllers
 
         public ActionResult RequestSoloGameStart()
         {
-            var match = Match.New(db, new List<User>() {currentUser});
+            var rounds = (Environment.UserName == "Pete") ? 1 : 9;
+            var match = Match.New(db, new List<User>() {currentUser}, rounds);
+
             match.Initizile(db);
 
             db.SaveChanges();
@@ -49,7 +51,94 @@ namespace LetterHeadServer.Controllers
             return Json(match.Id);
         }
 
-        
+
+        private class LeaderboardRowData
+        {
+            public int Score;
+            public int Rank;
+            public string Username;
+        }
+
+        public ActionResult IsSoloHighScore(int matchId)
+        {
+            var match = Match.GetById(db, matchId);
+            if (match == null)
+            {
+                return Error("Invalid Match");
+            }
+
+            if (!match.UserAuthorized(currentUser))
+            {
+                return Error("You can't access that match");
+            }
+
+            var highRound = db.Matches.Where(m => m.Users.Any(u => u.Id == currentUser.Id) && m.DailyGame == null && m.Users.Count == 1).OrderByDescending(m => m.SingleScore).FirstOrDefault()?.Id;
+            if (!highRound.HasValue || highRound == matchId)
+                return Json("Y");
+
+            return Json("N");
+        }
+
+        public ActionResult DailyLeaderbaord()
+        {
+            var curDailyId = DailyGame.Current().Id;
+
+            var top5 = db.Matches.Where(m => m.DailyGame != null && m.DailyGame.Id == curDailyId).OrderByDescending(m => m.SingleScore).Take(5).ToList();
+            Match currentUserMatch = null;
+            var currentUserRank = 0;
+
+            for (int index = 0; index < top5.Count; index++)
+            {
+                var match = top5[index];
+                if (match.Users[0].Id == currentUser.Id)
+                {
+                    currentUserMatch = match;
+                    currentUserRank = index + 1;
+                    break;
+                }
+            }
+
+            if (currentUserMatch == null)
+            {
+                var allMatches = db.Matches.Where(m => m.DailyGame != null && m.DailyGame.Id == DailyGame.Current().Id).OrderByDescending(m => m.SingleScore).ToList();
+                for (int index = 0; index < allMatches.Count; index++)
+                {
+                    var match = allMatches[index];
+                    if (match.Users[0].Id == currentUser.Id)
+                    {
+                        currentUserMatch = match;
+                        currentUserRank = index + 1;
+                        break;
+                    }
+                }
+            }
+
+            var ret = new List<LeaderboardRowData>();
+
+            for (int index = 0; index < top5.Count; index++)
+            {
+                var match = top5[index];
+
+                ret.Add(new LeaderboardRowData()
+                        {
+                            Rank = index + 1,
+                            Username = match.Users[0].Username,
+                            Score = match.SingleScore
+                        });
+            }
+
+            if (currentUserRank > 5)
+            {
+                ret.Add(new LeaderboardRowData()
+                {
+                    Rank = currentUserRank,
+                    Username = currentUserMatch.Users[0].Username,
+                    Score = currentUserMatch.SingleScore
+                });
+            }
+
+            return Json(ret);
+        }
 
         public ActionResult Random()
         {
