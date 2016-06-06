@@ -1,25 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using uTools;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class Lever : MonoBehaviour
 {
     public Image leverBase;
+    public uTweenAlpha leverBaseGlow;
+
     public Image leverHandle;
+    public uTweenAlpha leverHandleGlow;
 
-    public Sprite handleNormal;
-    public Sprite handleGlow;
-
-    public Sprite baseNormal;
-    public Sprite baseGlow;
 
     public float speed;
 
     public enum State
     {
-        Top, Middle, Bottom
+        On, Middle, Off
     }
 
     private RectTransform rect;
@@ -44,20 +43,22 @@ public class Lever : MonoBehaviour
     {
         switch (state)
         {
-            case State.Top:
+            case State.On:
                 destRotation = 65;
-                leverHandle.sprite = handleGlow;
-                leverBase.sprite = baseGlow;
+
+                leverBaseGlow.gameObject.SetActive(true);
+                leverHandleGlow.gameObject.SetActive(true);
                 break;
             case State.Middle:
                 destRotation = 0;
-                leverHandle.sprite = handleNormal;
-                leverBase.sprite = baseNormal;
+
+                leverBaseGlow.gameObject.SetActive(false);
+                leverHandleGlow.gameObject.SetActive(false);
                 break;
-            case State.Bottom:
+            case State.Off:
                 destRotation = -65;
-                leverHandle.sprite = handleNormal;
-                leverBase.sprite = baseNormal;
+                leverBaseGlow.gameObject.SetActive(false);
+                leverHandleGlow.gameObject.SetActive(false);
                 break;
             default:
                 throw new ArgumentOutOfRangeException("state", state, null);

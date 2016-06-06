@@ -93,7 +93,7 @@ public class GameGui : Singleton<GameGui>
             if (GameManager.Instance.CanStart())
             {
                 startButton.interactable = true;
-                lever.SetState(Lever.State.Top);
+                lever.SetState(Lever.State.On);
             }
             else
             {
@@ -104,7 +104,7 @@ public class GameGui : Singleton<GameGui>
         {
             startButton.interactable = false;
             shuffleButton.interactable = true;
-            lever.SetState(Lever.State.Bottom);
+            lever.SetState(Lever.State.Off);
         }
         else if (GameScene.Instance.CurrentState == GameScene.State.End)
         {
