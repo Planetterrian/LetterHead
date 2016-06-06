@@ -18,7 +18,7 @@ public class TimerElement : MonoBehaviour
     public float flashUnderTime = -1;
     public float soundUnderTime = -1;
 
-    public GameObject[] flashSprites;
+    public uTweenAlpha flashLightTween;
 
     public UnityEvent OnTimeExpired;
 
@@ -41,20 +41,11 @@ public class TimerElement : MonoBehaviour
 
             if (flashUnderTime != -1 && secondsRemaining < flashUnderTime && !tweenAlpha.enabled)
             {
+                flashLightTween.Play();
                 tweenAlpha.Play();
                 audio.Play();
             }
-
-            if (flashUnderTime != -1 && secondsRemaining < flashUnderTime)
-            {
-                var spriteToShow = Mathf.FloorToInt(secondsRemaining) % flashSprites.Length;
-                for (int index = 0; index < flashSprites.Length; index++)
-                {
-                    var flashSprite = flashSprites[index];
-                    flashSprite.SetActive(index == spriteToShow);
-                }
-            }
-
+            
             if (secondsRemaining <= 0)
             {
                 active = false;
@@ -102,7 +93,11 @@ public class TimerElement : MonoBehaviour
     public void Stop()
     {
         tweenAlpha.ResetToInitialState();
+        flashLightTween.ResetToInitialState();
+
+        flashLightTween.enabled = false;
         tweenAlpha.enabled = false;
+
         audio.Stop();
         active = false;
     }
