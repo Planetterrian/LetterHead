@@ -24,4 +24,9 @@ public class Tooltip : Singleton<Tooltip>
         mainText.text = text;
         fade.FadeIn();
     }
+
+    public void Hide()
+    {
+        fade.FadeOut();
+    }
 }

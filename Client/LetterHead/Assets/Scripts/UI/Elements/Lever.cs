@@ -45,7 +45,7 @@ public class Lever : MonoBehaviour
         switch (state)
         {
             case State.Top:
-                destRotation = -65;
+                destRotation = 65;
                 leverHandle.sprite = handleGlow;
                 leverBase.sprite = baseGlow;
                 break;
@@ -55,7 +55,7 @@ public class Lever : MonoBehaviour
                 leverBase.sprite = baseNormal;
                 break;
             case State.Bottom:
-                destRotation = 65;
+                destRotation = -65;
                 leverHandle.sprite = handleNormal;
                 leverBase.sprite = baseNormal;
                 break;

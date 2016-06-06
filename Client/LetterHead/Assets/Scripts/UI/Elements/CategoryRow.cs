@@ -22,12 +22,17 @@ public class CategoryRow : MonoBehaviour
         tooltipAnchor.transform.SetParent(transform);
         tooltipAnchor.transform.ResetToOrigin();
 
-        tooltipAnchor.GetComponent<RectTransform>().anchoredPosition = new Vector2(tooltipAnchor.GetComponent<RectTransform>().anchoredPosition.x, tooltipAnchor.GetComponent<RectTransform>().anchoredPosition.y + 45);
+        tooltipAnchor.GetComponent<RectTransform>().anchoredPosition = new Vector2(tooltipAnchor.GetComponent<RectTransform>().anchoredPosition.x, tooltipAnchor.GetComponent<RectTransform>().anchoredPosition.y + 78);
     }
 
-    public void OnNameClicked()
+    public void OnNameDown()
     {
         Tooltip.Instance.Show(category.description, tooltipAnchor.transform.position.y);
+    }
+
+    public void OnNameUp()
+    {
+        Tooltip.Instance.Hide();
     }
 
     public void OnScoreClicked()

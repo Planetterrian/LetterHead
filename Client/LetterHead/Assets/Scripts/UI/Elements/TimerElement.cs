@@ -18,6 +18,8 @@ public class TimerElement : MonoBehaviour
     public float flashUnderTime = -1;
     public float soundUnderTime = -1;
 
+    public GameObject[] flashSprites;
+
     public UnityEvent OnTimeExpired;
 
     private void Awake()
@@ -41,6 +43,16 @@ public class TimerElement : MonoBehaviour
             {
                 tweenAlpha.Play();
                 audio.Play();
+            }
+
+            if (flashUnderTime != -1 && secondsRemaining < flashUnderTime)
+            {
+                var spriteToShow = Mathf.FloorToInt(secondsRemaining) % flashSprites.Length;
+                for (int index = 0; index < flashSprites.Length; index++)
+                {
+                    var flashSprite = flashSprites[index];
+                    flashSprite.SetActive(index == spriteToShow);
+                }
             }
 
             if (secondsRemaining <= 0)
