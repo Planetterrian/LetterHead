@@ -25,6 +25,8 @@ public class GameGui : Singleton<GameGui>
     public AvatarBox leftAvatarBox;
     public AvatarBox rightAvatarBox;
 
+    public GameObject dailyGameBox;
+
     public GameObject leftPowerupsBox;
     public GameObject rightPowerupsBox;
 
@@ -165,6 +167,12 @@ public class GameGui : Singleton<GameGui>
         {
             rightAvatarBox.gameObject.SetActive(false);
             HidePowerups();
+
+            if (GameManager.Instance.MatchDetails.IsDaily)
+            {
+                dailyGameBox.gameObject.SetActive(true);
+                dailyGameBox.GetComponentInChildren<TextMeshProUGUI>().text = GameManager.Instance.MatchDetails.DateString;
+            }
         }
     }
 

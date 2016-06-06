@@ -10,8 +10,8 @@ namespace LetterHeadServer.Models
     {
         public int Id { get; set; }
         public string LettersEncoded { get; set; }
-        public DateTime StartDate;
-        public DateTime? EndDate;
+        public DateTime StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
 
         public string RoundLetters(int roundNumber)
         {

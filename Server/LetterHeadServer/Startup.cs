@@ -46,6 +46,7 @@ namespace MyWebApplication
                     ForMember(dest => dest.Rounds, opt => opt.MapFrom(src => src.Rounds.Select(r => r.DTO()))).
                     ForMember(dest => dest.Scores, opt => opt.MapFrom(src => src.GetScores())).
                     ForMember(dest => dest.IsDaily, opt => opt.MapFrom(src => src.DailyGame != null)).
+                    ForMember(dest => dest.DateString, opt => opt.MapFrom(src => src.DailyGame == null ? "" : src.DailyGame.StartDate.ToString("MMMMMM dd") + "\n" + src.DailyGame.StartDate.ToString("yyyy"))).
                     ForMember(dest => dest.CurrentUserId, opt => opt.MapFrom(src => src.CurrentUserTurn.Id));
 
                 cfg.CreateMap<MatchRound, LetterHeadShared.DTO.MatchRound>().

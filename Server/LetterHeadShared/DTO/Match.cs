@@ -23,7 +23,7 @@ namespace LetterHeadShared.DTO
         public int MaxRounds;
         public int SingleScore;
         public bool IsDaily;
-
+        public string DateString;
 
         public int UserScore(int userIndex)
         {
