@@ -150,7 +150,7 @@ public abstract class GameManager : Singleton<GameManager>
                 {
                     if (PlayerCount() == 1)
                     {
-                        TimerManager.AddEvent(1, () => GameScene.Instance.RefreshMatch());
+                        TimerManager.AddEvent(1.25f, () => GameScene.Instance.RefreshMatch());
                     }
                     TimerManager.AddEvent(1, () => GameGui.Instance.endRoundWindow.ShowModal());
                 });

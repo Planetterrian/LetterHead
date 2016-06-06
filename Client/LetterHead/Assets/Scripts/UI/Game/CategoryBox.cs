@@ -95,6 +95,7 @@ public class CategoryBox : Singleton<CategoryBox>, IGameHandler
         }
 
         totallabel.text = totalScore.ToString("N0");
+        ScoringManager.Instance.currentRoundScore = totalScore;
     }
 
     public void SetCurrentlySelectedCategory(Category category)

@@ -9,7 +9,7 @@ public class WindowController : MonoBehaviour
 
     public GameObject modal;
 
-    private void Awake()
+    protected virtual void Awake()
     {
         fade = GetComponent<CanvasFade>();
     }

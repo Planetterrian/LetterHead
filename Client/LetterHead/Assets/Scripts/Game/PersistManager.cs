@@ -71,6 +71,8 @@ public class PersistManager : Singleton<PersistManager>
         matchToLoadId = matchId;
         matchToLoadIsDaily = isDaily;
 
+        DialogWindowTM.Instance.Show("", "Loading.. please wait.", () => { }, () => { }, "");
+
         SceneManager.LoadScene("game");
     }
 

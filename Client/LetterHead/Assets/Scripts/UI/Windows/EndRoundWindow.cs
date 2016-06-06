@@ -28,6 +28,22 @@ public class EndRoundWindow : WindowController
     public uTweenTransform crownTween;
     public AvatarBox leftAvatarBox;
     public AvatarBox rightAvatarBox;
+    public TextMeshProUGUI topText;
+    public TextMeshProUGUI longWordsLabel;
+
+    public float shortHeight;
+    public string[] topMessages;
+    public string[] topMessages_noPoints;
+    public string endMatchMessages;
+
+    private float normalHeight;
+
+    protected override void Awake()
+    {
+        base.Awake();
+
+        normalHeight = GetComponent<RectTransform>().GetHeight();
+    }
 
     private void Start()
     {
@@ -38,17 +54,35 @@ public class EndRoundWindow : WindowController
         okButton.interactable = true;
         shopButton.interactable = true;
 
+        var isShort = false;
+        var myScore = ScoringManager.Instance.currentRoundScore;
+
+        if (GameManager.Instance.MatchDetails.CurrentState == Match.MatchState.Ended)
+        {
+            topText.text = endMatchMessages;
+        }
+        else
+        {
+            if(myScore > 0)
+                topText.text = topMessages[UnityEngine.Random.Range(0, topMessages.Length)];
+            else
+                topText.text = topMessages[UnityEngine.Random.Range(0, topMessages_noPoints.Length)];
+        }
+
         leaderboardButton.gameObject.SetActive(false);
 
         if (GameManager.Instance.PlayerCount() == 1)
         {
+            isShort = true;
             endTurnBottom.SetActive(false);
             endMatchBottom.SetActive(false);
+            shopButton.gameObject.SetActive(false);
 
             if (GameManager.Instance.MatchDetails.IsDaily)
             {
                 if (GameManager.Instance.MatchDetails.CurrentState == Match.MatchState.Ended)
                 {
+                    isShort = false;
                     leaderboardButton.gameObject.SetActive(true);
                     AchievementManager.Instance.ReportScore(GameManager.Instance.MatchDetails.UserScore(0), "daily");
                 }
@@ -86,6 +120,7 @@ public class EndRoundWindow : WindowController
             {
                 endMatchBottom.SetActive(false);
                 endTurnBottom.SetActive(true);
+                shopButton.gameObject.SetActive(true);
 
                 stealTimeToggle.interactable = PowerupManager.Instance.CanUsePowerup(Powerup.Type.StealTime);
                 stealLetterToggle.interactable = PowerupManager.Instance.CanUsePowerup(Powerup.Type.StealLetter);
@@ -94,9 +129,20 @@ public class EndRoundWindow : WindowController
 
         longWordGrid.transform.DeleteChildren();
 
+        longWordsLabel.text = "Finding missed BIG WORDS...";
+
         StartCoroutine(GetLongWords(5, ScoringManager.Instance.Words(), wordList =>
         {
             wordList = wordList.OrderByDescending(w => w.Length).ToList();
+
+            if (wordList.Count > 0)
+            {
+                longWordsLabel.text = "Here are some BIG WORDS you missed:";
+            }
+            else
+            {
+                longWordsLabel.text = "No BIG WORDS were missed";
+            }
 
             var ct = 0;
             foreach (var word in wordList)
@@ -111,6 +157,15 @@ public class EndRoundWindow : WindowController
                     break;
             }
         }));
+
+        if (isShort)
+        {
+            GetComponent<RectTransform>().SetHeight(shortHeight);
+        }
+        else
+        {
+            GetComponent<RectTransform>().SetHeight(normalHeight);
+        }
     }
 
     public void OkClicked()

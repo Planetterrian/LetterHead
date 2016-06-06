@@ -12,6 +12,7 @@ public class ScoringManager : Singleton<ScoringManager>, IGameHandler
     private Category currentCategory;
     public CategoryManager categoryManager = new CategoryManager();
     public int usedLetterIds;
+    public int currentRoundScore;
 
     private void Start()
     {
@@ -24,6 +25,7 @@ public class ScoringManager : Singleton<ScoringManager>, IGameHandler
         submittedWords.Clear();
         currentCategory = null;
         usedLetterIds = 0;
+        currentRoundScore = 0;
         OnWordsChanged();
     }
 

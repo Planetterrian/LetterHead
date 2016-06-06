@@ -34,6 +34,10 @@ public class GameScene : Singleton<GameScene>
     protected override void Awake()
     {
         base.Awake();
+
+        if(DialogWindowTM.Instance)
+            DialogWindowTM.Instance.Hide();
+
         SetForSingleplayer();
     }
 
