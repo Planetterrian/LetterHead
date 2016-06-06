@@ -40,6 +40,7 @@ public class ScoringManager : Singleton<ScoringManager>, IGameHandler
         else
         {
             SoundManager.Instance.PlayClip("Reject Word");
+            Speller.Instance.OnInvalidWord();
         }
     }
 

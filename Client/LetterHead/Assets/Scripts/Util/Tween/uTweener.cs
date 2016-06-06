@@ -217,7 +217,12 @@ namespace uTools {
 			return comp;
 		}
 
-		public void Play(PlayDirection dir = PlayDirection.Forward) {
+	    public void PlayForward()
+	    {
+            Play();
+	    }
+
+	    public void Play(PlayDirection dir = PlayDirection.Forward) {
 			mAmountPerDelta = (dir == PlayDirection.Reverse)? - Mathf.Abs(amountPerDelta): Mathf.Abs(amountPerDelta);
 			enabled = true;
 

@@ -13,6 +13,8 @@ public class Speller : Singleton<Speller>, IGameHandler
     public Color tileColor;
     public LinkedList<Tile> tiles = new LinkedList<Tile>();
 
+    public uTweener[] invalidTweens;
+
     private float tileWidthDivider = 1.75f;
 
     [Serializable]
@@ -195,5 +197,14 @@ public class Speller : Singleton<Speller>, IGameHandler
     public void OnReset()
     {
         ClearTiles();
+    }
+
+    public void OnInvalidWord()
+    {
+        foreach (var invalidTween in invalidTweens)
+        {
+            invalidTween.Rewind();
+            invalidTween.Play();
+        }
     }
 }
