@@ -387,7 +387,7 @@ public class EndRoundWindow : WindowController
                     availableLetters.RemoveAt(indexOfLetter);
                 }
 
-                if (canSpell && !existingWords.Contains(word))
+                if (canSpell && !existingWords.Contains(word.ToLower()))
                 {
                     yield return new WaitForEndOfFrame();
                     longWords.Add(word);

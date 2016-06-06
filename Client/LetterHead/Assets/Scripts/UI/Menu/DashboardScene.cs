@@ -16,6 +16,8 @@ public class DashboardScene : GuiScene
         pagination.DefaultPage = PersistManager.Instance.initialDashPage;
         pagination.SetCurrentPage(PersistManager.Instance.initialDashPage, true);
 
+        homePage.ClearMatches();
+
 
         if (PersistManager.Instance.NotificationsEnabled)
             NotificationManager.Instance.RegisterForNotifications();

@@ -15,6 +15,7 @@ public class HomePage : Page
     public Transform completedHeader;
 
     public Transform scrollParent;
+    public float pollDelay;
 
     private List<DashboardRow> myMatchRows = new List<DashboardRow>(); 
     private List<DashboardRow> theirMatchRows = new List<DashboardRow>(); 
@@ -22,6 +23,7 @@ public class HomePage : Page
 
     private List<Invite> invites = new List<Invite>();
     private bool matchesRefreshing;
+    private float lastPoll;
 
     void Start()
     {
@@ -51,6 +53,7 @@ public class HomePage : Page
             return;
 
         matchesRefreshing = true;
+        lastPoll = Time.time;
 
         Srv.Instance.POST("Match/List", null, s =>
         {
@@ -73,6 +76,26 @@ public class HomePage : Page
         });
     }
 
+    public void ClearMatches()
+    {
+        foreach (var dashboardRow in myMatchRows)
+        {
+            GameObject.Destroy(dashboardRow.gameObject);
+        }
+        foreach (var dashboardRow in theirMatchRows)
+        {
+            GameObject.Destroy(dashboardRow.gameObject);
+        }
+        foreach (var dashboardRow in completedMatchRows)
+        {
+            GameObject.Destroy(dashboardRow.gameObject);
+        }
+
+        myMatchRows.Clear();
+        theirMatchRows.Clear();
+        completedMatchRows.Clear();
+    }
+
     void OnShown()
     {
         RefreshMatches();
@@ -80,6 +103,11 @@ public class HomePage : Page
 
     void Update()
     {
+        if (Time.time - lastPoll > pollDelay)
+        {
+            RefreshMatches();
+        }
+
         if (invites.Count > 0 && !DialogWindowTM.Instance.gameObject.activeInHierarchy)
         {
             var invite = invites[0];
