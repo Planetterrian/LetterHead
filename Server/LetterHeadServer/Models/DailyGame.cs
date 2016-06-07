@@ -71,6 +71,11 @@ namespace LetterHeadServer.Models
             context.SaveChanges();
         }
 
+        public bool CanStart()
+        {
+            return (DateTime.Now - StartDate).TotalHours < 23;
+        }
+
         public Match CreateMatchForUser(ApplicationDbContext context, User currentUser)
         {
             var rounds = (Environment.UserName == "Pete") ? 1 : 9;

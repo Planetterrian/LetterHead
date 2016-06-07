@@ -20,6 +20,7 @@ namespace LetterHeadShared.DTO
         public int RoundTimeSeconds;
         public int CurrentRoundNumber;
         public int CurrentUserId;
+        public int ResignerUserId;
         public int MaxRounds;
         public int SingleScore;
         public bool IsDaily;

@@ -153,14 +153,14 @@ public class GameGui : Singleton<GameGui>
     {
         OnGameStateChanged();
 
-        SetAvatarBox(leftAvatarBox, 0);
+        SetAvatarBox(leftAvatarBox, GameManager.Instance.MatchDetails.Users[0].Id == ClientManager.Instance.UserId() ? 0 : 1);
         timer.SetTimer(GameManager.Instance.MatchDetails.RoundTimeSeconds);
         roundNumberLabel.text = "Round " + (GameManager.Instance.MatchDetails.CurrentRoundNumber + 1) + "/" + GameManager.Instance.MatchDetails.MaxRounds;
 
         if (GameManager.Instance.MatchDetails.Users.Count > 1)
         {
             rightAvatarBox.gameObject.SetActive(true);
-            SetAvatarBox(rightAvatarBox, 1);
+            SetAvatarBox(rightAvatarBox, GameManager.Instance.MatchDetails.Users[0].Id != ClientManager.Instance.UserId() ? 0 : 1);
             ShowPowerups();
         }
         else

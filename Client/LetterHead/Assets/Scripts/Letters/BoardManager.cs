@@ -490,4 +490,12 @@ public class BoardManager : Singleton<BoardManager>
 
         return null;
     }
+
+    public void ColorSelectedTiles(Color color)
+    {
+        foreach (var selectedTile in SelectedTiles())
+        {
+            selectedTile.SetColor(color);
+        }
+    }
 }

@@ -122,10 +122,15 @@ public class DashboardRow : MonoBehaviour
         backBoxTheir.SetActive(type == RowType.TheirTurn);
         backBoxComplete.SetActive(type == RowType.Completed);
 
+        var isFirstPlayer = MatchInfo.IndexOfUser(ClientManager.Instance.UserId()) == 0;
+
         usernameLabel.text = opponentInfo.Username;
         avatarBox.SetAvatarImage(opponentInfo.AvatarUrl);
         roundLabel.text = "Round " + (MatchInfo.CurrentRoundNumber + 1) + "/" + MatchInfo.MaxRounds;
-        myScoreLabel.text = "My Score: " + (MatchInfo.IndexOfUser(ClientManager.Instance.UserId()) == 0 ? score1.ToString() : score2.ToString());
+
+        myScoreLabel.text = "My Score: " + (isFirstPlayer ? score1.ToString() : score2.ToString());
+        if (ClientManager.Instance.UserId() == matchInfo.ResignerUserId)
+            myScoreLabel.text += " <size=80%>(Resigned)</size>";
 
         if (MatchInfo.Users.Count == 1)
         {
@@ -138,7 +143,10 @@ public class DashboardRow : MonoBehaviour
         }
         else
         {
-            theirScoreLabel.text = "Their Score: " + (MatchInfo.IndexOfUser(ClientManager.Instance.UserId()) == 0 ? score2.ToString() : score1.ToString());
+            theirScoreLabel.text = "Their Score: " + (isFirstPlayer ? score2.ToString() : score1.ToString());
+
+            if (opponentInfo.Id == matchInfo.ResignerUserId)
+                theirScoreLabel.text += " <size=80%>(Resigned)</size>";
         }
 
     }

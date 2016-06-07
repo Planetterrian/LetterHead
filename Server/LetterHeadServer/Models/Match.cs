@@ -58,6 +58,8 @@ namespace LetterHeadServer.Models
         [Index]
         public virtual User Winner { get; set; }
 
+        public virtual User Resigner { get; set; }
+
         [Index]
         public LetterHeadShared.DTO.Match.MatchState CurrentState { get; set; }
 
@@ -285,8 +287,9 @@ namespace LetterHeadServer.Models
         {
             CurrentState = LetterHeadShared.DTO.Match.MatchState.Ended;
             Winner = Users.FirstOrDefault(u => u.Id != resigner.Id);
+            Resigner = resigner;
         }
-
+        
         public void ClearMatch(User clearer)
         {
             if(ClearedUserIds.Contains(clearer.Id))

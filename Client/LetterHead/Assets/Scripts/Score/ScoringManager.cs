@@ -13,6 +13,7 @@ public class ScoringManager : Singleton<ScoringManager>, IGameHandler
     public CategoryManager categoryManager = new CategoryManager();
     public int usedLetterIds;
     public int currentRoundScore;
+    public Color usedTileColor;
 
     private void Start()
     {
@@ -77,6 +78,8 @@ public class ScoringManager : Singleton<ScoringManager>, IGameHandler
             }
 
         }
+
+        BoardManager.Instance.ColorSelectedTiles(usedTileColor);
 
         if (PersistManager.Instance.ClearWord)
             BoardManager.Instance.ClearCurrentWord();
