@@ -204,7 +204,7 @@ public class GameGui : Singleton<GameGui>
 
     public void OnNextClicked()
     {
-        DialogWindowTM.Instance.Show("Next Match", "Finding next match..", () => { }, null, "");
+        DialogWindowTM.Instance.Show("", "Finding next match..", () => { }, null, "");
         Srv.Instance.POST("User/NextAvailableMatch", new Dictionary<string, string>() {{"currentMatchId", GameManager.Instance.MatchId.ToString()}}, s =>
         {
             var match = JsonConvert.DeserializeObject<Match>(s);

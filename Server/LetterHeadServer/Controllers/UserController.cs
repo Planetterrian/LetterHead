@@ -246,8 +246,12 @@ namespace LetterHeadServer.Controllers
         [AuthenticationFilter()]
         public ActionResult NextAvailableMatch(int currentMatchId)
         {
-            var match = currentUser.Matches.FirstOrDefault(m => m.CurrentState != Match.MatchState.Ended && m.CurrentUserTurn.Id == currentUser.Id && m.Id != currentMatchId);
-            return Json(match);
+            var match = currentUser.Matches.Where(m => m.CurrentState != Match.MatchState.Ended && m.CurrentUserTurn.Id == currentUser.Id && m.Id > currentMatchId).OrderBy(m => m.Id).FirstOrDefault();
+
+            if(match == null)
+                match = currentUser.Matches.Where(m => m.CurrentState != Match.MatchState.Ended && m.CurrentUserTurn.Id == currentUser.Id && m.Id != currentMatchId).OrderBy(m => m.Id).FirstOrDefault();
+
+            return Json(match?.DTO());
         }
 
         public ActionResult LoginEmail([Bind(Exclude = "Id")] UserRegistrationModel model)
