@@ -104,8 +104,8 @@ namespace LetterHeadServer.Models
         public UserStats Stats(ApplicationDbContext db)
         {
             var stats = new UserStats();
-            stats.gamesWon = Matches.Count(m => m.Winner != null && m.Winner.Id == Id);
-            stats.gamesLost = Matches.Count(m => m.Winner != null && m.Winner.Id != Id);
+            stats.gamesWon = Matches.Count(m => m.Winner != null && m.Winner.Id == Id && m.Users.Count > 1);
+            stats.gamesLost = Matches.Count(m => m.Winner != null && m.Winner.Id != Id && m.Users.Count > 1);
             stats.gamesPlayed = stats.gamesWon + stats.gamesLost;
 
             var rounds = db.MatchRounds.Where(m => m.User.Id == Id);

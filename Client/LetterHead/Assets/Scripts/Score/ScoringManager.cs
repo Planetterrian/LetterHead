@@ -34,7 +34,7 @@ public class ScoringManager : Singleton<ScoringManager>, IGameHandler
     {
         var word = Speller.Instance.CurrentWord();
 
-        if (WordManager.Instance.IsWordValid(word) && CanAcceptWord(word))
+        if (WordManager.Instance.IsWordValid(word) && CanAcceptWord(word) && !WordManager.Instance.IsBadWord(word))
         {
             OnValidWordSubmitted(word);
         }

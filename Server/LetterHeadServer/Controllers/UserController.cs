@@ -8,6 +8,7 @@ using Hangfire;
 using LetterHeadServer.Classes;
 using LetterHeadServer.Models;
 using LetterHeadShared;
+using Match = LetterHeadShared.DTO.Match;
 
 namespace LetterHeadServer.Controllers
 {
@@ -242,6 +243,12 @@ namespace LetterHeadServer.Controllers
             return Json(user.Stats(db));
         }
 
+        [AuthenticationFilter()]
+        public ActionResult NextAvailableMatch(int currentMatchId)
+        {
+            var match = currentUser.Matches.FirstOrDefault(m => m.CurrentState != Match.MatchState.Ended && m.CurrentUserTurn.Id == currentUser.Id && m.Id != currentMatchId);
+            return Json(match);
+        }
 
         public ActionResult LoginEmail([Bind(Exclude = "Id")] UserRegistrationModel model)
         {

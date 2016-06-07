@@ -16,6 +16,9 @@ public class WordManager : Singleton<WordManager>
 
     private Dawg<bool> dawg;
 
+    private string badWordCsv = "anal,anus,arse,ass,ballsack,balls,bastard,bitch,biatch,bloody,blowjob,blow job,bollock,bollok,boner,boob,bugger,bum,butt,buttplug,clitoris,cock,coon,crap,cunt,damn,dick,dildo,dyke,fag,feck,fellate,fellatio,felching,fuck,f u c k,fudgepacker,fudge packer,flange,Goddamn,God damn,hell,homo,jerk,jizz,knobend,knob end,labia,lmao,lmfao,muff,nigger,nigga,omg,penis,piss,poop,prick,pube,pussy,queer,scrotum,sex,shit,s hit,sh1t,slut,smegma,spunk,tit,tosser,turd,twat,vagina,wank,whore,wtf";
+    private string[] badWords; 
+
     public class SpelledWord
     {
         public LinkedList<Tile> tiles; 
@@ -33,9 +36,16 @@ public class WordManager : Singleton<WordManager>
 	void Start ()
 	{
         //BuildDawg();
-	    //BuildPowrWordDawg();
+        //BuildPowrWordDawg();
+
+	    badWords = badWordCsv.Split(',');
 
         StartCoroutine(LoadWordList());
+    }
+
+    public bool IsBadWord(string word)
+    {
+        return badWords.Contains(word.ToLower());
     }
 
     private void BuildDawg()

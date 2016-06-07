@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using LetterHeadShared.DTO;
+using Newtonsoft.Json;
 using TMPro;
 using uTools;
 using UnityEngine;
@@ -203,7 +204,23 @@ public class GameGui : Singleton<GameGui>
 
     public void OnNextClicked()
     {
+        DialogWindowTM.Instance.Show("Next Match", "Finding next match..", () => { }, null, "");
+        Srv.Instance.POST("User/NextAvailableMatch", new Dictionary<string, string>() {{"currentMatchId", GameManager.Instance.MatchId.ToString()}}, s =>
+        {
+            var match = JsonConvert.DeserializeObject<Match>(s);
+            if (match == null)
+            {
+                DialogWindowTM.Instance.Show("Next Match", "No additional matches found.", () => {}, () =>
+                {
+                    PersistManager.Instance.LoadMenu();
+                }, "OK", "MENU");
 
+            }
+            else
+            {
+                PersistManager.Instance.LoadMatch(match.Id, false);
+            }
+        }, DialogWindowTM.Instance.Error);
     }
 
     public void OnShieldUsed()
