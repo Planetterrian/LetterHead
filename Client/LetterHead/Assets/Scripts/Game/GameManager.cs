@@ -34,6 +34,7 @@ public abstract class GameManager : Singleton<GameManager>
     }
 
     public UnityEvent OnMatchDetailsLoadedEvent;
+    private bool isDestroyed;
 
     public MatchRound MyCurrentRound()
     {
@@ -144,18 +145,38 @@ public abstract class GameManager : Singleton<GameManager>
             { "categoryName", ScoringManager.Instance.SelectedCategory().name }
         }, s =>
         {
+            if(isDestroyed)
+                return;
+
             if (CurrentRound().CurrentState == MatchRound.RoundState.Ended)
             {
                 LoadMatchDetails(() =>
                 {
                     if (PlayerCount() == 1)
                     {
-                        TimerManager.AddEvent(1.25f, () => GameScene.Instance.RefreshMatch());
+                        TimerManager.AddEvent(1.25f, () =>
+                        {
+                            if (isDestroyed)
+                                return;
+
+                            GameScene.Instance.RefreshMatch();
+                        });
                     }
-                    TimerManager.AddEvent(1, () => GameGui.Instance.endRoundWindow.ShowModal());
+                    TimerManager.AddEvent(1, () =>
+                    {
+                        if (isDestroyed)
+                            return;
+
+                        GameGui.Instance.endRoundWindow.ShowModal();
+                    });
                 });
             }
         });
+    }
+
+    void OnDestroy()
+    {
+        isDestroyed = true;
     }
 
     public virtual void OnGameStateChanged()
