@@ -34,6 +34,7 @@ namespace LetterHeadServer.Models
         public string FacebookId { get; set; }
         public string FacebookToken { get; set; }
         public DateTime SignupDate { get; set; }
+        public DateTime? LastFreePowerup { get; set; }
 
         public string AndroidNotificationToken { get; set; }
         public string IosNotificationToken { get; set; }
@@ -130,6 +131,18 @@ namespace LetterHeadServer.Models
                 return;
 
             BackgroundJob.Enqueue(() => new BackendController().SendNotification(Id, message));
+        }
+
+        public bool CanDoDailyPowerup()
+        {
+            if (!LastFreePowerup.HasValue)
+                return true;
+
+            var timeUtc = DateTime.UtcNow;
+            TimeZoneInfo easternZone = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
+            DateTime easternTime = TimeZoneInfo.ConvertTimeFromUtc(timeUtc, easternZone);
+
+            return easternTime.Date > LastFreePowerup.Value;
         }
     }
 }

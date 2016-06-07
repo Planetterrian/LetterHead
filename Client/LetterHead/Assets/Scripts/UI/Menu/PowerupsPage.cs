@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using LetterHeadShared;
+using Newtonsoft.Json;
 using UI.Pagination;
 using UnityEngine;
 using UnityEngine.UI;
@@ -22,12 +23,13 @@ public class PowerupsPage : Page
             powerupRow.SetCount(ClientManager.Instance.PowerupCount((Powerup.Type)index));
         }
 
-        var lastPowerup = DateTime.Now.AddDays(-30);
-        var lastDailyStr = PlayerPrefs.GetString("LastDailyPowerup", null);
-        if (!string.IsNullOrEmpty(lastDailyStr))
-            lastPowerup = DateTime.Parse(lastDailyStr);
+        dailyPowerupButton.interactable = false;
 
-        dailyPowerupButton.interactable = (DateTime.Now - lastPowerup).TotalHours > 23.5f;
+        Srv.Instance.POST("User/CanDoDailyPowerup", null, s =>
+        {
+            var can = JsonConvert.DeserializeObject<bool>(s);
+            dailyPowerupButton.interactable = can;
+        });
     }
 
 

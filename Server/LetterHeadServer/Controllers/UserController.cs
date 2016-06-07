@@ -193,13 +193,21 @@ namespace LetterHeadServer.Controllers
             return false;
         }
 
+        [AuthenticationFilter()]
+        public ActionResult CanDoDailyPowerup()
+        {
+            return Json(currentUser.CanDoDailyPowerup());
+        }
 
         [AuthenticationFilter()]
         public ActionResult DailyPowerup(int type)
         {
+            if (!currentUser.CanDoDailyPowerup())
+                return Error("Can't do daily powerup!");
+
             var powerupType = (Powerup.Type) type;
             currentUser.AddPowerup(powerupType, 1);
-
+            currentUser.LastFreePowerup = DateTime.Now;
             db.SaveChanges();
 
             return Okay();
