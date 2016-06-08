@@ -105,6 +105,7 @@ public class ScoringManager : Singleton<ScoringManager>, IGameHandler
         }
 
         usedLetterIds = GameManager.Instance.CurrentRound().UsedLetterIds;
+        BoardManager.Instance.ColorTiles(usedLetterIds, usedTileColor);
     }
 
     public List<string> Words()

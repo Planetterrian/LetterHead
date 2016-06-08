@@ -87,19 +87,16 @@ namespace LetterHeadServer.Models
         public static Match New(ApplicationDbContext db, List<User> users, int roundCount = 9)
         {
             var roundTime = 120;
-
-            if (Environment.UserName == "Pete")
-                roundTime = 50;
-
-                var match = new Match()
-                   {
-                       CurrentState = LetterHeadShared.DTO.Match.MatchState.WaitingForPlayers,
-                       CreatedOn = DateTime.Now,
-                       RoundTimeSeconds = roundTime,
-                       Rounds = new List<MatchRound>(),
-                       Users = users,
-                        MaxRounds = roundCount,
-                };
+            
+            var match = new Match()
+                {
+                    CurrentState = LetterHeadShared.DTO.Match.MatchState.WaitingForPlayers,
+                    CreatedOn = DateTime.Now,
+                    RoundTimeSeconds = roundTime,
+                    Rounds = new List<MatchRound>(),
+                    Users = users,
+                    MaxRounds = roundCount,
+            };
 
             if(users.Count > 0)
                 match.CurrentUserTurn = users[0];

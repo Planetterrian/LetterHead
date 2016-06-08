@@ -498,4 +498,15 @@ public class BoardManager : Singleton<BoardManager>
             selectedTile.SetColor(color);
         }
     }
+
+    public void ColorTiles(int usedLetterIds, Color color)
+    {
+        foreach (var tile in tiles)
+        {
+            if (((1 << tile.ID) & usedLetterIds) == (1 << tile.ID))
+            {
+                tile.SetColor(color);
+            }
+        }
+    }
 }
