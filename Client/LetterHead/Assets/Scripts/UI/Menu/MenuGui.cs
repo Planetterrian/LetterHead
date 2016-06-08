@@ -10,6 +10,8 @@ public class MenuGui : Singleton<MenuGui>
     public LoginScene loginScene;
     public DashboardScene dashboardScene;
 
+    public AudioClip menuMusic;
+
     protected override void Awake()
     {
         base.Awake();
@@ -19,6 +21,8 @@ public class MenuGui : Singleton<MenuGui>
 
     private void Start()
     {
+        MusicManager.Instance.PlayMusic(menuMusic);
+
         if (!string.IsNullOrEmpty(ClientManager.Instance.SessionId))
         {
             ClientManager.Instance.RefreshMyInfo(true, (state) =>
