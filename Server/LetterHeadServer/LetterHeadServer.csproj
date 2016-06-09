@@ -248,6 +248,7 @@
     <None Include="App_Data\letterhead-push.pfx" />
     <None Include="Properties\PublishProfiles\Azure.pubxml" />
     <None Include="Properties\PublishProfiles\letterhead %282%29.pubxml" />
+    <None Include="Properties\PublishProfiles\letterhead %283%29.pubxml" />
     <None Include="Properties\PublishProfiles\letterhead.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />

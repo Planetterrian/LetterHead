@@ -380,9 +380,9 @@ namespace LetterHeadServer.Models
         private int RoundIndex(MatchRound round)
         {
             var roundNumber = round.Number;
-            var userIndexOffset = TurnOrderUserIds.IndexOf(round.User.Id);
+            var indexOffset = TurnOrderUserIds.IndexOf(round.User.Id);
 
-            return roundNumber + userIndexOffset;
+            return roundNumber + indexOffset;
         }
 
         // Returns the next round that is an opponent's (or the current one if it's the opponent's turn)
