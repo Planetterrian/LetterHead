@@ -22,6 +22,7 @@ public class EndRoundWindow : WindowController
     public Button okButton;
     public Button shopButton;
     public Button leaderboardButton;
+    public Button rematchButton;
 
     public GameObject endTurnBottom;
     public GameObject endMatchBottom;
@@ -64,6 +65,7 @@ public class EndRoundWindow : WindowController
         okButton.interactable = true;
         shopButton.interactable = true;
         highScoreLabel.gameObject.SetActive(false);
+        rematchButton.gameObject.SetActive(false);
 
         var isShort = false;
         var myScore = ScoringManager.Instance.currentRoundScore;
@@ -126,6 +128,8 @@ public class EndRoundWindow : WindowController
             {
                 endMatchBottom.SetActive(true);
                 endTurnBottom.SetActive(false);
+                rematchButton.gameObject.SetActive(true);
+
 
                 leftAvatarBox.SetAvatarImage(GameManager.Instance.MatchDetails.Users[0].AvatarUrl);
                 leftAvatarBox.SetName(GameManager.Instance.MatchDetails.Users[0].Username);
@@ -406,5 +410,15 @@ public class EndRoundWindow : WindowController
     public void LeaderboardClicked()
     {
         NPBinding.GameServices.ShowLeaderboardUIWithGlobalID("daily", eLeaderboardTimeScope.WEEK, error => { });
+    }
+
+    public void RematchClicked()
+    {
+        DialogWindowTM.Instance.Show("Invite", "Sending invite to " + GameManager.Instance.OpponentUserName(), () => { }, () => { }, "");
+        Srv.Instance.POST("Match/Invite", new Dictionary<string, string>() { { "userId", GameManager.Instance.OpponentUserId().ToString() } },
+            (s) =>
+            {
+                DialogWindowTM.Instance.Show("Invite", "Invite sent!", () => { });
+            }, DialogWindowTM.Instance.Error);
     }
 }

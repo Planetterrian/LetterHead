@@ -252,4 +252,18 @@ public abstract class GameManager : Singleton<GameManager>
 
         return -1;
     }
+
+    public string OpponentUserName()
+    {
+        if (MatchDetails == null)
+            return "";
+
+        foreach (var userInfo in MatchDetails.Users)
+        {
+            if (userInfo.Id != ClientManager.Instance.UserId())
+                return userInfo.Username;
+        }
+
+        return "";
+    }
 }

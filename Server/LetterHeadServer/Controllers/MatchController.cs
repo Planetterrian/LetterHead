@@ -162,7 +162,7 @@ namespace LetterHeadServer.Controllers
             }
             else
             {
-                var match = Match.New(db, new List<User>() {currentUser});
+                var match = Match.New(db, new List<User>() {currentUser}, 1);
             }
 
             db.SaveChanges();
@@ -289,12 +289,12 @@ namespace LetterHeadServer.Controllers
             var lastBuzz = match.Buzzes.Where(b => b.SourceUser.Id == currentUser.Id).OrderByDescending(b => b.date).FirstOrDefault();
             if (lastBuzz != null && (DateTime.Now - lastBuzz.date).TotalHours < 12)
             {
-                return Error("Please wait before buzzing again");
+                return Error("Please wait before sending another poke");
             }
 
             if ((DateTime.Now - match.CurrentRound().ActivatedOn.Value).TotalHours < 12)
             {
-                return Error("Please wait before buzzing");
+                return Error("Please wait before poking");
             }
             
             match.Buzzes.Add(new MatchBuzz()
@@ -309,8 +309,8 @@ namespace LetterHeadServer.Controllers
 
             match.CurrentUserTurn.SendNotification(new NotificationDetails()
                                                    {
-                                                       content = currentUser.Username + " buzzed you! It's your turn.",
-                                                       title = "LetterHead - Buzz",
+                                                       content = currentUser.Username + " poked you! It's your turn.",
+                                                       title = "LetterHead - Poke",
                                                        tag = "buzz" + currentUser.Username,
                                                        type = NotificationDetails.Type.Buzz
                                                    });
