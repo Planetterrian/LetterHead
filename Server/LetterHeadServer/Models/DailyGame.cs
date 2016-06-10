@@ -78,7 +78,7 @@ namespace LetterHeadServer.Models
 
         public Match CreateMatchForUser(ApplicationDbContext context, User currentUser)
         {
-            var rounds = (Environment.UserName == "Pete") ? 1 : 9;
+            var rounds = (Environment.UserName == "Pete") ? 2 : 9;
 
             var match = Match.New(context, new List<User>(){ currentUser }, rounds);
             match.DailyGame = this;

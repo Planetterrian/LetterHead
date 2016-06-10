@@ -77,7 +77,7 @@ public class EndRoundWindow : WindowController
             if (myScore > 0)
                 topText.text = topMessages[UnityEngine.Random.Range(0, topMessages.Length)];
             else
-                topText.text = topMessages[UnityEngine.Random.Range(0, topMessages_noPoints.Length)];
+                topText.text = topMessages_noPoints[UnityEngine.Random.Range(0, topMessages_noPoints.Length)];
         }
 
         leaderboardButton.gameObject.SetActive(false);

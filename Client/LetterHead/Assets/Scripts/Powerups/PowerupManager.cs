@@ -36,16 +36,16 @@ public class PowerupManager : Singleton<PowerupManager>
         if(GameManager.Instance.MatchDetails == null)
             return;
 
-        var active = GameManager.Instance.MatchDetails.HasDoOverBeenUsed(GameManager.Instance.OpponentUserId());
+        var active = !GameManager.Instance.MatchDetails.HasDoOverBeenUsed(GameManager.Instance.OpponentUserId());
         opponentpowerupButtons[(int)Powerup.Type.DoOver].SetState(active);
 
-        active = GameManager.Instance.MatchDetails.HasShieldBeenUsed(GameManager.Instance.OpponentUserId());
+        active = !GameManager.Instance.MatchDetails.HasShieldBeenUsed(GameManager.Instance.OpponentUserId());
         opponentpowerupButtons[(int)Powerup.Type.Shield].SetState(active);
 
-        active = GameManager.Instance.MatchDetails.HasStealTimeBeenUsed(GameManager.Instance.OpponentUserId());
+        active = !GameManager.Instance.MatchDetails.HasStealTimeBeenUsed(GameManager.Instance.OpponentUserId());
         opponentpowerupButtons[(int)Powerup.Type.StealLetter].SetState(active);
 
-        active = GameManager.Instance.MatchDetails.HasStealLetterBeenUsed(GameManager.Instance.OpponentUserId());
+        active = !GameManager.Instance.MatchDetails.HasStealLetterBeenUsed(GameManager.Instance.OpponentUserId());
         opponentpowerupButtons[(int)Powerup.Type.StealTime].SetState(active);
     }
 
