@@ -182,7 +182,7 @@ namespace LetterHeadServer.Classes
                         user.AndroidNotificationToken
                     },
                 Data = JObject.Parse("{\"content_title\" : \"" + message.title.Replace("\"", "\\\"") + "\", \"content_text\":\"" + message.content.Replace("\"", "\\\"") + "\", \"ticker_text\" : \"" + message.content.Replace("\"", "\\\"") + "\", " +
-                                     "\"tag\" : \"" + message.tag.Replace("\"", "\\\"") + "\", \"large - icon\" : \"NativePlugins.png\", " +
+                                     "\"tag\" : \"" + message.tag.Replace("\"", "\\\"") + "\", \"custom-sound\" : \"TurnNotification.wav\", " +
                                      "\"user_info\": { \"alertType\"  : \"" + (int)message.type + "\" } }")
             });
             // Stop the broker, wait for it to finish   

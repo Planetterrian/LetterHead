@@ -25,15 +25,15 @@ namespace LetterHeadServer.Controllers
                 return Error("No daily game available");
             }
 
-            if (!dailyGame.CanStart())
-            {
-                return Error("The daily game is about to end. Try again soon.");
-            }
-
             var match = currentUser.GetMatch(db, dailyGame);
             if (match != null && match.CurrentState == LetterHeadShared.DTO.Match.MatchState.Ended)
             {
                 return Error("You have already completed your daily game");
+            }
+
+            if (!dailyGame.CanStart())
+            {
+                return Error("The daily game is about to end. Try again soon.");
             }
 
             if (match == null)

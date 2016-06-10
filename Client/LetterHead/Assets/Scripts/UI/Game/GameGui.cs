@@ -225,11 +225,11 @@ public class GameGui : Singleton<GameGui>
 
     public void OnShieldUsed()
     {
-        shieldTween.gameObject.SetActive(true);
-        shieldTween.ResetToInitialState();
-        shieldTween.Play();
+        //shieldTween.gameObject.SetActive(true);
+        //shieldTween.ResetToInitialState();
+        //shieldTween.Play();
 
-        TimerManager.AddEvent(1.2f, () => shieldTween.Play(PlayDirection.Reverse));
-        TimerManager.AddEvent(3f, () => shieldTween.gameObject.SetActive(false));
+        //TimerManager.AddEvent(1.2f, () => shieldTween.Play(PlayDirection.Reverse));
+        //TimerManager.AddEvent(3f, () => shieldTween.gameObject.SetActive(false));
     }
 }
