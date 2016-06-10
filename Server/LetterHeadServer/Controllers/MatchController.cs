@@ -162,7 +162,7 @@ namespace LetterHeadServer.Controllers
             }
             else
             {
-                var match = Match.New(db, new List<User>() {currentUser}, 1);
+                var match = Match.New(db, new List<User>() {currentUser});
             }
 
             db.SaveChanges();
