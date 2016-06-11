@@ -167,7 +167,8 @@ public class EndRoundWindow : WindowController
 
         longWordsLabel.text = "Finding missed BIG WORDS...";
 
-        StartCoroutine(GetLongWords(5, ScoringManager.Instance.Words(), wordList =>
+        var myWords = new List<string>(ScoringManager.Instance.Words());
+        StartCoroutine(GetLongWords(5, myWords, wordList =>
         {
             wordList = wordList.OrderByDescending(w => w.Length).ToList();
 

@@ -32,8 +32,8 @@ namespace LetterHeadServer.Models
             for (int i = 0; i < RoundCount; i++)
             {
                 letterArray.Add(BoardHelper.GenerateBoard());
+                //letterArray.Add("nipiusreij");
             }
-
 
             db.DailyGames.Add(new DailyGame()
             {

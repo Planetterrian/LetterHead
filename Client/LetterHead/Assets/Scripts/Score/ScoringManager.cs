@@ -23,6 +23,7 @@ public class ScoringManager : Singleton<ScoringManager>, IGameHandler
 
     public void OnReset()
     {
+        Debug.Log("Score Reset");
         submittedWords.Clear();
         currentCategory = null;
         usedLetterIds = 0;

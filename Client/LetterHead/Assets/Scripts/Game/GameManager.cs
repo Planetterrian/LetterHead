@@ -152,22 +152,23 @@ public abstract class GameManager : Singleton<GameManager>
             {
                 LoadMatchDetails(() =>
                 {
-                    if (PlayerCount() == 1)
-                    {
-                        TimerManager.AddEvent(1.25f, () =>
-                        {
-                            if (isDestroyed)
-                                return;
-
-                            GameScene.Instance.RefreshMatch();
-                        });
-                    }
                     TimerManager.AddEvent(1, () =>
                     {
                         if (isDestroyed)
                             return;
 
                         GameGui.Instance.endRoundWindow.ShowModal();
+
+                        if (PlayerCount() == 1)
+                        {
+                            TimerManager.AddEvent(0.25f, () =>
+                            {
+                                if (isDestroyed)
+                                    return;
+
+                                GameScene.Instance.RefreshMatch();
+                            });
+                        }
                     });
                 });
             }
