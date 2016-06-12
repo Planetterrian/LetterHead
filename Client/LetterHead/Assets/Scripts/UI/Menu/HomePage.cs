@@ -202,4 +202,16 @@ public class HomePage : Page
             DialogWindowTM.Instance.Show("Buzz", "You buzzed your opponent.", () => { });
         }, DialogWindowTM.Instance.Error);
     }
+
+    public void Rematch(Match matchInfo)
+    {
+        var opponentInfo = matchInfo.Users.FirstOrDefault(u => u.Id != ClientManager.Instance.UserId());
+
+        DialogWindowTM.Instance.Show("Invite", "Sending invite to " + opponentInfo.Username, () => { }, () => { }, "");
+        Srv.Instance.POST("Match/Invite", new Dictionary<string, string>() { { "userId", opponentInfo.Id.ToString() } },
+            (s) =>
+            {
+                DialogWindowTM.Instance.Show("Invite", "Invite sent!", () => { });
+            }, DialogWindowTM.Instance.Error);
+    }
 }

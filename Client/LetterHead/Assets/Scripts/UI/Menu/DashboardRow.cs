@@ -84,6 +84,11 @@ public class DashboardRow : MonoBehaviour
         homePage.ClearMatch(MatchInfo);
     }
 
+    public void OnRematchClicked()
+    {
+        homePage.Rematch(MatchInfo);
+    }
+
     private void ShowBackBox()
     {
         backShown = true;
