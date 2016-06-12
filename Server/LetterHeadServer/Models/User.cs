@@ -104,16 +104,19 @@ namespace LetterHeadServer.Models
         public UserStats Stats(ApplicationDbContext db)
         {
             var stats = new UserStats();
-            stats.gamesWon = Matches.Count(m => m.Winner != null && m.Winner.Id == Id && m.Users.Count > 1);
-            stats.gamesLost = Matches.Count(m => m.Winner != null && m.Winner.Id != Id && m.Users.Count > 1);
-            stats.gamesPlayed = stats.gamesWon + stats.gamesLost;
+            var gamesWon = Matches.Where(m => m.Winner != null && m.Winner.Id == Id && m.Users.Count > 1);
+            var gamesLost = Matches.Where(m => m.Winner != null && m.Winner.Id != Id && m.Users.Count > 1);
 
-            var rounds = db.MatchRounds.Where(m => m.User.Id == Id);
+            var games = gamesWon.ToList();
+            games.AddRange(gamesLost.ToList());
 
-            if (rounds.Any())
+            stats.gamesPlayed = games.Count();
+
+            var scores = games.Select(g => g.UserScore(this));
+            if (scores.Any())
             {
-                stats.averageScore = (int)(rounds.Sum(r => r.Score)/rounds.Count());
-                stats.bestScore = rounds.Max(r => r.Score);
+                stats.averageScore = (int)(scores.Sum()/ scores.Count());
+                stats.bestScore = scores.Max();
             }
             else
             {

@@ -228,11 +228,17 @@ namespace LetterHeadServer.Models
             for (int index = 0; index < Users.Count; index++)
             {
                 var user = Users[index];
-                var score = Rounds.Where(r => r.User.Id == user.Id).Sum(r => r.Score) + MatchBonus(user);
+                var score = UserScore(user);
                 scores.Add(score);
             }
 
             return scores;
+        }
+
+        public int UserScore(User user)
+        {
+            var score = Rounds.Where(r => r.User.Id == user.Id).Sum(r => r.Score) + MatchBonus(user);
+            return score;
         }
 
 
