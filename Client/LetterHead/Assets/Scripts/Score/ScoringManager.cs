@@ -95,7 +95,7 @@ public class ScoringManager : Singleton<ScoringManager>, IGameHandler
     {
         UpdateCurrentRoundScore();
         WordCountBox.Instance.Refresh();
-        CategoryBox.Instance.Refresh();
+        GameGui.Instance.categoryBox.RefreshMyRounds();
     }
 
     private void OnMatchDetailsLoaded()

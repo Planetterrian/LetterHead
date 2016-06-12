@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using LetterHeadShared;
 using LetterHeadShared.DTO;
 using Newtonsoft.Json;
 using TMPro;
@@ -17,6 +18,9 @@ public class GameGui : Singleton<GameGui>
     public GameObject selectCategoryHelper;
     public TextMeshProUGUI roundNumberLabel;
     public EndRoundWindow endRoundWindow;
+    public CategoryBox categoryBox;
+    public CategoryBox opponentCategoryBox;
+    public CanvasFade opponentCategoryBoxFade;
     public Chomper chomper;
 
     public TimerElement timer;
@@ -231,5 +235,25 @@ public class GameGui : Singleton<GameGui>
 
         //TimerManager.AddEvent(1.2f, () => shieldTween.Play(PlayDirection.Reverse));
         //TimerManager.AddEvent(3f, () => shieldTween.gameObject.SetActive(false));
+    }
+
+    public void OpponentAvatarDown()
+    {
+        var round = GameManager.Instance.GetLastOpponentRound();
+
+        if (round != null && !string.IsNullOrEmpty(round.CategoryName))
+        {
+            //var man = new CategoryManager();
+            //categoryBox.SetCurrentlySelectedCategory(man.GetCategory(round.CategoryName));
+        }
+
+        opponentCategoryBoxFade.FadeIn();
+        opponentCategoryBox.Refresh(GameManager.Instance.OpponentRounds());
+
+    }
+
+    public void OpponentAvatarUp()
+    {
+        opponentCategoryBoxFade.FadeOut();
     }
 }

@@ -2,15 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using LetterHeadShared;
+using LetterHeadShared.DTO;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CategoryBox : Singleton<CategoryBox>, IGameHandler
+public class CategoryBox : MonoBehaviour, IGameHandler
 {
     public CategoryRow[] categoryRows;
 
     public TextMeshProUGUI totallabel;
+    public bool isPrimary;
 
     private Dictionary<CategoryRow, Category> categoryScoreFunctions = new Dictionary<CategoryRow, Category>();
 
@@ -18,8 +20,11 @@ public class CategoryBox : Singleton<CategoryBox>, IGameHandler
 
     void Start()
     {
-        GameScene.Instance.AddGameManger(this);
-        GameManager.Instance.OnMatchDetailsLoadedEvent.AddListener(OnMatchDetailsLoaded);
+        if (isPrimary)
+        {
+            GameScene.Instance.AddGameManger(this);
+            GameManager.Instance.OnMatchDetailsLoadedEvent.AddListener(OnMatchDetailsLoaded);
+        }
 
         for (int index = 0; index < ScoringManager.Instance.categoryManager.Categories.Count; index++)
         {
@@ -29,12 +34,12 @@ public class CategoryBox : Singleton<CategoryBox>, IGameHandler
             categoryScoreFunctions[categoryRows[index]] = category;
         }
 
-        Refresh();
+        RefreshMyRounds();
     }
 
     private void OnMatchDetailsLoaded()
     {
-        Refresh();
+        Refresh(GameManager.Instance.MyRounds());
 
         if (!string.IsNullOrEmpty(GameManager.Instance.CurrentRound().CategoryName))
         {
@@ -58,7 +63,7 @@ public class CategoryBox : Singleton<CategoryBox>, IGameHandler
         SoundManager.Instance.PlayClip("Circle Score");
     }
 
-    public void Refresh()
+    public void Refresh(List<MatchRound> rounds)
     {
         var totalScore = 0;
 
@@ -66,11 +71,11 @@ public class CategoryBox : Singleton<CategoryBox>, IGameHandler
         {
             var score = 0;
 
-            var existingRound = GameManager.Instance.MyRounds().FirstOrDefault(r => r.CategoryName == scoreFunc.Value.name);
+            var existingRound = rounds.FirstOrDefault(r => r.CategoryName == scoreFunc.Value.name);
 
             if (scoreFunc.Value.name == "Big Word Bonus")
             {
-                foreach (var matchRound in GameManager.Instance.MyRounds())
+                foreach (var matchRound in rounds)
                 {
                     score += scoreFunc.Value.GetScore(matchRound.Words, 0, new List<int>());
                 }
@@ -85,17 +90,22 @@ public class CategoryBox : Singleton<CategoryBox>, IGameHandler
             }
             else
             {
-                score = ScoringManager.Instance.GetCategoryScore(scoreFunc.Value);
+                if (isPrimary)
+                    score = ScoringManager.Instance.GetCategoryScore(scoreFunc.Value);
+                else
+                    score = 0;
 
                 if (scoreFunc.Value.alwaysActive)
                     totalScore += score;
             }
 
-            scoreFunc.Key.SetScore(score, scoreFunc.Value.alwaysActive || GameManager.Instance.MyRounds().Any(c => c.CategoryName == scoreFunc.Value.name));
+            scoreFunc.Key.SetScore(score, scoreFunc.Value.alwaysActive || rounds.Any(c => c.CategoryName == scoreFunc.Value.name));
         }
 
         totallabel.text = totalScore.ToString("N0");
-        ScoringManager.Instance.currentRoundScore = totalScore;
+
+        if(isPrimary)
+            ScoringManager.Instance.currentRoundScore = totalScore;
     }
 
     public void SetCurrentlySelectedCategory(Category category)
@@ -110,5 +120,10 @@ public class CategoryBox : Singleton<CategoryBox>, IGameHandler
     public void OnReset()
     {
         currentSelectedCategoryImage.gameObject.SetActive(false);
+    }
+
+    public void RefreshMyRounds()
+    {
+        Refresh(GameManager.Instance.MyRounds());
     }
 }

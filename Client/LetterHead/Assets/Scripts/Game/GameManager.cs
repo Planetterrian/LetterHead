@@ -57,6 +57,14 @@ public abstract class GameManager : Singleton<GameManager>
         return MatchDetails.Rounds.Where(m => m.UserId == ClientManager.Instance.myUserInfo.Id).ToList();
     }
 
+    public List<MatchRound> OpponentRounds()
+    {
+        if (MatchDetails == null)
+            return new List<MatchRound>();
+
+        return MatchDetails.Rounds.Where(m => m.UserId != ClientManager.Instance.myUserInfo.Id).ToList();
+    }
+
     public void LoadMatchDetails(Action onLoadOverrideAction = null)
     {
         Srv.Instance.POST("Match/MatchInfo", new Dictionary<string, string>() {{"matchId", MatchId.ToString()}}, (matchDetailsJson) =>
@@ -221,8 +229,8 @@ public abstract class GameManager : Singleton<GameManager>
             SubmitCategory();
         }
 
-        CategoryBox.Instance.Refresh();
-        CategoryBox.Instance.SetCurrentlySelectedCategory(category);
+        GameGui.Instance.categoryBox.RefreshMyRounds();
+        GameGui.Instance.categoryBox.SetCurrentlySelectedCategory(category);
     }
 
     public bool CanStart()
@@ -267,4 +275,40 @@ public abstract class GameManager : Singleton<GameManager>
 
         return "";
     }
+
+    public MatchRound GetLastOpponentRound()
+    {
+        if (MatchDetails == null)
+            return null;
+
+        var opponentIndex = 0;
+        var opponentUid = 0;
+        for (int index = 0; index < MatchDetails.Users.Count; index++)
+        {
+            var userInfo = MatchDetails.Users[index];
+
+            if (userInfo.Id != ClientManager.Instance.UserId())
+            {
+                opponentIndex = index;
+                opponentUid = userInfo.Id;
+                break;
+            }
+        }
+
+        var roundNumber = MatchDetails.CurrentRoundNumber;
+        if (MatchDetails.CurrentUserId == opponentUid)
+            roundNumber--;
+        else if(opponentIndex > 0)
+        {
+            roundNumber--;
+        }
+
+        if (roundNumber < 0)
+            return null;
+
+        var round = MatchDetails.Rounds.FirstOrDefault(r => r.Number == roundNumber && r.UserId == opponentUid);
+        return round;
+    }
+
+
 }
