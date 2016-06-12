@@ -288,7 +288,7 @@ public class EndRoundWindow : WindowController
         }
         else
         {
-            PersistManager.Instance.LoadMenu(5);
+            PersistManager.Instance.LoadMenu(3);
 
         }
     }
