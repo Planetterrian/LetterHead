@@ -10,11 +10,12 @@ using UnityEngine.UI;
 
 class ProfilePage : Page
 {
-    public Dropdown avatarDropdown;
-    public AvatarBox facebookAvatarBox;
+    public AvatarBox avatarBox;
     public Toggle useFacebookImageToggle;
 
     public TMP_InputField usernameInput;
+
+    public AvatarSelectWindow avatarSelectWindow;
 
     public TextMeshProUGUI stat_gamesPlayed;
     public TextMeshProUGUI stat_wins;
@@ -33,19 +34,11 @@ class ProfilePage : Page
             return;
 
         initDone = true;
+    }
 
-        avatarDropdown.ClearOptions();
-
-        foreach (var sprite in AvatarManager.Instance.avatars_sprites)
-        {
-            avatarDropdown.options.Add(new Dropdown.OptionData()
-            {
-                image = sprite,
-                text = sprite.name
-            });
-        }
-
-        avatarDropdown.value = -1;
+    public void SelectAvatarClicked()
+    {
+        
     }
 
     public void OnNameChanged()
@@ -58,25 +51,27 @@ class ProfilePage : Page
             });
     }
 
-    public void OnAvatarChanged()
+    public void OnAvatarChanged(string avatarName)
     {
-        if(useFacebookImageToggle.isOn || avatarDropdown.value == -1 || dontAllowAvatarChange)
+        if(useFacebookImageToggle.isOn)
             return;
 
-        ClientManager.Instance.myUserInfo.AvatarUrl = "sprite:" + avatarDropdown.options[avatarDropdown.value].text;
+        ClientManager.Instance.myUserInfo.AvatarUrl = "sprite:" + avatarName;
 
         Srv.Instance.POST("User/SetAvatar",
-            new Dictionary<string, string>() {{"sprite", avatarDropdown.options[avatarDropdown.value].text}}, s =>
+            new Dictionary<string, string>() {{"sprite", avatarName}}, s =>
             {
                 // Silently accept it
                 ClientManager.Instance.RefreshMyInfo(false);
             });
+
+        Refresh();
     }
 
     public void OnUseFacebookImageChanged()
     {
-        avatarDropdown.gameObject.SetActive(!useFacebookImageToggle.isOn);
-        facebookAvatarBox.gameObject.SetActive(useFacebookImageToggle.isOn);
+        if(dontAllowAvatarChange)
+            return;
 
         if (useFacebookImageToggle.isOn)
         {
@@ -84,11 +79,12 @@ class ProfilePage : Page
             {
                 ClientManager.Instance.RefreshMyInfo(false);
             });
+
+            ClientManager.Instance.myUserInfo.AvatarUrl = ClientManager.Instance.myUserInfo.FacebookPictureUrl;
         }
         else
         {
-            avatarDropdown.value = -1;
-            avatarDropdown.value = Random.Range(0, avatarDropdown.options.Count);
+            OnAvatarChanged("Picture1");
         }
     }
 
@@ -104,34 +100,13 @@ class ProfilePage : Page
 
         useFacebookImageToggle.gameObject.SetActive(!string.IsNullOrEmpty(ClientManager.Instance.myUserInfo.FacebookPictureUrl));
 
+        avatarBox.SetAvatarImage(ClientManager.Instance.myUserInfo.AvatarUrl);
+
         if (!string.IsNullOrEmpty(ClientManager.Instance.myUserInfo.FacebookPictureUrl))
         {
-            facebookAvatarBox.SetAvatarImage(ClientManager.Instance.myUserInfo.FacebookPictureUrl);
+            avatarBox.SetAvatarImage(ClientManager.Instance.myUserInfo.FacebookPictureUrl);
         }
-
-        if (ClientManager.Instance.myUserInfo.AvatarUrl.StartsWith("sprite:"))
-        {
-            avatarDropdown.gameObject.SetActive(true);
-            facebookAvatarBox.gameObject.SetActive(false);
-
-            var spriteName = ClientManager.Instance.myUserInfo.AvatarUrl.Substring(7);
-            for (int index = 0; index < avatarDropdown.options.Count; index++)
-            {
-                var optionData = avatarDropdown.options[index];
-                if (optionData.text == spriteName)
-                {
-                    avatarDropdown.value = index;
-                    avatarDropdown.RefreshShownValue();
-                    break;
-                }
-            }
-        }
-        else
-        {
-            avatarDropdown.gameObject.SetActive(false);
-            facebookAvatarBox.gameObject.SetActive(true);
-        }
-
+        
         Srv.Instance.POST("User/Stats",
             new Dictionary<string, string>() {{"userId", ClientManager.Instance.myUserInfo.Id.ToString()}}, s =>
             {
@@ -150,5 +125,10 @@ class ProfilePage : Page
                 stat_averageScore.text = stats.averageScore.ToString();
                 stat_mostWords.text = stats.mostWords.ToString();
             });
+    }
+
+    public void ShowAvatarSelectWindow()
+    {
+        avatarSelectWindow.ShowModal();
     }
 }
