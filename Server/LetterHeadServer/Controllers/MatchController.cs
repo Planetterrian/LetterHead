@@ -472,7 +472,7 @@ namespace LetterHeadServer.Controllers
             }
 
             round.StealTimeUsed = true;
-            nextRound.StealTimeDelay = (float)(BoardHelper.rand.NextDouble() * 20f) + 10f;
+            nextRound.StealTimeDelay = (float)(BoardHelper.rand.NextDouble() * 10f) + 10f;
             currentUser.ConsumePowerup(Powerup.Type.StealTime);
             db.SaveChanges();
 

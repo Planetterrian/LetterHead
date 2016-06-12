@@ -23,6 +23,7 @@ public class PowerupManager : Singleton<PowerupManager>
 
     private void Start()
     {
+        GameManager.Instance.OnMatchDetailsLoadedEvent.AddListener(OnRoundStateChanged);
     }
 
     public void OnRoundStateChanged()
@@ -33,38 +34,28 @@ public class PowerupManager : Singleton<PowerupManager>
 
     private void RefreshOpponentButtons()
     {
-        if(GameManager.Instance.MatchDetails == null)
-            return;
-
-        var active = !GameManager.Instance.MatchDetails.HasDoOverBeenUsed(GameManager.Instance.OpponentUserId());
-        opponentpowerupButtons[(int)Powerup.Type.DoOver].SetState(active);
-
-        active = !GameManager.Instance.MatchDetails.HasShieldBeenUsed(GameManager.Instance.OpponentUserId());
-        opponentpowerupButtons[(int)Powerup.Type.Shield].SetState(active);
-
-        active = !GameManager.Instance.MatchDetails.HasStealTimeBeenUsed(GameManager.Instance.OpponentUserId());
-        opponentpowerupButtons[(int)Powerup.Type.StealLetter].SetState(active);
-
-        active = !GameManager.Instance.MatchDetails.HasStealLetterBeenUsed(GameManager.Instance.OpponentUserId());
-        opponentpowerupButtons[(int)Powerup.Type.StealTime].SetState(active);
+        
     }
 
     private void RefreshMyButtons()
     {
+        if(GameManager.Instance.MatchDetails == null)
+            return;
+
         var type = Powerup.Type.DoOver;
-        powerupButtons[(int)type].SetState(CanUsePowerup(type));
+        powerupButtons[(int)type].SetState(!GameManager.Instance.MatchDetails.HasDoOverBeenUsed(ClientManager.Instance.UserId()));
         powerupButtons[(int)type].SetQty(ClientManager.Instance.PowerupCount(type));
 
         type = Powerup.Type.Shield;
-        powerupButtons[(int)type].SetState(CanUsePowerup(type));
+        powerupButtons[(int)type].SetState(!GameManager.Instance.MatchDetails.HasShieldBeenUsed(ClientManager.Instance.UserId()));
         powerupButtons[(int)type].SetQty(ClientManager.Instance.PowerupCount(type));
 
         type = Powerup.Type.StealTime;
-        powerupButtons[(int)type].SetState(false);
+        powerupButtons[(int)type].SetState(!GameManager.Instance.MatchDetails.HasStealTimeBeenUsed(ClientManager.Instance.UserId()));
         powerupButtons[(int)type].SetQty(ClientManager.Instance.PowerupCount(type));
 
         type = Powerup.Type.StealLetter;
-        powerupButtons[(int)type].SetState(false);
+        powerupButtons[(int)type].SetState(!GameManager.Instance.MatchDetails.HasStealLetterBeenUsed(ClientManager.Instance.UserId()));
         powerupButtons[(int)type].SetQty(ClientManager.Instance.PowerupCount(type));
     }
 

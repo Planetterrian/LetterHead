@@ -208,7 +208,12 @@ namespace LetterHeadServer.Controllers
 
             var powerupType = (Powerup.Type) type;
             currentUser.AddPowerup(powerupType, 1);
-            currentUser.LastFreePowerup = DateTime.Now;
+
+            var timeUtc = DateTime.UtcNow;
+            TimeZoneInfo easternZone = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
+            DateTime easternTime = TimeZoneInfo.ConvertTimeFromUtc(timeUtc, easternZone);
+
+            currentUser.LastFreePowerup = easternTime;
             db.SaveChanges();
 
             return Okay();
