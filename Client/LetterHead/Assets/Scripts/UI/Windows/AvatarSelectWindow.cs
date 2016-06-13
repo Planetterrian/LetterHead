@@ -5,11 +5,12 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.UI;
 
-class AvatarSelectWindow : WindowController
+public class AvatarSelectWindow : WindowController
 {
     public Transform gridParent;
-    public ProfilePage profilePage;
     public GameObject avatarButtonPrefab;
+
+    public Action<string> OnSelected; 
 
     private bool initDone;
 
@@ -41,6 +42,6 @@ class AvatarSelectWindow : WindowController
     {
         Hide();
 
-        profilePage.OnAvatarChanged(avatarName);
+        OnSelected(avatarName);
     }
 }

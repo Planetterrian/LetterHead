@@ -9,24 +9,26 @@ public class RegisterStep2Window : MonoBehaviour
 {
     public Button submitButton;
     public TMP_InputField usernameInput;
-    public Dropdown avatarDropdown;
+    public AvatarBox avatarBox;
+    public AvatarSelectWindow avatarSelectWindow;
+
+    private string avatarName;
 
     void Start()
     {
-        avatarDropdown.ClearOptions();
-        
-        foreach (var sprite in AvatarManager.Instance.avatars_sprites)
+        avatarName = AvatarManager.Instance.avatars_sprites[UnityEngine.Random.Range(0, AvatarManager.Instance.avatars_sprites.Length)].name;
+        avatarBox.SetAvatarImage("sprite:" + avatarName);
+    }
+
+    public void ShowAvatarSelect()
+    {
+        avatarSelectWindow.OnSelected = (s) =>
         {
-            avatarDropdown.options.Add(new Dropdown.OptionData()
-                                       {
-                                           image = sprite,
-                                           text = sprite.name
-            });
-        }
+            avatarName = s;
+            avatarBox.SetAvatarImage("sprite:" + avatarName);
+        };
 
-        avatarDropdown.value = -1;
-
-        avatarDropdown.value = UnityEngine.Random.Range(0, avatarDropdown.options.Count);
+        avatarSelectWindow.ShowModal();
     }
 
     void OnEnable()
@@ -39,7 +41,7 @@ public class RegisterStep2Window : MonoBehaviour
         submitButton.interactable = false;
         Srv.Instance.POST("User/RegisterDetails", new Dictionary<string, string>()
                                                   {
-                                                      {"Username", usernameInput.text}, {"Avatar", avatarDropdown.options[avatarDropdown.value].text}
+                                                      {"Username", usernameInput.text}, {"Avatar", avatarName}
                                                   }, s =>
                                                   {
                                                       if (s == "1")

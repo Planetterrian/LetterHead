@@ -36,11 +36,6 @@ class ProfilePage : Page
         initDone = true;
     }
 
-    public void SelectAvatarClicked()
-    {
-        
-    }
-
     public void OnNameChanged()
     {
         Srv.Instance.POST("User/SetUsername",
@@ -129,6 +124,7 @@ class ProfilePage : Page
 
     public void ShowAvatarSelectWindow()
     {
+        avatarSelectWindow.OnSelected = OnAvatarChanged;
         avatarSelectWindow.ShowModal();
     }
 }
