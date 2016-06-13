@@ -8,6 +8,7 @@ using Hangfire;
 using LetterHeadServer.Classes;
 using LetterHeadServer.Models;
 using LetterHeadShared;
+using MyWebApplication;
 using Match = LetterHeadShared.DTO.Match;
 
 namespace LetterHeadServer.Controllers
@@ -188,6 +189,16 @@ namespace LetterHeadServer.Controllers
             {
                 actionResult = Error("Username contains invalid characters");
                 return true;
+            }
+
+            var badWords = Startup.BadWords;
+            foreach (var badWord in badWords)
+            {
+                if (username.Contains(badWord))
+                {
+                    actionResult = Error("Username contains inappropriate words");
+                    return true;
+                }
             }
 
             actionResult = null;
