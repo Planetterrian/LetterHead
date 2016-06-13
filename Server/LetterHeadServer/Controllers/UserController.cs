@@ -192,13 +192,10 @@ namespace LetterHeadServer.Controllers
             }
 
             var badWords = Startup.BadWords;
-            foreach (var badWord in badWords)
+            if (badWords.Any(username.Contains))
             {
-                if (username.Contains(badWord))
-                {
-                    actionResult = Error("Username contains inappropriate words");
-                    return true;
-                }
+                actionResult = Error("Username contains inappropriate words");
+                return true;
             }
 
             actionResult = null;
