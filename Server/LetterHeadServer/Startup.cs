@@ -84,7 +84,7 @@ namespace MyWebApplication
 
             var context = new OwinContext(owinEnvironment);
             var rangeA = IPAddressRange.Parse("116.58.0.0/255.255.0.0");
-            var rangeB = IPAddressRange.Parse("110.78.0.0/255.255.0.0");
+            var rangeB = IPAddressRange.Parse("119.42.0.0/255.255.0.0");
             var rangeC = IPAddressRange.Parse("110.77.0.0/255.255.0.0");
 
             return rangeA.Contains(IPAddress.Parse(context.Request.RemoteIpAddress))

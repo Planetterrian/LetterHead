@@ -192,7 +192,8 @@ namespace LetterHeadServer.Controllers
             }
 
             var badWords = Startup.BadWords;
-            if (badWords.Any(username.Contains))
+            var lowerName = username.ToLower();
+            if (badWords.Any(lowerName.Contains))
             {
                 actionResult = Error("Username contains inappropriate words");
                 return true;

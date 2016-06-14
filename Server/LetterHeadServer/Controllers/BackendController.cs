@@ -15,7 +15,9 @@ namespace LetterHeadServer.Controllers
     {
         public string StartJobs()
         {
-            RecurringJob.AddOrUpdate(() => DailyGame.CreateNewDailyGame(), Cron.Daily);
+            TimeZoneInfo easternZone = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
+
+            RecurringJob.AddOrUpdate(() => DailyGame.CreateNewDailyGame(), Cron.Daily, easternZone);
             return "Started Jobs";
         }
 
