@@ -81,6 +81,8 @@ namespace LetterHeadServer.Classes
 
             if (message.type == NotificationDetails.Type.YourTurn)
                 payload += "\t\t,\"sound\": \"TurnNotification.wav\"\n";
+            else if (message.type == NotificationDetails.Type.Invite)
+                payload += "\t\t,\"sound\": \"DoorKnock.wav\"\n";
 
             payload += "\t},\n" +
             "\t\"user_info\": {\n" +
@@ -174,15 +176,28 @@ namespace LetterHeadServer.Classes
 
             // Start the broker
             gcmBroker.Start();
+            var sound = "";
+            
+            if (message.type == NotificationDetails.Type.Invite)
+                sound = "DoorKnock.wav";
+            else
+            {
+                sound = "TurnNotification.wav";
+            }
 
             // Queue a notification to send
             gcmBroker.QueueNotification(new GcmNotification
             {
-                RegistrationIds = new List<string> {
+
+
+
+            RegistrationIds = new List<string> {
                         user.AndroidNotificationToken
                     },
-                Data = JObject.Parse("{\"content_title\" : \"" + message.title.Replace("\"", "\\\"") + "\", \"content_text\":\"" + message.content.Replace("\"", "\\\"") + "\", \"ticker_text\" : \"" + message.content.Replace("\"", "\\\"") + "\", " +
-                                     "\"tag\" : \"" + message.tag.Replace("\"", "\\\"") + "\", \"custom-sound\" : \"TurnNotification.wav\", " +
+
+
+            Data = JObject.Parse("{\"content_title\" : \"" + message.title.Replace("\"", "\\\"") + "\", \"content_text\":\"" + message.content.Replace("\"", "\\\"") + "\", \"ticker_text\" : \"" + message.content.Replace("\"", "\\\"") + "\", " +
+                                     "\"tag\" : \"" + message.tag.Replace("\"", "\\\"") + "\", \"custom-sound\" : \"" + sound + "\", " +
                                      "\"user_info\": { \"alertType\"  : \"" + (int)message.type + "\" } }")
             });
             // Stop the broker, wait for it to finish   
