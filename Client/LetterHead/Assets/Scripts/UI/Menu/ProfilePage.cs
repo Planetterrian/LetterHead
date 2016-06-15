@@ -48,9 +48,6 @@ class ProfilePage : Page
 
     public void OnAvatarChanged(string avatarName)
     {
-        if(useFacebookImageToggle.isOn)
-            return;
-
         ClientManager.Instance.myUserInfo.AvatarUrl = "sprite:" + avatarName;
 
         Srv.Instance.POST("User/SetAvatar",
@@ -59,6 +56,10 @@ class ProfilePage : Page
                 // Silently accept it
                 ClientManager.Instance.RefreshMyInfo(false);
             });
+
+        dontAllowAvatarChange = true;
+        useFacebookImageToggle.isOn = false;
+        dontAllowAvatarChange = false;
 
         Refresh();
     }
