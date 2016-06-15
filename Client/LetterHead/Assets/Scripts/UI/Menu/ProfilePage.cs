@@ -76,6 +76,7 @@ class ProfilePage : Page
             });
 
             ClientManager.Instance.myUserInfo.AvatarUrl = ClientManager.Instance.myUserInfo.FacebookPictureUrl;
+            Refresh();
         }
         else
         {
@@ -97,11 +98,6 @@ class ProfilePage : Page
 
         avatarBox.SetAvatarImage(ClientManager.Instance.myUserInfo.AvatarUrl);
 
-        if (!string.IsNullOrEmpty(ClientManager.Instance.myUserInfo.FacebookPictureUrl))
-        {
-            avatarBox.SetAvatarImage(ClientManager.Instance.myUserInfo.FacebookPictureUrl);
-        }
-        
         Srv.Instance.POST("User/Stats",
             new Dictionary<string, string>() {{"userId", ClientManager.Instance.myUserInfo.Id.ToString()}}, s =>
             {
