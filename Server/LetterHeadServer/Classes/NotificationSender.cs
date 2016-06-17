@@ -200,6 +200,7 @@ namespace LetterHeadServer.Classes
                                      "\"tag\" : \"" + message.tag.Replace("\"", "\\\"") + "\", \"custom-sound\" : \"" + sound + "\", " +
                                      "\"user_info\": { \"alertType\"  : \"" + (int)message.type + "\" } }")
             });
+
             // Stop the broker, wait for it to finish   
             // This isn't done after every message, but after you're
             // done with the broker
