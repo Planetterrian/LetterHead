@@ -13,6 +13,15 @@ public class NotificationManager : Singleton<NotificationManager>
         NPBinding.NotificationService.ClearNotifications();
     }
 
+    void OnApplicationFocus(bool state)
+    {
+        if (state)
+        {
+            NPBinding.NotificationService.ClearNotifications();
+        }
+    }
+
+
     // Register for callbacks
     void OnEnable()
     {
