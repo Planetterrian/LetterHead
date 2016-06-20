@@ -149,8 +149,11 @@ public class DashboardRow : MonoBehaviour
         {
             theirScoreLabel.text = "";
 
-            if(MatchInfo.IsDaily)
+            if (MatchInfo.IsDaily)
+            {
                 dailyGameLabel.gameObject.SetActive(true);
+                dailyGameLabel.text = "DAILY GAME - " + MatchInfo.DateString;
+            }
             else
                 soloGameLabel.gameObject.SetActive(true);
         }
