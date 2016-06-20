@@ -143,9 +143,55 @@ namespace LetterHeadServer.Models
         {
             var dto = Startup.Mapper.Map<LetterHeadShared.DTO.Match>(this);
             if (sparse)
+            {
                 dto.Rounds = null;
+            }
 
             return dto;
+        }
+
+        public string LastTurnString(User forUser)
+        {
+            var lastRound = PreviousRound();
+            if (lastRound == null)
+                return "";
+
+            if (lastRound.ShieldUsed)
+            {
+                if (lastRound.StealTimeDelay > 0)
+                {
+                    if(lastRound.User == forUser)
+                        return "You blocked your opponent's seal time!";
+                    else
+                        return "Your opponent blocked your seal time!";
+                }
+                else if (lastRound.StealLetterDelay > 0)
+                {
+                    if (lastRound.User == forUser)
+                        return "You blocked your opponent's seal letter!";
+                    else
+                        return "Your opponent blocked your seal letter!";
+                }
+            }
+
+            var currentRound = CurrentRound();
+
+            if (currentRound.StealTimeDelay > 0)
+            {
+                if (currentRound.User != forUser)
+                    return "You activated steal time!";
+                else
+                    return "Your opoonent activated steal time!";
+            }
+            else if (currentRound.StealLetterDelay > 0)
+            {
+                if (currentRound.User != forUser)
+                    return "You activated steal letter!";
+                else
+                    return "Your opoonent activated steal letter!";
+            }
+
+            return "";
         }
 
         public static Match GetById(ApplicationDbContext db, int matchId)
@@ -365,6 +411,26 @@ namespace LetterHeadServer.Models
             }
 
             if (roundNumber > MaxRounds)
+            {
+                return null;
+            }
+
+            return Rounds.First(r => r.Number == roundNumber && r.User.Id == Users[currentUserIndex].Id);
+        }
+
+        public MatchRound PreviousRound()
+        {
+            var roundNumber = CurrentRoundNumber;
+
+            var currentUserIndex = TurnOrderUserIds.IndexOf(CurrentUserTurn.Id);
+            currentUserIndex--;
+            if (currentUserIndex < 0)
+            {
+                currentUserIndex = Users.Count - 1;
+                roundNumber--;
+            }
+
+            if (roundNumber < 0)
             {
                 return null;
             }

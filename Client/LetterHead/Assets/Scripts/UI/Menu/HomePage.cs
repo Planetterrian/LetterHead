@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using LetterHeadShared.DTO;
@@ -24,6 +25,7 @@ public class HomePage : Page
     private List<Invite> invites = new List<Invite>();
     private bool matchesRefreshing;
     private float lastPoll;
+    private bool refreshBars;
 
     void Start()
     {
@@ -132,6 +134,30 @@ public class HomePage : Page
                         });
                 }, "Accept", "Decline");
         }
+
+        if (refreshBars)
+        {
+            RefreshBars(theirMatchRows);
+            RefreshBars(myMatchRows);
+            RefreshBars(completedMatchRows);
+            refreshBars = false;
+        }
+    }
+
+    private void RefreshBars(List<DashboardRow> rows)
+    {
+        var sortedRows = rows.OrderByDescending(r => r.transform.position.y).ToList();
+
+        for (int index = 0; index < sortedRows.Count; index++)
+        {
+            var dashboardRow = sortedRows[index];
+
+            if (index == sortedRows.Count - 1)
+                dashboardRow.barBottom.SetActive(true);
+            else
+                dashboardRow.barBottom.SetActive(false);
+        }
+
     }
 
     private void UpdateMatchSet(List<DashboardRow> rows, List<Match> matches, Transform header, DashboardRow.RowType rowType)
@@ -172,6 +198,8 @@ public class HomePage : Page
                 rows.Add(row);
             }
         }
+
+        refreshBars = true;
     }
 
     public void OnRowClicked(DashboardRow dashboardRow)

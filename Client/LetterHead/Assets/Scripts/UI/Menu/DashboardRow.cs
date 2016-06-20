@@ -16,6 +16,9 @@ public class DashboardRow : MonoBehaviour
     public TextMeshProUGUI theirScoreLabel;
     public TextMeshProUGUI dailyGameLabel;
     public TextMeshProUGUI soloGameLabel;
+    public TextMeshProUGUI lastTurnLabel;
+
+    public GameObject barBottom;
 
     public GameObject backBoxMy;
     public GameObject backBoxTheir;
@@ -133,6 +136,7 @@ public class DashboardRow : MonoBehaviour
 
         var isFirstPlayer = MatchInfo.IndexOfUser(ClientManager.Instance.UserId()) == 0;
 
+        lastTurnLabel.text = MatchInfo.LastTurnInfo;
         usernameLabel.text = opponentInfo.Username;
         avatarBox.SetAvatarImage(opponentInfo.AvatarUrl);
         roundLabel.text = "Round " + (MatchInfo.CurrentRoundNumber + 1) + "/" + MatchInfo.MaxRounds;

@@ -25,6 +25,7 @@ namespace LetterHeadShared.DTO
         public int SingleScore;
         public bool IsDaily;
         public string DateString;
+        public string LastTurnInfo;
 
         public int UserScore(int userIndex)
         {

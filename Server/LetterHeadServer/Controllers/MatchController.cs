@@ -176,7 +176,16 @@ namespace LetterHeadServer.Controllers
 
             // Remove cleared
             matches = matches.Where(m => !m.ClearedUserIds.Contains(currentUser.Id)).ToList();
-            return Json(new { Matches = matches.Select(m => m.DTO(true)), Invites = currentUser.Invites.Select(i => i.DTO()) } );
+
+            var matchDTOs = new List<LetterHeadShared.DTO.Match>();
+            foreach (var match in matches)
+            {
+                var dto = match.DTO(true);
+                dto.LastTurnInfo = match.LastTurnString(currentUser);
+                matchDTOs.Add(dto);
+            }
+
+            return Json(new { Matches = matchDTOs, Invites = currentUser.Invites.Select(i => i.DTO()) } );
         }
 
         public ActionResult AcceptInvite(int inviteId)
