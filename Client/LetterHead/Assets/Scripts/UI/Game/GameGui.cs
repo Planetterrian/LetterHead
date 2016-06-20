@@ -15,6 +15,8 @@ public class GameGui : Singleton<GameGui>
     public Button clearWordButton;
     public Button shuffleButton;
     public Button startButton;
+    public Button nextMatchButton;
+    public TextMeshProUGUI nextMatchText;
     public GameObject selectCategoryHelper;
     public TextMeshProUGUI roundNumberLabel;
     public EndRoundWindow endRoundWindow;
@@ -41,12 +43,23 @@ public class GameGui : Singleton<GameGui>
     public AudioClip gameplayMusic;
 
     public uTweenScale shieldTween;
+    private Match nextMatchInfo;
+    private float lastNextMatchPoll;
 
     private void Start()
     {
-        GameManager.Instance.OnMatchDetailsLoadedEvent.AddListener(OnMatchDetailsLoaded);
+        nextMatchButton.interactable = false;
+        nextMatchText.color = new Color(0.3f, 0.3f, 0.3f);
 
+        GameManager.Instance.OnMatchDetailsLoadedEvent.AddListener(OnMatchDetailsLoaded);
         timer.OnTimeExpired.AddListener(OnTimeExpired);
+        NextMatchPolling();
+    }
+
+    void Update()
+    {
+        if(Time.time - lastNextMatchPoll > 20)
+            NextMatchPolling();
     }
 
     public bool CanClickBoardTile()
@@ -208,23 +221,19 @@ public class GameGui : Singleton<GameGui>
 
     public void OnNextClicked()
     {
-        DialogWindowTM.Instance.Show("", "Finding next match..", () => { }, null, "");
+        PersistManager.Instance.LoadMatch(nextMatchInfo.Id, false);
+    }
+
+    private void NextMatchPolling()
+    {
         Srv.Instance.POST("User/NextAvailableMatch", new Dictionary<string, string>() {{"currentMatchId", GameManager.Instance.MatchId.ToString()}}, s =>
         {
-            var match = JsonConvert.DeserializeObject<Match>(s);
-            if (match == null)
-            {
-                DialogWindowTM.Instance.Show("Next Match", "No additional matches found.", () => {}, () =>
-                {
-                    PersistManager.Instance.LoadMenu();
-                }, "OK", "MENU");
+            nextMatchInfo = JsonConvert.DeserializeObject<Match>(s);
+            nextMatchButton.interactable = nextMatchButton != null;
+            nextMatchText.color = nextMatchButton != null ? Color.black : new Color(0.75f, 0.75f, 0.75f);
+        }, null);
 
-            }
-            else
-            {
-                PersistManager.Instance.LoadMatch(match.Id, false);
-            }
-        }, DialogWindowTM.Instance.Error);
+        lastNextMatchPoll = Time.time;
     }
 
     public void OnShieldUsed()
