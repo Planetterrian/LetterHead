@@ -21,6 +21,13 @@ public class EmailLoginWindow : MonoBehaviour
 
         passwordInput.text = "";
     }
+
+    public void OnEmailSubmit()
+    {
+        Debug.Log("ONS");
+
+        TimerManager.AddEvent(0.1f, () => passwordInput.Select());
+    }
     
     public void OnLoginClicked()
     {

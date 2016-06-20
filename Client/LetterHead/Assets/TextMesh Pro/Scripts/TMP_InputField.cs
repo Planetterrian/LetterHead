@@ -2291,7 +2291,9 @@ namespace TMPro
 
                 m_CaretPosition = m_CaretSelectPosition = 0;
                 m_TextComponent.rectTransform.localPosition = Vector3.zero;
-                caretRectTrans.localPosition = Vector3.zero;
+
+                if(caretRectTrans != null)
+                    caretRectTrans.localPosition = Vector3.zero;
 
                 SendOnSubmit();
 

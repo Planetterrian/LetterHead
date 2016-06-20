@@ -161,16 +161,16 @@ namespace LetterHeadServer.Models
                 if (lastRound.StealTimeDelay > 0)
                 {
                     if(lastRound.User == forUser)
-                        return "You blocked your opponent's seal time!";
+                        return "You blocked your opponent's steal time!";
                     else
-                        return "Your opponent blocked your seal time!";
+                        return "Your opponent blocked your steal time!";
                 }
                 else if (lastRound.StealLetterDelay > 0)
                 {
                     if (lastRound.User == forUser)
-                        return "You blocked your opponent's seal letter!";
+                        return "You blocked your opponent's steal letter!";
                     else
-                        return "Your opponent blocked your seal letter!";
+                        return "Your opponent blocked your steal letter!";
                 }
             }
 
@@ -181,14 +181,14 @@ namespace LetterHeadServer.Models
                 if (currentRound.User != forUser)
                     return "You activated steal time!";
                 else
-                    return "Your opoonent activated steal time!";
+                    return "Your opponent activated steal time!";
             }
             else if (currentRound.StealLetterDelay > 0)
             {
                 if (currentRound.User != forUser)
                     return "You activated steal letter!";
                 else
-                    return "Your opoonent activated steal letter!";
+                    return "Your opponent activated steal letter!";
             }
 
             return "";
