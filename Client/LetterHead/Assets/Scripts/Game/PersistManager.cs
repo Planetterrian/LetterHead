@@ -55,7 +55,7 @@ public class PersistManager : Singleton<PersistManager>
 
     public bool ClearWord
     {
-        get { return PlayerPrefs.GetInt("ClearWord", 0) == 1; }
+        get { return PlayerPrefs.GetInt("ClearWord", 1) == 1; }
         set { PlayerPrefs.SetInt("ClearWord", value ? 1 : 0); }
     }
 

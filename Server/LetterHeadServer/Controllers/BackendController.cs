@@ -18,6 +18,8 @@ namespace LetterHeadServer.Controllers
             TimeZoneInfo easternZone = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
 
             RecurringJob.AddOrUpdate(() => DailyGame.CreateNewDailyGame(), Cron.Daily, easternZone);
+            RecurringJob.AddOrUpdate(() => new BackendController().AutoResignMatches(), Cron.Daily);
+            
             return "Started Jobs";
         }
 
@@ -76,6 +78,26 @@ namespace LetterHeadServer.Controllers
                                          content = message,
                                          tag = "invite123"
                                      });
+        }
+
+        public string AutoResignMatches()
+        {
+            var oldMatches = db.Matches.Where(m => m.CurrentState == LetterHeadShared.DTO.Match.MatchState.Running).ToList();
+            foreach (var match in oldMatches)
+            {
+                if(!match.CurrentRound().ActivatedOn.HasValue)
+                    continue;
+
+                if ((DateTime.Now - match.CurrentRound().ActivatedOn.Value).TotalDays > 14)
+                {
+                    match.Resign(match.CurrentUserTurn);
+                    Response.Write("Resigned " + match.Id + "<br>");
+                }
+            }
+
+            db.SaveChanges();
+
+            return "Done";
         }
 
         public void SendNotification(int userId, NotificationDetails message)
