@@ -30,6 +30,11 @@ public class PowerupManager : Singleton<PowerupManager>
     {
         RefreshMyButtons();
         RefreshOpponentButtons();
+
+        if (GameScene.Instance.CurrentState == GameScene.State.End && StealActive())
+        {
+            CancelSteal();
+        }
     }
 
     private void RefreshOpponentButtons()
@@ -183,6 +188,9 @@ public class PowerupManager : Singleton<PowerupManager>
 
     public void OnStealLetterActivated(string letterStolen)
     {
+        if(GameManager.Instance.MatchDetails.CurrentState != Match.MatchState.Running)
+            return;
+
         var tile = BoardManager.Instance.GetTileWithLetter(letterStolen);
         stealLetterActive = true;
         tileToSteal = tile;
@@ -192,6 +200,9 @@ public class PowerupManager : Singleton<PowerupManager>
 
     public void OnStealTimeActivated()
     {
+        if (GameManager.Instance.MatchDetails.CurrentState != Match.MatchState.Running)
+            return;
+
         GameGui.Instance.chomper.Begin(GameGui.Instance.timer.transform);
         stealTimeActive = true;
         RefreshMyButtons();

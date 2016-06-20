@@ -73,7 +73,7 @@ namespace LetterHeadServer.Models
 
         public bool CanStart()
         {
-            return (DateTime.Now - StartDate).TotalHours < 23;
+            return (DateTime.Now - StartDate).TotalHours < 23.5;
         }
 
         public Match CreateMatchForUser(ApplicationDbContext context, User currentUser)
