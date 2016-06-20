@@ -22,6 +22,8 @@ public class RegisterStep2Window : MonoBehaviour
 
     public void ShowAvatarSelect()
     {
+        avatarSelectWindow.selectedAvatar = avatarName;
+
         avatarSelectWindow.OnSelected = (s) =>
         {
             avatarName = s;

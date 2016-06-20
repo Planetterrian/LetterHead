@@ -121,6 +121,16 @@ class ProfilePage : Page
 
     public void ShowAvatarSelectWindow()
     {
+        if (ClientManager.Instance.myUserInfo.AvatarUrl.StartsWith("sprite:"))
+        {
+            // Using a built in sprite
+            avatarSelectWindow.selectedAvatar = ClientManager.Instance.myUserInfo.AvatarUrl.Substring(7);
+        }
+        else
+        {
+            avatarSelectWindow.selectedAvatar = "";
+        }
+        
         avatarSelectWindow.OnSelected = OnAvatarChanged;
         avatarSelectWindow.ShowModal();
     }
