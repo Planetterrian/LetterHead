@@ -50,7 +50,7 @@ public class GameGui : Singleton<GameGui>
     {
         nextMatchButton.interactable = false;
         nextMatchText.color = new Color(0.3f, 0.3f, 0.3f);
-
+        HidePowerups();
         GameManager.Instance.OnMatchDetailsLoadedEvent.AddListener(OnMatchDetailsLoaded);
         timer.OnTimeExpired.AddListener(OnTimeExpired);
         NextMatchPolling();
