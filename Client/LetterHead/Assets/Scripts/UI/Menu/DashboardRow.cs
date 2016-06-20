@@ -21,6 +21,9 @@ public class DashboardRow : MonoBehaviour
     public GameObject backBoxTheir;
     public GameObject backBoxComplete;
 
+    public GameObject rematchButton;
+
+
     public Animator slideAnimator;
 
     [HideInInspector]
@@ -121,6 +124,7 @@ public class DashboardRow : MonoBehaviour
         else
         {
             opponentInfo = MatchInfo.Users[0];
+            rematchButton.SetActive(false);
         }
 
         backBoxMy.SetActive(type == RowType.MyTurn);
