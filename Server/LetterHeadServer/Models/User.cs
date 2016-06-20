@@ -104,19 +104,21 @@ namespace LetterHeadServer.Models
         public UserStats Stats(ApplicationDbContext db)
         {
             var stats = new UserStats();
-            var gamesWon = Matches.Where(m => m.Winner != null && m.Winner.Id == Id && m.Users.Count > 1);
-            var gamesLost = Matches.Where(m => m.Winner != null && m.Winner.Id != Id && m.Users.Count > 1);
+            var gamesWon = Matches.Where(m => m.Winner != null && m.Winner.Id == Id);
+            var gamesLost = Matches.Where(m => m.Winner != null && m.Winner.Id != Id);
 
             var games = gamesWon.ToList();
             games.AddRange(gamesLost.ToList());
 
-            stats.gamesPlayed = games.Count();
+            stats.gamesWon = gamesWon.Count(g => g.Users.Count > 1);
+            stats.gamesPlayed = games.Count(g => g.Users.Count > 1);
 
-            var scores = games.Select(g => g.UserScore(this));
-            if (scores.Any())
+            var scores = games.Where(g => g.Resigner == null).Select(g => g.UserScore(this));
+            var scoresEnum = scores as int[] ?? scores.ToArray();
+            if (scoresEnum.Any())
             {
-                stats.averageScore = (int)(scores.Sum()/ scores.Count());
-                stats.bestScore = scores.Max();
+                stats.averageScore = (int)(scoresEnum.Sum()/ scoresEnum.Count());
+                stats.bestScore = scoresEnum.Max();
             }
             else
             {
