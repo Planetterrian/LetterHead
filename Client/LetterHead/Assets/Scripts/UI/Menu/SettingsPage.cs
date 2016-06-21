@@ -35,6 +35,7 @@ public class SettingsPage : Page
         premiumUpgradeButton.gameObject.SetActive(PlayerPrefs.GetInt("PurchaseMade", 0) == 0);
 
         musicEnabledToggle.isOn = PersistManager.Instance.MusicEnabled;
+        musicEnabledToggle.interactable = PersistManager.Instance.SoundEnabled;
         clearWordToggle.isOn = PersistManager.Instance.ClearWord;
         soundEnabledToggle.isOn = PersistManager.Instance.SoundEnabled;
         notificationsToggle.isOn = PersistManager.Instance.NotificationsEnabled;
@@ -47,7 +48,8 @@ public class SettingsPage : Page
 
     public void OnSoundToggleChanged()
     {
-        PersistManager.Instance.SoundEnabled = musicEnabledToggle.isOn;
+        PersistManager.Instance.SoundEnabled = soundEnabledToggle.isOn;
+        musicEnabledToggle.interactable = PersistManager.Instance.SoundEnabled;
     }
 
     public void OnClearWordToggleChanged()
