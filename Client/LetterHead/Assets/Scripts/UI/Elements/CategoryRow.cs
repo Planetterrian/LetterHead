@@ -37,7 +37,7 @@ public class CategoryRow : MonoBehaviour
 
     public void OnScoreClicked()
     {
-        categoryBox.OnCategoryScoreClicked(category);
+        DialogWindowTM.Instance.Show("Select score", "Lock in the " + category.name + " category for " + scoreLabel.text + " points?", () => categoryBox.OnCategoryScoreClicked(category), () => { }, "Confirm", "Cancel");
     }
 
     public void Set(Category category, CategoryBox categoryBox)
