@@ -25,6 +25,7 @@ public class SettingsPage : Page
 
     private void Start()
     {
+        IapManager.Instance.OnItemsUpdated.AddListener(Refresh);
     }
 
     public void Refresh()
@@ -73,7 +74,7 @@ public class SettingsPage : Page
 
     public void UpgradeToPremiumClicked()
     {
-
+        IapManager.Instance.RequestPurchase("com.we3workshop.letterhead.premium");
     }
 
     public void LogoutClicked()
@@ -84,11 +85,14 @@ public class SettingsPage : Page
 
     public void DisconnectFacebookClicked()
     {
+        DialogWindowTM.Instance.Show("Diconnect Facebook", "Please wait", () => { }, null, "", "");
         Srv.Instance.POST("User/FacebookDisconnect", null, s =>
         {
             ClientManager.Instance.myUserInfo.FacebookPictureUrl = "";
+            ClientManager.Instance.myUserInfo.AvatarUrl = "sprite:Picture1";
             Refresh();
-        });
+            DialogWindowTM.Instance.Show("Diconnect Facebook", "Your Facebook account has been disconnected from LetterHead", () => { });
+        }, DialogWindowTM.Instance.Error);
     }
 
     public void CconnectFacebookClicked()

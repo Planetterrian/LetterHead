@@ -56,11 +56,50 @@ namespace LetterHeadServer.Controllers
             return Okay();
         }
 
+        [AuthenticationFilter()]
+        public ActionResult FacebookDisconnect()
+        {
+            currentUser.FacebookToken = "";
+            currentUser.FacebookPictureUrl = "";
+            currentUser.FacebookId = "";
+            currentUser.AvatarUrl = "sprite:Picture1";
+
+            db.SaveChanges();
+
+            return Okay();
+        }
+
+        [AuthenticationFilter()]
+        public ActionResult FacebookConnect(string token)
+        {
+            var info = GetFacebookInfo(token);
+            if (info.error != null)
+            {
+                return Error("Invalid token");
+            }
+
+            var facebookUser = new FacebookUserInfo()
+            {
+                Id = info.id,
+                Token = token,
+                PictureUrl = info.picture.data.url,
+                Name = info.name,
+            };
+
+
+            currentUser.FacebookToken = token;
+            currentUser.FacebookId = facebookUser.Id;
+            currentUser.FacebookPictureUrl = facebookUser.PictureUrl;
+            currentUser.AvatarUrl = facebookUser.PictureUrl;
+            db.SaveChanges();
+
+            return Okay();
+        }
+
+
         public ActionResult FacebookLogin(string token)
         {
-            var client = new FacebookClient(token);
-            dynamic info = client.Get("me?fields=id,name,picture.type(large)", null);
-
+            var info = GetFacebookInfo(token);
             if (info.error != null)
             {
                 return Error("Invalid token");
@@ -79,6 +118,13 @@ namespace LetterHeadServer.Controllers
             db.SaveChanges();
 
             return Json(user.SessionId, JsonRequestBehavior.AllowGet);
+        }
+
+        private static dynamic GetFacebookInfo(string token)
+        {
+            var client = new FacebookClient(token);
+            dynamic info = client.Get("me?fields=id,name,picture.type(large)", null);
+            return info;
         }
 
         [AuthenticationFilter()]
