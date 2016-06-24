@@ -33,7 +33,7 @@ public class SettingsPage : Page
         linkFacebookButton.SetActive(string.IsNullOrEmpty(ClientManager.Instance.myUserInfo.FacebookPictureUrl));
         unLinkFacebookButton.SetActive(!string.IsNullOrEmpty(ClientManager.Instance.myUserInfo.FacebookPictureUrl));
 
-        premiumUpgradeButton.gameObject.SetActive(PlayerPrefs.GetInt("PurchaseMade", 0) == 0);
+        premiumUpgradeButton.interactable = PlayerPrefs.GetInt("PurchaseMade", 0) == 0;
 
         musicEnabledToggle.isOn = PersistManager.Instance.MusicEnabled;
         musicEnabledToggle.interactable = PersistManager.Instance.SoundEnabled;
