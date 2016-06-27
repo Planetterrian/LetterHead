@@ -64,6 +64,7 @@ namespace MyWebApplication
                     ForMember(dest => dest.Scores, opt => opt.MapFrom(src => src.GetScores())).
                     ForMember(dest => dest.IsDaily, opt => opt.MapFrom(src => src.DailyGame != null)).
                     ForMember(dest => dest.DateString, opt => opt.MapFrom(src => src.DailyGame == null ? "" : src.DailyGame.StartDate.ToString("MMMMMM dd") + "\n" + src.DailyGame.StartDate.ToString("yyyy"))).
+                    ForMember(dest => dest.DateStringShort, opt => opt.MapFrom(src => src.DailyGame == null ? "" : src.DailyGame.StartDate.ToString("MM/dd/yyyy"))).
                     ForMember(dest => dest.CurrentUserId, opt => opt.MapFrom(src => src.CurrentUserTurn.Id)).
                     ForMember(dest => dest.ResignerUserId, opt => opt.MapFrom(src => src.Resigner == null ? -1 : src.Resigner.Id));
 

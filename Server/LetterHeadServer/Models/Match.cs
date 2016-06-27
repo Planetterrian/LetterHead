@@ -160,17 +160,30 @@ namespace LetterHeadServer.Models
             {
                 if (lastRound.StealTimeDelay > 0)
                 {
-                    if(lastRound.User == forUser)
+                    if (lastRound.User == forUser)
                         return "You blocked your opponent's steal time!";
                     else
-                        return "Your opponent blocked your steal time!";
+                        return "Your opponent blocked your steal!";
                 }
                 else if (lastRound.StealLetterDelay > 0)
                 {
                     if (lastRound.User == forUser)
                         return "You blocked your opponent's steal letter!";
                     else
-                        return "Your opponent blocked your steal letter!";
+                        return "Your opponent blocked your steal!";
+                }
+            }
+            else
+            {
+                if (lastRound.StealTimeDelay > 0)
+                {
+                    if (lastRound.User != forUser)
+                        return "You stole a letter from your opponent!";
+                }
+                else if (lastRound.StealLetterDelay > 0)
+                {
+                    if (lastRound.User != forUser)
+                        return "You stole time from your opponent!";
                 }
             }
 
@@ -179,16 +192,14 @@ namespace LetterHeadServer.Models
             if (currentRound.StealTimeDelay > 0)
             {
                 if (currentRound.User != forUser)
-                    return "You activated steal time!";
-                else
-                    return "Your opponent activated steal time!";
+                {
+                    return "You sent a timer sabatage!";
+                }
             }
             else if (currentRound.StealLetterDelay > 0)
             {
                 if (currentRound.User != forUser)
-                    return "You activated steal letter!";
-                else
-                    return "Your opponent activated steal letter!";
+                    return "You sent a letter sabatage!";
             }
 
             return "";
@@ -435,7 +446,7 @@ namespace LetterHeadServer.Models
                 return null;
             }
 
-            return Rounds.First(r => r.Number == roundNumber && r.User.Id == Users[currentUserIndex].Id);
+            return Rounds.First(r => r.Number == roundNumber && r.User.Id == TurnOrderUserIds[currentUserIndex]);
         }
 
         public MatchRound GetRoundByIndex(int index)

@@ -112,6 +112,7 @@ namespace LetterHeadServer.Models
 
             stats.gamesWon = gamesWon.Count(g => g.Users.Count > 1);
             stats.gamesPlayed = games.Count(g => g.Users.Count > 1);
+            stats.gamesLost = stats.gamesPlayed - stats.gamesWon;
 
             var scores = games.Where(g => g.Resigner == null).Select(g => g.UserScore(this));
             var scoresEnum = scores as int[] ?? scores.ToArray();

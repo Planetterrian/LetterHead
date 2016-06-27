@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Facebook.Unity;
 using Newtonsoft.Json;
+using TMPro;
 using UI.Pagination;
 using UnityEngine;
 using UnityEngine.UI;
@@ -19,8 +20,11 @@ public class SettingsPage : Page
 
     public Button premiumUpgradeButton;
 
+    public TextMeshProUGUI aboutVersionText;
+
     private void Awake()
     {
+        aboutVersionText.text = "Version " + Application.version;
     }
 
     private void Start()
