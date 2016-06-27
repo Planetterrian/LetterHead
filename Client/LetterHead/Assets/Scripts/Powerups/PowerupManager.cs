@@ -188,7 +188,7 @@ public class PowerupManager : Singleton<PowerupManager>
 
     public void OnStealLetterActivated(string letterStolen)
     {
-        if(GameManager.Instance.MatchDetails.CurrentState != Match.MatchState.Running)
+        if(GameScene.Instance.CurrentState != GameScene.State.Active)
             return;
 
         var tile = BoardManager.Instance.GetTileWithLetter(letterStolen);
@@ -200,7 +200,7 @@ public class PowerupManager : Singleton<PowerupManager>
 
     public void OnStealTimeActivated()
     {
-        if (GameManager.Instance.MatchDetails.CurrentState != Match.MatchState.Running)
+        if (GameScene.Instance.CurrentState != GameScene.State.Active)
             return;
 
         GameGui.Instance.chomper.Begin(GameGui.Instance.timer.transform);
