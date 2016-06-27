@@ -93,7 +93,6 @@ public class GameGui : Singleton<GameGui>
 
     public void SubmitClicked()
     {
-        Debug.Log("Word Submit: 1");
         ScoringManager.Instance.OnWordSubmit();
     }
 

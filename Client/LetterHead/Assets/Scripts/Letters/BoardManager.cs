@@ -495,7 +495,7 @@ public class BoardManager : Singleton<BoardManager>
     {
         foreach (var selectedTile in SelectedTiles())
         {
-            selectedTile.SetColor(color);
+            selectedTile.MarkAsUsed();
         }
     }
 
@@ -505,7 +505,7 @@ public class BoardManager : Singleton<BoardManager>
         {
             if (((1 << tile.ID) & usedLetterIds) == (1 << tile.ID))
             {
-                tile.SetColor(color);
+                tile.MarkAsUsed();
             }
         }
     }

@@ -18,6 +18,7 @@ public class Tile : MonoBehaviour
     public LetterDefinition letterDefinition;
 
     public Color selectedColor;
+    public Color originalUsedColor;
     private bool selected;
 
     public int ID;
@@ -68,10 +69,11 @@ public class Tile : MonoBehaviour
     }
 
     private bool enabledState;
-    
+    private bool hasBeenUsed;
 
     void OnSpawned()
     {
+        hasBeenUsed = false;
         letterText.color = originalLetterColor;
         image.color = originalImageColor;
         
@@ -241,13 +243,29 @@ public class Tile : MonoBehaviour
     public void Deselect()
     {
         selected = false;
-        letterText.color = originalLetterColor;
+        UpdateLetterColor();
     }
 
     public void Select()
     {
         selected = true;
-        letterText.color = selectedColor;
+        UpdateLetterColor();
+    }
+
+
+    private void UpdateLetterColor()
+    {
+        if (selected)
+        {
+            letterText.color = selectedColor;
+        }
+        else
+        {
+            if(hasBeenUsed)
+                letterText.color = originalUsedColor;
+            else
+                letterText.color = originalLetterColor;
+        }
     }
 
     public void SetColor(Color color)
@@ -307,5 +325,11 @@ public class Tile : MonoBehaviour
     public void CancelPopIn()
     {
         popInTween.enabled = false;
+    }
+
+    public void MarkAsUsed()
+    {
+        hasBeenUsed = true;
+        UpdateLetterColor();
     }
 }
