@@ -15,35 +15,35 @@ namespace LetterHeadShared
             categories.Add(new Category()
             {
                 name = "Roll Call",
-                description = "Use all letters at least once",
+                description = "Use all letters at least once.  Worth 20 points.",
                 GetScore = (words, uniqueLetterCount, existingScores) => uniqueLetterCount == 10 ? 20 : 0
             });
 
             categories.Add(new Category()
             {
                 name = "3 & 4 Letters",
-                description = "Make at least 15 3-letter and 4-letter words",
+                description = "Make at least 15 3-letter and 4-letter words.  Worth 30 points.",
                 GetScore = (words, uniqueLetterCount, existingScores) => words.Count(w => w.Length == 3 || w.Length == 4) >= 15 ? 30 : 0
             });
 
             categories.Add(new Category()
             {
                 name = "5 & 6 Letters",
-                description = "Make at least 10 5-letter and 6-letter words.",
+                description = "Make at least 10 5-letter and 6-letter words.  Worth 30 points.",
                 GetScore = (words, uniqueLetterCount, existingScores) => words.Count(w => w.Length == 5 || w.Length == 6) >= 10 ? 30 : 0
             });
 
             categories.Add(new Category()
             {
                 name = "20 Words",
-                description = "Make at least 20 words.",
+                description = "Make at least 20 words.  Worth 40 points.",
                 GetScore = (words, uniqueLetterCount, existingScores) => words.Count >= 20 ? 40 : 0
             });
 
             categories.Add(new Category()
             {
                 name = "Upper Bonus",
-                description = "Successfully complete all of the above categories",
+                description = "Successfully complete all of the above categories for an additional 35 points.",
                 alwaysActive = true,
                 GetScore = (words, uniqueLetterCount, existingScores) =>
                 {
@@ -64,7 +64,7 @@ namespace LetterHeadShared
             categories.Add(new Category()
             {
                 name = "Starter",
-                description = "Make at least 10 words that start with the same letter.",
+                description = "Make at least 10 words that start with the same letter.  Worth 25 points.",
                 GetScore = (words, uniqueLetterCount, existingScores) =>
                 {
                     var leterDict = new Dictionary<char, int>();
@@ -92,7 +92,7 @@ namespace LetterHeadShared
             categories.Add(new Category()
             {
                 name = "Small Straight",
-                description = "Make at least one 3, 4, 5, and 6 letter word.",
+                description = "Make at least one 3-letter, 4-letter, 5-letter, and 6-letter word.  Worth 30 points.",
                 GetScore = (words, uniqueLetterCount, existingScores) => words.Count(w => w.Length == 3) > 0 && words.Count(w => w.Length == 4) > 0 &&
                  words.Count(w => w.Length == 5) > 0 && words.Count(w => w.Length == 6) > 0 ? 30 : 0
             });
@@ -100,7 +100,7 @@ namespace LetterHeadShared
             categories.Add(new Category()
             {
                 name = "Large Straight",
-                description = "Make at least one 3, 4, 5, 6, and 7 letter word.",
+                description = "Make at least one 3-letter, 4-letter, 5-letter, 6-letter, and 7-letter letter word.  Worth 40 points.",
                 GetScore = (words, uniqueLetterCount, existingScores) => words.Count(w => w.Length == 3) > 0 && words.Count(w => w.Length == 4) > 0 &&
                  words.Count(w => w.Length == 5) > 0 && words.Count(w => w.Length == 6) > 0 && words.Count(w => w.Length == 7) > 0 ? 40 : 0
             });
@@ -108,7 +108,7 @@ namespace LetterHeadShared
             categories.Add(new Category()
             {
                 name = "Weighted Words",
-                description = "Score based on the words you make. 3&4-letter 1 points, 5&6-letter 2 points, 7+ letter 3 points",
+                description = "Score based on the length of the words you make. 3 & 4 1 point each, 5 & 6 2 points, 7+ letter 3 points",
                 GetScore = (words, uniqueLetterCount, existingScores) => (words.Count(w => w.Length == 3 || w.Length == 4) * 1) +
                  (words.Count(w => w.Length == 5 || w.Length == 6) * 2) +
                  (words.Count(w => w.Length >= 7) * 3)
@@ -117,7 +117,7 @@ namespace LetterHeadShared
             categories.Add(new Category()
             {
                 name = "7+ Letters",
-                description = "7+ letter words 25 points each. (Max 75 points)",
+                description = "Make 7+ letter words for 25 points each with a max of 75 points for this category.",
                 GetScore = (words, uniqueLetterCount, existingScores) =>
                 {
                     var score = words.Count(w => w.Length >= 7) * 25;
@@ -132,7 +132,7 @@ namespace LetterHeadShared
             {
                 alwaysActive = true,
                 name = "Big Word Bonus",
-                description = "8+ letter words 50 points each. No max!",
+                description = "Each word with at least 8 letters is worth 50 points.  No max!",
                 GetScore = (words, uniqueLetterCount, existingScores) => words.Count(w => w.Length >= 8) * 50
             });
 
