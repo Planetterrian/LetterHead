@@ -12,6 +12,9 @@ public class MenuGui : Singleton<MenuGui>
 
     public AudioClip menuMusic;
 
+    public RectTransform adPlaceholder;
+    public RectTransform viewport;
+
     protected override void Awake()
     {
         base.Awake();
@@ -22,6 +25,14 @@ public class MenuGui : Singleton<MenuGui>
     private void Start()
     {
         MusicManager.Instance.PlayMusic(menuMusic);
+
+        AdManager.Instance.OnBannerAdShown.AddListener(OnBannerShown);
+        AdManager.Instance.OnBannerAdHidden.AddListener(OnBannerHidden);
+
+        if (AdManager.Instance.BannerShown())
+        {
+            OnBannerShown();
+        }
 
         if (!string.IsNullOrEmpty(ClientManager.Instance.SessionId))
         {
@@ -48,6 +59,20 @@ public class MenuGui : Singleton<MenuGui>
         {
             LoadLogin();
         }
+    }
+
+    private void OnBannerHidden()
+    {
+        viewport.SetSize(new Vector2(viewport.GetSize().x, viewport.GetSize().y + adPlaceholder.GetSize().y));
+        viewport.anchoredPosition = new Vector2(viewport.anchoredPosition.x, viewport.anchoredPosition.y - (adPlaceholder.GetSize().y / 2));
+        adPlaceholder.gameObject.SetActive(false);
+    }
+
+    private void OnBannerShown()
+    {
+        adPlaceholder.gameObject.SetActive(true);
+        viewport.SetSize(new Vector2(viewport.GetSize().x, viewport.GetSize().y - adPlaceholder.GetSize().y));
+        viewport.anchoredPosition = new Vector2(viewport.anchoredPosition.x, viewport.anchoredPosition.y + (adPlaceholder.GetSize().y / 2));
     }
 
     public void LoadLogin()

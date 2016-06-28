@@ -46,6 +46,11 @@ public class GameGui : Singleton<GameGui>
     private Match nextMatchInfo;
     private float lastNextMatchPoll;
 
+
+    public RectTransform adPlaceholder;
+    public RectTransform viewport;
+
+
     private void Start()
     {
         nextMatchButton.interactable = false;
@@ -54,6 +59,29 @@ public class GameGui : Singleton<GameGui>
         GameManager.Instance.OnMatchDetailsLoadedEvent.AddListener(OnMatchDetailsLoaded);
         timer.OnTimeExpired.AddListener(OnTimeExpired);
         NextMatchPolling();
+
+        AdManager.Instance.OnBannerAdShown.AddListener(OnBannerShown);
+        AdManager.Instance.OnBannerAdHidden.AddListener(OnBannerHidden);
+
+        if (AdManager.Instance.BannerShown())
+        {
+            OnBannerShown();
+        }
+    }
+
+
+    private void OnBannerHidden()
+    {
+        viewport.SetSize(new Vector2(viewport.GetSize().x, viewport.GetSize().y + adPlaceholder.GetSize().y));
+        viewport.anchoredPosition = new Vector2(viewport.anchoredPosition.x, viewport.anchoredPosition.y - (adPlaceholder.GetSize().y / 2));
+        adPlaceholder.gameObject.SetActive(false);
+    }
+
+    private void OnBannerShown()
+    {
+        adPlaceholder.gameObject.SetActive(true);
+        viewport.SetSize(new Vector2(viewport.GetSize().x, viewport.GetSize().y - adPlaceholder.GetSize().y));
+        viewport.anchoredPosition = new Vector2(viewport.anchoredPosition.x, viewport.anchoredPosition.y + (adPlaceholder.GetSize().y / 2));
     }
 
     void Update()

@@ -39,8 +39,9 @@ public class IapManager : Singleton<IapManager>
     private void OnPurchaseMade()
     {
         PlayerPrefs.SetInt("PurchaseMade", 1);
+        AdManager.Instance.DisableAds();
 
-        if(OnItemsUpdated != null)
+        if (OnItemsUpdated != null)
             OnItemsUpdated.Invoke();
     }
 
