@@ -204,6 +204,9 @@ public class HomePage : Page
 
     public void OnRowClicked(DashboardRow dashboardRow)
     {
+        if(!dashboardRow.MatchInfo.IsDaily && dashboardRow.MatchInfo.Users.Count == 0)
+            AdManager.Instance.ShowInterstitial();
+
         PersistManager.Instance.LoadMatch(dashboardRow.MatchInfo.Id, dashboardRow.MatchInfo.Users.Count == 1);
     }
 

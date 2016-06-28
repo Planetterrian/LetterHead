@@ -15,11 +15,21 @@ public class AdManager : Singleton<AdManager>
     string bannerAdUnitId = "unexpected_platform";
 #endif
 
+#if UNITY_ANDROID
+    string interstitialAdUnitId = "ca-app-pub-7112330326407860/7273735432";
+#elif UNITY_IPHONE
+        string interstitialAdUnitId = "ca-app-pub-7112330326407860/8890069430";
+#else
+        string interstitialAdUnitId = "unexpected_platform";
+#endif
+
+
     private BannerView bannerView;
 
     public UnityEvent OnBannerAdShown;
     public UnityEvent OnBannerAdHidden;
     private bool adShown;
+    private InterstitialAd interstitial;
 
     public bool AdsEnabled()
     {
@@ -29,8 +39,38 @@ public class AdManager : Singleton<AdManager>
     // Use this for initialization
     void Start ()
     {
-        if(AdsEnabled())
+        if (AdsEnabled())
+        {
             ShowBanner();
+            LoadInterstitial();
+        }
+    }
+
+    private void LoadInterstitial()
+    {
+        // Initialize an InterstitialAd.
+        interstitial = new InterstitialAd(interstitialAdUnitId);
+        // Create an empty ad request.
+        AdRequest request = new AdRequest.Builder().Build();
+        // Load the interstitial with the request.
+        interstitial.LoadAd(request);
+        interstitial.OnAdClosed += (sender, args) =>
+        {
+            AdRequest request2 = new AdRequest.Builder().Build();
+            // Load the interstitial with the request.
+            interstitial.LoadAd(request2);
+        };
+    }
+
+    public void ShowInterstitial()
+    {
+        if(interstitial == null)
+            return;
+
+        if (interstitial.IsLoaded())
+        {
+            interstitial.Show();
+        }
     }
 
     void ShowBanner()
