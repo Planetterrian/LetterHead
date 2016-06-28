@@ -54,6 +54,11 @@ public class AdManager : Singleton<AdManager>
         AdRequest request = new AdRequest.Builder().Build();
         // Load the interstitial with the request.
         interstitial.LoadAd(request);
+        interstitial.OnAdLoaded += (sender, args) =>
+        {
+            Debug.Log("Interstitial Loaded");
+        };
+
         interstitial.OnAdClosed += (sender, args) =>
         {
             AdRequest request2 = new AdRequest.Builder().Build();
@@ -64,6 +69,8 @@ public class AdManager : Singleton<AdManager>
 
     public void ShowInterstitial()
     {
+        Debug.Log("Attempting to show interstitial");
+
         if(interstitial == null)
             return;
 
