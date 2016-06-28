@@ -432,6 +432,8 @@ namespace LetterHeadServer.Models
         public MatchRound PreviousRound()
         {
             var roundNumber = CurrentRoundNumber;
+            if (TurnOrderUserIds.Count == 0)
+                return null;
 
             var currentUserIndex = TurnOrderUserIds.IndexOf(CurrentUserTurn.Id);
             currentUserIndex--;
@@ -446,7 +448,7 @@ namespace LetterHeadServer.Models
                 return null;
             }
 
-            return Rounds.First(r => r.Number == roundNumber && r.User.Id == TurnOrderUserIds[currentUserIndex]);
+            return Rounds.FirstOrDefault(r => r.Number == roundNumber && r.User.Id == TurnOrderUserIds[currentUserIndex]);
         }
 
         public MatchRound GetRoundByIndex(int index)

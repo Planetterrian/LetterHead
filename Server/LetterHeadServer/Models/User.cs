@@ -33,6 +33,7 @@ namespace LetterHeadServer.Models
         public string DeviceGUID { get; set; }
         public string FacebookId { get; set; }
         public string FacebookToken { get; set; }
+        public string LostPasswordToken { get; set; }
         public DateTime SignupDate { get; set; }
         public DateTime? LastFreePowerup { get; set; }
 
