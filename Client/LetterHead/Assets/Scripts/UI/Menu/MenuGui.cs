@@ -15,6 +15,10 @@ public class MenuGui : Singleton<MenuGui>
     public RectTransform adPlaceholder;
     public RectTransform viewport;
 
+    public LoadingEffect loadingEffect;
+
+    private static bool firstLoad = true;
+
     protected override void Awake()
     {
         base.Awake();
@@ -36,8 +40,19 @@ public class MenuGui : Singleton<MenuGui>
 
         if (!string.IsNullOrEmpty(ClientManager.Instance.SessionId))
         {
+            if (firstLoad)
+            {
+                firstLoad = false;
+                sceneManager.SetGuiScene("Loggin In Scene");
+            }
+            else
+            {
+                loadingEffect.loading = true;
+            }
+
             ClientManager.Instance.RefreshMyInfo(true, (state) =>
             {
+                loadingEffect.loading = false;
                 if (state)
                 {
                     if (string.IsNullOrEmpty(ClientManager.Instance.myUserInfo.Username))
