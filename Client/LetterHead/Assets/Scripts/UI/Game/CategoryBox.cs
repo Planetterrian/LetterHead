@@ -48,7 +48,7 @@ public class CategoryBox : MonoBehaviour, IGameHandler
         }
     }
 
-    public void OnCategoryScoreClicked(Category category)
+    public void OnCategoryScoreClicked(Category category, string scoreText)
     {
         if (!GameGui.CanSelectCategory())
             return;
@@ -59,6 +59,18 @@ public class CategoryBox : MonoBehaviour, IGameHandler
         if(category.alwaysActive)
             return;
 
+        if (scoreText == "0")
+        {
+            DialogWindowTM.Instance.Show("Select score", "Lock in the " + category.name + " category for " + scoreText + " points?", () => DoCategorySelect(category), () => { }, "Confirm", "Cancel");
+        }
+        else
+        {
+            DoCategorySelect(category);
+        }
+    }
+
+    private static void DoCategorySelect(Category category)
+    {
         GameManager.Instance.SelectCategory(category);
         SoundManager.Instance.PlayClip("Circle Score");
     }
