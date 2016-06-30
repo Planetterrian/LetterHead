@@ -196,12 +196,14 @@ public class Tile : MonoBehaviour
             if (IsSelected())
             {
                 BoardManager.Instance.DeselectTile(this);
-                deselectSound.Play();
+                if (!SoundManager.Instance.Muted())
+                    deselectSound.Play();
             }
             else
             {
                 BoardManager.Instance.SelectTile(this);
-                selectSound.Play();
+                if (!SoundManager.Instance.Muted())
+                    selectSound.Play();
             }
         }
         else if (Mode == Tile.TileMode.SpelledWord)

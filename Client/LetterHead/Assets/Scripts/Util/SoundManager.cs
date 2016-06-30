@@ -26,18 +26,21 @@ public class SoundManager : Singleton<SoundManager>
 
     public void ToggleSound(bool state)
     {
-        AudioListener.volume = state ? 1 : 0;
+        //AudioListener.volume = state ? 1 : 0;
         PlayerPrefs.SetInt("Muted", state ? 0 : 1);
     }
 
 
     public bool Muted()
     {
-        return PlayerPrefs.GetInt("Muted", 0) == 1;
+        return !PersistManager.Instance.SoundEnabled;
     }
 
     public void PlayClip(string name)
     {
+        if(Muted())
+            return;
+
         var clip = clipDictionary[name];
 
         _PlayClip(clip);

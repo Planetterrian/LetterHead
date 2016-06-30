@@ -50,7 +50,6 @@ public class PersistManager : Singleton<PersistManager>
 
     private void OnSoundEnabledChanged()
     {
-        AudioListener.volume = SoundEnabled ? 1 : 0;
     }
 
     public bool ClearWord

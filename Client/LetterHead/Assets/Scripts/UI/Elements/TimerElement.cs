@@ -43,7 +43,9 @@ public class TimerElement : MonoBehaviour
             {
                 flashLightTween.Play();
                 tweenAlpha.Play();
-                audio.Play();
+
+                if(!SoundManager.Instance.Muted())
+                    audio.Play();
             }
             
             if (secondsRemaining <= 0)
