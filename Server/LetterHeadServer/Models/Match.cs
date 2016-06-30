@@ -173,17 +173,17 @@ namespace LetterHeadServer.Models
                         return "Your opponent blocked your steal!";
                 }
             }
-            else
+            else if(lastRound.StealSuccess)
             {
                 if (lastRound.StealTimeDelay > 0)
                 {
                     if (lastRound.User != forUser)
-                        return "You stole a letter from your opponent!";
+                        return "You stole time from your opponent!";
                 }
                 else if (lastRound.StealLetterDelay > 0)
                 {
                     if (lastRound.User != forUser)
-                        return "You stole time from your opponent!";
+                        return "You stole a letter from your opponent!";
                 }
             }
 
@@ -193,13 +193,13 @@ namespace LetterHeadServer.Models
             {
                 if (currentRound.User != forUser)
                 {
-                    return "You sent a timer sabatage!";
+                    return "You sent a timer sabotage!";
                 }
             }
             else if (currentRound.StealLetterDelay > 0)
             {
                 if (currentRound.User != forUser)
-                    return "You sent a letter sabatage!";
+                    return "You sent a letter sabotage!";
             }
 
             return "";

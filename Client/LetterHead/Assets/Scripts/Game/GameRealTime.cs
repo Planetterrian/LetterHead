@@ -204,6 +204,11 @@ public class GameRealTime : Singleton<GameRealTime>
         SendMsg("RequestStart");
     }
 
+    public void StealSuccess()
+    {
+        SendMsg("StealSuccess");
+    }
+
     public void AddWord(string word, int usedLetterIds)
     {
         using (var steam = new MemoryStream())

@@ -271,6 +271,25 @@ namespace LetterHeadServer.Controllers
         }
 
 
+        private async Task _StealSuccess(BinaryReader reader)
+        {
+            if (match.CurrentUserTurn != currentUser)
+            {
+                await Err("It's your opponents turn");
+                return;
+            }
+
+            if (match.CurrentState == LetterHeadShared.DTO.Match.MatchState.Ended)
+            {
+                await Err("That game has already ended");
+                return;
+            }
+
+            var round = match.CurrentRoundForUser(currentUser);
+            round.StealSuccess = true;
+            db.SaveChanges();
+        }
+
         private async Task _UseDoOver(BinaryReader reader)
         {
             if (match.CurrentUserTurn != currentUser)

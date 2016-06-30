@@ -239,6 +239,7 @@ public class PowerupManager : Singleton<PowerupManager>
             tileToSteal.transform.SetAsFirstSibling();
         }
 
+        GameRealTime.Instance.StealSuccess();
         stealTimeActive = false;
         stealLetterActive = false;
         RefreshMyButtons();

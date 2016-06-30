@@ -52,6 +52,7 @@ namespace LetterHeadServer.Models
         public LetterHeadShared.DTO.MatchRound.RoundState CurrentState { get; set; }
         public DateTime? StartedOn { get; set; }
         public DateTime? ActivatedOn { get; set; }
+        public bool StealSuccess { get; set; }
 
         public MatchRound()
         {
