@@ -43,7 +43,8 @@ public class AdManager : Singleton<AdManager>
 
     public bool AdsEnabled()
     {
-        return PlayerPrefs.GetInt("PurchaseMade", 0) == 0;
+        return true;
+        //return PlayerPrefs.GetInt("PurchaseMade", 0) == 0;
     }
 
     // Use this for initialization

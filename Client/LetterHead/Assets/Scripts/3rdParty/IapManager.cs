@@ -55,6 +55,7 @@ public class IapManager : Singleton<IapManager>
                 {
                     // Your code to handle purchased products
                     AwardProduct(_transaction);
+                    _transaction.OnCustomVerificationFinished(eBillingTransactionVerificationState.SUCCESS);
                 }
             }
         }
