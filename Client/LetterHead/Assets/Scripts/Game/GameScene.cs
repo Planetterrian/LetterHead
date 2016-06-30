@@ -35,9 +35,6 @@ public class GameScene : Singleton<GameScene>
     {
         base.Awake();
 
-        if(DialogWindowTM.Instance)
-            DialogWindowTM.Instance.Hide();
-
         SetForSingleplayer();
     }
 

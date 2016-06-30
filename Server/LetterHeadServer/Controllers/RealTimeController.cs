@@ -270,6 +270,10 @@ namespace LetterHeadServer.Controllers
             await SendMessage("StartRound", round.TimeRemaining());
         }
 
+        private async Task _ClientPing(BinaryReader reader)
+        {
+            await SendMessage("ServerPing");
+        }
 
         private async Task _StealSuccess(BinaryReader reader)
         {

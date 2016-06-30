@@ -97,6 +97,9 @@ public class GameGui : Singleton<GameGui>
 
     public void OnRealTimeConnected()
     {
+        if (DialogWindowTM.Instance)
+            DialogWindowTM.Instance.Hide();
+
         OnGameStateChanged();
     }
 

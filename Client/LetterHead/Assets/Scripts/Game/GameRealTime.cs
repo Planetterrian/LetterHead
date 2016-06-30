@@ -13,6 +13,8 @@ public class GameRealTime : Singleton<GameRealTime>
     private bool isShuttingDown;
 
     private int currentMatchId;
+    private bool pingRecieved;
+    private bool manualReconnect;
 
     void Start()
     {
@@ -69,9 +71,13 @@ public class GameRealTime : Singleton<GameRealTime>
         {
             Loom.QueueOnMainThread(() =>
             {
-                Debug.Log("Connected to real time socket");
-                GameGui.Instance.OnRealTimeConnected();
-                GameManager.Instance.OnRealTimeConnected();
+                if (!isShuttingDown)
+                {
+                    Debug.Log("Connected to real time socket. Sending Ping");
+                    pingRecieved = false;
+                    TimerManager.AddEvent(3f, CheckPing);
+                    SendMsg("ClientPing");
+                }
             });
         };
 
@@ -80,6 +86,13 @@ public class GameRealTime : Singleton<GameRealTime>
             Loom.QueueOnMainThread(() =>
             {
                 Debug.Log("Disconnected fromn real time socket: " + args.Code + " " + args.Reason);
+
+                if (manualReconnect)
+                {
+                    manualReconnect = false;
+                    Connect();
+                    return;
+                }
 
                 if (!isShuttingDown)
                 {
@@ -92,6 +105,15 @@ public class GameRealTime : Singleton<GameRealTime>
         };
 
         socket.Connect();
+    }
+
+    private void CheckPing()
+    {
+        if (pingRecieved || isShuttingDown)
+            return;
+
+        manualReconnect = true;
+        socket.Close();
     }
 
     private void ProcessMessage(byte[] rawData)
@@ -140,6 +162,17 @@ public class GameRealTime : Singleton<GameRealTime>
         socket.SendAsync(steam.ToByteArray(), b => { });
         bw.Close();
         steam.Close();
+    }
+
+    private void _ServerPing(BinaryReader message)
+    {
+        if(!GameGui.Instance)
+            return;
+
+        pingRecieved = true;
+
+        GameGui.Instance.OnRealTimeConnected();
+        GameManager.Instance.OnRealTimeConnected();
     }
 
     void _Err(BinaryReader message)
