@@ -75,6 +75,7 @@ public class AdManager : Singleton<AdManager>
         };
 
         AdRequest request = new AdRequest.Builder().Build();
+        request.TestDevices.Add("96f0159b9494d5c6174f95f199b659bc");
         rewardBasedVideo.LoadAd(request, rewardedAdUnitId);
     }
 
@@ -83,6 +84,7 @@ public class AdManager : Singleton<AdManager>
         onRewardAdCompleted(reward);
 
         AdRequest request = new AdRequest.Builder().Build();
+        request.TestDevices.Add("96f0159b9494d5c6174f95f199b659bc");
         rewardBasedVideo.LoadAd(request, rewardedAdUnitId);
     }
 
@@ -103,11 +105,17 @@ public class AdManager : Singleton<AdManager>
         interstitial = new InterstitialAd(interstitialAdUnitId);
         // Create an empty ad request.
         AdRequest request = new AdRequest.Builder().Build();
+        request.TestDevices.Add("96f0159b9494d5c6174f95f199b659bc");
         // Load the interstitial with the request.
         interstitial.LoadAd(request);
         interstitial.OnAdLoaded += (sender, args) =>
         {
             Debug.Log("Interstitial Loaded");
+        };
+
+        interstitial.OnAdFailedToLoad += (sender, args) =>
+        {
+            Debug.Log("Interstial failed to load: " + args.Message);
         };
 
         interstitial.OnAdClosed += (sender, args) =>
@@ -137,8 +145,14 @@ public class AdManager : Singleton<AdManager>
         // Create a 320x50 banner at the top of the screen.
         bannerView = new BannerView(bannerAdUnitId, AdSize.Banner, AdPosition.Bottom);
         bannerView.OnAdLoaded += BannerViewOnOnAdLoaded;
+        bannerView.OnAdFailedToLoad += (sender, args) =>
+        {
+            Debug.Log("Error loading banner: " + args.Message);
+        };
+
         // Create an empty ad request.
         AdRequest request = new AdRequest.Builder().Build();
+        request.TestDevices.Add("96f0159b9494d5c6174f95f199b659bc");
         // Load the banner with the request.
         bannerView.LoadAd(request);
     }
@@ -153,7 +167,9 @@ public class AdManager : Singleton<AdManager>
     private void BannerViewOnOnAdLoaded(object sender, EventArgs eventArgs)
     {
         adShown = true;
-        OnBannerAdShown.Invoke();
+
+        if(OnBannerAdShown != null)
+            OnBannerAdShown.Invoke();
     }
 
     // Update is called once per frame
