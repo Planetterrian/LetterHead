@@ -118,7 +118,7 @@ public class PowerupsPage : Page
             Srv.Instance.POST("User/RewardedAd", new Dictionary<string, string>() { { "type", ((int)boosterType).ToString() } }, s =>
             {
                 ClientManager.Instance.RefreshMyInfo(false, b => Refresh());
-            });
+            }, DialogWindowTM.Instance.Error);
 
             DialogWindowTM.Instance.Show("Completed!", "You have been awarded a free " + PowerupName(boosterType) + " booster!", () => { });
         });

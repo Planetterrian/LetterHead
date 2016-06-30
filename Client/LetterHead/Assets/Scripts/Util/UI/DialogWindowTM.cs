@@ -9,7 +9,6 @@ public class DialogWindowTM : Singleton<DialogWindowTM>
     public TextMeshProUGUI title;
     public Button okayButton;
     public Button cancelButton;
-    public Button closeButton;
     private Action okayCallback;
     private Action cancelCallback;
 
@@ -43,7 +42,7 @@ public class DialogWindowTM : Singleton<DialogWindowTM>
         Show("Error", errText, () => { });
     }
 
-    public void Show(string titleText, string text, Action okCallback, Action cancelCallback = null, string okayText = "OK", string cancelText = "CANCEL")
+    public void Show(string titleText, string text, Action okCallback, Action cancelCallback = null, string okayText = "Ok", string cancelText = "Cancel")
     {
         gameObject.SetActive(true);
 
@@ -63,7 +62,6 @@ public class DialogWindowTM : Singleton<DialogWindowTM>
             // Info box
             cancelButton.gameObject.SetActive(false);
             okayButton.gameObject.SetActive(false);
-            closeButton.gameObject.SetActive(false);
 
             butLeft.gameObject.SetActive(false);
             butRight.gameObject.SetActive(false);
@@ -72,7 +70,6 @@ public class DialogWindowTM : Singleton<DialogWindowTM>
         else if (cancelCallback == null)
         {
             okayButton.gameObject.SetActive(true);
-            closeButton.gameObject.SetActive(false);
             cancelButton.gameObject.SetActive(false);
 
             butLeft.gameObject.SetActive(false);
@@ -90,17 +87,7 @@ public class DialogWindowTM : Singleton<DialogWindowTM>
             butBottom.gameObject.SetActive(false);
 
             okayButton.transform.SetParent(butRight, false);
-
-            if (cancelText == "CANCEL")
-            {
-                closeButton.gameObject.SetActive(true);
-                cancelButton.gameObject.SetActive(false);
-            }
-            else
-            {
-                cancelButton.gameObject.SetActive(true);
-                closeButton.gameObject.SetActive(false);
-            }
+            cancelButton.gameObject.SetActive(true);
         }
     }
 

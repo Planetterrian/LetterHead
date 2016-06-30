@@ -75,7 +75,7 @@ public class GameRealTime : Singleton<GameRealTime>
                 {
                     Debug.Log("Connected to real time socket. Sending Ping");
                     pingRecieved = false;
-                    TimerManager.AddEvent(3f, CheckPing);
+                    TimerManager.AddEvent(2f, CheckPing);
                     SendMsg("ClientPing");
                 }
             });
@@ -87,15 +87,15 @@ public class GameRealTime : Singleton<GameRealTime>
             {
                 Debug.Log("Disconnected fromn real time socket: " + args.Code + " " + args.Reason);
 
-                if (manualReconnect)
-                {
-                    manualReconnect = false;
-                    Connect();
-                    return;
-                }
-
                 if (!isShuttingDown)
                 {
+                    if (manualReconnect)
+                    {
+                        manualReconnect = false;
+                        Connect();
+                        return;
+                    }
+
                     DialogWindowTM.Instance.Show("Disconnected", "You have been disconnected from the server", () =>
                     {
                         PersistManager.Instance.LoadMenu();
