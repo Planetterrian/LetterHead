@@ -56,10 +56,11 @@ public class GameRealTime : Singleton<GameRealTime>
 
                 if (!isShuttingDown)
                 {
+                    PersistManager.Instance.LoadMenu();
+/*
                     DialogWindowTM.Instance.Show("Disconnected", "You have been disconnected from the server", () =>
                     {
-                        PersistManager.Instance.LoadMenu();
-                    });
+                    });*/
                 }
             });
         };
