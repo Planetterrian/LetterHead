@@ -64,6 +64,10 @@ public class AdManager : Singleton<AdManager>
         rewardBasedVideo = RewardBasedVideoAd.Instance;
 
         rewardBasedVideo.OnAdRewarded += RewardBasedVideoOnOnAdRewarded;
+        rewardBasedVideo.OnAdClosed += (sender, args) =>
+        {
+            Debug.Log("Rewarded ad closed");
+        };
 
         rewardBasedVideo.OnAdLoaded += (sender, args) =>
         {
@@ -82,10 +86,10 @@ public class AdManager : Singleton<AdManager>
 
     private void RewardBasedVideoOnOnAdRewarded(object sender, Reward reward)
     {
+        Debug.Log("Rewarded video completed");
         onRewardAdCompleted(reward);
 
         AdRequest request = new AdRequest.Builder().Build();
-        request.TestDevices.Add("96f0159b9494d5c6174f95f199b659bc");
         rewardBasedVideo.LoadAd(request, rewardedAdUnitId);
     }
 
