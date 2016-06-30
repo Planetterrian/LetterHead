@@ -50,7 +50,16 @@ public class EmailLoginWindow : MonoBehaviour
                                             {
                                                 DialogWindowTM.Instance.Hide();
                                                 GetComponent<WindowController>().Hide();
-                                                MenuGui.Instance.LoadDashboard();
+
+                                                if (string.IsNullOrEmpty(ClientManager.Instance.myUserInfo.Username))
+                                                {
+                                                    MenuGui.Instance.loginScene.registerDetailsWindow.ShowModal();
+                                                }
+                                                else
+                                                {
+                                                    MenuGui.Instance.LoadDashboard();
+                                                }
+                                                
                                             });
                                         }, s =>
                                         {
