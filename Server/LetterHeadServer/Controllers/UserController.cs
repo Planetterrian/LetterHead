@@ -86,6 +86,12 @@ namespace LetterHeadServer.Controllers
                 Name = info.name,
             };
 
+            var existingFacebook = db.Users.FirstOrDefault(u => u.FacebookId == facebookUser.Id);
+            if (existingFacebook != null && existingFacebook.Id != currentUser.Id)
+            {
+                return Error("That Facebook is already associated with another account. Try logging in using Facebook to access it.");
+            }
+
 
             currentUser.FacebookToken = token;
             currentUser.FacebookId = facebookUser.Id;
@@ -253,6 +259,16 @@ namespace LetterHeadServer.Controllers
         public ActionResult CanDoDailyPowerup()
         {
             return Json(currentUser.CanDoDailyPowerup());
+        }
+
+        [AuthenticationFilter()]
+        public ActionResult RewardedAd(int type)
+        {
+            var powerupType = (Powerup.Type)type;
+            currentUser.AddPowerup(powerupType, 1);
+            db.SaveChanges();
+
+            return Okay();
         }
 
         [AuthenticationFilter()]

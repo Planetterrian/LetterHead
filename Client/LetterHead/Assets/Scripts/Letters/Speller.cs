@@ -52,6 +52,7 @@ public class Speller : Singleton<Speller>, IGameHandler
         tile.transform.SetParent(transform);
         tile.GetComponent<RectTransform>().SetWidth(tileOriginalSize.x / tileWidthDivider);
         tile.SetColor(tileColor);
+        tile.MarkAsUsed();
         tile.Mode = Tile.TileMode.SpelledWord;
         tile.referencedTileID = originalTile.ID;
         tiles.AddLast(tile);

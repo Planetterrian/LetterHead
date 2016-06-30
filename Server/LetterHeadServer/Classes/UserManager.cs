@@ -12,7 +12,7 @@ namespace LetterHeadServer.Classes
 
         public static User LoginUserFromFacebook(ApplicationDbContext db, FacebookUserInfo facebookUser)
         {
-            var user = db.Users.SingleOrDefault(u => u.FacebookId == facebookUser.Id);
+            var user = db.Users.FirstOrDefault(u => u.FacebookId == facebookUser.Id);
 
             if (user == null)
                 user = CreateFacebookUser(db, facebookUser);

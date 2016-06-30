@@ -7,11 +7,13 @@ using Newtonsoft.Json;
 using UI.Pagination;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class PowerupsPage : Page
 {
     public LotteryGui lottetyGui;
     public Button dailyPowerupButton;
+    public Button rewardedPowerupButton;
 
     public PowerupRow[] powerupRows;
 
@@ -32,6 +34,24 @@ public class PowerupsPage : Page
         });
     }
 
+
+    void Update()
+    {
+        rewardedPowerupButton.interactable = CanDoRewardedAd();
+    }
+
+    private bool CanDoRewardedAd()
+    {
+        if (!AdManager.Instance.HasRewardedVideo())
+            return false;
+
+        var date = DateTime.Now.Date.ToString();
+        var curDone = PlayerPrefs.GetInt("ad_" + date, 0);
+        if (curDone > 4)
+            return false;
+
+        return true;
+    }
 
     void OnApplicationFocus(bool state)
     {
@@ -57,8 +77,50 @@ public class PowerupsPage : Page
         lottetyGui.ShowModal();
     }
 
+    private Powerup.Type GetRandomPowerup()
+    {
+        return (Powerup.Type)Random.Range(0, 4);
+    }
+
+    private string PowerupName(Powerup.Type type)
+    {
+        switch (type)
+        {
+            case Powerup.Type.DoOver:
+                return "Do-Over";
+                break;
+            case Powerup.Type.Shield:
+                return "Shield";
+                break;
+            case Powerup.Type.StealTime:
+                return "Steal Time";
+                break;
+            case Powerup.Type.StealLetter:
+                return "Steal Letter";
+                break;
+        }
+
+        return "";
+    }
+
     public void WatchAdClicked()
     {
-        
+        AdManager.Instance.ShowRewardedVideo(reward =>
+        {
+            var boosterType = GetRandomPowerup();
+
+            var date = DateTime.Now.Date.ToString();
+            var curDone = PlayerPrefs.GetInt("ad_" + date, 0);
+            PlayerPrefs.SetInt("ad_" + date, curDone + 1);
+            Debug.Log("Cur Done = " + PlayerPrefs.GetInt("ad_" + date, 0));
+            Debug.Log("Date = " + date);
+
+            Srv.Instance.POST("User/RewardedAd", new Dictionary<string, string>() { { "type", ((int)boosterType).ToString() } }, s =>
+            {
+                ClientManager.Instance.RefreshMyInfo(false, b => Refresh());
+            });
+
+            DialogWindowTM.Instance.Show("Completed!", "You have been awarded a free " + PowerupName(boosterType) + " booster!", () => { });
+        });
     }
 }

@@ -23,6 +23,14 @@ public class AdManager : Singleton<AdManager>
         string interstitialAdUnitId = "unexpected_platform";
 #endif
 
+#if UNITY_ANDROID
+    string rewardedAdUnitId = "ca-app-pub-7112330326407860/8511306234";
+#elif UNITY_IPHONE
+        string rewardedAdUnitId = "ca-app-pub-7112330326407860/5557839830";
+#else
+        string rewardedAdUnitId = "unexpected_platform";
+#endif
+
 
     private BannerView bannerView;
 
@@ -30,6 +38,8 @@ public class AdManager : Singleton<AdManager>
     public UnityEvent OnBannerAdHidden;
     private bool adShown;
     private InterstitialAd interstitial;
+    private RewardBasedVideoAd rewardBasedVideo;
+    private Action<Reward> onRewardAdCompleted;
 
     public bool AdsEnabled()
     {
@@ -44,6 +54,47 @@ public class AdManager : Singleton<AdManager>
             ShowBanner();
             LoadInterstitial();
         }
+
+        LoadRewardedVideo();
+    }
+
+    private void LoadRewardedVideo()
+    {
+        rewardBasedVideo = RewardBasedVideoAd.Instance;
+
+        rewardBasedVideo.OnAdRewarded += RewardBasedVideoOnOnAdRewarded;
+
+        rewardBasedVideo.OnAdLoaded += (sender, args) =>
+        {
+            Debug.Log("Rewarded ad loaded");
+        };
+
+        rewardBasedVideo.OnAdFailedToLoad += (sender, args) =>
+        {
+            Debug.Log("Failed to load rewarded ad. " + args.Message);
+        };
+
+        AdRequest request = new AdRequest.Builder().Build();
+        rewardBasedVideo.LoadAd(request, rewardedAdUnitId);
+    }
+
+    private void RewardBasedVideoOnOnAdRewarded(object sender, Reward reward)
+    {
+        onRewardAdCompleted(reward);
+
+        AdRequest request = new AdRequest.Builder().Build();
+        rewardBasedVideo.LoadAd(request, rewardedAdUnitId);
+    }
+
+    public bool HasRewardedVideo()
+    {
+        return rewardBasedVideo.IsLoaded();
+    }
+
+    public void ShowRewardedVideo(Action<Reward> onCompleted)
+    {
+        onRewardAdCompleted = onCompleted;
+        rewardBasedVideo.Show();
     }
 
     private void LoadInterstitial()
