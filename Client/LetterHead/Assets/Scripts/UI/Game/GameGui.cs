@@ -49,6 +49,7 @@ public class GameGui : Singleton<GameGui>
 
     public RectTransform adPlaceholder;
     public RectTransform viewport;
+    private bool bannerShown;
 
 
     private void Start()
@@ -72,6 +73,11 @@ public class GameGui : Singleton<GameGui>
 
     private void OnBannerHidden()
     {
+        if (!bannerShown)
+            return;
+
+        bannerShown = false;
+
         viewport.SetSize(new Vector2(viewport.GetSize().x, viewport.GetSize().y + adPlaceholder.GetSize().y));
         viewport.anchoredPosition = new Vector2(viewport.anchoredPosition.x, viewport.anchoredPosition.y - (adPlaceholder.GetSize().y / 2));
         adPlaceholder.gameObject.SetActive(false);
@@ -79,6 +85,11 @@ public class GameGui : Singleton<GameGui>
 
     private void OnBannerShown()
     {
+        if (bannerShown)
+            return;
+
+        bannerShown = true;
+
         adPlaceholder.gameObject.SetActive(true);
         viewport.SetSize(new Vector2(viewport.GetSize().x, viewport.GetSize().y - adPlaceholder.GetSize().y));
         viewport.anchoredPosition = new Vector2(viewport.anchoredPosition.x, viewport.anchoredPosition.y + (adPlaceholder.GetSize().y / 2));

@@ -18,6 +18,7 @@ public class MenuGui : Singleton<MenuGui>
     public LoadingEffect loadingEffect;
 
     private static bool firstLoad = true;
+    private bool bannerShown;
 
     protected override void Awake()
     {
@@ -78,6 +79,10 @@ public class MenuGui : Singleton<MenuGui>
 
     private void OnBannerHidden()
     {
+        if(!bannerShown)
+            return;
+
+        bannerShown = false;
         viewport.SetSize(new Vector2(viewport.GetSize().x, viewport.GetSize().y + adPlaceholder.GetSize().y));
         viewport.anchoredPosition = new Vector2(viewport.anchoredPosition.x, viewport.anchoredPosition.y - (adPlaceholder.GetSize().y / 2));
         adPlaceholder.gameObject.SetActive(false);
@@ -85,6 +90,10 @@ public class MenuGui : Singleton<MenuGui>
 
     private void OnBannerShown()
     {
+        if (bannerShown)
+            return;
+
+        bannerShown = true;
         adPlaceholder.gameObject.SetActive(true);
         viewport.SetSize(new Vector2(viewport.GetSize().x, viewport.GetSize().y - adPlaceholder.GetSize().y));
         viewport.anchoredPosition = new Vector2(viewport.anchoredPosition.x, viewport.anchoredPosition.y + (adPlaceholder.GetSize().y / 2));
