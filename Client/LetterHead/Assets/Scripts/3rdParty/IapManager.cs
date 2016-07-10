@@ -57,6 +57,10 @@ public class IapManager : Singleton<IapManager>
                     AwardProduct(_transaction);
                     _transaction.OnCustomVerificationFinished(eBillingTransactionVerificationState.SUCCESS);
                 }
+                else
+                {
+                    DialogWindowTM.Instance.Error(_transaction.Error);
+                }
             }
         }
     }
@@ -77,6 +81,7 @@ public class IapManager : Singleton<IapManager>
 
     public void RequestPurchase(string identifier)
     {
+        DialogWindowTM.Instance.Show("Purchase", "One moment, processing your request...", () => { }, () => { }, "");
         var product = NPBinding.Billing.GetStoreProduct(identifier);
         NPBinding.Billing.BuyProduct(product);
     }
