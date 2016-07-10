@@ -45,7 +45,7 @@ public class LoginScene : GuiScene
             return;
         }
 
-        DialogWindowTM.Instance.Show("Facebook", "We're processing your Login... Please wait.", () => { }, () => { }, "");
+        DialogWindowTM.Instance.Show("Facebook", "We are processing your login... Please wait.", () => { }, () => { }, "");
 
         Srv.Instance.POST("User/FacebookLogin", new Dictionary<string, string>() {{"token", result.AccessToken.TokenString}}, (s) =>
         {

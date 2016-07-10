@@ -18,7 +18,7 @@ public class NewGamePage : Page
     {
         Srv.Instance.POST("Match/Random", null, s =>
         {
-            DialogWindowTM.Instance.Show("New Game", "We're searching for an opponent. You will receive a notification when one is found.", () => { });
+            DialogWindowTM.Instance.Show("New Game", "We are searching for an opponent. You will receive a notification when one is found.", () => { });
         }, DialogWindowTM.Instance.Error );
     }
 

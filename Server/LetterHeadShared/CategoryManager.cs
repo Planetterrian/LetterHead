@@ -108,7 +108,7 @@ namespace LetterHeadShared
             categories.Add(new Category()
             {
                 name = "Weighted Words",
-                description = "Score based on the length of the words you make. 3 & 4 1 point each, 5 & 6 2 points, 7+ letter 3 points.",
+                description = "Score based on word length. 3-4 = 1 point, 5-6 = 2 points, 7+ letters = 3 points.",
                 GetScore = (words, uniqueLetterCount, existingScores) => (words.Count(w => w.Length == 3 || w.Length == 4) * 1) +
                  (words.Count(w => w.Length == 5 || w.Length == 6) * 2) +
                  (words.Count(w => w.Length >= 7) * 3)

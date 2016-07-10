@@ -415,7 +415,7 @@ public class EndRoundWindow : WindowController
 
     public void RematchClicked()
     {
-        DialogWindowTM.Instance.Show("Invite", "Sending invite to " + GameManager.Instance.OpponentUserName(), () => { }, () => { }, "");
+        DialogWindowTM.Instance.Show("Invite", "Sending invite to " + GameManager.Instance.OpponentUserName() + ".", () => { }, () => { }, "");
         Srv.Instance.POST("Match/Invite", new Dictionary<string, string>() { { "userId", GameManager.Instance.OpponentUserId().ToString() } },
             (s) =>
             {

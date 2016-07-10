@@ -33,7 +33,7 @@ public class IapManager : Singleton<IapManager>
             OnPurchaseMade();
         }
 
-        DialogWindowTM.Instance.Show("Restore Purchases", "Purchases have been restored", () => { });
+        DialogWindowTM.Instance.Show("Restore Purchases", "Purchases have been restored.", () => { });
     }
 
     private void OnPurchaseMade()
@@ -69,12 +69,12 @@ public class IapManager : Singleton<IapManager>
     {
         OnPurchaseMade();
 
-        DialogWindowTM.Instance.Show("Awarding", "Please wait while we award you your items", () => { }, () => { }, "");
+        DialogWindowTM.Instance.Show("Awarding", "Please wait while we award you your items.", () => { }, () => { }, "");
 
         Srv.Instance.POST("User/IapPurchase", new Dictionary<string, string>() {{"productId", transaction.ProductIdentifier}, {"receipt", transaction.TransactionReceipt}}, s =>
         {
             OnPurchaseMade();
-            DialogWindowTM.Instance.Show("Purchase completed", "Thank you for your purchase!", () => { });
+            DialogWindowTM.Instance.Show("Purchase Completed", "Thank you for your purchase!", () => { });
         }, DialogWindowTM.Instance.Error);
     }
 

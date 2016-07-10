@@ -93,7 +93,7 @@ public class SettingsPage : Page
             ClientManager.Instance.myUserInfo.FacebookPictureUrl = "";
             ClientManager.Instance.myUserInfo.AvatarUrl = "sprite:Picture1";
             Refresh();
-            DialogWindowTM.Instance.Show("Diconnect Facebook", "Your Facebook account has been disconnected from LetterHead", () => { });
+            DialogWindowTM.Instance.Show("Disconnect Facebook", "Your Facebook account has been disconnected from Letter Head.", () => { });
         }, DialogWindowTM.Instance.Error);
     }
 
@@ -116,7 +116,7 @@ public class SettingsPage : Page
             return;
         }
 
-        DialogWindowTM.Instance.Show("Facebook", "We're processing your Login... Please wait.", () => { }, () => { }, "");
+        DialogWindowTM.Instance.Show("Facebook", "We are processing your login... Please wait.", () => { }, () => { }, "");
 
         Srv.Instance.POST("User/FacebookConnect", new Dictionary<string, string>() { { "token", result.AccessToken.TokenString } }, (s) =>
         {

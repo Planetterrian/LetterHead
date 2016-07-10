@@ -61,7 +61,7 @@ public class CategoryBox : MonoBehaviour, IGameHandler
 
         if (scoreText == "0")
         {
-            DialogWindowTM.Instance.Show("Select score", "Lock in the " + category.name + " category for " + scoreText + " points?", () => DoCategorySelect(category), () => { }, "Confirm", "Cancel");
+            DialogWindowTM.Instance.Show("Select Score", "Lock in the " + category.name + " category for " + scoreText + " points?", () => DoCategorySelect(category), () => { }, "Confirm", "Cancel");
         }
         else
         {

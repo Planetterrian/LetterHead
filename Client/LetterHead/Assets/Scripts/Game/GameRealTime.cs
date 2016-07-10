@@ -60,7 +60,7 @@ public class GameRealTime : Singleton<GameRealTime>
                 {
                     PersistManager.Instance.LoadMenu();
 /*
-                    DialogWindowTM.Instance.Show("Disconnected", "You have been disconnected from the server", () =>
+                    DialogWindowTM.Instance.Show("Disconnected", "You have been disconnected from the server.", () =>
                     {
                     });*/
                 }
@@ -96,7 +96,7 @@ public class GameRealTime : Singleton<GameRealTime>
                         return;
                     }
 
-                    DialogWindowTM.Instance.Show("Disconnected", "You have been disconnected from the server", () =>
+                    DialogWindowTM.Instance.Show("Disconnected", "You have been disconnected from the server.", () =>
                     {
                         PersistManager.Instance.LoadMenu();
                     });

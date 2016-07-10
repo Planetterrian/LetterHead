@@ -31,7 +31,7 @@ public class FriendsInviteWindow : WindowController
 
     public void OnRowClicked(FriendRow friendRow)
     {
-        DialogWindowTM.Instance.Show("Invite", "Sending invite to " + friendRow.user.Username, () => { }, () => { }, "");
+        DialogWindowTM.Instance.Show("Invite", "Sending invite to " + friendRow.user.Username + ".", () => { }, () => { }, "");
         Srv.Instance.POST("Match/Invite", new Dictionary<string, string>() {{"userId", friendRow.user.Id.ToString()}},
             (s) =>
             {
