@@ -136,6 +136,7 @@ namespace LetterHeadServer.Controllers
         [AuthenticationFilter()]
         public ActionResult RegisterDetails(string username, string avatar)
         {
+            username = username.Trim();
             ActionResult actionResult;
 
             if (UsernameIsInvalid(username, out actionResult))
@@ -301,6 +302,7 @@ namespace LetterHeadServer.Controllers
         [AuthenticationFilter()]
         public ActionResult SetUsername(string username)
         {
+            username = username.Trim();
             ActionResult actionResult;
             if (UsernameIsInvalid(username, out actionResult))
                 return actionResult;

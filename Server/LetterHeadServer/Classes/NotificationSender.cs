@@ -30,7 +30,7 @@ namespace LetterHeadServer.Classes
         {
             // Configuration (NOTE: .pfx can also be used here)
             //var config = new ApnsConfiguration(ApnsConfiguration.ApnsServerEnvironment.Sandbox, HttpContext.Current.Server.MapPath("~/App_Data/letterhead-push.pfx"), "letterhead");
-            var config = new ApnsConfiguration(ApnsConfiguration.ApnsServerEnvironment.Sandbox, certBytes, "letterhead");
+            var config = new ApnsConfiguration(ApnsConfiguration.ApnsServerEnvironment.Production, certBytes, "letterhead");
             //var config = new ApnsConfiguration(ApnsConfiguration.ApnsServerEnvironment.Sandbox, 
 
             // Create a new broker
