@@ -2,6 +2,7 @@
 using UnityEngine;
 using System.Collections;
 using GoogleMobileAds.Api;
+using UnityEngine.Advertisements;
 using UnityEngine.Events;
 
 public class AdManager : Singleton<AdManager>
@@ -39,7 +40,7 @@ public class AdManager : Singleton<AdManager>
     private bool adShown;
     private InterstitialAd interstitial;
     private RewardBasedVideoAd rewardBasedVideo;
-    private Action<Reward> onRewardAdCompleted;
+    private Action<ShowResult> onRewardAdCompleted;
 
     public bool AdsEnabled()
     {
@@ -61,7 +62,7 @@ public class AdManager : Singleton<AdManager>
 
     private void LoadRewardedVideo()
     {
-        rewardBasedVideo = RewardBasedVideoAd.Instance;
+/*        rewardBasedVideo = RewardBasedVideoAd.Instance;
 
         rewardBasedVideo.OnAdRewarded += RewardBasedVideoOnOnAdRewarded;
         rewardBasedVideo.OnAdClosed += (sender, args) =>
@@ -81,27 +82,33 @@ public class AdManager : Singleton<AdManager>
 
         AdRequest request = new AdRequest.Builder().Build();
         request.TestDevices.Add("96f0159b9494d5c6174f95f199b659bc");
-        rewardBasedVideo.LoadAd(request, rewardedAdUnitId);
+        rewardBasedVideo.LoadAd(request, rewardedAdUnitId);*/
     }
 
-    private void RewardBasedVideoOnOnAdRewarded(object sender, Reward reward)
+    private void RewardBasedVideoOnOnAdRewarded(ShowResult result)
     {
         Debug.Log("Rewarded video completed");
-        onRewardAdCompleted(reward);
-
+        onRewardAdCompleted(result);
+/*
         AdRequest request = new AdRequest.Builder().Build();
-        rewardBasedVideo.LoadAd(request, rewardedAdUnitId);
+        rewardBasedVideo.LoadAd(request, rewardedAdUnitId);*/
     }
 
     public bool HasRewardedVideo()
     {
-        return rewardBasedVideo.IsLoaded();
+        //return rewardBasedVideo.IsLoaded();
+        return Advertisement.IsReady("rewardedVideo");
     }
 
-    public void ShowRewardedVideo(Action<Reward> onCompleted)
+    public void ShowRewardedVideo(Action<ShowResult> onCompleted)
     {
         onRewardAdCompleted = onCompleted;
-        rewardBasedVideo.Show();
+
+        Advertisement.Show("rewardedVideo", new ShowOptions()
+                                            {
+                                                resultCallback = RewardBasedVideoOnOnAdRewarded
+        });
+        //rewardBasedVideo.Show();
     }
 
     private void LoadInterstitial()
