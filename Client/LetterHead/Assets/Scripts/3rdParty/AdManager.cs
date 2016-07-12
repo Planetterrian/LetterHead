@@ -155,7 +155,7 @@ public class AdManager : Singleton<AdManager>
     {
         Debug.Log("Showing banner ad");
         // Create a 320x50 banner at the top of the screen.
-        bannerView = new BannerView(bannerAdUnitId, AdSize.Banner, AdPosition.Bottom);
+        bannerView = new BannerView(bannerAdUnitId, AdSize.SmartBanner, AdPosition.Bottom);
         bannerView.OnAdLoaded += BannerViewOnOnAdLoaded;
         bannerView.OnAdFailedToLoad += (sender, args) =>
         {

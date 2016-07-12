@@ -315,7 +315,7 @@ namespace LetterHeadServer.Controllers
             }
 
             var lastBuzz = match.Buzzes.Where(b => b.SourceUser.Id == currentUser.Id).OrderByDescending(b => b.date).FirstOrDefault();
-            if (lastBuzz != null && (DateTime.Now - lastBuzz.date).TotalHours < 12)
+            if (lastBuzz != null && (DateTime.Now - lastBuzz.date).TotalHours < 24)
             {
                 return Error("Please wait before sending another poke");
             }

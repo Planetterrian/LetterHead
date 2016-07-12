@@ -49,6 +49,8 @@ public class NotificationManager : Singleton<NotificationManager>
         {
             MenuGui.Instance.dashboardScene.homePage.RefreshMatches();
         }
+
+        InGameNotification.Instance.Show(_notification.AlertBody);
     }
 
     private void DidReceiveLocalNotificationEvent(CrossPlatformNotification _notification)

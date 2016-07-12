@@ -26,7 +26,7 @@ public class EmailLoginWindow : MonoBehaviour
     {
         Debug.Log("ONS");
 
-        TimerManager.AddEvent(0.1f, () => passwordInput.Select());
+        TimerManager.AddEvent(0.6f, () => passwordInput.Select());
     }
     
     public void OnLoginClicked()
