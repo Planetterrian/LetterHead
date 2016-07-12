@@ -108,4 +108,9 @@ public class MenuGui : Singleton<MenuGui>
     {
         sceneManager.SetGuiScene(dashboardScene);
     }
+
+    public void OpenLink(string url)
+    {
+        Application.OpenURL(url);
+    }
 }
