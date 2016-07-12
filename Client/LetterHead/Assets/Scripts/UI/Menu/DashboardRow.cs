@@ -112,6 +112,24 @@ public class DashboardRow : MonoBehaviour
         homePage.OnRowClicked(this);
     }
 
+    private bool DidWin()
+    {
+        var score1 = MatchInfo.UserScore(0);
+        var score2 = MatchInfo.UserScore(1);
+
+        var isFirstPlayer = MatchInfo.IndexOfUser(ClientManager.Instance.UserId()) == 0;
+
+        if (MatchInfo.ResignerUserId > 0)
+            return ClientManager.Instance.UserId() != MatchInfo.ResignerUserId;
+
+        if (isFirstPlayer)
+        {
+            return score1 > score2;
+        }
+
+        return score2 > score1;
+    }
+
     private void Refresh()
     {
         var score1 = MatchInfo.UserScore(0);
@@ -140,6 +158,17 @@ public class DashboardRow : MonoBehaviour
         usernameLabel.text = opponentInfo.Username;
         avatarBox.SetAvatarImage(opponentInfo.AvatarUrl);
         roundLabel.text = "Round " + (MatchInfo.CurrentRoundNumber + 1) + "/" + MatchInfo.MaxRounds;
+
+        if (type == RowType.Completed)
+        {
+            if (MatchInfo.Users.Count > 1)
+            {
+                if (DidWin())
+                    lastTurnLabel.text = "<color=green>You Won";
+                else
+                    lastTurnLabel.text = "You Lost";
+            }
+        }
 
         myScoreLabel.text = "My Score: " + (isFirstPlayer ? score1.ToString() : score2.ToString());
         if (ClientManager.Instance.UserId() == matchInfo.ResignerUserId)
