@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mail;
 using System.Web;
+using System.Web.Helpers;
 using System.Web.Mvc;
 using Facebook;
 using Hangfire;
@@ -9,6 +11,8 @@ using LetterHeadServer.Classes;
 using LetterHeadServer.Models;
 using LetterHeadShared;
 using MyWebApplication;
+using SendGrid;
+using SendGrid.Helpers.Mail;
 using Match = LetterHeadShared.DTO.Match;
 
 namespace LetterHeadServer.Controllers
@@ -102,6 +106,79 @@ namespace LetterHeadServer.Controllers
             return Okay();
         }
 
+
+        public ActionResult LostPassword(string email)
+        {
+            email = email.Trim();
+
+            var account = db.Users.FirstOrDefault(u => u.Email == email);
+            if (account == null)
+            {
+                return Error("Unable to locate that email address.");
+            }
+
+            account.LostPasswordToken = Guid.NewGuid().ToString();
+            db.SaveChanges();
+
+            var recoverUrl = "letterhead.azurewebsites.net/User/NewPassword?userid=" + account.Id + "&token=" + account.LostPasswordToken;
+            dynamic sg = new SendGridAPIClient("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");
+
+            Email from = new Email("noreply@we3workshop.com");
+            String subject = "Letter Head Lost Password";
+            Email to = new Email(account.Email);
+            Content content = new Content("text/plain",
+                "Greeting from Letter Head!\n\n\n\nClick this link to create a new password for your account:\n\n" + recoverUrl + "\n\n\n\nThank you,\n\nLetter Head Team");
+
+            Mail mail = new Mail(from, subject, to, content);
+
+            dynamic response = sg.client.mail.send.post(requestBody: mail.Get());
+
+            return Okay();
+        }
+
+        [HttpPost]
+        public ActionResult NewPasswordSubmit(int userid, string token, string newpassword)
+        {
+            ViewBag.PasswordError = false;
+            var account = db.Users.Find(userid);
+            if (account == null)
+            {
+                return View("NewPassword", null);
+            }
+
+            if (account.LostPasswordToken != token)
+            {
+                return View("NewPassword", account);
+            }
+
+            ViewBag.Token = token;
+
+            if (newpassword.Length < 3)
+            {
+                ViewBag.PasswordError = true;
+                return View("NewPassword", account);
+            }
+
+            account.PasswordHash = Crypto.HashPassword(newpassword);
+            account.SessionId = "";
+            account.LostPasswordToken = "";
+            db.SaveChanges();
+
+            return View();
+        }
+
+        public ActionResult NewPassword(int userid, string token)
+        {
+            ViewBag.PasswordError = false;
+            var account = db.Users.Find(userid);
+            if (account != null)
+            {
+                if(token == account.LostPasswordToken)
+                    ViewBag.Token = token;
+            }
+
+            return View(account);
+        }
 
         public ActionResult FacebookLogin(string token)
         {
