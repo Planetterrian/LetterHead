@@ -125,6 +125,14 @@
       <HintPath>..\packages\PushSharp.4.0.10\lib\net45\PushSharp.Windows.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="SendGrid, Version=7.0.6.0, Culture=neutral, PublicKeyToken=4f047e93159395ca, processorArchitecture=MSIL">
+      <HintPath>..\packages\Sendgrid.7.0.6\lib\SendGrid.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SendGrid.CSharp.HTTP.Client, Version=2.0.4.0, Culture=neutral, PublicKeyToken=79219bf4e5ecaaca, processorArchitecture=MSIL">
+      <HintPath>..\packages\SendGrid.CSharp.HTTP.Client.2.0.4\lib\SendGrid.CSharp.HTTP.Client.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -284,6 +292,8 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\User\RegisterEmail.cshtml" />
     <Content Include="Views\User\RegisterEmailWeb.cshtml" />
+    <Content Include="Views\User\NewPassword.cshtml" />
+    <Content Include="Views\User\NewPasswordSubmit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Certificates\" />
