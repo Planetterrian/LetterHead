@@ -28,6 +28,27 @@ public class EmailLoginWindow : MonoBehaviour
 
         TimerManager.AddEvent(0.6f, () => passwordInput.Select());
     }
+
+    public void LostPasswordClicked()
+    {
+        var email = emailInput.text;
+
+        DialogWindowTM.Instance.Show("Lost Password", "Sending recovery email...", () => { }, () => { }, "");
+
+
+        if (email.Length < 3)
+        {
+            DialogWindowTM.Instance.Error("Please enter the email address of the account you wish to recover the password.");
+        }
+
+        Srv.Instance.POST("User/LostPassword", new Dictionary<string, string>()
+                                             {
+                                                 {"Email", email}
+                                             }, s =>
+                                             {
+                                                 DialogWindowTM.Instance.Show("Lost Password", "We've sen't an email to " + email + " to recover your password.", () => { });
+                                             }, DialogWindowTM.Instance.Error);
+    }
     
     public void OnLoginClicked()
     {
