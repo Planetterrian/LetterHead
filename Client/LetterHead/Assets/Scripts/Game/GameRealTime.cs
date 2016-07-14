@@ -212,6 +212,7 @@ public class GameRealTime : Singleton<GameRealTime>
         PowerupManager.Instance.OnRoundStateChanged();
         PowerupManager.Instance.CancelSteal();
         ClientManager.Instance.RefreshMyInfo(false, b => PowerupManager.Instance.OnRoundStateChanged());
+        SoundManager.Instance.PlayClip("Shield");
     }
 
     void _StealTimeStart(BinaryReader message)
