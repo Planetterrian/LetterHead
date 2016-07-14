@@ -55,6 +55,9 @@ public class EmailLoginWindow : MonoBehaviour
         var email = emailInput.text;
         var password = passwordInput.text;
 
+        if (string.IsNullOrEmpty(password))
+            password = " ";
+
         loginButton.interactable = false;
         registerButton.interactable = false;
 

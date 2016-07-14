@@ -33,6 +33,16 @@ namespace LetterHeadServer.Controllers
                     return Error("Email address already in use");
                 }
 
+                if (model.Password.Length < 6)
+                {
+                    return Error("Password must be at least 6 characters");
+                }
+
+                if (model.Email.Length < 3)
+                {
+                    return Error("Email is required");
+                }
+
                 UserManager.CreateUser(db, model.Email, model.Password);
                 var user = UserManager.LoginUserWithEmail(db, model);
                 user.GenerateNewSessionId();
