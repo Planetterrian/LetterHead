@@ -168,6 +168,9 @@ public class LotteryMachine : MonoBehaviour
 
     private void PlayBloop(LotteryRow row)
     {
+        if(SoundManager.Instance.Muted())
+            return;
+
         row.bloopPlayed = true;
         beepAudioSource.PlayOneShot(beepAudioSource.clip);
     }

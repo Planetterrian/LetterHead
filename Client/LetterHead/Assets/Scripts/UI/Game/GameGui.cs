@@ -130,6 +130,7 @@ public class GameGui : Singleton<GameGui>
         if(PowerupManager.Instance.stealLetterActive)
             return;
 
+        SoundManager.Instance.PlayClip("Shuffle");
         BoardManager.Instance.Shuffle();
     }
 

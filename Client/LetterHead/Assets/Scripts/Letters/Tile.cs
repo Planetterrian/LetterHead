@@ -218,7 +218,8 @@ public class Tile : MonoBehaviour
                 BoardManager.Instance.DeselectTile(originalTile);
             }
 
-            deselectSound.Play();
+            if (!SoundManager.Instance.Muted())
+                deselectSound.Play();
         }
     }
 
