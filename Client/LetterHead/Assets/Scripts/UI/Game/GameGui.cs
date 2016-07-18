@@ -54,7 +54,7 @@ public class GameGui : Singleton<GameGui>
 
     private void Start()
     {
-        nextMatchButton.interactable = false;
+        nextMatchButton.gameObject.SetActive(false);
         nextMatchText.color = new Color(0.3f, 0.3f, 0.3f);
         HidePowerups();
         GameManager.Instance.OnMatchDetailsLoadedEvent.AddListener(OnMatchDetailsLoaded);
@@ -212,6 +212,7 @@ public class GameGui : Singleton<GameGui>
     public void OnMatchDetailsLoaded()
     {
         OnGameStateChanged();
+        NextMatchPolling();
 
         SetAvatarBox(leftAvatarBox, GameManager.Instance.MatchDetails.Users[0].Id == ClientManager.Instance.UserId() ? 0 : 1);
         timer.SetTimer(GameManager.Instance.MatchDetails.RoundTimeSeconds);
@@ -266,16 +267,22 @@ public class GameGui : Singleton<GameGui>
         PersistManager.Instance.LoadMatch(nextMatchInfo.Id, false);
     }
 
-    private void NextMatchPolling()
+    public void NextMatchPolling()
     {
+        lastNextMatchPoll = Time.time;
+
+        if (GameManager.Instance.MatchDetails == null || GameManager.Instance.MatchDetails.CurrentState == Match.MatchState.Ended || !GameManager.Instance.IsMyRound())
+        {
+            nextMatchButton.gameObject.SetActive(false);
+            return;
+        }
+
         Srv.Instance.POST("User/NextAvailableMatch", new Dictionary<string, string>() {{"currentMatchId", GameManager.Instance.MatchId.ToString()}}, s =>
         {
             nextMatchInfo = JsonConvert.DeserializeObject<Match>(s);
-            nextMatchButton.interactable = nextMatchButton != null;
+            nextMatchButton.gameObject.SetActive(nextMatchInfo != null);
             nextMatchText.color = nextMatchButton != null ? Color.black : new Color(0.75f, 0.75f, 0.75f);
         }, null);
-
-        lastNextMatchPoll = Time.time;
     }
 
     public void OnShieldUsed()
