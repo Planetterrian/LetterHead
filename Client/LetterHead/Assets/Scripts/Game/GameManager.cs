@@ -77,6 +77,9 @@ public abstract class GameManager : Singleton<GameManager>
             }
             else
                 onLoadOverrideAction();
+        }, s =>
+        {
+            LoadMatchDetails(onLoadOverrideAction);
         });
     }
 
