@@ -46,7 +46,7 @@ public class EmailLoginWindow : MonoBehaviour
                                                  {"Email", email}
                                              }, s =>
                                              {
-                                                 DialogWindowTM.Instance.Show("Lost Password", "We've sen't an email to " + email + " to recover your password.", () => { });
+                                                 DialogWindowTM.Instance.Show("Lost Password", "We sent an email to " + email + " to recover your password.", () => { });
                                              }, DialogWindowTM.Instance.Error);
     }
     

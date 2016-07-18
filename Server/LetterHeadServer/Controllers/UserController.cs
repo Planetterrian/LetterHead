@@ -30,17 +30,17 @@ namespace LetterHeadServer.Controllers
             {
                 if (db.Users.Count(u => u.Email == model.Email) > 0)
                 {
-                    return Error("Email address already in use");
+                    return Error("That Email address already in use.");
                 }
 
                 if (model.Password.Length < 6)
                 {
-                    return Error("Password must be at least 6 characters");
+                    return Error("Passwords must be at least 6 characters long.");
                 }
 
                 if (model.Email.Length < 3)
                 {
-                    return Error("Email is required");
+                    return Error("Please enter a valid Email.");
                 }
 
                 UserManager.CreateUser(db, model.Email, model.Password);
@@ -137,7 +137,7 @@ namespace LetterHeadServer.Controllers
             String subject = "Letter Head Lost Password";
             Email to = new Email(account.Email);
             Content content = new Content("text/plain",
-                "Greeting from Letter Head!\n\n\n\nClick this link to create a new password for your account:\n\n" + recoverUrl + "\n\n\n\nThank you,\n\nLetter Head Team");
+                "Greetings from Letter Head!\n\n\n\nClick this link to create a new password for your account:\n\n" + recoverUrl + "\n\n\n\nThank you,\n\nThe Letter Head Team");
 
             Mail mail = new Mail(from, subject, to, content);
 
@@ -306,7 +306,7 @@ namespace LetterHeadServer.Controllers
         {
             if (username.Length < 3 || username.Length > 24)
             {
-                actionResult = Error("Username must be between 3 and 24 characters");
+                actionResult = Error("Your Player Name must be between 3 and 24 characters.");
                 return true;
             }
 
@@ -314,7 +314,7 @@ namespace LetterHeadServer.Controllers
             {
                 if (db.Users.Count(u => u.Username == username && u.Id != currentUser.Id) > 0)
                 {
-                    actionResult = Error("Username already taken");
+                    actionResult = Error("That Player Name is already taken.");
                     return true;
                 }
             }
@@ -322,14 +322,14 @@ namespace LetterHeadServer.Controllers
             {
                 if (db.Users.Count(u => u.Username == username) > 0)
                 {
-                    actionResult = Error("Username already taken");
+                    actionResult = Error("That Player Name is already taken.");
                     return true;
                 }
             }
 
             if (username.Contains("<"))
             {
-                actionResult = Error("Username contains invalid characters");
+                actionResult = Error("That Player Name contains invalid characters.");
                 return true;
             }
 
@@ -337,7 +337,7 @@ namespace LetterHeadServer.Controllers
             var lowerName = username.ToLower();
             if (badWords.Any(lowerName.Contains))
             {
-                actionResult = Error("Username contains inappropriate words");
+                actionResult = Error("That Player Name contains inappropriate words.");
                 return true;
             }
 
@@ -405,7 +405,7 @@ namespace LetterHeadServer.Controllers
         {
             var user = db.Users.Find(userId);
             if (user == null)
-                return Error("Unable to locate user");
+                return Error("Unable to locate user.");
 
             return Json(user.Stats(db));
         }
