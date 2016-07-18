@@ -44,8 +44,10 @@ public class AdManager : Singleton<AdManager>
 
     public bool AdsEnabled()
     {
-        return true;
-        //return PlayerPrefs.GetInt("PurchaseMade", 0) == 0;
+        if (ClientManager.Instance.myUserInfo == null)
+            return true;
+
+        return !ClientManager.Instance.myUserInfo.IsPremium;
     }
 
     // Use this for initialization
@@ -140,6 +142,9 @@ public class AdManager : Singleton<AdManager>
 
     public void ShowInterstitial()
     {
+        if(!AdsEnabled())
+            return;
+
         Debug.Log("Attempting to show interstitial");
 
         if(interstitial == null)

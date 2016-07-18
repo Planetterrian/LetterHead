@@ -59,7 +59,7 @@ public class IapManager : Singleton<IapManager>
                 }
                 else
                 {
-                    DialogWindowTM.Instance.Error(_transaction.Error);
+                    //DialogWindowTM.Instance.Error(_transaction.Error);
                 }
             }
         }
@@ -74,7 +74,8 @@ public class IapManager : Singleton<IapManager>
         Srv.Instance.POST("User/IapPurchase", new Dictionary<string, string>() {{"productId", transaction.ProductIdentifier}, {"receipt", transaction.TransactionReceipt}}, s =>
         {
             OnPurchaseMade();
-            DialogWindowTM.Instance.Show("Purchase Completed", "Thank you for your purchase!", () => { });
+            DialogWindowTM.Instance.Hide();
+            //DialogWindowTM.Instance.Show("Purchase Completed", "Thank you for your purchase!", () => { });
         }, DialogWindowTM.Instance.Error);
     }
 

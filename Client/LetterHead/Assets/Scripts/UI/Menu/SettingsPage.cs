@@ -34,10 +34,11 @@ public class SettingsPage : Page
 
     public void Refresh()
     {
+        
         linkFacebookButton.SetActive(string.IsNullOrEmpty(ClientManager.Instance.myUserInfo.FacebookPictureUrl));
         unLinkFacebookButton.SetActive(!string.IsNullOrEmpty(ClientManager.Instance.myUserInfo.FacebookPictureUrl));
 
-        premiumUpgradeButton.interactable = PlayerPrefs.GetInt("PurchaseMade", 0) == 0;
+        premiumUpgradeButton.interactable = AdManager.Instance.AdsEnabled();
 
         musicEnabledToggle.isOn = PersistManager.Instance.MusicEnabled;
         clearWordToggle.isOn = PersistManager.Instance.ClearWord;

@@ -295,6 +295,8 @@ namespace LetterHeadServer.Controllers
                     break;
             }
 
+            currentUser.IsPremium = true;
+
             db.SaveChanges();
             return Okay();
         }

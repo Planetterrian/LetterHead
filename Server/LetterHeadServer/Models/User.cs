@@ -39,6 +39,7 @@ namespace LetterHeadServer.Models
 
         public string AndroidNotificationToken { get; set; }
         public string IosNotificationToken { get; set; }
+        public bool IsPremium { get; set; }
 
 
         public virtual ICollection<Match> Matches { get; set; }
@@ -68,6 +69,7 @@ namespace LetterHeadServer.Models
         [Index]
         [MaxLength(64)]
         public string SessionId { get; set; }
+
 
         public int PowerupCount(LetterHeadShared.Powerup.Type powerupType)
         {

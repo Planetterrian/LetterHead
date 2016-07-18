@@ -52,6 +52,9 @@ public class ClientManager : Singleton<ClientManager>
         {
             myUserInfo = JsonConvert.DeserializeObject<UserInfo>(s);
 
+            if(myUserInfo.IsPremium)
+                AdManager.Instance.DisableAds();
+
             if (onInfoLoaded != null)
                 onInfoLoaded(true);
         }, s =>
