@@ -88,7 +88,7 @@ public class SettingsPage : Page
 
     public void DisconnectFacebookClicked()
     {
-        DialogWindowTM.Instance.Show("Diconnect Facebook", "Please wait", () => { }, null, "", "");
+        DialogWindowTM.Instance.Show("Disconnect Facebook", "Please wait", () => { }, null, "", "");
         Srv.Instance.POST("User/FacebookDisconnect", null, s =>
         {
             ClientManager.Instance.myUserInfo.FacebookPictureUrl = "";

@@ -120,7 +120,7 @@ public class PowerupsPage : Page
                 ClientManager.Instance.RefreshMyInfo(false, b => Refresh());
             }, DialogWindowTM.Instance.Error);
 
-            DialogWindowTM.Instance.Show("Completed!", "You have been awarded a free " + PowerupName(boosterType) + " booster!", () => { });
+            DialogWindowTM.Instance.Show("Thanks!", "You win a free " + PowerupName(boosterType) + " booster!", () => { });
         });
     }
 }

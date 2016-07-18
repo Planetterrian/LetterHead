@@ -42,7 +42,7 @@ public class DialogWindowTM : Singleton<DialogWindowTM>
         Show("Error", errText, () => { });
     }
 
-    public void Show(string titleText, string text, Action okCallback, Action cancelCallback = null, string okayText = "Ok", string cancelText = "Cancel")
+    public void Show(string titleText, string text, Action okCallback, Action cancelCallback = null, string okayText = "OK", string cancelText = "Cancel")
     {
         gameObject.SetActive(true);
 

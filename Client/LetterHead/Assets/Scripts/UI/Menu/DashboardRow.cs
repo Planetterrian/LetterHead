@@ -164,7 +164,7 @@ public class DashboardRow : MonoBehaviour
             if (MatchInfo.Users.Count > 1)
             {
                 if (DidWin())
-                    lastTurnLabel.text = "<color=green>You Won";
+                    lastTurnLabel.text = "<color=#61BC6D>You Won";
                 else
                     lastTurnLabel.text = "You Lost";
             }

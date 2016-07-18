@@ -8,7 +8,7 @@ namespace VoxelBusters.NativePlugins
 	{
 		#region Constants
 			
-		private const string kDefaultTextForButton = "Ok";
+		private const string kDefaultTextForButton = "OK";
 
 		#endregion
 
