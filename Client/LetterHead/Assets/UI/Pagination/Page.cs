@@ -108,7 +108,7 @@ namespace UI.Pagination
         /// <summary>
         /// Called when this Page is shown. Triggers any OnShow events that have been set.
         /// </summary>
-        public void OnShow()
+        public virtual void OnShow()
         {
             Visible = true;
 

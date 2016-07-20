@@ -6,6 +6,7 @@ using LetterHeadShared.DTO;
 using Newtonsoft.Json;
 using UI.Pagination;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class HomePage : Page
 {
@@ -14,6 +15,7 @@ public class HomePage : Page
     public Transform myTurnHeader;
     public Transform theirTurnHeader;
     public Transform completedHeader;
+    public WindowController tutorialWindow;
 
     public Transform scrollParent;
     public float pollDelay;
@@ -98,9 +100,25 @@ public class HomePage : Page
         completedMatchRows.Clear();
     }
 
-    void OnShown()
+    public override void OnShow()
     {
-        RefreshMatches();
+        base.OnShow();
+
+        if (!TutorialShown())
+            ShowTutorial();
+    }
+
+    private bool TutorialShown()
+    {
+        return PlayerPrefs.GetInt("TutShown" + ClientManager.Instance.UserId(), 0) == 1;
+    }
+
+    private void ShowTutorial()
+    {
+        Debug.Log("Showing tutorial");
+        PlayerPrefs.SetInt("TutShown" + ClientManager.Instance.UserId(), 1);
+        tutorialWindow.ShowModal();
+        tutorialWindow.GetComponentInChildren<ScrollRect>().verticalNormalizedPosition = 1;
     }
 
     void Update()
