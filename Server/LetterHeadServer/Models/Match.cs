@@ -369,7 +369,8 @@ namespace LetterHeadServer.Models
                     continue;
 
                 var categoryIndex = Startup.CategoryManager.GetCategoryIndex(round.CategoryName);
-                scores[categoryIndex] = round.Score;
+                if(categoryIndex != -1)
+                    scores[categoryIndex] = round.Score;
             }
 
             return scores.ToList();

@@ -23,6 +23,7 @@ public class Chomper : MonoBehaviour
 
     public AudioSource warningSound;
     public AudioSource chompSound;
+    public AudioSource startSound;
 
     private float startingXpos;
 
@@ -51,7 +52,10 @@ public class Chomper : MonoBehaviour
         startingXpos = transform.position.x;
 
         if (!SoundManager.Instance.Muted())
+        {
             warningSound.enabled = true;
+            startSound.Play();
+        }
     }
 
     public void OnClicked()
