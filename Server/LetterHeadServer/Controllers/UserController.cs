@@ -438,6 +438,23 @@ namespace LetterHeadServer.Controllers
 
 
         [AuthenticationFilter]
+        public ActionResult AchiecvementInfo()
+        {
+            var last3 = currentUser.Matches.Where(m => m.Users.Count > 1 && m.Winner != null).OrderByDescending(m => m.EndedOn).Take(3).ToArray();
+
+            var info = new ServerAchievementInfo()
+            {
+                           GamesPlayed = currentUser.Matches.Count(m => m.CurrentState == Match.MatchState.Ended),
+                           GamesWon = currentUser.Matches.Count(m => m.Winner != null && m.Winner.Id == currentUser.Id),
+                           HasWonAny = currentUser.Matches.Any(m => m.Winner != null && m.Winner.Id == currentUser.Id),
+                           HasWonDaily = currentUser.Matches.Any(m => m.Winner != null && m.Winner.Id == currentUser.Id && m.DailyGame != null),
+                           HasThreeGameStreak = last3.Length == 3 && last3.All(m => m.Winner.Id == currentUser.Id)
+            };
+
+            return Json(info);
+        }
+
+        [AuthenticationFilter]
         public ActionResult MyInfo(bool isFirstLoad)
         {
             if (isFirstLoad)

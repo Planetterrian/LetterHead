@@ -69,6 +69,7 @@ namespace LetterHeadServer.Models
         public virtual User CurrentUserTurn { get; set; }
         public DateTime CreatedOn { get; set; }
         public DateTime? StartedOn { get; set; }
+        public DateTime? EndedOn { get; set; }
         public int RoundTimeSeconds { get; set; }
         public int SingleScore { get; set; }
 
@@ -314,6 +315,7 @@ namespace LetterHeadServer.Models
         public void EndMatch()
         {
             CurrentState = LetterHeadShared.DTO.Match.MatchState.Ended;
+            EndedOn = DateTime.Now;
             DetermineWinner();
         }
 

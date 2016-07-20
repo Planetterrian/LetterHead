@@ -104,6 +104,8 @@ public class HomePage : Page
     {
         base.OnShow();
 
+        AchievementManager.Instance.CheckServerAchievements();
+
         if (!TutorialShown())
             ShowTutorial();
     }

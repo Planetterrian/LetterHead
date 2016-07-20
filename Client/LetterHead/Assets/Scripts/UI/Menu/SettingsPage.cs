@@ -121,6 +121,8 @@ public class SettingsPage : Page
 
         Srv.Instance.POST("User/FacebookConnect", new Dictionary<string, string>() { { "token", result.AccessToken.TokenString } }, (s) =>
         {
+            AchievementManager.Instance.Set("facebook");
+
             ClientManager.Instance.RefreshMyInfo(false, b =>
             {
                 DialogWindowTM.Instance.Hide();

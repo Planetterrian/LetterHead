@@ -78,6 +78,17 @@ public class ScoringManager : Singleton<ScoringManager>, IGameHandler
                 SoundManager.Instance.PlayClip("Accept Word");
             }
 
+            if (word.Length >= 8)
+                AchievementManager.Instance.Set("word8");
+
+            if (word.Length >= 10)
+                AchievementManager.Instance.Set("word10");
+
+            var wordCount8 = submittedWords.Count(w => w.Length >= 8);
+            if(wordCount8 >= 5)
+            {
+                AchievementManager.Instance.Set("long_words5");
+            }
         }
 
         BoardManager.Instance.ColorSelectedTiles(usedTileColor);

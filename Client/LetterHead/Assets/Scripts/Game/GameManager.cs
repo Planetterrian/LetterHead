@@ -163,6 +163,12 @@ public abstract class GameManager : Singleton<GameManager>
             {
                 LoadMatchDetails(() =>
                 {
+                    AchievementManager.Instance.CheckServerAchievements();
+
+                    var myScore = MatchDetails.UserScore(MatchDetails.IndexOfUser(ClientManager.Instance.UserId()));
+                    if (myScore >= 500)
+                        AchievementManager.Instance.Set("word10");
+
                     TimerManager.AddEvent(1, () =>
                     {
                         if (isDestroyed)

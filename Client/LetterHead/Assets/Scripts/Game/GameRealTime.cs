@@ -75,7 +75,7 @@ public class GameRealTime : Singleton<GameRealTime>
                 {
                     Debug.Log("Connected to real time socket. Sending Ping");
                     pingRecieved = false;
-                    TimerManager.AddEvent(2f, CheckPing);
+                    TimerManager.AddEvent(1.3f, CheckPing);
                     SendMsg("ClientPing");
                 }
             });
@@ -203,6 +203,8 @@ public class GameRealTime : Singleton<GameRealTime>
         BoardManager.Instance.SetBoardLetters(letters, false);
         GameManager.Instance.StartGame(time);
         ClientManager.Instance.RefreshMyInfo(false, b => PowerupManager.Instance.OnRoundStateChanged());
+
+        AchievementManager.Instance.Set("booster_doover");
     }
 
     void _ShieldUsed(BinaryReader message)
@@ -213,6 +215,8 @@ public class GameRealTime : Singleton<GameRealTime>
         PowerupManager.Instance.CancelSteal();
         ClientManager.Instance.RefreshMyInfo(false, b => PowerupManager.Instance.OnRoundStateChanged());
         SoundManager.Instance.PlayClip("Shield");
+
+        AchievementManager.Instance.Set("booster_shield");
     }
 
     void _StealTimeStart(BinaryReader message)

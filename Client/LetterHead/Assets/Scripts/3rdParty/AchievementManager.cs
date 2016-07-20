@@ -2,6 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using LetterHeadShared;
+using Newtonsoft.Json;
 using VoxelBusters.NativePlugins;
 using VoxelBusters.NativePlugins.Internal;
 
@@ -13,6 +15,61 @@ public class AchievementManager : Singleton<AchievementManager>
     {
         if(!Application.isEditor)
             Authenticate();
+    }
+
+    public void CheckServerAchievements()
+    {
+        if (!NPBinding.GameServices.LocalUser.IsAuthenticated)
+        {
+            //return;
+        }
+
+        Srv.Instance.POST("User/AchiecvementInfo", null, s =>
+        {
+            var info = JsonConvert.DeserializeObject<ServerAchievementInfo>(s);
+
+            // Played
+            var _achievementGID = "play10";
+            int _noOfSteps = NPBinding.GameServices.GetNoOfStepsForCompletingAchievement(_achievementGID);
+            SetProgress(_achievementGID, info.GamesPlayed / (float)_noOfSteps);
+
+            _achievementGID = "play50";
+            _noOfSteps = NPBinding.GameServices.GetNoOfStepsForCompletingAchievement(_achievementGID);
+            SetProgress(_achievementGID, info.GamesPlayed / (float)_noOfSteps);
+
+            _achievementGID = "play100";
+            _noOfSteps = NPBinding.GameServices.GetNoOfStepsForCompletingAchievement(_achievementGID);
+            SetProgress(_achievementGID, info.GamesPlayed / (float)_noOfSteps);
+
+            // Won
+            _achievementGID = "win10";
+            _noOfSteps = NPBinding.GameServices.GetNoOfStepsForCompletingAchievement(_achievementGID);
+            SetProgress(_achievementGID, info.GamesWon / (float)_noOfSteps);
+
+            _achievementGID = "win50";
+            _noOfSteps = NPBinding.GameServices.GetNoOfStepsForCompletingAchievement(_achievementGID);
+            SetProgress(_achievementGID, info.GamesWon / (float)_noOfSteps);
+
+            _achievementGID = "win100";
+            _noOfSteps = NPBinding.GameServices.GetNoOfStepsForCompletingAchievement(_achievementGID);
+            SetProgress(_achievementGID, info.GamesWon / (float)_noOfSteps);
+
+            if (info.HasWonAny)
+            {
+                Set("win");
+            }
+
+            if (info.HasWonDaily)
+            {
+                Set("win_daily");
+            }
+
+            if (info.HasThreeGameStreak)
+            {
+                Set("win3row");
+            }
+
+        });
     }
 
     private void Authenticate()

@@ -139,6 +139,8 @@ public class PowerupManager : Singleton<PowerupManager>
                     OnRoundStateChanged();
             });
 
+            AchievementManager.Instance.Set("booster_time");
+
             if (onUsed != null)
             {
                 onUsed(true);
@@ -162,6 +164,8 @@ public class PowerupManager : Singleton<PowerupManager>
                 if (b)
                     OnRoundStateChanged();
             });
+
+            AchievementManager.Instance.Set("booster_letter");
 
             if (onUsed != null)
             {
