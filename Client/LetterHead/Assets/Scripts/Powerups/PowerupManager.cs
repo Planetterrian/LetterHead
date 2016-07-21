@@ -182,7 +182,7 @@ public class PowerupManager : Singleton<PowerupManager>
     }
 
 #if UNITY_EDITOR
-    [MenuItem("LetterHead/Steal Time")]
+    [MenuItem("Letter Head/Steal Time")]
     private static void x()
     {
         Instance.OnStealTimeActivated();

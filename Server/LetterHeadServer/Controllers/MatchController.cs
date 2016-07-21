@@ -26,7 +26,7 @@ namespace LetterHeadServer.Controllers
             var dailyGame = DailyGame.Current();
             if (dailyGame == null)
             {
-                return Error("No daily game available");
+                return Error("No daily game available.");
             }
 
             lock (dailyGameLock)
@@ -34,7 +34,7 @@ namespace LetterHeadServer.Controllers
                 var match = currentUser.GetMatch(db, dailyGame);
                 if (match != null && match.CurrentState == LetterHeadShared.DTO.Match.MatchState.Ended)
                 {
-                    return Error("You have already completed your daily game");
+                    return Error("You already completed your daily game.");
                 }
 
                 if (!dailyGame.CanStart())
@@ -81,7 +81,7 @@ namespace LetterHeadServer.Controllers
 
             if (!match.UserAuthorized(currentUser))
             {
-                return Error("You can't access that match");
+                return Error("You can't access that match.");
             }
 
             var highRound = db.Matches.Where(m => m.Users.Any(u => u.Id == currentUser.Id) && m.DailyGame == null && m.Users.Count == 1).OrderByDescending(m => m.SingleScore).FirstOrDefault()?.Id;
@@ -252,7 +252,7 @@ namespace LetterHeadServer.Controllers
 
                 if (targetUser.Invites.Any(i => i.Inviter.Id == currentUser.Id))
                 {
-                    return Error("You have already sent an invite to that user");
+                    return Error("You already sent an invite to that user.");
                 }
 
                 var invite = new Invite()
@@ -267,9 +267,9 @@ namespace LetterHeadServer.Controllers
 
                 targetUser.SendNotification(new NotificationDetails()
                                             {
-                                                content = "You have a LetterHead match invitation from " + currentUser.Username,
+                                                content = "You have a Letter Head match invitation from " + currentUser.Username + ".",
                                                 tag = "",
-                                                title = "LeterHead Match Invite",
+                                                title = "Leter Head Match Invite",
                                                 type = NotificationDetails.Type.Invite
                                             });
 
@@ -287,7 +287,7 @@ namespace LetterHeadServer.Controllers
 
             if (!match.UserAuthorized(currentUser))
             {
-                return Error("You can't access that match");
+                return Error("You can't access that match.");
             }
 
             match.Resign(currentUser);
@@ -306,7 +306,7 @@ namespace LetterHeadServer.Controllers
 
             if (!match.UserAuthorized(currentUser))
             {
-                return Error("You can't access that match");
+                return Error("You can't access that match.");
             }
 
             if (match.CurrentUserTurn == currentUser)
@@ -317,12 +317,12 @@ namespace LetterHeadServer.Controllers
             var lastBuzz = match.Buzzes.Where(b => b.SourceUser.Id == currentUser.Id).OrderByDescending(b => b.date).FirstOrDefault();
             if (lastBuzz != null && (DateTime.Now - lastBuzz.date).TotalHours < 24)
             {
-                return Error("Please wait before sending another poke");
+                return Error("Please wait before sending another poke.");
             }
 
             if ((DateTime.Now - match.CurrentRound().ActivatedOn.Value).TotalHours < 12)
             {
-                return Error("Please wait before poking");
+                return Error("This user played recently.  Please wait before poking.");
             }
             
             match.Buzzes.Add(new MatchBuzz()
@@ -338,7 +338,7 @@ namespace LetterHeadServer.Controllers
             match.CurrentUserTurn.SendNotification(new NotificationDetails()
                                                    {
                                                        content = currentUser.Username + " poked you! It's your turn.",
-                                                       title = "LetterHead - Poke",
+                                                       title = "Letter Head - Poke",
                                                        tag = "buzz" + currentUser.Username,
                                                        type = NotificationDetails.Type.Buzz
                                                    });
@@ -357,13 +357,13 @@ namespace LetterHeadServer.Controllers
 
             if (!match.UserAuthorized(currentUser))
             {
-                return Error("You can't access that match");
+                return Error("You can't access that match.");
             }
 
 
             if (match.CurrentState != LetterHeadShared.DTO.Match.MatchState.Ended)
             {
-                return Error("Match isn't ended");
+                return Error("Match hassn't ended.");
             }
 
 
@@ -383,7 +383,7 @@ namespace LetterHeadServer.Controllers
 
             if (!match.UserAuthorized(currentUser))
             {
-                return Error("You can't access that match");
+                return Error("You can't access that match.");
             }
 
             var dto = match.DTO();
@@ -405,17 +405,17 @@ namespace LetterHeadServer.Controllers
 
                 if (!match.UserAuthorized(currentUser))
                 {
-                    return Error("You can't access that match");
+                    return Error("You can't access that match.");
                 }
 
                 if (match.CurrentUserTurn != currentUser)
                 {
-                    return Error("It's your opponents turn");
+                    return Error("It's your opponents turn.");
                 }
 
                 if (match.CurrentState == LetterHeadShared.DTO.Match.MatchState.Ended)
                 {
-                    return Error("That game has already ended");
+                    return Error("That game already ended.");
                 }
 
                 var round = match.CurrentRoundForUser(currentUser);
@@ -428,7 +428,7 @@ namespace LetterHeadServer.Controllers
                 var category = Startup.CategoryManager.GetCategory(categoryName);
                 if (category == null)
                 {
-                    return Error("No category selected");
+                    return Error("No category selected.");
                 }
 
                 if (category.alwaysActive)
@@ -439,7 +439,7 @@ namespace LetterHeadServer.Controllers
                 var rounds = match.UserRounds(currentUser).Where(r => r.Number != match.CurrentRoundNumber);
                 if (rounds.Any(r => r.CategoryName == category.name))
                 {
-                    return Error("That category has already been used");
+                    return Error("That category has already been used.");
                 }
 
 
@@ -475,23 +475,23 @@ namespace LetterHeadServer.Controllers
 
                 if (!match.UserAuthorized(currentUser))
                 {
-                    return Error("You can't access that match");
+                    return Error("You can't access that match.");
                 }
 
                 if (match.CurrentState == LetterHeadShared.DTO.Match.MatchState.Ended)
                 {
-                    return Error("That game has already ended");
+                    return Error("That game already ended.");
                 }
 
                 var round = match.CurrentRoundForUser(currentUser);
                 if (match.HasStealTimeBeenUsed(currentUser))
                 {
-                    return Error("Steal time already used");
+                    return Error("Steal time already used.");
                 }
 
                 if (currentUser.PowerupCount(Powerup.Type.StealTime) < 1)
                 {
-                    return Error("No boost available");
+                    return Error("No boost available.");
                 }
 
                 var nextRound = match.NextOpponentRoundNotStarted(currentUser);
@@ -502,7 +502,7 @@ namespace LetterHeadServer.Controllers
 
                 if (nextRound.CurrentState != MatchRound.RoundState.NotStarted)
                 {
-                    return Error("Their round has already started!");
+                    return Error("Their round already started!");
                 }
 
                 round.StealTimeUsed = true;
@@ -526,23 +526,23 @@ namespace LetterHeadServer.Controllers
 
                 if (!match.UserAuthorized(currentUser))
                 {
-                    return Error("You can't access that match");
+                    return Error("You can't access that match.");
                 }
 
                 if (match.CurrentState == LetterHeadShared.DTO.Match.MatchState.Ended)
                 {
-                    return Error("That game has already ended");
+                    return Error("That game already ended.");
                 }
 
                 var round = match.CurrentRoundForUser(currentUser);
                 if (match.HasStealLetterBeenUsed(currentUser))
                 {
-                    return Error("Steal letter already used");
+                    return Error("Steal letter already used.");
                 }
 
                 if (currentUser.PowerupCount(Powerup.Type.StealLetter) < 1)
                 {
-                    return Error("No boost available");
+                    return Error("No boost available.");
                 }
 
                 var nextRound = match.NextOpponentRoundNotStarted(currentUser);
@@ -553,7 +553,7 @@ namespace LetterHeadServer.Controllers
 
                 if (nextRound.CurrentState != MatchRound.RoundState.NotStarted)
                 {
-                    return Error("Their round has already started!");
+                    return Error("Their round already started!");
                 }
 
                 round.StealLetterUsed = true;
