@@ -10,18 +10,27 @@ using VoxelBusters.NativePlugins.Internal;
 public class AchievementManager : Singleton<AchievementManager>
 {
     private Dictionary<string, AchievementDescription> achievements = new Dictionary<string, AchievementDescription>();
-    // Use this for initialization
+    private float lastAchievementCheck = -100;
+
+
+    public bool allowEditorAuth = false;
+
     void Start()
     {
-        if(!Application.isEditor)
+        if(!Application.isEditor || allowEditorAuth)
             Authenticate();
     }
 
     public void CheckServerAchievements()
     {
+        if(Time.time - lastAchievementCheck < 10)
+            return;
+
+        lastAchievementCheck = Time.time;
+
         if (!NPBinding.GameServices.LocalUser.IsAuthenticated)
         {
-            //return;
+            return;
         }
 
         Srv.Instance.POST("User/AchiecvementInfo", null, s =>
@@ -146,17 +155,23 @@ public class AchievementManager : Singleton<AchievementManager>
 
     void SetProgress(string _achievementID, float pct)
     {
-        if(GetAchievementProgress(_achievementID) == pct)
-            return;
-
-        PlayerPrefs.SetFloat("ach_" + _achievementID, pct);
-
         if (!NPBinding.GameServices.LocalUser.IsAuthenticated)
         {
             return;
         }
 
+        if (pct > 1)
+            pct = 1;
+
+        if (GetAchievementProgress(_achievementID) == pct)
+            return;
+
+        PlayerPrefs.SetFloat("ach_" + _achievementID, pct);
+
+
         var desc = GetAchievementDescription(_achievementID);
+        Debug.Log(desc);
+
         pct = desc.MaximumPoints*pct;
 
         NPBinding.GameServices.ReportProgressWithGlobalID(_achievementID, pct, (bool _status, string _error) => {
