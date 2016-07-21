@@ -170,7 +170,6 @@ public class AchievementManager : Singleton<AchievementManager>
 
 
         var desc = GetAchievementDescription(_achievementID);
-        Debug.Log(desc);
 
         pct = desc.MaximumPoints*pct;
 
