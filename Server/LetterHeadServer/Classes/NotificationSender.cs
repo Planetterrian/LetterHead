@@ -108,6 +108,7 @@ namespace LetterHeadServer.Classes
         {
             // Configuration
             var config = new GcmConfiguration(androidSenderId, androidToken, null);
+            config.GcmUrl = "https://fcm.googleapis.com/fcm/send";
 
             //System.Diagnostics.Trace.TraceInformation("Sending notification to " + user.Id + " token = " + user.AndroidNotificationToken);
 

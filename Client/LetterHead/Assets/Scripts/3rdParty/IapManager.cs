@@ -82,8 +82,16 @@ public class IapManager : Singleton<IapManager>
 
     public void RequestPurchase(string identifier)
     {
+        if (!NPBinding.Billing.IsAvailable())
+        {
+            DialogWindowTM.Instance.Error("Unable to access the store at this time");
+            return;
+        }
+
         DialogWindowTM.Instance.Show("Purchase", "One moment, processing your request...", () => { }, () => { }, "");
         var product = NPBinding.Billing.GetStoreProduct(identifier);
+
+        Debug.Log("Trying to purchase: " + product.Name);
         NPBinding.Billing.BuyProduct(product);
     }
 
