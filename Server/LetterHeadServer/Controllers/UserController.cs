@@ -257,37 +257,37 @@ namespace LetterHeadServer.Controllers
         {
             switch (productId)
             {
-                case "com.we3workshop.letterhead.doover_small":
+                case "com.we3workshop.lhead.doover_small":
                     currentUser.AddPowerup(Powerup.Type.DoOver, 5);
                     break;
-                case "com.we3workshop.letterhead.doover_large":
+                case "com.we3workshop.lhead.doover_large":
                     currentUser.AddPowerup(Powerup.Type.DoOver, 25);
                     break;
-                case "com.we3workshop.letterhead.shield_small":
+                case "com.we3workshop.lhead.shield_small":
                     currentUser.AddPowerup(Powerup.Type.Shield, 5);
                     break;
-                case "com.we3workshop.letterhead.shield_large":
+                case "com.we3workshop.lhead.shield_large":
                     currentUser.AddPowerup(Powerup.Type.Shield, 25);
                     break;
-                case "com.we3workshop.letterhead.stealtime_small":
+                case "com.we3workshop.lhead.stealtime_small":
                     currentUser.AddPowerup(Powerup.Type.StealTime, 5);
                     break;
-                case "com.we3workshop.letterhead.stealtime_large":
+                case "com.we3workshop.lhead.stealtime_large":
                     currentUser.AddPowerup(Powerup.Type.StealTime, 25);
                     break;
-                case "com.we3workshop.letterhead.stealletter_small":
+                case "com.we3workshop.lhead.stealletter_small":
                     currentUser.AddPowerup(Powerup.Type.StealLetter, 5);
                     break;
-                case "com.we3workshop.letterhead.stealletter_large":
+                case "com.we3workshop.lhead.stealletter_large":
                     currentUser.AddPowerup(Powerup.Type.StealLetter, 25);
                     break;
-                case "com.we3workshop.letterhead.boosterpack_small":
+                case "com.we3workshop.lhead.boosterpack_small":
                     currentUser.AddPowerup(Powerup.Type.DoOver, 5);
                     currentUser.AddPowerup(Powerup.Type.Shield, 5);
                     currentUser.AddPowerup(Powerup.Type.StealTime, 5);
                     currentUser.AddPowerup(Powerup.Type.StealLetter, 5);
                     break;
-                case "com.we3workshop.letterhead.boosterpack_large":
+                case "com.we3workshop.lhead.boosterpack_large":
                     currentUser.AddPowerup(Powerup.Type.DoOver, 15);
                     currentUser.AddPowerup(Powerup.Type.Shield, 15);
                     currentUser.AddPowerup(Powerup.Type.StealTime, 15);

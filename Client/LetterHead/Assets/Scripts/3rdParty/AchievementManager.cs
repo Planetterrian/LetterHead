@@ -26,6 +26,9 @@ public class AchievementManager : Singleton<AchievementManager>
         if(Time.time - lastAchievementCheck < 10)
             return;
 
+        if(ClientManager.Instance.UserId() < 1)
+            return;
+
         lastAchievementCheck = Time.time;
 
         if (!NPBinding.GameServices.LocalUser.IsAuthenticated)
@@ -144,6 +147,8 @@ public class AchievementManager : Singleton<AchievementManager>
                     achievements[ach.Identifier] = ach;
                 }
             }
+
+            CheckServerAchievements();
         });
     }
 

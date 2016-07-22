@@ -77,7 +77,7 @@ public class SettingsPage : Page
 
     public void UpgradeToPremiumClicked()
     {
-        IapManager.Instance.RequestPurchase("com.we3workshop.letterhead.premium");
+        IapManager.Instance.RequestPurchase("com.we3workshop.lhead.premium");
     }
 
     public void LogoutClicked()
