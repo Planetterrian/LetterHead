@@ -30,6 +30,7 @@ public class EndRoundWindow : WindowController
     public GameObject soloBottom;
 
     public uTweenTransform crownTween;
+    public uTweenTransform crownTweenPlayer2;
     public AvatarBox leftAvatarBox;
     public AvatarBox rightAvatarBox;
     public TextMeshProUGUI topText;
@@ -139,18 +140,41 @@ public class EndRoundWindow : WindowController
                 rightAvatarBox.SetName(GameManager.Instance.MatchDetails.Users[1].Username);
                 rightAvatarBox.score.text = GameManager.Instance.MatchDetails.UserScore(1).ToString("N0");
 
-                var leftWon = GameManager.Instance.MatchDetails.UserScore(0) > GameManager.Instance.MatchDetails.UserScore(1);
+                var tied = GameManager.Instance.MatchDetails.UserScore(0) == GameManager.Instance.MatchDetails.UserScore(1);
 
-                if (leftWon && ClientManager.Instance.UserId() == GameManager.Instance.MatchDetails.Users[0].Id || !leftWon && ClientManager.Instance.UserId() == GameManager.Instance.MatchDetails.Users[1].Id)
+                if (tied)
+                {
                     SoundManager.Instance.PlayClip("MatchWin");
-                else
-                    SoundManager.Instance.PlayClip("MatchLoss");
 
-                crownTween.gameObject.SetActive(true);
-                crownTween.from = new Vector3(leftWon ? leftAvatarBox.transform.localPosition.x : rightAvatarBox.transform.localPosition.x, crownTween.from.y, crownTween.from.z);
-                crownTween.to = new Vector3(leftWon ? leftAvatarBox.transform.localPosition.x : rightAvatarBox.transform.localPosition.x, crownTween.to.y, crownTween.to.z);
-                crownTween.ResetToInitialState();
-                crownTween.Play();
+                    crownTween.gameObject.SetActive(true);
+                    crownTween.from = new Vector3(leftAvatarBox.transform.localPosition.x, crownTween.from.y, crownTween.from.z);
+                    crownTween.to = new Vector3(leftAvatarBox.transform.localPosition.x, crownTween.to.y, crownTween.to.z);
+                    crownTween.ResetToInitialState();
+                    crownTween.Play();
+
+                    crownTweenPlayer2.gameObject.SetActive(true);
+                    crownTweenPlayer2.from = new Vector3(rightAvatarBox.transform.localPosition.x, crownTween.from.y, crownTween.from.z);
+                    crownTweenPlayer2.to = new Vector3(rightAvatarBox.transform.localPosition.x, crownTween.to.y, crownTween.to.z);
+                    crownTweenPlayer2.ResetToInitialState();
+                    crownTweenPlayer2.Play();
+                }
+                else
+                {
+                    var leftWon = GameManager.Instance.MatchDetails.UserScore(0) > GameManager.Instance.MatchDetails.UserScore(1);
+
+                    if (leftWon && ClientManager.Instance.UserId() == GameManager.Instance.MatchDetails.Users[0].Id || !leftWon && ClientManager.Instance.UserId() == GameManager.Instance.MatchDetails.Users[1].Id)
+                        SoundManager.Instance.PlayClip("MatchWin");
+                    else
+                        SoundManager.Instance.PlayClip("MatchLoss");
+
+                    crownTweenPlayer2.gameObject.SetActive(false);
+
+                    crownTween.gameObject.SetActive(true);
+                    crownTween.from = new Vector3(leftWon ? leftAvatarBox.transform.localPosition.x : rightAvatarBox.transform.localPosition.x, crownTween.from.y, crownTween.from.z);
+                    crownTween.to = new Vector3(leftWon ? leftAvatarBox.transform.localPosition.x : rightAvatarBox.transform.localPosition.x, crownTween.to.y, crownTween.to.z);
+                    crownTween.ResetToInitialState();
+                    crownTween.Play();
+                }
             }
             else
             {
