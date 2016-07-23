@@ -25,7 +25,6 @@ public class IdFixer : MonoBehaviour
         {
             foreach (var billingProduct in products)
             {
-                file.WriteLine(billingProduct.ProductIdentifier + ", published, managed_by_android, false, en_US; " + billingProduct.Name + "; " + billingProduct.Description + ",true," + (int)(skinDefinition.Cost() * 1000000));
             }
         }
 
