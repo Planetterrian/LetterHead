@@ -255,6 +255,8 @@ namespace LetterHeadServer.Controllers
         [AuthenticationFilter()]
         public ActionResult IapPurchase(string productId, string receipt)
         {
+            productId = productId.ToLower();
+
             switch (productId)
             {
                 case "com.we3workshop.lhead.doover_small":

@@ -173,10 +173,7 @@ public class AchievementManager : Singleton<AchievementManager>
 
         PlayerPrefs.SetFloat("ach_" + _achievementID, pct);
 
-
-        var desc = GetAchievementDescription(_achievementID);
-
-        pct = desc.MaximumPoints*pct;
+        pct *= 100f;
 
         NPBinding.GameServices.ReportProgressWithGlobalID(_achievementID, pct, (bool _status, string _error) => {
 
