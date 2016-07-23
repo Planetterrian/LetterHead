@@ -18,6 +18,19 @@ public class IapManager : Singleton<IapManager>
     {
         Billing.DidFinishProductPurchaseEvent += OnDidFinishTransaction;
         Billing.DidFinishRestoringPurchasesEvent += OnDidFinishRestoringPurchases;
+        Billing.DidFinishRequestForBillingProductsEvent += OnDidFinishRequestForBillingProducts;
+    }
+
+    private void OnDidFinishRequestForBillingProducts(BillingProduct[] _products, string _error)
+    {
+        if (!string.IsNullOrEmpty(_error))
+        {
+            Debug.LogError(_error);
+        }
+        else
+        {
+            Debug.Log(_products.Length + " IAPs Loaded");
+        }
     }
 
     private void OnDisable()
@@ -60,6 +73,7 @@ public class IapManager : Singleton<IapManager>
                 else
                 {
                     //DialogWindowTM.Instance.Error(_transaction.Error);
+                    DialogWindowTM.Instance.Hide();
                 }
             }
         }
