@@ -58,6 +58,9 @@ namespace LetterHeadServer.Models
         [Index]
         public virtual User Winner { get; set; }
 
+        public bool IsTie { get; set; }
+
+
         public virtual User Resigner { get; set; }
 
         [Index]
@@ -333,8 +336,19 @@ namespace LetterHeadServer.Models
             }
 
             var scores = Rounds.GroupBy(r => r.User).Select(g => new {User = g.Key, Score = g.Sum(r => r.Score) + MatchBonus(g.Key)}).ToList();
-            var winner = scores.OrderByDescending(s => s.Score).First().User;
-            Winner = winner;
+
+            var firstScore = scores[0].Score;
+            var isTie = scores.All(scoreInfo => scoreInfo.Score == firstScore);
+
+            if (isTie)
+            {
+                IsTie = true;
+            }
+            else
+            {
+                var winner = scores.OrderByDescending(s => s.Score).First().User;
+                Winner = winner;
+            }
         }
 
         public void GenerateRandomBoard()

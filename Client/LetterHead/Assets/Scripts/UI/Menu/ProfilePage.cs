@@ -24,6 +24,7 @@ class ProfilePage : Page
     public TextMeshProUGUI stat_bestScore;
     public TextMeshProUGUI stat_averageScore;
     public TextMeshProUGUI stat_mostWords;
+    public TextMeshProUGUI stat_ties;
 
     private bool initDone;
     private bool dontAllowAvatarChange;
@@ -116,6 +117,7 @@ class ProfilePage : Page
                 stat_bestScore.text = stats.bestScore.ToString();
                 stat_averageScore.text = stats.averageScore.ToString();
                 stat_mostWords.text = stats.mostWords.ToString();
+                stat_ties.text = stats.gamesTied.ToString();
             });
     }
 

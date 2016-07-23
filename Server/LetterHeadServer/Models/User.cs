@@ -109,6 +109,7 @@ namespace LetterHeadServer.Models
             var stats = new UserStats();
             var gamesWon = Matches.Where(m => m.Winner != null && m.Winner.Id == Id);
             var gamesLost = Matches.Where(m => m.Winner != null && m.Winner.Id != Id);
+            var gamesTied = Matches.Where(m => m.IsTie);
 
             var games = gamesWon.ToList();
             games.AddRange(gamesLost.ToList());
@@ -130,6 +131,7 @@ namespace LetterHeadServer.Models
                 stats.bestScore = 0;
             }
             stats.mostWords = MostWords;
+            stats.gamesTied = gamesTied.Count();
 
             return stats;
         }

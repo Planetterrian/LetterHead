@@ -13,5 +13,6 @@ namespace LetterHeadShared.DTO
         public int bestScore;
         public int averageScore;
         public int mostWords;
+        public int gamesTied;
     }
 }

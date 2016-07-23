@@ -112,6 +112,15 @@ public class DashboardRow : MonoBehaviour
         homePage.OnRowClicked(this);
     }
 
+
+    private bool DidTie()
+    {
+        var score1 = MatchInfo.UserScore(0);
+        var score2 = MatchInfo.UserScore(1);
+
+        return score1 == score2;
+    }
+
     private bool DidWin()
     {
         var score1 = MatchInfo.UserScore(0);
@@ -163,7 +172,11 @@ public class DashboardRow : MonoBehaviour
         {
             if (MatchInfo.Users.Count > 1)
             {
-                if (DidWin())
+                if (DidTie() && matchInfo.ResignerUserId < 1)
+                {
+                    lastTurnLabel.text = "<color=#2288A4>You Tied";
+                }
+                else if (DidWin())
                     lastTurnLabel.text = "<color=#61BC6D>You Won";
                 else
                     lastTurnLabel.text = "You Lost";
