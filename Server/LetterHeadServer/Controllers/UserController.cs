@@ -295,6 +295,12 @@ namespace LetterHeadServer.Controllers
                     currentUser.AddPowerup(Powerup.Type.StealTime, 15);
                     currentUser.AddPowerup(Powerup.Type.StealLetter, 15);
                     break;
+                case "com.we3workshop.lhead.premium":
+                    currentUser.AddPowerup(Powerup.Type.DoOver, 2);
+                    currentUser.AddPowerup(Powerup.Type.Shield, 2);
+                    currentUser.AddPowerup(Powerup.Type.StealTime, 2);
+                    currentUser.AddPowerup(Powerup.Type.StealLetter, 2);
+                    break;
             }
 
             currentUser.IsPremium = true;
