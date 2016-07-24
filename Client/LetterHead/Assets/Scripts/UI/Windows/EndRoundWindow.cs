@@ -434,7 +434,11 @@ public class EndRoundWindow : WindowController
 
     public void LeaderboardClicked()
     {
-        NPBinding.GameServices.ShowLeaderboardUIWithGlobalID("daily", eLeaderboardTimeScope.WEEK, error => { });
+        NPBinding.GameServices.ShowLeaderboardUIWithGlobalID("daily", eLeaderboardTimeScope.TODAY, error =>
+        {
+            if(!string.IsNullOrEmpty(error))
+                Debug.LogError(error);
+        });
     }
 
     public void RematchClicked()
