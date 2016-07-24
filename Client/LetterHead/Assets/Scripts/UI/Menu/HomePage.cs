@@ -224,12 +224,6 @@ public class HomePage : Page
 
     public void OnRowClicked(DashboardRow dashboardRow)
     {
-        if (dashboardRow.MatchInfo.Users.Count == 1)
-        {
-            if (dashboardRow.MatchInfo.CurrentState != Match.MatchState.Ended && dashboardRow.MatchInfo.CurrentUserId == ClientManager.Instance.myUserInfo.Id)
-                AdManager.Instance.ShowInterstitial();
-        }
-
         PersistManager.Instance.LoadMatch(dashboardRow.MatchInfo.Id, dashboardRow.MatchInfo.Users.Count == 1);
     }
 
