@@ -455,7 +455,7 @@ namespace LetterHeadServer.Controllers
                            GamesPlayed = currentUser.Matches.Count(m => m.CurrentState == Match.MatchState.Ended),
                            GamesWon = currentUser.Matches.Count(m => m.Winner != null && m.Winner.Id == currentUser.Id),
                            HasWonAny = currentUser.Matches.Any(m => m.Winner != null && m.Winner.Id == currentUser.Id),
-                           HasWonDaily = currentUser.Matches.Any(m => m.Winner != null && m.Winner.Id == currentUser.Id && m.DailyGame != null),
+                           HasWonDaily = db.Matches.Any(m => m.DailyGame != null && m.DailyGame.Winner != null && m.DailyGame.Winner.Id == currentUser.Id),
                            HasThreeGameStreak = last3.Length == 3 && last3.All(m => m.Winner.Id == currentUser.Id)
             };
 

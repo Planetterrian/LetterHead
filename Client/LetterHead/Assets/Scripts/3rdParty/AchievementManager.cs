@@ -94,6 +94,7 @@ public class AchievementManager : Singleton<AchievementManager>
                 Debug.Log("Local User Details : " + NPBinding.GameServices.LocalUser.ToString());
 
                 LoadAchievementDescriptions();
+                CheckServerAchievements();
             }
             else
             {

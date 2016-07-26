@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 using LetterHeadServer.Classes;
@@ -9,6 +10,9 @@ namespace LetterHeadServer.Models
     public class DailyGame
     {
         public int Id { get; set; }
+
+        [Index]
+        public User Winner { get; set; }
         public string LettersEncoded { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime? EndDate { get; set; }
@@ -54,6 +58,12 @@ namespace LetterHeadServer.Models
         private void End(ApplicationDbContext context)
         {
             EndDate = DateTime.Now;
+
+            var topMatch = context.Matches.Where(m => m.DailyGame.Id == Id).OrderByDescending(m => m.DailyGame != null && m.DailyGame.Id == Id).FirstOrDefault();
+
+            if (topMatch != null)
+                Winner = topMatch.Users[0];
+
             context.SaveChanges();
 
             EndExistingGames(context);

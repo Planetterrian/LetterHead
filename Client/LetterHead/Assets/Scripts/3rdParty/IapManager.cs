@@ -62,13 +62,17 @@ public class IapManager : Singleton<IapManager>
     {
         if (_transaction != null)
         {
-            if (_transaction.VerificationState == eBillingTransactionVerificationState.SUCCESS || _transaction.VerificationState == eBillingTransactionVerificationState.NOT_CHECKED)
+            if (_transaction.VerificationState == eBillingTransactionVerificationState.NOT_CHECKED)
+            {
+                if (_transaction.TransactionState == eBillingTransactionState.PURCHASED)
+                    _transaction.OnCustomVerificationFinished(eBillingTransactionVerificationState.SUCCESS);
+            }
+            else if (_transaction.VerificationState == eBillingTransactionVerificationState.SUCCESS)
             {
                 if (_transaction.TransactionState == eBillingTransactionState.PURCHASED)
                 {
                     // Your code to handle purchased products
                     AwardProduct(_transaction);
-                    _transaction.OnCustomVerificationFinished(eBillingTransactionVerificationState.SUCCESS);
                 }
                 else
                 {
