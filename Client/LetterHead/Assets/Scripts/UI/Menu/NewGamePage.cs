@@ -16,6 +16,8 @@ public class NewGamePage : Page
 
     public void OnRandomOpponentClicked()
     {
+        DialogWindowTM.Instance.Show("New Game", "One moment...", () => { }, () => { }, "");
+
         Srv.Instance.POST("Match/Random", null, s =>
         {
             DialogWindowTM.Instance.Show("New Game", "We are searching for an opponent. You will receive a notification when one is found.", () => { });
