@@ -147,6 +147,9 @@ public class ScoringManager : Singleton<ScoringManager>, IGameHandler
 
     private void UpdateCurrentRoundScore()
     {
+        if(GameManager.Instance.MyCurrentRound().CurrentState == MatchRound.RoundState.Ended)
+            return;
+
         if (currentCategory == null)
         {
             GameManager.Instance.MyCurrentRound().Score = 0;

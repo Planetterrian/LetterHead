@@ -39,13 +39,13 @@ public class CategoryBox : MonoBehaviour, IGameHandler
 
     private void OnMatchDetailsLoaded()
     {
-        Refresh(GameManager.Instance.MyRounds());
-
         if (!string.IsNullOrEmpty(GameManager.Instance.CurrentRound().CategoryName))
         {
             var category = ScoringManager.Instance.categoryManager.GetCategory(GameManager.Instance.CurrentRound().CategoryName);
             GameManager.Instance.SelectCategory(category, true);
         }
+
+        Refresh(GameManager.Instance.MyRounds());
     }
 
     public void OnCategoryScoreClicked(Category category, string scoreText)
