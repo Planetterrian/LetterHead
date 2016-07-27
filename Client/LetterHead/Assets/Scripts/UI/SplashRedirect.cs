@@ -17,6 +17,9 @@ public class SplashRedirect : MonoBehaviour
 
     private IEnumerator Start()
     {
+#if UNITY_IOS
+        minDelay *= 2;
+#endif
         yield return new WaitForSeconds(minDelay);
         SceneManager.LoadScene(sceneName);
     }
