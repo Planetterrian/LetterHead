@@ -62,24 +62,25 @@ public class IapManager : Singleton<IapManager>
     {
         if (_transaction != null)
         {
-            if (_transaction.VerificationState == eBillingTransactionVerificationState.NOT_CHECKED)
+            if (_transaction.TransactionState == eBillingTransactionState.PURCHASED)
             {
-                if (_transaction.TransactionState == eBillingTransactionState.PURCHASED)
-                    _transaction.OnCustomVerificationFinished(eBillingTransactionVerificationState.SUCCESS);
-            }
-            else if (_transaction.VerificationState == eBillingTransactionVerificationState.SUCCESS)
-            {
-                if (_transaction.TransactionState == eBillingTransactionState.PURCHASED)
+                if (_transaction.VerificationState == eBillingTransactionVerificationState.NOT_CHECKED)
                 {
-                    // Your code to handle purchased products
+                    _transaction.OnCustomVerificationFinished(eBillingTransactionVerificationState.SUCCESS);
+                }
+                else if (_transaction.VerificationState == eBillingTransactionVerificationState.SUCCESS)
+                {
                     AwardProduct(_transaction);
                 }
-                else
-                {
-                    //DialogWindowTM.Instance.Error(_transaction.Error);
-                    DialogWindowTM.Instance.Hide();
-                }
             }
+            else
+            {
+                DialogWindowTM.Instance.Hide();
+            }
+        }
+        else
+        {
+            DialogWindowTM.Instance.Hide();
         }
     }
 
