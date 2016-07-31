@@ -247,7 +247,7 @@ public class HomePage : Page
     {
         Srv.Instance.POST("Match/Buzz", new Dictionary<string, string>() { { "matchId", matchInfo.Id.ToString() } }, s =>
         {
-            DialogWindowTM.Instance.Show("Buzz", "You buzzed your opponent.", () => { });
+            DialogWindowTM.Instance.Show("Poke", "You poked your opponent.", () => { });
         }, DialogWindowTM.Instance.Error);
     }
 
