@@ -1,0 +1,49 @@
+Duplicate Score Cards
+Jul 30 23:19:20 Synco lhead[4143] <Warning>: You are using download over http. Currently unity adds NSAllowsArbitraryLoads to Info.plist to simplify transition, but it will be removed soon. Please consider updating to https.
+Jul 30 23:19:26 Synco softwarebehaviorservicesd[4183] <Warning>: *********** Ended XPC transaction : SBMinimumLaunchTransaction ***********
+Jul 30 23:19:40 Synco lhead[4143] <Warning>: You are using download over http. Currently unity adds NSAllowsArbitraryLoads to Info.plist to simplify transition, but it will be removed soon. Please consider updating to https.
+Jul 30 23:19:41 Synco locationd[2699] <Notice>: Gesture EnabledForTopCLient: 0, EnabledInDaemonSettings: 0
+Jul 30 23:19:41 Synco locationd[2699] <Notice>: Gesture EnabledForTopCLient: 0, EnabledInDaemonSettings: 0
+Jul 30 23:19:41 Synco locationd[2699] <Notice>: Gesture EnabledForTopCLient: 0, EnabledInDaemonSettings: 0
+Jul 30 23:19:41 Synco locationd[2699] <Notice>: Gesture EnabledForTopCLient: 0, EnabledInDaemonSettings: 0
+Jul 30 23:20:00 Synco lhead[4143] <Warning>: You are using download over http. Currently unity adds NSAllowsArbitraryLoads to Info.plist to simplify transition, but it will be removed soon. Please consider updating to https.
+Jul 30 23:20:10 Synco locationd[2699] <Notice>: need a scan, count, 0, 0, lwatchdog, 0.0, interval, 60.0, needWatchdog, 1
+Jul 30 23:20:10 Synco locationd[2699] <Notice>: scan result, count, wait, 1, retry, 0, error
+Jul 30 23:20:10 Synco locationd[2699] <Notice>: scan result, count, wait, 1, retry, 1, error
+Jul 30 23:20:10 Synco locationd[2699] <Notice>: scan result, count, wait, 1, retry, 2, error
+Jul 30 23:20:13 Synco locationd[2699] <Notice>: Fence: loc watchdog cancel, count, 1, 3, client, 0x0
+Jul 30 23:20:20 Synco lhead[4143] <Warning>: You are using download over http. Currently unity adds NSAllowsArbitraryLoads to Info.plist to simplify transition, but it will be removed soon. Please consider updating to https.
+Jul 30 23:20:40 Synco lhead[4143] <Warning>: You are using download over http. Currently unity adds NSAllowsArbitraryLoads to Info.plist to simplify transition, but it will be removed soon. Please consider updating to https.
+Jul 30 23:20:47 Synco lhead[4143] <Warning>: [OrientationManager] new orientation: 1
+Jul 30 23:20:47 Synco SpringBoard[94] <Warning>: {
+        SBBacklightChangeSourceKey = 0;
+        SBBacklightNewFactorKey = 0;
+        SBBacklightOldFactorKey = 1;
+    }
+Jul 30 23:20:47 Synco kernel[0] <Notice>: AppleMultitouchN1SPI: updating power statistics
+Jul 30 23:20:47 Synco SpringBoard[94] <Warning>: [MPUSystemMediaControls] Disabling lock screen media controls updates for screen turning off.
+Jul 30 23:20:47 Synco backboardd[100] <Notice>: MultitouchHID: detection mode: 3->255
+Jul 30 23:20:47 Synco sharingd[106] <Notice>: 23:20:47.413 : BTLE scanning stopped
+Jul 30 23:20:47 Synco SpringBoard[94] <Notice>: (Note ) MC: Locking device.
+Jul 30 23:20:48 Synco SpringBoard[94] <Warning>: [MPUSystemMediaControls] Updating supported commands for now playing application.
+Jul 30 23:20:48 Synco UserEventAgent[122] <Error>:  LockStateNotifier aksNotificationCallback posting notification: com.apple.mobile.keybagd.lock_status
+Jul 30 23:20:48 Synco SpringBoard[94] <Notice>: (Note ) MC: Locking device.
+Jul 30 23:20:48 Synco UserEventAgent[122] <Notice>: (Note ) PIH: Lock status changed.
+Jul 30 23:20:48 Synco locationd[2699] <Warning>: notify name "com.apple.locationd.DumpDiagnostics" has been registered 40 times - this may be a leak
+Jul 30 23:20:48 Synco SpringBoard[94] <Warning>: Telling backboard to enable secure lock screen.
+Jul 30 23:20:48 Synco cloudd[3501] <Notice>: (Note ) MC: User has completed cloud configuration. Not showing UI again.
+Jul 30 23:20:48 Synco backupd[4186] <Notice>: MS:Notice: Injecting: com.apple.backupd [backupd] (1145.15)
+Jul 30 23:20:49 Synco backupd[4186] <Notice>: MS:Notice: Loading: /Library/MobileSubstrate/DynamicLibraries/Unrestrictor3G-daemons.dylib
+Jul 30 23:20:49 Synco backupd[4186] <Warning>: Unrestrictor3G_Tweak:Info: Loaded Unrestrictor3G_Tweak v(5.9.0-PF-1) into com.apple.backupd (Did not hook or modify anything yet)
+Jul 30 23:20:49 Synco backupd[4186] <Warning>: INFO: Scheduling next backup at 7/30/16, 11:55:39 PM
+Jul 30 23:20:49 Synco backupd[4186] <Warning>: INFO: Exporting keychain
+Jul 30 23:20:49 Synco locationd[2699] <Notice>: Gesture EnabledForTopCLient: 0, EnabledInDaemonSettings: 0
+Jul 30 23:20:54 Synco cloudd[3501] <Notice>: (Note ) MC: User has completed cloud configuration. Not showing UI again.
+Jul 30 23:20:57 Synco kernel[0] <Notice>: AppleARMPMUCharger: limiting USB input current to 1300 mA (measured 1021 mA)
+Jul 30 23:20:58 Synco kernel[0] <Notice>: AppleARMPMUCharger: limiting USB input current to 1200 mA (measured 1029 mA)
+Jul 30 23:20:58 Synco kernel[0] <Notice>: AppleKeyStore:Sending lock change 1 for handle 0
+Jul 30 23:20:58 Synco UserEventAgent[122] <Error>:  LockStateNotifier aksNotificationCallback posting notification: com.apple.mobile.keybagd.lock_status
+Jul 30 23:20:58 Synco SpringBoard[94] <Warning>: Telling backboard to enable secure lock screen.
+Jul 30 23:20:58 Synco UserEventAgent[122] <Notice>: (Note ) PIH: Lock status changed.
+Jul 30 23:20:58 Synco cloudd[3501] <Notice>: (Note ) MC: User has completed cloud configuration. Not showing UI again.
+Jul 30 23:21:04 Synco cloudd[3501] <Notice>: (Note ) MC: User has completed cloud configuration. Not showing UI again.

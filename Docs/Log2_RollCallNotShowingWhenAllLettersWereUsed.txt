@@ -1,0 +1,183 @@
+Ellen Phone - Roll Call not showing when all letters have been used
+
+Jul 31 00:37:25 Gatsby lhead[1469] <Warning>: [OrientationManager] new orientation: 1
+Jul 31 00:37:25 Gatsby SpringBoard[58] <Warning>: HW kbd: Failed to set (null) as keyboard focus
+Jul 31 00:37:25 Gatsby searchd[1429] <Warning>: ====^^^^ DuetExpert missing data, count -> people:8 applicationDeepLinks:0 applications:8 requests:19 missingAllDataRequests:0
+Jul 31 00:37:26 Gatsby kbd[163] <Warning>: -[PFUbiquitySwitchboardEntryMetadata setUseLocalStorage:](898): CoreData: Ubiquity:  mobile~BA785EF0-6609-5F23-A42C-73ACEF90D908:UserDictionary
+    Using local storage: 1 for new NSFileManager current token <7fd27aa1 d27602d0 daee89c0 d3ccb4a4 518c3865>
+Jul 31 00:37:26 Gatsby kbd[163] <Warning>: -[PFUbiquitySwitchboardEntryMetadata setUseLocalStorage:](898): CoreData: Ubiquity:  mobile~BA785EF0-6609-5F23-A42C-73ACEF90D908:UserDictionary
+    Using local storage: 0 for new NSFileManager current token <7fd27aa1 d27602d0 daee89c0 d3ccb4a4 518c3865>
+Jul 31 00:37:26 Gatsby timed[62] <Notice>: (Note ) CoreTime: Current mcc: '310' simulated:'0'.
+Jul 31 00:37:26 Gatsby timed[62] <Notice>: (Note ) CoreTime: Received timezone "America/Chicago" from "Location" with mcc 310
+Jul 31 00:37:26 Gatsby timed[62] <Notice>: (Note ) CoreTime: Not setting time zone to America/Chicago from LocationAndNetwork because time zone is unchanged
+Jul 31 00:37:28 Gatsby timed[62] <Notice>: (Note ) CoreTime: Want active time in 39.91min. Need active time in 8331.58min. Remaining retry interval: 0.000000min.
+Jul 31 00:37:28 Gatsby UserEventAgent[26] <Error>: validateAndAddDefaults(com.apple.timed): End Time (inf) > now (491636248.7) + BACKGROUND_TASK_AGENT_JOB_WINDOW_MAX_TIME_FROM_NOW_SEC (3024000.0) + BACKGROUND_TASK_AGENT_JOB_TIME_ERROR_MARGIN (300.0)
+Jul 31 00:37:28 Gatsby timed[62] <Notice>: (Error) CoreTime: Error requesting proactive time check job
+Jul 31 00:37:29 Gatsby timed[62] <Notice>: (Note ) CoreTime: Want active time in 40.29min. Need active time in 8331.95min. Remaining retry interval: 0.000000min.
+Jul 31 00:37:29 Gatsby UserEventAgent[26] <Error>: validateAndAddDefaults(com.apple.timed): End Time (inf) > now (491636249.8) + BACKGROUND_TASK_AGENT_JOB_WINDOW_MAX_TIME_FROM_NOW_SEC (3024000.0) + BACKGROUND_TASK_AGENT_JOB_TIME_ERROR_MARGIN (300.0)
+Jul 31 00:37:29 Gatsby timed[62] <Notice>: (Error) CoreTime: Error requesting proactive time check job
+Jul 31 00:37:30 Gatsby Game Center[1575] <Warning>: no bundle for bundleID: (null)
+Jul 31 00:37:30 Gatsby Game Center[1575] <Warning>: no bundle for bundleID: (null)
+Jul 31 00:37:30 Gatsby Game Center[1575] <Warning>: no bundle for bundleID: (null)
+Jul 31 00:37:30 Gatsby Game Center[1575] <Warning>: no bundle for bundleID: (null)
+Jul 31 00:37:31 Gatsby Game Center[1575] <Warning>: no bundle for bundleID: (null)
+Jul 31 00:37:31 Gatsby Game Center[1575] <Warning>: no bundle for bundleID: (null)
+Jul 31 00:37:32 Gatsby Game Center[1575] <Warning>: no bundle for bundleID: (null)
+Jul 31 00:37:32 Gatsby Game Center[1575] <Warning>: no bundle for bundleID: (null)
+Jul 31 00:37:32 Gatsby Game Center[1575] <Warning>: no bundle for bundleID: (null)
+Jul 31 00:37:32 Gatsby Game Center[1575] <Warning>: no bundle for bundleID: (null)
+Jul 31 00:37:33 Gatsby Game Center[1575] <Warning>: no bundle for bundleID: (null)
+Jul 31 00:37:33 Gatsby Game Center[1575] <Warning>: no bundle for bundleID: (null)
+Jul 31 00:37:33 Gatsby Game Center[1575] <Warning>: no bundle for bundleID: (null)
+Jul 31 00:37:33 Gatsby Game Center[1575] <Warning>: no bundle for bundleID: (null)
+Jul 31 00:37:40 Gatsby Game Center[1575] <Warning>: no bundle for bundleID: (null)
+Jul 31 00:37:40 Gatsby Game Center[1575] <Warning>: no bundle for bundleID: (null)
+Jul 31 00:37:40 Gatsby Game Center[1575] <Warning>: no bundle for bundleID: (null)
+Jul 31 00:37:40 Gatsby Game Center[1575] <Warning>: no bundle for bundleID: (null)
+Jul 31 00:37:40 Gatsby Game Center[1575] <Warning>: no bundle for bundleID: (null)
+Jul 31 00:37:41 Gatsby Game Center[1575] <Warning>: no bundle for bundleID: (null)
+Jul 31 00:37:42 Gatsby SpringBoard[58] <Warning>: HW kbd: Failed to set (null) as keyboard focus
+Jul 31 00:37:43 Gatsby SpringBoard[58] <Error>:  SecTrustEvaluate  [leaf IssuerCommonName SubjectCommonName]
+Jul 31 00:37:43 Gatsby SpringBoard[58] <Error>:  SecTrustEvaluate  [leaf IssuerCommonName SubjectCommonName]
+Jul 31 00:37:43 Gatsby lhead[1469] <Warning>: [OrientationManager] new orientation: 1
+Jul 31 00:37:43 Gatsby lhead[1469] <Warning>: [OrientationManager] new orientation: 1
+Jul 31 00:37:43 Gatsby lhead[1469] <Warning>: Requesting Unity Ads ad plan from https://impact.applifier.com/mobile/campaigns?platform=ios&gameId=1087169&sdkVersion=1506&rawAdvertisingTrackingId=EFD0D9FB-0754-4E79-941C-2DF874C11BF3&advertisingTrackingId=6e26b9babc9694bc13011036337046e8&trackingEnabled=1&softwareVersion=9.3.2&deviceType=iPhone8,1&connectionType=wifi&unityVersion=5.3.4f1&iosNetworkType=CTRadioAccessTechnologyHSDPA&test=true
+Jul 31 00:37:43 Gatsby networkd[92] <Error>: -[NETClient sendMessage:replyHandler:] attempting to send an XPC message to a suspended client lhead.1469! This is a bug!
+Jul 31 00:37:43 Gatsby lhead[1469] <Warning>: [NotifyEventListener] Method=AuthenticationFinished, Message={"player-info":{"underage":false,"alias":"Narrot","player-id":"G:91152957","authenticated":true,"display-name":"Me"}}
+Jul 31 00:37:43 Gatsby lhead[1469] <Warning>: Unity Ads initialized with 3 campaigns and 2 zones
+Jul 31 00:37:44 Gatsby lhead[1469] <Warning>: [OrientationManager] new orientation: 1
+Jul 31 00:37:44 Gatsby lhead[1469] <Warning>: count 0
+Jul 31 00:37:44 Gatsby lhead[1469] <Warning>: no bundle for bundleID: (null)
+Jul 31 00:37:44 Gatsby lhead[1469] <Warning>: You are using download over http. Currently unity adds NSAllowsArbitraryLoads to Info.plist to simplify transition, but it will be removed soon. Please consider updating to https.
+Jul 31 00:37:44 Gatsby lhead[1469] <Warning>: [NotifyEventListener] Method=LoadAchievementDescriptionsFinished, Message={"descriptions":[{"hidden":false,"id":"com.we3workshop.lhead.play10","unachieved-desc":"Play 10 matches.","replayable":false,"title":"Strike a Match","achieved-desc":"You played 10 matches.","max-points":10},{"hidden":false,"id":"com.we3workshop.lhead.play50","unachieved-desc":"Play 50 matches.","replayable":false,"title":"Match Book","achieved-desc":"You played 50 matches.","max-points":50},{"hidden":false,"id":"com.we3workshop.lhead.play100","unachieved-desc":"Play 100 matches.","replayable":false,"title":"Match Box","achieved-desc":"You played 100 matches.","max-points":100},{"hidden":false,"id":"com.we3workshop.lhead.booster_time","unachieved-desc":"Use the steal time booster.","replayable":false,"title":"Time Bandit","achieved-desc":"You used the steal time booster.","max-points":5},{"hidden":false,"id":"com.we3workshop.lhead.booster_letter","unachieved-desc":"Use the steal letter booster.","replayable":false,"title":"Letter Carrier","achieved-desc":"You used the steal letter booster.","max-points":5},{"hidden":false,"id":"com.we3workshop.lhead.booster_shield","unachieved-desc":"Stop an attack using a shield.","replayable":false,"title":"Shields Up","achieved-desc":"You stopped an attack using a shield.","max-points":5},{"hidden":false,"id":"com.we3workshop.lhead.booster_doover","unachieved-desc":"Use the do-over booster to reset your letters.","replayable":false,"title":"Return to Sender","achieved-desc":"You used the do-over booster to reset your letters.","max-points":5},{"hidden":false,"id":"com.we3workshop.lhead.facebook","unachieved-desc":"Connect with friends on Facebook.","replayable":false,"title":"Buddies","achieved-desc":"You connected with friends on Facebook.","max-points":5},{"hidden":false,"id":"com.we3workshop.lhead.word8","unachieved-desc":"Make your first 8-letter word.","replayable":false,"title":"Long Fellow","achieved-desc":"You made your first 8-letter word.","max-points":5},{"hidden":false,"id":"com.we3workshop.lhead.word10","unachieved-desc":"Make your first 10-letter word.","replayable":false,"title":"All In","achieved-desc":"You made your first 10-letter word.","max-points":10},{"hidden":false,"id":"com.we3workshop.lhead.score500","unachieved-desc":"Score 500 points in a game.","replayable":false,"title":"Grand Master","achieved-desc":"You scored 500 points in a game.","max-points":50},{"hidden":false,"id":"com.we3workshop.lhead.long_words5","unachieved-desc":"Make five 8-letter words in one game!","replayable":false,"title":"High Five","achieved-desc":"You made five 8-letter words in one game!","max-points":50},{"hidden":false,"id":"com.we3workshop.lhead.win","unachieved-desc":"Win your first match.","replayable":false,"title":"Victory Lap","achieved-desc":"You won your first match.","max-points":10},{"hidden":false,"id":"com.we3workshop.lhead.win_daily","unachieved-desc":"Win the daily game.","replayable":false,"title":"The Champ","achieved-desc":"You won the daily game.","max-points":100},{"hidden":false,"id":"com.we3workshop.lhead.win3row","unachieved-desc":"Win 3 matches in a row.","replayable":false,"title":"The Streak","achieved-desc":"You won 3 matches in a row.","max-points":30},{"hidden":false,"id":"com.we3workshop.lhead.win10","unachieved-desc":"Win 10 games.","replayable":false,"title":"Win 10","achieved-desc":"You won 10 games.","max-points":10},{"hidden":false,"id":"com.we3workshop.lhead.win50","unachieved-desc":"Win 50 games.","replayable":false,"title":"Win 50","achieved-desc":"You won 50 games.","max-points":50},{"hidden":false,"id":"com.we3workshop.lhead.win100","unachieved-desc":"Win 100 games.","replayable":false,"title":"Win 100","achieved-desc":"You won 100 games.","max-points":100}]}
+Jul 31 00:37:50 Gatsby lhead[1469] <Warning>: [OrientationManager] new orientation: 1
+Jul 31 00:37:50 Gatsby lhead[1469] <Warning>: count 0
+Jul 31 00:37:50 Gatsby akd[123] <Warning>: success
+Jul 31 00:37:51 Gatsby akd[123] <Warning>: success
+Jul 31 00:37:51 Gatsby accountsd[97] <Warning>: AIDA Notification plugin running
+Jul 31 00:38:00 Gatsby lhead[1469] <Warning>: You are using download over http. Currently unity adds NSAllowsArbitraryLoads to Info.plist to simplify transition, but it will be removed soon. Please consider updating to https.
+Jul 31 00:38:20 Gatsby lhead[1469] <Warning>: You are using download over http. Currently unity adds NSAllowsArbitraryLoads to Info.plist to simplify transition, but it will be removed soon. Please consider updating to https.
+Jul 31 00:38:40 Gatsby lhead[1469] <Warning>: You are using download over http. Currently unity adds NSAllowsArbitraryLoads to Info.plist to simplify transition, but it will be removed soon. Please consider updating to https.
+Jul 31 00:39:00 Gatsby lhead[1469] <Warning>: You are using download over http. Currently unity adds NSAllowsArbitraryLoads to Info.plist to simplify transition, but it will be removed soon. Please consider updating to https.
+Jul 31 00:39:20 Gatsby lhead[1469] <Warning>: You are using download over http. Currently unity adds NSAllowsArbitraryLoads to Info.plist to simplify transition, but it will be removed soon. Please consider updating to https.
+Jul 31 00:39:40 Gatsby lhead[1469] <Warning>: You are using download over http. Currently unity adds NSAllowsArbitraryLoads to Info.plist to simplify transition, but it will be removed soon. Please consider updating to https.
+Jul 31 00:39:42 Gatsby lhead[1469] <Warning>: You are using download over http. Currently unity adds NSAllowsArbitraryLoads to Info.plist to simplify transition, but it will be removed soon. Please consider updating to https.
+Jul 31 00:39:42 Gatsby lhead[1469] <Warning>: You are using download over http. Currently unity adds NSAllowsArbitraryLoads to Info.plist to simplify transition, but it will be removed soon. Please consider updating to https.
+Jul 31 00:39:42 Gatsby lhead[1469] <Warning>: You are using download over http. Currently unity adds NSAllowsArbitraryLoads to Info.plist to simplify transition, but it will be removed soon. Please consider updating to https.
+Jul 31 00:39:43 Gatsby lhead[1469] <Warning>: You are using download over http. Currently unity adds NSAllowsArbitraryLoads to Info.plist to simplify transition, but it will be removed soon. Please consider updating to https.
+Jul 31 00:39:44 Gatsby lhead[1469] <Warning>: You are using download over http. Currently unity adds NSAllowsArbitraryLoads to Info.plist to simplify transition, but it will be removed soon. Please consider updating to https.
+Jul 31 00:40:04 Gatsby lhead[1469] <Warning>: You are using download over http. Currently unity adds NSAllowsArbitraryLoads to Info.plist to simplify transition, but it will be removed soon. Please consider updating to https.
+Jul 31 00:40:24 Gatsby lhead[1469] <Warning>: You are using download over http. Currently unity adds NSAllowsArbitraryLoads to Info.plist to simplify transition, but it will be removed soon. Please consider updating to https.
+Jul 31 00:40:28 Gatsby configd[37] <Notice>: network changed
+Jul 31 00:40:28 Gatsby configd[37] <Notice>: network changed: v4(en0:192.168.1.18, pdp_ip0) DNS Proxy
+Jul 31 00:40:28 Gatsby configd[37] <Notice>: network changed
+Jul 31 00:40:28 Gatsby configd[37] <Notice>: network changed: v4(en0:192.168.1.18, pdp_ip0) DNS Proxy
+Jul 31 00:40:30 Gatsby SpringBoard[58] <Warning>: sending screenshot action to scene: <FBScene: 0x1643be9a0; id: com.we3workshop.lhead>
+Jul 31 00:40:31 Gatsby mstreamd[1584] <Notice>: (Note ) mstreamd: mstreamd starting up.
+Jul 31 00:40:31 Gatsby mstreamd[1584] <Notice>: (Note ) PS: Media stream daemon starting...
+Jul 31 00:40:31 Gatsby mstreamd[1584] <Warning>: [Warning] Bad response (null) from daemon for setup info
+Jul 31 00:40:31 Gatsby mstreamd[1584] <Notice>: (Note ) PS: MSPublisher - 91152957 Requesting derivatives for 1 files.
+Jul 31 00:40:31 Gatsby mstreamd[1584] <Notice>: (Error) PS: Can't retrieve server-side configuration for personID 91152957. Error: NSError:
+    Domain  : mstreamdErrorDomain
+    Code    : 1000
+    Desc    : An internal communications error has occurred.
+    Sugg    : Couldn’t communicate with a helper application.
+    UserInfo: {
+        NSLocalizedDescription = "An internal communications error has occurred.";
+        NSLocalizedRecoverySuggestion = "Couldn\U2019t communicate with a helper application.";
+        NSUnderlyingError = "Error Domain=NSCocoaErrorDomain Code=4097 \"connection to service named com.apple.mediastream.mstreamd\" UserInfo={NSDebugDescription=connection to service named com.apple.mediastream.mstreamd}";
+    }
+    ...Underlying error:
+    NSError:
+    Domain  : NSCocoaErrorDomain
+    Code    : 4097
+    Desc    : Couldn’t communicate with a helper application.
+    Sugg    : Try your operation again. If that fails, quit and relaunch the application and try again.
+    UserInfo: {
+        NSDebugDescription = "connection to service named com.apple.mediastream.mstreamd";
+    }
+Jul 31 00:40:31 Gatsby assistant_service[1583] <Notice>: (Error) NPSLogging: <NPSDomainAccessor.m +[NPSDomainAccessor resolveActivePairedDevicePairingID:pairingDataStore:]:40> Failed to resolve pairing ID ((null)) or data store ((null)) for active device
+Jul 31 00:40:31 Gatsby mstreamd[1584] <Notice>: (Note ) PS: MSPublisher - 91152957 Submitting 1 asset collections for publication.
+Jul 31 00:40:31 Gatsby assistant_service[1583] <Warning>: Error getting NanoAppRegistry workspace info: Error Domain=NSCocoaErrorDomain Code=4099 "The connection to service named com.apple.nanoappregistry.workspace was invalidated." UserInfo={NSDebugDescription=The connection to service named com.apple.nanoappregistry.workspace was invalidated.}
+Jul 31 00:40:31 Gatsby mstreamd[1584] <Notice>: (Note ) PS: MSPublisher - 91152957 Sending metadata...
+Jul 31 00:40:31 Gatsby AssetCacheLocatorService[1446] <Warning>: #a1a6cd74 [I:AssetCacheLocatorService.queue] found no caching servers
+Jul 31 00:40:31 Gatsby mstreamd[1584] <Notice>: (Note ) PS: MSPublisher - 91152957 uploading 1 assets...
+Jul 31 00:40:31 Gatsby assistant_service[1583] <Warning>: Failed to soft-link "/System/Library/PrivateFrameworks/MobileCoreServices.framework/MobileCoreServices"
+Jul 31 00:40:32 Gatsby assistant_service[1583] <Warning>: Error getting NanoAppRegistry workspace info: Error Domain=NSCocoaErrorDomain Code=4099 "The connection to service named com.apple.nanoappregistry.workspace was invalidated." UserInfo={NSDebugDescription=The connection to service named com.apple.nanoappregistry.workspace was invalidated.}
+Jul 31 00:40:32 Gatsby calaccessd[1433] <Warning>: ERROR: couldn't find any operation group that responds to the selector CADDatabaseGetSharedCalendarInvitationsWithReply:
+Jul 31 00:40:32 Gatsby calaccessd[1433] <Warning>: ERROR: couldn't find any operation group that responds to the invocation CADDatabaseGetSharedCalendarInvitationsWithReply:
+Jul 31 00:40:32 Gatsby assistant_service[1583] <Warning>: Error getting shared calendar invitations for entity types 2 from daemon: Error Domain=EKCADErrorDomain Code=1014 "(null)"
+Jul 31 00:40:33 Gatsby kernel[0] <Notice>: in6_unlink_ifa: IPv6 address 0x3c7b5bc33ef3f8bf has no prefix
+Jul 31 00:40:33 Gatsby kernel[0] <Notice>: in6_unlink_ifa: IPv6 address 0x3c7b5bc33ef3e08f has no prefix
+Jul 31 00:40:33 Gatsby kernel[0] <Notice>: in6_unlink_ifa: IPv6 address 0x3c7b5bc33ef3e747 has no prefix
+Jul 31 00:40:33 Gatsby kernel[0] <Notice>: in6_unlink_ifa: IPv6 address 0x3c7b5bc33ef3eb4f has no prefix
+Jul 31 00:40:33 Gatsby CommCenter[79] <Notice>: Sending Event notification for EventRegistrationActive
+Jul 31 00:40:33 Gatsby configd[37] <Error>: siocsifnetsignature(ipsec4, IPv6, 0) failed: Device not configured
+Jul 31 00:40:33 Gatsby configd[37] <Error>: siocsifnetsignature(ipsec3, IPv6, 0) failed: Device not configured
+Jul 31 00:40:33 Gatsby configd[37] <Notice>: network changed: v4(en0:192.168.1.18, pdp_ip0) DNS Proxy
+Jul 31 00:40:33 Gatsby configd[37] <Error>: siocsifnetsignature(ipsec8, IPv6, 0) failed: Device not configured
+Jul 31 00:40:33 Gatsby configd[37] <Error>: siocsifnetsignature(ipsec7, IPv6, 0) failed: Device not configured
+Jul 31 00:40:33 Gatsby configd[37] <Notice>: network changed: v4(en0:192.168.1.18, pdp_ip0) DNS Proxy
+Jul 31 00:40:33 Gatsby mDNSResponder[72] <Error>: getExtendedFlags: SIOCGIFEFLAGS failed, errno = 6 (Device not configured)
+Jul 31 00:40:33 Gatsby mDNSResponder[72] <Error>: getExtendedFlags: SIOCGIFEFLAGS failed, errno = 6 (Device not configured)
+Jul 31 00:40:33 Gatsby mDNSResponder[72] <Error>: getExtendedFlags: SIOCGIFEFLAGS failed, errno = 6 (Device not configured)
+Jul 31 00:40:33 Gatsby mDNSResponder[72] <Error>: getExtendedFlags: SIOCGIFEFLAGS failed, errno = 6 (Device not configured)
+Jul 31 00:40:34 Gatsby mstreamd[1584] <Notice>: (Note ) PS: MSPublisher - 91152957 Sending metadata...
+Jul 31 00:40:34 Gatsby mstreamd[1584] <Notice>: (Note ) PS: Received push notification for invitations topic: com.apple.mediastream.subscription.push userInfo: {
+        r = 91152957;
+    }
+Jul 31 00:40:34 Gatsby mstreamd[1584] <Notice>: (Note ) PS: <MSIOSMediaStreamDaemon: 0x13fd06730>: Push notification received for My Photo Stream with targetPersonID 91152957.
+Jul 31 00:40:34 Gatsby mstreamd[1584] <Notice>: (Note ) mstreamd: <MSPowerBudget: 0x13fe76b20>: Plugged in to external power. Allowing file transfers.
+Jul 31 00:40:34 Gatsby mstreamd[1584] <Notice>: (Note ) mstreamd: <MSPowerBudget: 0x13fe76b20>: Push received. Allowing file transfers to continue for 60.00 seconds
+Jul 31 00:40:34 Gatsby AssetCacheLocatorService[1446] <Warning>: #7d2d86bc [I:AssetCacheLocatorService.queue] found no caching servers
+Jul 31 00:40:34 Gatsby mstreamd[1584] <Notice>: (Note ) PS: MSSubscriber - 91152957 Found 1 new asset collections.
+Jul 31 00:40:44 Gatsby lhead[1469] <Warning>: You are using download over http. Currently unity adds NSAllowsArbitraryLoads to Info.plist to simplify transition, but it will be removed soon. Please consider updating to https.
+Jul 31 00:40:48 Gatsby assistantd[30] <Error>: tcp_connection_tls_session_error_callback_imp 23 __tcp_connection_tls_session_callback_write_block_invoke.434 error 22
+Jul 31 00:40:48 Gatsby assistantd[30] <Error>: NSURLSessionStreamTask: TCPConnection read invalidated by closed connection
+Jul 31 00:40:48 Gatsby networkd[92] <Error>: -[NETAWDManager reportStats:metricID:] AWDServerConnection newMetricContainerWithIdentifier failed for metric 2686980, server 0x15ce49c70, not reporting:
+    <AWDMPTCPConnectionReport: 0x15cec7b30> {
+        "client_id" = assistantd;
+        "establishment_cellular_fallback" = 0;
+        "establishment_failure_error" = 0;
+        "establishment_forced_tcp_fallback" = 0;
+        "establishment_interface_name" = en0;
+        "establishment_success" = 1;
+        "establishment_syn_retransmits" = 0;
+        "establishment_tcp_fallback" = 0;
+        "establishment_time" = "0.047937875";
+        "interface_reports" =     (
+                    {
+                "data_in_KB" = 0;
+                "data_out_KB" = 0;
+                "interface_name" = "pdp_ip0";
+                "post_connect_subflow_failure_errors" =             (
+                );
+                "post_connect_tcp_fallback_count" = 0;
+                "secondary_flow_failure_count" = 0;
+                "secondary_flow_success_count" = 1;
+            },
+                    {
+                "data_in_KB" = 5;
+                "data_out_KB" = 2;
+                "interface_name" = en0;
+                "post_connect_subflow_failure_errors" =             (
+                );
+                "post_connect_tcp_fallback_count" = 0;
+                "secondary_flow_failure_count" = 0;
+                "secondary_flow_success_count" = 0;
+            }
+        );
+        "post_connect_multi_homed" = 1;
+        "post_connect_session_lifetime" = "17.628853333";
+        "post_connect_single_homed" = 0;
+        "post_connect_subflow_attempt_count" = 2;
+        "post_connect_subflow_max_subflow_count" = 2;
+        "subflow_switching_count" = 0;
+    }
+Jul 31 00:40:55 Gatsby syncdefaultsd[1585] <Notice>: (Note ) marked "com.me.keyvalueservice" topic as "opportunistic" on <APSConnection: 0x124e33920>
+Jul 31 00:40:56 Gatsby syncdefaultsd[1585] <Notice>: (Note ) marked "com.me.keyvalueservice" topic as "enabled" on <APSConnection: 0x124e33920>
+Jul 31 00:40:57 Gatsby MobileGestaltHelper[88] <Error>: libMobileGestalt MobileGestalt.c:281: server_access_check denied access to question UniqueDeviceID for pid 1585
+Jul 31 00:40:57 Gatsby syncdefaultsd[1585] <Error>: libMobileGestalt MobileGestaltSupport.m:151: pid 1585 (syncdefaultsd) does not have sandbox access for re6Zb+zwFKJNlkQTUeT+/w and IS NOT appropriately entitled
+Jul 31 00:40:57 Gatsby syncdefaultsd[1585] <Error>: libMobileGestalt MobileGestalt.c:542: no access to UniqueDeviceID (see <rdar://problem/11744455>)
+Jul 31 00:41:03 Gatsby lhead[1469] <Warning>: [OrientationManager] new orientation: 5
+Jul 31 00:41:04 Gatsby lhead[1469] <Warning>: You are using download over http. Currently unity adds NSAllowsArbitraryLoads to Info.plist to simplify transition, but it will be removed soon. Please consider updating to https.
