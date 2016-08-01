@@ -168,10 +168,26 @@ public class AdManager : Singleton<AdManager>
         };
 
         // Create an empty ad request.
+        RequestBanner();
+    }
+
+    private void RequestBanner()
+    {
+        if(bannerView == null)
+            return;
+
         AdRequest request = new AdRequest.Builder().Build();
         request.TestDevices.Add("96f0159b9494d5c6174f95f199b659bc");
         // Load the banner with the request.
         bannerView.LoadAd(request);
+    }
+
+    public void EnableAds()
+    {
+        if(adShown)
+            return;
+
+        RequestBanner();
     }
 
     public void DisableAds()

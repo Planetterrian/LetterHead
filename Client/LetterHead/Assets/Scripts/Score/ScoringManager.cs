@@ -68,7 +68,18 @@ public class ScoringManager : Singleton<ScoringManager>, IGameHandler
 
             GameRealTime.Instance.AddWord(word, usedLetterIds);
             GameManager.Instance.CurrentRound().Words.Add(word);
+        }
 
+        BoardManager.Instance.ColorSelectedTiles(usedTileColor);
+
+        if (PersistManager.Instance.ClearWord)
+            BoardManager.Instance.ClearCurrentWord();
+
+        WordBox.Instance.AddWord(word);
+        submittedWords.Add(word);
+
+        if (!prepopulateWord)
+        {
             if (word.Length >= 8)
             {
                 SoundManager.Instance.PlayClip("Big Word");
@@ -85,19 +96,11 @@ public class ScoringManager : Singleton<ScoringManager>, IGameHandler
                 AchievementManager.Instance.Set("word10");
 
             var wordCount8 = submittedWords.Count(w => w.Length >= 8);
-            if(wordCount8 >= 5)
+            if (wordCount8 >= 5)
             {
                 AchievementManager.Instance.Set("long_words5");
             }
         }
-
-        BoardManager.Instance.ColorSelectedTiles(usedTileColor);
-
-        if (PersistManager.Instance.ClearWord)
-            BoardManager.Instance.ClearCurrentWord();
-
-        WordBox.Instance.AddWord(word);
-        submittedWords.Add(word);
 
         OnWordsChanged();
     }

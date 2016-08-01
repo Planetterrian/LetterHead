@@ -39,6 +39,11 @@ public class MenuGui : Singleton<MenuGui>
             OnBannerShown();
         }
 
+        if (AdManager.Instance.AdsEnabled())
+        {
+            AdManager.Instance.EnableAds();
+        }
+
         if (!string.IsNullOrEmpty(ClientManager.Instance.SessionId))
         {
             if (firstLoad)

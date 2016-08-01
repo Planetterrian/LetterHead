@@ -268,7 +268,7 @@ namespace LetterHeadServer.Controllers
                 case "com.we3workshop.lhead.shield_small":
                     currentUser.AddPowerup(Powerup.Type.Shield, 5);
                     break;
-                case "com.we3workshop.lhead.shield_large":
+                case "com.we3workshop.lhead.shieldlarge":
                     currentUser.AddPowerup(Powerup.Type.Shield, 25);
                     break;
                 case "com.we3workshop.lhead.stealtime_small":

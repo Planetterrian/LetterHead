@@ -21,6 +21,7 @@ public class ClientManager : Singleton<ClientManager>
     {
         base.Awake();
 
+        //SessionId = "1aac67e6-4dc6-4cc0-9bc4-a7a5f7289da9";
         SessionId = PlayerPrefs.GetString("sessId", "");
     }
 
@@ -54,6 +55,10 @@ public class ClientManager : Singleton<ClientManager>
 
             if(myUserInfo.IsPremium)
                 AdManager.Instance.DisableAds();
+            else
+            {
+                AdManager.Instance.EnableAds();
+            }
 
             if (onInfoLoaded != null)
                 onInfoLoaded(true);

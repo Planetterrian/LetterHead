@@ -167,7 +167,7 @@ public abstract class GameManager : Singleton<GameManager>
 
                     var myScore = MatchDetails.UserScore(MatchDetails.IndexOfUser(ClientManager.Instance.UserId()));
                     if (myScore >= 500)
-                        AchievementManager.Instance.Set("word10");
+                        AchievementManager.Instance.Set("score500");
 
                     TimerManager.AddEvent(1, () =>
                     {

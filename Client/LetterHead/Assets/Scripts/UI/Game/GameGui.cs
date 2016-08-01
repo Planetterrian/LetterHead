@@ -61,13 +61,7 @@ public class GameGui : Singleton<GameGui>
         timer.OnTimeExpired.AddListener(OnTimeExpired);
         NextMatchPolling();
 
-        AdManager.Instance.OnBannerAdShown.AddListener(OnBannerShown);
-        AdManager.Instance.OnBannerAdHidden.AddListener(OnBannerHidden);
-
-        if (AdManager.Instance.BannerShown())
-        {
-            OnBannerShown();
-        }
+        AdManager.Instance.DisableAds();
     }
 
 
