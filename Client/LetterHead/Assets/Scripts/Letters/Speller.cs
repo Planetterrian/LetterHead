@@ -14,6 +14,7 @@ public class Speller : Singleton<Speller>, IGameHandler
     public LinkedList<Tile> tiles = new LinkedList<Tile>();
 
     public uTweener[] invalidTweens;
+    public uTweener[] invalidTweensDupe;
 
     private float tileWidthDivider = 1.75f;
 
@@ -200,12 +201,23 @@ public class Speller : Singleton<Speller>, IGameHandler
         ClearTiles();
     }
 
-    public void OnInvalidWord()
+    public void OnInvalidWord(bool isDuplicate)
     {
-        foreach (var invalidTween in invalidTweens)
+        if (isDuplicate)
         {
-            invalidTween.Rewind();
-            invalidTween.Play();
+            foreach (var invalidTween in invalidTweensDupe)
+            {
+                invalidTween.Rewind();
+                invalidTween.Play();
+            }
+        }
+        else
+        {
+            foreach (var invalidTween in invalidTweens)
+            {
+                invalidTween.Rewind();
+                invalidTween.Play();
+            }
         }
     }
 }

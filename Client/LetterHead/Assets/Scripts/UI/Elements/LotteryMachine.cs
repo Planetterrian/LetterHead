@@ -116,6 +116,8 @@ public class LotteryMachine : MonoBehaviour
 
     void Update()
     {
+        var middleRowindex = 1;
+
         if (state == State.Spinning)
         {
             bool finalSelection = false;
@@ -145,7 +147,6 @@ public class LotteryMachine : MonoBehaviour
                 var rowIndex = GetRowIndexFromPosition(row.transform.localPosition);
                 var offsetAmount = CalculatePositionForRow(rowIndex).y - newPos.y;
 
-                var middleRowindex = 2;
                 if (rowIndex == middleRowindex)
                 {
                     if (finalSelection && offsetAmount > -8 && offsetAmount < 10)

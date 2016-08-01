@@ -338,7 +338,7 @@ namespace LetterHeadServer.Models
             var scores = Rounds.GroupBy(r => r.User).Select(g => new {User = g.Key, Score = g.Sum(r => r.Score) + MatchBonus(g.Key)}).ToList();
 
             var firstScore = scores[0].Score;
-            var isTie = scores.All(scoreInfo => scoreInfo.Score == firstScore);
+            var isTie = Users.Count > 1 && scores.All(scoreInfo => scoreInfo.Score == firstScore);
 
             if (isTie)
             {

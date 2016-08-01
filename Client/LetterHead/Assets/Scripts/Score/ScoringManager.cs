@@ -42,13 +42,13 @@ public class ScoringManager : Singleton<ScoringManager>, IGameHandler
         else
         {
             SoundManager.Instance.PlayClip("Reject Word");
-            Speller.Instance.OnInvalidWord();
+            Speller.Instance.OnInvalidWord(!CanAcceptWord(word));
         }
     }
 
     private bool CanAcceptWord(string word)
     {
-        if (!Application.isEditor)
+        //if (!Application.isEditor)
         {
             if (submittedWords.Contains(word))
                 return false;

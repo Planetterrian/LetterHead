@@ -84,8 +84,8 @@ namespace LetterHeadServer.Controllers
                 return Error("You can't access that match.");
             }
 
-            var highRound = db.Matches.Where(m => m.Users.Any(u => u.Id == currentUser.Id) && m.DailyGame == null && m.Users.Count == 1 && m.SingleScore > match.SingleScore).OrderByDescending(m => m.SingleScore).FirstOrDefault()?.Id;
-            if (!highRound.HasValue || highRound == matchId)
+            var highRound = db.Matches.Where(m => m.Users.Any(u => u.Id == currentUser.Id) && m.DailyGame == null && m.Users.Count == 1 && m.Id != matchId).OrderByDescending(m => m.SingleScore).FirstOrDefault();
+            if(highRound == null || (highRound.SingleScore < match.SingleScore))
                 return Json("Y");
 
             return Json("N");
