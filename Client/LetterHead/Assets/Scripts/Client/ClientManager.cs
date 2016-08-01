@@ -17,6 +17,8 @@ public class ClientManager : Singleton<ClientManager>
         private set { sessionId = value; }
     }
 
+    public bool CanDoDaily { get; set; }
+
     protected override void Awake()
     {
         base.Awake();

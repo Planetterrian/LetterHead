@@ -195,7 +195,21 @@ namespace LetterHeadServer.Controllers
                 matchDTOs.Add(dto);
             }
 
-            return Json(new { Matches = matchDTOs, Invites = currentUser.Invites.Select(i => i.DTO()) } );
+            var dailyGame = DailyGame.Current();
+            var dailyMatch = currentUser.GetMatch(db, dailyGame);
+            var canDoDaily = true;
+
+            if (dailyMatch != null && dailyMatch.CurrentState == LetterHeadShared.DTO.Match.MatchState.Ended)
+            {
+                canDoDaily = false;
+            }
+
+            if (!dailyGame.CanStart())
+            {
+                canDoDaily = false;
+            }
+
+            return Json(new { Matches = matchDTOs, Invites = currentUser.Invites.Select(i => i.DTO()), CanDoDaily = canDoDaily } );
         }
 
         public ActionResult AcceptInvite(int inviteId)

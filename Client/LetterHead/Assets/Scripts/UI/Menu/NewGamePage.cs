@@ -4,10 +4,19 @@ using System.Linq;
 using Newtonsoft.Json;
 using UI.Pagination;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class NewGamePage : Page
 {
     public WindowController friendsWindow;
+    public Button dailyGameButton;
+
+    public override void OnShow()
+    {
+        base.OnShow();
+
+        dailyGameButton.interactable = ClientManager.Instance.CanDoDaily;
+    }
 
     public void OnInviteFriendClicked()
     {

@@ -38,6 +38,7 @@ public class HomePage : Page
     {
         public List<Match> Matches;
         public List<Invite> Invites;
+        public bool CanDoDaily;
     }
 
     void OnApplicationFocus(bool state)
@@ -64,6 +65,8 @@ public class HomePage : Page
             var list = JsonConvert.DeserializeObject<ListInfo>(s);
             var matches = list.Matches;
             invites = list.Invites;
+
+            ClientManager.Instance.CanDoDaily = list.CanDoDaily;
 
             var myMatches = matches.Where(m => m.CurrentState != Match.MatchState.Ended && m.CurrentUserId == ClientManager.Instance.myUserInfo.Id).ToList();
             var theirMatches = matches.Where(m => m.CurrentState != Match.MatchState.Ended && m.CurrentUserId != ClientManager.Instance.myUserInfo.Id).ToList();
