@@ -38,6 +38,7 @@ public class WindowController : MonoBehaviour
     public void Hide(bool instant = false)
     {
         fade.FadeOut(instant);
+        SendMessage("OnWindowHidden", SendMessageOptions.DontRequireReceiver);
     }
 
     public bool IsShown()

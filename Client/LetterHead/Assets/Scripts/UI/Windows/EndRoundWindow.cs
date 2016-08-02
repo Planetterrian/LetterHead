@@ -229,20 +229,13 @@ public class EndRoundWindow : WindowController
         }
     }
 
-    private class LeaderboardRowData
-    {
-        public int Score;
-        public int Rank;
-        public string Username;
-    }
-
     private void LoadDailyLeaderboard()
     {
-        Srv.Instance.POST("Match/DailyLeaderbaord", null, s =>
+        Srv.Instance.POST("Match/DailyLeaderbaord", new Dictionary<string, string>() { {"maxResults", "5"} }, s =>
         {
-            var scores = JsonConvert.DeserializeObject<List<LeaderboardRowData>>(s);
+            var scores = JsonConvert.DeserializeObject<LeaderboardWindow.LeaderboardData>(s);
 
-            foreach (var score in scores)
+            foreach (var score in scores.Scores)
             {
                 var row = GameObject.Instantiate(leaderboardRow) as GameObject;
                 row.transform.SetParent(leaderboardParent);
@@ -434,11 +427,7 @@ public class EndRoundWindow : WindowController
 
     public void LeaderboardClicked()
     {
-        NPBinding.GameServices.ShowLeaderboardUIWithGlobalID("daily", eLeaderboardTimeScope.TODAY, error =>
-        {
-            if(!string.IsNullOrEmpty(error))
-                Debug.LogError(error);
-        });
+        LeaderboardWindow.Instance.ShowModal();
     }
 
     public void RematchClicked()

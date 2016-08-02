@@ -91,11 +91,25 @@ namespace LetterHeadServer.Controllers
             return Json("N");
         }
 
-        public ActionResult DailyLeaderbaord()
+        public ActionResult DailyLeaderbaord(int dayOffset = 0, int maxResults = 100)
         {
             var curDailyId = DailyGame.Current().Id;
 
-            var top5 = db.Matches.Where(m => m.DailyGame != null && m.DailyGame.Id == curDailyId).OrderByDescending(m => m.SingleScore).Take(5).ToList();
+            if (dayOffset > 0)
+            {
+                var newId = curDailyId - dayOffset;
+                var match = db.DailyGames.Find(newId);
+                if (match == null)
+                {
+                    return Error("No daily game found");
+                }
+
+                curDailyId = match.Id;
+            }
+
+            var dailyMatch = db.DailyGames.Find(curDailyId);
+
+            var top5 = db.Matches.Where(m => m.DailyGame != null && m.DailyGame.Id == curDailyId).OrderByDescending(m => m.SingleScore).Take(maxResults).ToList();
             Match currentUserMatch = null;
             var currentUserRank = 0;
 
@@ -112,7 +126,7 @@ namespace LetterHeadServer.Controllers
 
             if (currentUserMatch == null)
             {
-                var allMatches = db.Matches.Where(m => m.DailyGame != null && m.DailyGame.Id == DailyGame.Current().Id).OrderByDescending(m => m.SingleScore).ToList();
+                var allMatches = db.Matches.Where(m => m.DailyGame != null && m.DailyGame.Id == curDailyId).OrderByDescending(m => m.SingleScore).ToList();
                 for (int index = 0; index < allMatches.Count; index++)
                 {
                     var match = allMatches[index];
@@ -139,7 +153,7 @@ namespace LetterHeadServer.Controllers
                         });
             }
 
-            if (currentUserRank > 5)
+            if (currentUserRank > maxResults)
             {
                 ret.Add(new LeaderboardRowData()
                 {
@@ -149,7 +163,11 @@ namespace LetterHeadServer.Controllers
                 });
             }
 
-            return Json(ret);
+            return Json(new
+                        {
+                            Scores = ret,
+                            DateString = dailyMatch.StartDate.ToString("MM/dd/yyyy")
+                        });
         }
 
         public ActionResult Random()

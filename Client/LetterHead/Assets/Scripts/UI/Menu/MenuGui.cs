@@ -118,4 +118,9 @@ public class MenuGui : Singleton<MenuGui>
     {
         Application.OpenURL(url);
     }
+
+    public void ShowLeaderboard()
+    {
+        LeaderboardWindow.Instance.ShowModal();
+    }
 }
