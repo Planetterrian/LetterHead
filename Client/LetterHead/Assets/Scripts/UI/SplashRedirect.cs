@@ -10,16 +10,26 @@ public class SplashRedirect : MonoBehaviour
     public string sceneName;
     public float minDelay;
 
+    private bool redirecting;
 
     private void Awake()
     {
     }
 
-    private IEnumerator Start()
+    void Update()
     {
-#if UNITY_IOS
-        minDelay *= 2;
-#endif
+        if(Application.isShowingSplashScreen)
+            return;
+
+        if(redirecting)
+            return;
+
+        redirecting = true;
+        StartCoroutine(Redirect());
+    }
+
+    private IEnumerator Redirect()
+    {
         yield return new WaitForSeconds(minDelay);
         SceneManager.LoadScene(sceneName);
     }
