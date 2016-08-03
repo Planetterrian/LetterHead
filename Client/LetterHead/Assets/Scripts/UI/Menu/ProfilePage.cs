@@ -14,6 +14,7 @@ class ProfilePage : Page
     public Toggle useFacebookImageToggle;
 
     public TMP_InputField usernameInput;
+    public TextMeshProUGUI usernameError;
 
     public AvatarSelectWindow avatarSelectWindow;
 
@@ -44,7 +45,10 @@ class ProfilePage : Page
             {
                 // Silently accept it
                 ClientManager.Instance.RefreshMyInfo(false);
-            });
+                usernameError.text = "";
+            }, s =>
+                usernameError.text = s
+            );
     }
 
     public void OnAvatarChanged(string avatarName)
