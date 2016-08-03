@@ -23,8 +23,13 @@ public class ClientManager : Singleton<ClientManager>
     {
         base.Awake();
 
-        //SessionId = "1aac67e6-4dc6-4cc0-9bc4-a7a5f7289da9";
         SessionId = PlayerPrefs.GetString("sessId", "");
+
+/*
+        SessionId = "72450ca5-75cd-456e-a367-a6ff89dd1c77";
+        Debug.LogError("USING MANUAL SESSID");
+*/
+
     }
 
     private void Start()
