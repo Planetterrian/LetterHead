@@ -56,7 +56,7 @@ namespace MyWebApplication
             Mapper = new MapperConfiguration(cfg =>
             {
 
-                cfg.CreateMap<User, LetterHeadShared.DTO.UserInfo>();
+                cfg.CreateMap<User, LetterHeadShared.DTO.UserInfo>().ForMember(dest => dest.HasEmail, opt => opt.MapFrom(src => !string.IsNullOrEmpty(src.Email)));
 
                 cfg.CreateMap<Match, LetterHeadShared.DTO.Match>().
 

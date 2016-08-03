@@ -36,7 +36,7 @@ public class SettingsPage : Page
     {
         
         linkFacebookButton.SetActive(string.IsNullOrEmpty(ClientManager.Instance.myUserInfo.FacebookPictureUrl));
-        unLinkFacebookButton.SetActive(!string.IsNullOrEmpty(ClientManager.Instance.myUserInfo.FacebookPictureUrl));
+        unLinkFacebookButton.SetActive(!string.IsNullOrEmpty(ClientManager.Instance.myUserInfo.FacebookPictureUrl) && ClientManager.Instance.myUserInfo.HasEmail);
 
         premiumUpgradeButton.interactable = AdManager.Instance.AdsEnabled();
 

@@ -11,6 +11,7 @@ namespace LetterHeadShared.DTO
         public string Username;
         public string AvatarUrl;
         public bool IsPremium;
+        public bool HasEmail;
         public string FacebookPictureUrl;
         public List<int> PowerupCountList;
     }

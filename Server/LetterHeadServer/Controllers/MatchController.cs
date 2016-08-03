@@ -345,7 +345,7 @@ namespace LetterHeadServer.Controllers
             {
                 return Error("It's your turn!");
             }
-
+/*
             var lastBuzz = match.Buzzes.Where(b => b.SourceUser.Id == currentUser.Id).OrderByDescending(b => b.date).FirstOrDefault();
             if (lastBuzz != null && (DateTime.Now - lastBuzz.date).TotalHours < 24)
             {
@@ -356,7 +356,7 @@ namespace LetterHeadServer.Controllers
             {
                 return Error("This user played recently.  Please wait before poking.");
             }
-            
+            */
             match.Buzzes.Add(new MatchBuzz()
                              {
                                  match = match,
