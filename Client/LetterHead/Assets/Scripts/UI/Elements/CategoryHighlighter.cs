@@ -40,4 +40,9 @@ public class CategoryHighlighter : MonoBehaviour
         image.fillAmount = animatePct;
         animating = true;
     }
+
+    public void Show()
+    {
+        image.fillAmount = 1;
+    }
 }

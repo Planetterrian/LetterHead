@@ -157,13 +157,21 @@ public class CategoryBox : MonoBehaviour, IGameHandler
             ScoringManager.Instance.currentRoundScore = totalScore;
     }
 
-    public void SetCurrentlySelectedCategory(Category category)
+    public void SetCurrentlySelectedCategory(Category category, bool instant = false)
     {
         currentSelectedCategoryImage.gameObject.SetActive(true);
 
         var box = categoryScoreFunctions.First(c => c.Value == category).Key;
         currentSelectedCategoryImage.transform.position = box.scoreLabel.transform.position;
-        currentSelectedCategoryImage.StartAnimation();
+
+        if (instant)
+        {
+            currentSelectedCategoryImage.Show();
+        }
+        else
+        {
+            currentSelectedCategoryImage.StartAnimation();
+        }
     }
 
     public void OnReset()
