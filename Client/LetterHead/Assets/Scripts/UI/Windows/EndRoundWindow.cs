@@ -69,7 +69,7 @@ public class EndRoundWindow : WindowController
         rematchButton.gameObject.SetActive(false);
 
         var isShort = false;
-        var myScore = ScoringManager.Instance.currentRoundScore;
+        var myScore = GameManager.Instance.currentRoundScore;
 
         if (GameManager.Instance.MatchDetails.CurrentState == Match.MatchState.Ended)
         {

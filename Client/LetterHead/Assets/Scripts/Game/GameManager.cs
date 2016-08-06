@@ -35,6 +35,7 @@ public abstract class GameManager : Singleton<GameManager>
 
     public UnityEvent OnMatchDetailsLoadedEvent;
     private bool isDestroyed;
+    public int currentRoundScore;
 
     public MatchRound MyCurrentRound()
     {
@@ -233,6 +234,7 @@ public abstract class GameManager : Singleton<GameManager>
         {
             ScoringManager.Instance.OnCategorySelected(category);
             MyCurrentRound().CategoryName = category.name;
+            currentRoundScore = ScoringManager.Instance.GetCategoryScore(category);
 
             EndRound();
             SubmitCategory();
