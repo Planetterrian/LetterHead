@@ -68,6 +68,9 @@ public class HomePage : Page
 
             ClientManager.Instance.CanDoDaily = list.CanDoDaily;
 
+            if(NewGamePage.Instance)
+                NewGamePage.Instance.Refresh();
+
             var myMatches = matches.Where(m => m.CurrentState != Match.MatchState.Ended && m.CurrentUserId == ClientManager.Instance.myUserInfo.Id).ToList();
             var theirMatches = matches.Where(m => m.CurrentState != Match.MatchState.Ended && m.CurrentUserId != ClientManager.Instance.myUserInfo.Id).ToList();
             var completedMatches = matches.Where(m =>m.CurrentState == Match.MatchState.Ended).ToList();

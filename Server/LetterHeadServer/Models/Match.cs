@@ -90,7 +90,7 @@ namespace LetterHeadServer.Models
 
         public static Match New(ApplicationDbContext db, List<User> users, int roundCount = 9)
         {
-            var roundTime = 120;
+            var roundTime = (Environment.UserName == "Pete") ? 20 : 120;
             
             var match = new Match()
                 {

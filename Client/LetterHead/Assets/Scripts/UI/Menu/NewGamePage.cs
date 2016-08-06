@@ -11,11 +11,23 @@ public class NewGamePage : Page
     public WindowController friendsWindow;
     public Button dailyGameButton;
 
+    public static NewGamePage Instance;
+
     public override void OnShow()
     {
         base.OnShow();
 
+        Refresh();
+    }
+
+    public void Refresh()
+    {
         dailyGameButton.interactable = ClientManager.Instance.CanDoDaily;
+    }
+
+    void Awake()
+    {
+        Instance = this;
     }
 
     public void OnInviteFriendClicked()

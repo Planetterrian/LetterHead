@@ -175,7 +175,12 @@ public class GameGui : Singleton<GameGui>
             shuffleButton.interactable = false;
             selectCategoryHelper.gameObject.SetActive(true);
             lever.SetState(Lever.State.Middle);
+
+            categoryBox.HighlightSelectableCategories();
         }
+
+        if (GameScene.Instance.CurrentState != GameScene.State.WaitingForCategory)
+            categoryBox.HideHighlights();
 
         topLightOn.SetActive(GameScene.Instance.CurrentState == GameScene.State.Active);
         topLightOff.SetActive(GameScene.Instance.CurrentState != GameScene.State.Active);

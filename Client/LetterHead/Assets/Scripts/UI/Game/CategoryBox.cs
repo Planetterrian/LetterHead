@@ -24,6 +24,7 @@ public class CategoryBox : MonoBehaviour, IGameHandler
         {
             GameScene.Instance.AddGameManger(this);
             GameManager.Instance.OnMatchDetailsLoadedEvent.AddListener(OnMatchDetailsLoaded);
+            GameScene.Instance.OnStateChanged.AddListener(OnGameStateChanged);
         }
 
         for (int index = 0; index < ScoringManager.Instance.categoryManager.Categories.Count; index++)
@@ -48,24 +49,59 @@ public class CategoryBox : MonoBehaviour, IGameHandler
         Refresh(GameManager.Instance.MyRounds());
     }
 
+    private void OnGameStateChanged()
+    {
+        if (isPrimary && GameScene.Instance.CurrentState == GameScene.State.WaitingForCategory)
+        {
+            RefreshMyRounds();
+        }
+    }
+
     public void OnCategoryScoreClicked(Category category, string scoreText)
     {
-        if (!GameGui.CanSelectCategory())
+        if (CategoryInvalid(category))
             return;
 
-        if(GameManager.Instance.HasCategoryBeenUsed(category))
-            return;
-
-        if(category.alwaysActive)
-            return;
-
-        if (scoreText == "0")
+        if (scoreText == "0" || scoreText == "")
         {
             DialogWindowTM.Instance.Show("Select Score", "Lock in the " + category.name + " category for " + scoreText + " points?", () => DoCategorySelect(category), () => { }, "Confirm", "Cancel");
         }
         else
         {
             DoCategorySelect(category);
+        }
+    }
+
+    private static bool CategoryInvalid(Category category)
+    {
+        if (!GameGui.CanSelectCategory())
+            return true;
+
+        if (GameManager.Instance.HasCategoryBeenUsed(category))
+            return true;
+
+        if (category.alwaysActive)
+            return true;
+        return false;
+    }
+
+
+    public void HighlightSelectableCategories()
+    {
+        foreach (var categoryRow in categoryRows)
+        {
+            if (CategoryInvalid(categoryRow.category))
+                continue;
+
+            categoryRow.ToggleHighlight(true);
+        }
+    }
+
+    public void HideHighlights()
+    {
+        foreach (var categoryRow in categoryRows)
+        {
+            categoryRow.ToggleHighlight(false);
         }
     }
 
@@ -111,7 +147,8 @@ public class CategoryBox : MonoBehaviour, IGameHandler
                     totalScore += score;
             }
 
-            scoreFunc.Key.SetScore(score, scoreFunc.Value.alwaysActive || rounds.Any(c => c.CategoryName == scoreFunc.Value.name));
+            var forceShow = GameManager.Instance.IsMyRound() && GameScene.Instance.CurrentState == GameScene.State.WaitingForCategory;
+            scoreFunc.Key.SetScore(score, scoreFunc.Value.alwaysActive || rounds.Any(c => c.CategoryName == scoreFunc.Value.name), forceShow);
         }
 
         totallabel.text = totalScore.ToString("N0");
