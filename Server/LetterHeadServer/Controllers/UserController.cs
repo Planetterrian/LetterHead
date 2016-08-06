@@ -426,7 +426,7 @@ namespace LetterHeadServer.Controllers
             if(match == null)
                 match = currentUser.Matches.Where(m => m.CurrentState != Match.MatchState.Ended && m.CurrentUserTurn.Id == currentUser.Id && m.Id != currentMatchId).OrderByDescending(m => m.Id).FirstOrDefault();
 
-            return Json(match?.DTO());
+            return Json(match?.DTO(true));
         }
 
         public ActionResult LoginEmail([Bind(Exclude = "Id")] UserRegistrationModel model)
