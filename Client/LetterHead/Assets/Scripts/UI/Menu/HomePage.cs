@@ -108,6 +108,7 @@ public class HomePage : Page
         myMatchRows.Clear();
         theirMatchRows.Clear();
         completedMatchRows.Clear();
+        clearAllButton.SetActive(false);
     }
 
     public override void OnShow()

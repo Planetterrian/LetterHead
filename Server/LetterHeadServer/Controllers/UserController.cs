@@ -421,10 +421,10 @@ namespace LetterHeadServer.Controllers
         [AuthenticationFilter()]
         public ActionResult NextAvailableMatch(int currentMatchId)
         {
-            var match = currentUser.Matches.Where(m => m.CurrentState != Match.MatchState.Ended && m.CurrentUserTurn.Id == currentUser.Id && m.Id > currentMatchId).OrderBy(m => m.Id).FirstOrDefault();
+            var match = currentUser.Matches.Where(m => m.CurrentState != Match.MatchState.Ended && m.CurrentUserTurn.Id == currentUser.Id && m.Id < currentMatchId).OrderByDescending(m => m.Id).FirstOrDefault();
 
             if(match == null)
-                match = currentUser.Matches.Where(m => m.CurrentState != Match.MatchState.Ended && m.CurrentUserTurn.Id == currentUser.Id && m.Id != currentMatchId).OrderBy(m => m.Id).FirstOrDefault();
+                match = currentUser.Matches.Where(m => m.CurrentState != Match.MatchState.Ended && m.CurrentUserTurn.Id == currentUser.Id && m.Id != currentMatchId).OrderByDescending(m => m.Id).FirstOrDefault();
 
             return Json(match?.DTO());
         }
