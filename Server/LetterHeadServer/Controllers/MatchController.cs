@@ -91,7 +91,7 @@ namespace LetterHeadServer.Controllers
             return Json("N");
         }
 
-        public ActionResult DailyLeaderbaord(int dayOffset = 0, int maxResults = 100)
+        public ActionResult DailyLeaderbaord(int dayOffset = 0, int maxResults = 25)
         {
             var curDailyId = DailyGame.Current().Id;
 
@@ -378,6 +378,19 @@ namespace LetterHeadServer.Controllers
             return Okay();
         }
 
+        public ActionResult ClearAll()
+        {
+            var matches = currentUser.Matches.Where(m => m.CurrentState == LetterHeadShared.DTO.Match.MatchState.Ended).ToList();
+
+            foreach (var match in matches)
+            {
+                match.ClearMatch(currentUser);
+            }
+
+            db.SaveChanges();
+
+            return Okay();
+        }
 
         public ActionResult Clear(int matchId)
         {

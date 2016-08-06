@@ -11,6 +11,7 @@ using UnityEngine.UI;
 public class HomePage : Page
 {
     public GameObject dashboardRowPrefab;
+    public GameObject clearAllButton;
 
     public Transform myTurnHeader;
     public Transform theirTurnHeader;
@@ -31,6 +32,7 @@ public class HomePage : Page
 
     void Start()
     {
+        clearAllButton.SetActive(false);
         RefreshMatches();
     }
 
@@ -78,6 +80,8 @@ public class HomePage : Page
             UpdateMatchSet(myMatchRows, myMatches, myTurnHeader, DashboardRow.RowType.MyTurn);
             UpdateMatchSet(theirMatchRows, theirMatches, theirTurnHeader, DashboardRow.RowType.TheirTurn);
             UpdateMatchSet(completedMatchRows, completedMatches, completedHeader, DashboardRow.RowType.Completed);
+
+            clearAllButton.SetActive(completedMatches.Count > 0);
 
             matchesRefreshing = false;
         }, s =>
@@ -247,6 +251,18 @@ public class HomePage : Page
         {
             RefreshMatches();
         });
+    }
+
+    public void ClearAllMatches()
+    {
+        DialogWindowTM.Instance.Show("Clear Matches", "Are you sure you want to clear all completed matches?", () =>
+        {
+            Srv.Instance.POST("Match/ClearAll", null, s =>
+            {
+                RefreshMatches();
+            });
+        }, () => { });
+
     }
 
     public void BuzzMatch(Match matchInfo)
