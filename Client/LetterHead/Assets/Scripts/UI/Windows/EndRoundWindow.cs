@@ -189,35 +189,20 @@ public class EndRoundWindow : WindowController
 
         longWordGrid.transform.DeleteChildren();
 
-        longWordsLabel.text = "Finding missed BIG WORDS...";
-
-        var myWords = new List<string>(ScoringManager.Instance.Words());
-        StartCoroutine(GetLongWords(5, myWords, wordList =>
+        if (BackgroundWordSearch.Instance.hasResults)
         {
-            wordList = wordList.OrderByDescending(w => w.Length).ToList();
-
-            if (wordList.Count > 0)
+            SetLongWords();
+        }
+        else
+        {
+            longWordsLabel.text = "Finding missed BIG WORDS...";
+            BackgroundWordSearch.Instance.EndEarly();
+            BackgroundWordSearch.Instance.OnResults = () =>
             {
-                longWordsLabel.text = "Here are some BIG WORDS you missed:";
-            }
-            else
-            {
-                longWordsLabel.text = "No BIG WORDS were missed";
-            }
-
-            var ct = 0;
-            foreach (var word in wordList)
-            {
-                var wordGo = GameObject.Instantiate(longWordPrefab);
-                wordGo.transform.SetParent(longWordGrid.transform);
-                wordGo.transform.ResetToOrigin();
-                wordGo.GetComponent<TextMeshProUGUI>().text = word.ToUpper();
-
-                ct++;
-                if (ct == 9)
-                    break;
-            }
-        }));
+                BackgroundWordSearch.Instance.OnResults = null;
+                SetLongWords();
+            };
+        }
 
         if (isShort)
         {
@@ -227,6 +212,48 @@ public class EndRoundWindow : WindowController
         {
             GetComponent<RectTransform>().SetHeight(normalHeight);
         }
+    }
+
+    private void SetLongWords()
+    {
+        var wordList = BackgroundWordSearch.Instance.LongWords.OrderByDescending(w => w.Length).ToList();
+
+        var myWords = new List<string>(ScoringManager.Instance.Words());
+        for (int index = wordList.Count - 1; index >= 0 ; index--)
+        {
+            var word = wordList[index];
+            if (myWords.Contains(word.ToLower()))
+            {
+                wordList.Remove(word);
+            }
+        }
+
+        if (wordList.Count > 0)
+        {
+            longWordsLabel.text = "Here are some BIG WORDS you missed:";
+        }
+        else
+        {
+            longWordsLabel.text = "No BIG WORDS were missed";
+        }
+
+        var ct = 0;
+        foreach (var word in wordList)
+        {
+            var wordGo = GameObject.Instantiate(longWordPrefab);
+            wordGo.transform.SetParent(longWordGrid.transform);
+            wordGo.transform.ResetToOrigin();
+            wordGo.GetComponent<TextMeshProUGUI>().text = word.ToUpper();
+
+            ct++;
+            if (ct == 9)
+                break;
+        }
+    }
+
+    public void OnLongWordResults()
+    {
+        
     }
 
     private void LoadDailyLeaderboard()

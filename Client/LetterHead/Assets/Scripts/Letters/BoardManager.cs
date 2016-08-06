@@ -127,6 +127,11 @@ public class BoardManager : Singleton<BoardManager>
                 }
             }
         }
+
+        if (GameManager.Instance.IsMyRound())
+        {
+            BackgroundWordSearch.Instance.DoSearch();
+        }
     }
 
 
