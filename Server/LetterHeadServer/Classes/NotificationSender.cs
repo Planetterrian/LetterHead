@@ -79,10 +79,10 @@ namespace LetterHeadServer.Classes
 "\t\t},\n" +
 "\t\t\"badge\": 1\n";
 
-            if (message.type == NotificationDetails.Type.YourTurn)
-                payload += "\t\t,\"sound\": \"TurnNotification.wav\"\n";
-            else if (message.type == NotificationDetails.Type.Invite)
+            if (message.type == NotificationDetails.Type.Invite)
                 payload += "\t\t,\"sound\": \"DoorKnock.wav\"\n";
+            else
+                payload += "\t\t,\"sound\": \"TurnNotification.wav\"\n";
 
             payload += "\t},\n" +
             "\t\"user_info\": {\n" +

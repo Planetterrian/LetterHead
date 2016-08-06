@@ -111,7 +111,7 @@ public class CategoryBox : MonoBehaviour, IGameHandler
         SoundManager.Instance.PlayClip("Circle Score");
     }
 
-    public void Refresh(List<MatchRound> rounds)
+    public void Refresh(List<MatchRound> rounds, bool playValidCategorySound = false)
     {
         var totalScore = 0;
 
@@ -148,7 +148,7 @@ public class CategoryBox : MonoBehaviour, IGameHandler
             }
 
             var forceShow = GameManager.Instance.IsMyRound() && GameScene.Instance.CurrentState == GameScene.State.WaitingForCategory;
-            scoreFunc.Key.SetScore(score, scoreFunc.Value.alwaysActive || rounds.Any(c => c.CategoryName == scoreFunc.Value.name), forceShow);
+            scoreFunc.Key.SetScore(score, scoreFunc.Value.alwaysActive || rounds.Any(c => c.CategoryName == scoreFunc.Value.name), forceShow, playValidCategorySound);
         }
 
         totallabel.text = totalScore.ToString("N0");
@@ -179,8 +179,8 @@ public class CategoryBox : MonoBehaviour, IGameHandler
         currentSelectedCategoryImage.gameObject.SetActive(false);
     }
 
-    public void RefreshMyRounds()
+    public void RefreshMyRounds(bool playValidCategorySound = false)
     {
-        Refresh(GameManager.Instance.MyRounds());
+        Refresh(GameManager.Instance.MyRounds(), playValidCategorySound);
     }
 }

@@ -19,6 +19,7 @@ namespace LetterHeadServer.Controllers
 
             RecurringJob.AddOrUpdate(() => DailyGame.CreateNewDailyGame(), Cron.Daily, easternZone);
             RecurringJob.AddOrUpdate(() => new BackendController().AutoResignMatches(), Cron.Daily);
+            RecurringJob.AddOrUpdate(() => new BackendController().ClearCompletedMatches(), Cron.Daily);
             
             return "Started Jobs";
         }
@@ -85,13 +86,32 @@ namespace LetterHeadServer.Controllers
             var oldMatches = db.Matches.Where(m => m.CurrentState == LetterHeadShared.DTO.Match.MatchState.Running).ToList();
             foreach (var match in oldMatches)
             {
-                if(!match.CurrentRound().ActivatedOn.HasValue)
+                if (!match.CurrentRound().ActivatedOn.HasValue)
                     continue;
 
-                if ((DateTime.Now - match.CurrentRound().ActivatedOn.Value).TotalDays > 14)
+                if ((DateTime.Now - match.CurrentRound().ActivatedOn.Value).TotalDays > 7)
                 {
                     match.Resign(match.CurrentUserTurn);
                     Response.Write("Resigned " + match.Id + "<br>");
+                }
+            }
+
+            db.SaveChanges();
+
+            return "Done";
+        }
+
+        public string ClearCompletedMatches()
+        {
+            var oldMatches = db.Matches.Where(m => m.CurrentState == LetterHeadShared.DTO.Match.MatchState.Ended).ToList();
+            foreach (var match in oldMatches)
+            {
+                if(!match.EndedOn.HasValue)
+                    continue;
+                if ((DateTime.Now - match.EndedOn.Value).TotalDays > 30)
+                {
+                    db.Matches.Remove(match);
+                    Response.Write("Deleted " + match.Id + "<br>");
                 }
             }
 

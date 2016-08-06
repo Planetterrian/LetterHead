@@ -28,7 +28,7 @@ public class ScoringManager : Singleton<ScoringManager>, IGameHandler
         currentCategory = null;
         usedLetterIds = 0;
         currentRoundScore = 0;
-        OnWordsChanged();
+        OnWordsChanged(true);
     }
 
     public void OnWordSubmit()
@@ -102,14 +102,14 @@ public class ScoringManager : Singleton<ScoringManager>, IGameHandler
             }
         }
 
-        OnWordsChanged();
+        OnWordsChanged(prepopulateWord);
     }
 
-    public void OnWordsChanged()
+    public void OnWordsChanged(bool prepopulateWord)
     {
         UpdateCurrentRoundScore();
         WordCountBox.Instance.Refresh();
-        GameGui.Instance.categoryBox.RefreshMyRounds();
+        GameGui.Instance.categoryBox.RefreshMyRounds(!prepopulateWord);
     }
 
     private void OnMatchDetailsLoaded()

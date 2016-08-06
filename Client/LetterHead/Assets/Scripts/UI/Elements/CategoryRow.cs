@@ -62,12 +62,18 @@ public class CategoryRow : MonoBehaviour
         scoreLabel.text = "";
     }
 
-    public void SetScore(int score, bool hasBeenUsed, bool forceShow)
+    public void SetScore(int score, bool hasBeenUsed, bool forceShow, bool playValidCategorySound = false)
     {
         if (score == 0 && !hasBeenUsed && !forceShow)
             scoreLabel.text = "";
         else
         {
+            if (playValidCategorySound && score > 0 && !category.alwaysActive && (scoreLabel.text == "" || scoreLabel.text == "0"))
+            {
+                SoundManager.Instance.PlayClip("CategoryValid");
+                Debug.Log("New Category Valid");
+            }
+
             scoreLabel.text = score.ToString("N0");
         }
 
