@@ -292,33 +292,16 @@ public abstract class GameManager : Singleton<GameManager>
         if (MatchDetails == null)
             return null;
 
-        var opponentIndex = 0;
-        var opponentUid = 0;
-        for (int index = 0; index < MatchDetails.Users.Count; index++)
+        var rounds = OpponentRounds();
+        for (int i = rounds.Count - 1; i >= 0; i--)
         {
-            var userInfo = MatchDetails.Users[index];
+            var round = rounds[i];
 
-            if (userInfo.Id != ClientManager.Instance.UserId())
-            {
-                opponentIndex = index;
-                opponentUid = userInfo.Id;
-                break;
-            }
+            if (round.CurrentState != MatchRound.RoundState.NotStarted)
+                return round;
         }
 
-        var roundNumber = MatchDetails.CurrentRoundNumber;
-        if (MatchDetails.CurrentUserId == opponentUid)
-            roundNumber--;
-        else if(opponentIndex > 0)
-        {
-            roundNumber--;
-        }
-
-        if (roundNumber < 0)
-            return null;
-
-        var round = MatchDetails.Rounds.FirstOrDefault(r => r.Number == roundNumber && r.UserId == opponentUid);
-        return round;
+        return null;
     }
 
 

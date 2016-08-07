@@ -88,7 +88,7 @@ public class LeaderboardWindow : WindowController
             }
             else
             {
-                myRankLabel.text = "";
+                myRankLabel.text = scores.TotalPlayers.ToString("N0") + " Players";
             }
 
             var darkColor = false;
