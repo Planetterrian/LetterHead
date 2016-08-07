@@ -145,6 +145,7 @@ public class GameGui : Singleton<GameGui>
             startButton.interactable = false;
             shuffleButton.interactable = false;
             selectCategoryHelper.gameObject.SetActive(false);
+            categoryBox.HideHighlights();
 
             if (GameManager.Instance.CanStart())
             {
@@ -161,6 +162,11 @@ public class GameGui : Singleton<GameGui>
             startButton.interactable = false;
             shuffleButton.interactable = true;
             lever.SetState(Lever.State.Off);
+
+            if (GameManager.Instance.IsMyRound())
+            {
+                categoryBox.HighlightSelectableCategories();
+            }
         }
         else if (GameScene.Instance.CurrentState == GameScene.State.End)
         {
@@ -168,6 +174,7 @@ public class GameGui : Singleton<GameGui>
             shuffleButton.interactable = false;
             selectCategoryHelper.gameObject.SetActive(false);
             lever.SetState(Lever.State.Middle);
+            categoryBox.HideHighlights();
         }
         else if (GameScene.Instance.CurrentState == GameScene.State.WaitingForCategory)
         {
@@ -178,9 +185,6 @@ public class GameGui : Singleton<GameGui>
 
             categoryBox.HighlightSelectableCategories();
         }
-
-        if (GameScene.Instance.CurrentState != GameScene.State.WaitingForCategory)
-            categoryBox.HideHighlights();
 
         topLightOn.SetActive(GameScene.Instance.CurrentState == GameScene.State.Active);
         topLightOff.SetActive(GameScene.Instance.CurrentState != GameScene.State.Active);

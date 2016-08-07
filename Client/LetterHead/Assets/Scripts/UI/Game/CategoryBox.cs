@@ -51,7 +51,7 @@ public class CategoryBox : MonoBehaviour, IGameHandler
 
     private void OnGameStateChanged()
     {
-        if (isPrimary && GameScene.Instance.CurrentState == GameScene.State.WaitingForCategory)
+        if (isPrimary)
         {
             RefreshMyRounds();
         }
@@ -147,7 +147,7 @@ public class CategoryBox : MonoBehaviour, IGameHandler
                     totalScore += score;
             }
 
-            var forceShow = GameManager.Instance.IsMyRound() && GameScene.Instance.CurrentState == GameScene.State.WaitingForCategory;
+            var forceShow = GameGui.CanSelectCategory();
             scoreFunc.Key.SetScore(score, scoreFunc.Value.alwaysActive || rounds.Any(c => c.CategoryName == scoreFunc.Value.name), forceShow, playValidCategorySound);
         }
 

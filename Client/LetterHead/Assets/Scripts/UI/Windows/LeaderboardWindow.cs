@@ -13,6 +13,7 @@ public class LeaderboardWindow : WindowController
     public Button previousButton;
     public Button nextButton;
     public TextMeshProUGUI dateString;
+    public TextMeshProUGUI myRankLabel;
     public GameObject rowPrefab;
     public Transform scrollParent;
 
@@ -54,6 +55,8 @@ public class LeaderboardWindow : WindowController
     {
         public List<LeaderboardWindow.LeaderboardRowData> Scores;
         public string DateString;
+        public int TotalPlayers;
+        public int MyRank;
     }
 
 
@@ -78,6 +81,15 @@ public class LeaderboardWindow : WindowController
 
             var scores = JsonConvert.DeserializeObject<LeaderboardData>(s);
             dateString.text = scores.DateString;
+
+            if (scores.MyRank > 0)
+            {
+                myRankLabel.text = "My Rank: " + scores.MyRank + "/" + scores.TotalPlayers.ToString("N0");
+            }
+            else
+            {
+                myRankLabel.text = "";
+            }
 
             var darkColor = false;
             foreach (var leaderboardRowData in scores.Scores)

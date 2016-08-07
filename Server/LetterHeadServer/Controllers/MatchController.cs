@@ -109,9 +109,11 @@ namespace LetterHeadServer.Controllers
 
             var dailyMatch = db.DailyGames.Find(curDailyId);
 
+            var totalPlayers = db.Matches.Count(m => m.DailyGame != null && m.DailyGame.Id == curDailyId);
+
             var top5 = db.Matches.Where(m => m.DailyGame != null && m.DailyGame.Id == curDailyId).OrderByDescending(m => m.SingleScore).Take(maxResults).ToList();
             Match currentUserMatch = null;
-            var currentUserRank = 0;
+            var currentUserRank = -1;
 
             for (int index = 0; index < top5.Count; index++)
             {
@@ -159,14 +161,17 @@ namespace LetterHeadServer.Controllers
                 {
                     Rank = currentUserRank,
                     Username = currentUserMatch.Users[0].Username,
-                    Score = currentUserMatch.SingleScore
+                    Score = currentUserMatch.SingleScore,
+
                 });
             }
 
             return Json(new
                         {
                             Scores = ret,
-                            DateString = dailyMatch.StartDate.ToString("MM/dd/yyyy")
+                            DateString = dailyMatch.StartDate.ToString("MM/dd/yyyy"),
+                            TotalPlayers = totalPlayers,
+                            MyRank = currentUserRank,
                         });
         }
 
