@@ -93,6 +93,7 @@ class ProfilePage : Page
     public void Refresh()
     {
         dontAllowAvatarChange = true;
+        usernameError.text = "";
         TimerManager.AddEvent(0.2f, () => dontAllowAvatarChange = false);
         Init();
 

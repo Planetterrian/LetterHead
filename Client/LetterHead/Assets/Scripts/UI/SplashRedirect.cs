@@ -11,6 +11,7 @@ public class SplashRedirect : MonoBehaviour
     public float minDelay;
 
     private bool redirecting;
+    private float startTime;
 
     private void Awake()
     {
@@ -30,7 +31,19 @@ public class SplashRedirect : MonoBehaviour
 
     private IEnumerator Redirect()
     {
-        yield return new WaitForSeconds(minDelay);
-        SceneManager.LoadScene(sceneName);
+        startTime = Time.time;
+        var async = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);
+        async.allowSceneActivation = false;
+        while (async.progress < 0.9f)
+        {
+            yield return null;
+        }
+
+        var duration = Time.time - startTime;
+        Debug.Log("Load time: " + duration);
+        if(duration < minDelay)
+            yield return new WaitForSeconds(minDelay - duration);
+
+        async.allowSceneActivation = true;
     }
 }

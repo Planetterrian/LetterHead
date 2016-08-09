@@ -41,6 +41,7 @@ public class AdManager : Singleton<AdManager>
     private InterstitialAd interstitial;
     private RewardBasedVideoAd rewardBasedVideo;
     private Action<ShowResult> onRewardAdCompleted;
+    private bool hasBanner;
 
     public bool AdsEnabled()
     {
@@ -187,7 +188,15 @@ public class AdManager : Singleton<AdManager>
         if(adShown)
             return;
 
-        RequestBanner();
+        if (hasBanner)
+        {
+            bannerView.Show();
+            BannerViewOnOnAdLoaded(null, null);
+        }
+        else
+        {
+            RequestBanner();
+        }
     }
 
     public void DisableAds()
@@ -200,6 +209,7 @@ public class AdManager : Singleton<AdManager>
     private void BannerViewOnOnAdLoaded(object sender, EventArgs eventArgs)
     {
         adShown = true;
+        hasBanner = true;
 
         if(OnBannerAdShown != null)
             OnBannerAdShown.Invoke();
