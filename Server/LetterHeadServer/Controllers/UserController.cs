@@ -314,7 +314,7 @@ namespace LetterHeadServer.Controllers
         {
             if (username.Length < 3 || username.Length > 24)
             {
-                actionResult = Error("Your Player Name must be between 3 and 24 characters.");
+                actionResult = Error("Player Name must be between 3 and 24 characters.");
                 return true;
             }
 
