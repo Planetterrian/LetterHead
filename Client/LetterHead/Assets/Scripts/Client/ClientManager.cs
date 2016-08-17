@@ -87,6 +87,9 @@ public class ClientManager : Singleton<ClientManager>
 
     public int UserId()
     {
+        if (myUserInfo == null)
+            return -1;
+
         return myUserInfo.Id;
     }
 
