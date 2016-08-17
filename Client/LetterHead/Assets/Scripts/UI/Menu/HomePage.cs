@@ -17,6 +17,7 @@ public class HomePage : Page
     public Transform theirTurnHeader;
     public Transform completedHeader;
     public WindowController tutorialWindow;
+    public Toggle dontShowTutorialToggle;
 
     public Transform scrollParent;
     public float pollDelay;
@@ -117,8 +118,14 @@ public class HomePage : Page
 
         AchievementManager.Instance.CheckServerAchievements();
 
-        if (!TutorialShown())
+        if (!TutorialShown() || (TutorialShown() && PlayerPrefs.GetInt("DontShowTutorialToggle", 0) == 0))
             ShowTutorial();
+    }
+
+    public void CloseTutorial()
+    {
+        PlayerPrefs.SetInt("DontShowTutorialToggle", dontShowTutorialToggle.isOn ? 1: 0);
+        tutorialWindow.Hide();
     }
 
     private bool TutorialShown()
@@ -129,6 +136,7 @@ public class HomePage : Page
     private void ShowTutorial()
     {
         Debug.Log("Showing tutorial");
+        dontShowTutorialToggle.isOn = PlayerPrefs.GetInt("DontShowTutorialToggle", 0) == 1;
         PlayerPrefs.SetInt("TutShown" + ClientManager.Instance.UserId(), 1);
         tutorialWindow.ShowModal();
         tutorialWindow.GetComponentInChildren<ScrollRect>().verticalNormalizedPosition = 1;

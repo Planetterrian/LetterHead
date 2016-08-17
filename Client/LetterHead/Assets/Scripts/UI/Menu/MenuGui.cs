@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MenuGui : Singleton<MenuGui>
 {
@@ -11,7 +12,6 @@ public class MenuGui : Singleton<MenuGui>
     public DashboardScene dashboardScene;
 
     public AudioClip menuMusic;
-
     public RectTransform adPlaceholder;
     public RectTransform viewport;
 
