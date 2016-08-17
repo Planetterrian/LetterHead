@@ -76,7 +76,6 @@ public class LeaderboardWindow : WindowController
 
         Srv.Instance.POST("Match/DailyLeaderbaord", new Dictionary<string, string>() { { "dayOffset", dayOffset.ToString() } }, s =>
         {
-            MenuGui.Instance.loadingEffect.loading = false;
             scrollParent.DeleteChildren();
 
             var scores = JsonConvert.DeserializeObject<LeaderboardData>(s);
@@ -102,13 +101,12 @@ public class LeaderboardWindow : WindowController
                 darkColor = !darkColor;
             }
 
-            previousButton.interactable = true;
-            nextButton.interactable = dayOffset > 0;
+            OnLeaderboardRefreshed();
         }, s =>
         {
-            previousButton.interactable = false;
-            nextButton.interactable = dayOffset > 0;
-            MenuGui.Instance.loadingEffect.loading = false;
+            OnLeaderboardRefreshed();
+
+            scrollParent.DeleteChildren();
 
             var row = GameObject.Instantiate(rowPrefab);
             row.transform.SetParent(scrollParent);
@@ -117,5 +115,12 @@ public class LeaderboardWindow : WindowController
             row.GetComponent<LeaderboardRow>().Set(null, false);
         }
         );
+    }
+
+    private void OnLeaderboardRefreshed()
+    {
+        MenuGui.Instance.loadingEffect.loading = false;
+        previousButton.interactable = dayOffset < 8;
+        nextButton.interactable = dayOffset > 0;
     }
 }

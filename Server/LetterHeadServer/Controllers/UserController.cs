@@ -251,7 +251,6 @@ namespace LetterHeadServer.Controllers
             return Okay();
         }
 
-
         [AuthenticationFilter()]
         public ActionResult IapPurchase(string productId, string receipt)
         {
@@ -304,8 +303,8 @@ namespace LetterHeadServer.Controllers
             }
 
             currentUser.IsPremium = true;
-
             db.SaveChanges();
+
             return Okay();
         }
 

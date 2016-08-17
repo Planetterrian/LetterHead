@@ -36,6 +36,7 @@ namespace LetterHeadServer.Models
         public string LostPasswordToken { get; set; }
         public DateTime SignupDate { get; set; }
         public DateTime? LastFreePowerup { get; set; }
+        public int SoloHighScore { get; set; }
 
         public string AndroidNotificationToken { get; set; }
         public string IosNotificationToken { get; set; }
