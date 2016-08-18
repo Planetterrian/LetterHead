@@ -208,6 +208,9 @@ public class AdManager : Singleton<AdManager>
 
     private void BannerViewOnOnAdLoaded(object sender, EventArgs eventArgs)
     {
+        if(!AdsEnabled())
+            return;
+
         adShown = true;
         hasBanner = true;
 
