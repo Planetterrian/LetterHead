@@ -300,6 +300,9 @@ public class EndRoundWindow : WindowController
             }
             else
             {
+                if(GameManager.Instance.MatchDetails.CurrentRoundNumber == 4)
+                    AdManager.Instance.ShowInterstitial();
+
                 Hide();
             }
         }

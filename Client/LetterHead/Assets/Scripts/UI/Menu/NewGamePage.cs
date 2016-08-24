@@ -50,7 +50,6 @@ public class NewGamePage : Page
         Srv.Instance.POST("Match/RequestDailyGameStart", null, s =>
         {
             var matchId = JsonConvert.DeserializeObject<int>(s);
-            AdManager.Instance.ShowInterstitial();
             PersistManager.Instance.LoadMatch(matchId, true);
         }, DialogWindowTM.Instance.Error);
     }
@@ -60,7 +59,6 @@ public class NewGamePage : Page
         Srv.Instance.POST("Match/RequestSoloGameStart", null, s =>
         {
             var matchId = JsonConvert.DeserializeObject<int>(s);
-            AdManager.Instance.ShowInterstitial();
             PersistManager.Instance.LoadMatch(matchId, true);
         }, DialogWindowTM.Instance.Error);
     }

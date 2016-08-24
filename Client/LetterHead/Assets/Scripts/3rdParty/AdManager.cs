@@ -143,10 +143,10 @@ public class AdManager : Singleton<AdManager>
 
     public void ShowInterstitial()
     {
-        if(!AdsEnabled())
-            return;
-
         Debug.Log("Attempting to show interstitial");
+
+        if (!AdsEnabled())
+            return;
 
         if(interstitial == null)
             return;
