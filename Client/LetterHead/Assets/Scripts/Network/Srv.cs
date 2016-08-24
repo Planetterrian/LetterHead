@@ -55,7 +55,8 @@ public class Srv : REST
 
     protected override void OnResults(string results, Action<string> onComplete, Action<string> onError)
     {
-        Debug.Log(results);
+        if(Application.isEditor)
+            Debug.Log(results);
 
         try
         {
