@@ -20,7 +20,7 @@ public class WebSocketManager : Singleton<WebSocketManager>
         ws.Log.Level = LogLevel.Info;
 
 
-        Debug.Log("Making new socket to URL " + url);
+        //Debug.Log("Making new socket to URL " + url);
         return ws;
     }
 
