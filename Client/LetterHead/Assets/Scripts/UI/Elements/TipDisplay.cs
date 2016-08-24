@@ -17,6 +17,6 @@ public class TipDisplay : MonoBehaviour
 
     private void Start()
     {
-        text.text = "Tip: " + tips[UnityEngine.Random.Range(0, tips.Length)];
+        text.text = tips[UnityEngine.Random.Range(0, tips.Length)];
     }
 }
