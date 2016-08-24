@@ -315,13 +315,19 @@ namespace LetterHeadServer.Controllers
                 return;
             }
 
-            if (match.HasDoOverBeenUsed(currentUser))
+            if (match.DailyGame != null)
+            {
+                await Err("Can't be used on a daily game");
+                return;
+            }
+
+            if (match.HasDoOverBeenUsed(currentUser) && match.Users.Count > 1)
             {
                 await Err("Do over already used");
                 return;
             }
 
-            if(currentUser.PowerupCount(Powerup.Type.DoOver) < 1)
+            if (currentUser.PowerupCount(Powerup.Type.DoOver) < 1)
             {
                 await Err("No boost available");
                 return;
@@ -335,8 +341,7 @@ namespace LetterHeadServer.Controllers
             round.CategoryName = "";
             round.DoOverUsed = true;
 
-            BackgroundJob.Delete(round.EndRoundJobId);
-            round.EndRoundJobId = BackgroundJob.Schedule(() => new MatchController().ManuallyEndRound(match.Id, round.Id), round.EndTime());
+            round.ScheduleRoundEnd();
 
             currentUser.ConsumePowerup(Powerup.Type.DoOver);
 

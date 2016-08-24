@@ -230,12 +230,18 @@ public class GameGui : Singleton<GameGui>
         else
         {
             rightAvatarBox.gameObject.SetActive(false);
-            HidePowerups();
 
             if (GameManager.Instance.MatchDetails.IsDaily)
             {
+                // Daily game
+                HidePowerups();
                 dailyGameBox.gameObject.SetActive(true);
                 dailyGameBox.GetComponentInChildren<TextMeshProUGUI>().text = GameManager.Instance.MatchDetails.DateString;
+            }
+            else
+            {
+                // Solo game
+                ShowSoloPowerups();
             }
         }
     }
@@ -257,6 +263,13 @@ public class GameGui : Singleton<GameGui>
     {
         leftPowerupsBox.SetActive(true);
         rightPowerupsBox.SetActive(true);
+    }
+
+    private void ShowSoloPowerups()
+    {
+        leftPowerupsBox.SetActive(true);
+        rightPowerupsBox.SetActive(false);
+        PowerupManager.Instance.ShowSoloGamePowerups();
     }
 
     public void OnBackClicked()

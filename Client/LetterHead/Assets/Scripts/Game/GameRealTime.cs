@@ -200,7 +200,7 @@ public class GameRealTime : Singleton<GameRealTime>
         GameManager.Instance.CurrentRound().DoOverUsed = true;
         GameManager.Instance.CurrentRound().Words = new List<string>();
         GameScene.Instance.ResetGame();
-        BoardManager.Instance.SetBoardLetters(letters, false);
+        BoardManager.Instance.SetBoardLetters(letters, true);
         GameManager.Instance.StartGame(time);
         ClientManager.Instance.RefreshMyInfo(false, b => PowerupManager.Instance.OnRoundStateChanged());
 

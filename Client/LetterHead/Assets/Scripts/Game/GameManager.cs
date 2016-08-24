@@ -66,6 +66,14 @@ public abstract class GameManager : Singleton<GameManager>
         return MatchDetails.Rounds.Where(m => m.UserId != ClientManager.Instance.myUserInfo.Id).ToList();
     }
 
+    public bool IsSoloGame()
+    {
+        if (MatchDetails == null)
+            return false;
+
+        return MatchDetails.Users.Count == 1 && !MatchDetails.IsDaily;
+    }
+
     public void LoadMatchDetails(Action onLoadOverrideAction = null)
     {
         Srv.Instance.POST("Match/MatchInfo", new Dictionary<string, string>() {{"matchId", MatchId.ToString()}}, (matchDetailsJson) =>

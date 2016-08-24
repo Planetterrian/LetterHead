@@ -42,13 +42,21 @@ public class PowerupManager : Singleton<PowerupManager>
         
     }
 
+    public void ShowSoloGamePowerups()
+    {
+        powerupButtons[(int)Powerup.Type.DoOver].gameObject.SetActive(true);
+        powerupButtons[(int)Powerup.Type.Shield].gameObject.SetActive(false);
+        powerupButtons[(int)Powerup.Type.StealTime].gameObject.SetActive(false);
+        powerupButtons[(int)Powerup.Type.StealLetter].gameObject.SetActive(false);
+    }
+
     private void RefreshMyButtons()
     {
         if(GameManager.Instance.MatchDetails == null)
             return;
 
         var type = Powerup.Type.DoOver;
-        powerupButtons[(int)type].SetState(!GameManager.Instance.MatchDetails.HasDoOverBeenUsed(ClientManager.Instance.UserId()));
+        powerupButtons[(int)type].SetState(!GameManager.Instance.MatchDetails.HasDoOverBeenUsed(ClientManager.Instance.UserId()) || GameManager.Instance.IsSoloGame());
         powerupButtons[(int)type].SetQty(ClientManager.Instance.PowerupCount(type));
 
         type = Powerup.Type.Shield;
@@ -80,7 +88,10 @@ public class PowerupManager : Singleton<PowerupManager>
         switch (type)
         {
             case Powerup.Type.DoOver:
-                if (GameManager.Instance.MatchDetails.HasDoOverBeenUsed(ClientManager.Instance.myUserInfo.Id) || GameManager.Instance.CurrentRound().CurrentState != MatchRound.RoundState.Active)
+                if (GameManager.Instance.MatchDetails.HasDoOverBeenUsed(ClientManager.Instance.myUserInfo.Id) && !GameManager.Instance.IsSoloGame())
+                    return false;
+
+                if (GameManager.Instance.CurrentRound().CurrentState != MatchRound.RoundState.Active)
                     return false;
                 break;
             case Powerup.Type.Shield:
