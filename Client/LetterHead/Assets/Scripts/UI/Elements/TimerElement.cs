@@ -15,6 +15,10 @@ public class TimerElement : MonoBehaviour
     private bool active;
     private AudioSource audio;
 
+    private bool warning30Played;
+    private bool warning20Played;
+    private bool warning10Played;
+
     public float flashUnderTime = -1;
     public float soundUnderTime = -1;
 
@@ -43,11 +47,27 @@ public class TimerElement : MonoBehaviour
             {
                 flashLightTween.Play();
                 tweenAlpha.Play();
-
-                if(!SoundManager.Instance.Muted())
-                    audio.Play();
             }
-            
+
+            if (!SoundManager.Instance.Muted())
+            {
+                if (secondsRemaining <= 30 && !warning30Played)
+                {
+                    warning30Played = true;
+                    audio.Play();
+                }
+                if (secondsRemaining <= 20 && !warning20Played)
+                {
+                    warning20Played = true;
+                    audio.Play();
+                }
+                if (secondsRemaining <= 10 && !warning10Played)
+                {
+                    warning10Played = true;
+                    audio.Play();
+                }
+            }
+
             if (secondsRemaining <= 0)
             {
                 active = false;
@@ -80,6 +100,10 @@ public class TimerElement : MonoBehaviour
         tweenAlpha.enabled = false;
         audio.Stop();
 
+        warning30Played = false;
+        warning20Played = false;
+        warning10Played = false;
+
         secondsRemaining = time;
         active = true;
 
@@ -89,6 +113,11 @@ public class TimerElement : MonoBehaviour
     public void SetTimer(int roundTimeSeconds)
     {
         secondsRemaining = roundTimeSeconds;
+
+        warning30Played = false;
+        warning20Played = false;
+        warning10Played = false;
+
         UpdateLabel();
     }
 
