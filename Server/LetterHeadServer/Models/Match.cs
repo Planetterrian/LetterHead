@@ -317,9 +317,39 @@ namespace LetterHeadServer.Models
 
         public void EndMatch()
         {
-            CurrentState = LetterHeadShared.DTO.Match.MatchState.Ended;
-            EndedOn = DateTime.Now;
             DetermineWinner();
+            OnMatchFinished();
+        }
+
+        private void UpdatePlayerStats()
+        {
+            foreach (var user in Users)
+            {
+
+                if (Users.Count > 1)
+                {
+                    // Multiplayer game
+
+                    if (Winner == user)
+                        user.Stat_GamesWon++;
+                    else if (IsTie)
+                        user.Stat_GamesTied++;
+                    else
+                        user.Stat_GamesLost++;
+                }
+
+                if (Resigner == null)
+                {
+                    // Check stats for games that didn't have a resigner
+                    user.Stat_GamesPlayedNoResigner++;
+
+                    var score = UserScore(user);
+                    if (score > user.Stat_BestScore)
+                        user.Stat_BestScore = score;
+
+                    user.Stat_TotalScore += score;
+                }
+            }
         }
 
         private void DetermineWinner()
@@ -327,10 +357,6 @@ namespace LetterHeadServer.Models
             if (Users.Count == 1)
             {
                 SingleScore = GetScores()[0];
-            }
-
-            if (DailyGame != null)
-            {
                 Winner = Users[0];
                 return;
             }
@@ -361,11 +387,18 @@ namespace LetterHeadServer.Models
 
         public void Resign(User resigner)
         {
-            CurrentState = LetterHeadShared.DTO.Match.MatchState.Ended;
             Winner = Users.FirstOrDefault(u => u.Id != resigner.Id);
             Resigner = resigner;
+            OnMatchFinished();
         }
-        
+
+        private void OnMatchFinished()
+        {
+            CurrentState = LetterHeadShared.DTO.Match.MatchState.Ended;
+            EndedOn = DateTime.Now;
+            UpdatePlayerStats();
+        }
+
         public void ClearMatch(User clearer)
         {
             if(ClearedUserIds.Contains(clearer.Id))

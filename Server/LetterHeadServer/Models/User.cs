@@ -38,6 +38,13 @@ namespace LetterHeadServer.Models
         public DateTime? LastFreePowerup { get; set; }
         public int SoloHighScore { get; set; }
 
+        public int Stat_GamesPlayedNoResigner { get; set; }
+        public int Stat_GamesWon { get; set; }
+        public int Stat_GamesLost { get; set; }
+        public int Stat_GamesTied { get; set; }
+        public int Stat_BestScore { get; set; }
+        public int Stat_TotalScore { get; set; }
+
         public string AndroidNotificationToken { get; set; }
         public string IosNotificationToken { get; set; }
         public bool IsPremium { get; set; }
@@ -108,31 +115,19 @@ namespace LetterHeadServer.Models
         public UserStats Stats(ApplicationDbContext db)
         {
             var stats = new UserStats();
-            var gamesWon = Matches.Where(m => m.Winner != null && m.Winner.Id == Id);
-            var gamesLost = Matches.Where(m => m.Winner != null && m.Winner.Id != Id);
-            var gamesTied = Matches.Where(m => m.IsTie);
 
-            var games = gamesWon.ToList();
-            games.AddRange(gamesLost.ToList());
+            stats.gamesWon = Stat_GamesWon;
+            stats.gamesLost = Stat_GamesLost;
+            stats.gamesTied = Stat_GamesTied;
+            stats.gamesPlayed = Stat_GamesWon + Stat_GamesLost + Stat_GamesTied;
 
-            stats.gamesWon = gamesWon.Count(g => g.Users.Count > 1);
-            stats.gamesPlayed = games.Count(g => g.Users.Count > 1);
-            stats.gamesLost = stats.gamesPlayed - stats.gamesWon;
-
-            var scores = games.Where(g => g.Resigner == null).Select(g => g.UserScore(this));
-            var scoresEnum = scores as int[] ?? scores.ToArray();
-            if (scoresEnum.Any())
-            {
-                stats.averageScore = (int)(scoresEnum.Sum()/ scoresEnum.Count());
-                stats.bestScore = scoresEnum.Max();
-            }
+            if (Stat_GamesPlayedNoResigner > 0)
+                stats.averageScore = Stat_TotalScore/Stat_GamesPlayedNoResigner;
             else
-            {
                 stats.averageScore = 0;
-                stats.bestScore = 0;
-            }
+
+            stats.bestScore = Stat_BestScore;
             stats.mostWords = MostWords;
-            stats.gamesTied = gamesTied.Count();
 
             return stats;
         }
