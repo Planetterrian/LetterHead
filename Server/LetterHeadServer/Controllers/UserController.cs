@@ -238,6 +238,12 @@ namespace LetterHeadServer.Controllers
         [AuthenticationFilter()]
         public ActionResult AndroidNotificationToken(string token)
         {
+            var existing = db.Users.Where(u => u.AndroidNotificationToken == token && u.Id != currentUser.Id).ToList();
+            foreach (var user in existing)
+            {
+                user.AndroidNotificationToken = "";
+            }
+
             currentUser.AndroidNotificationToken = token;
             db.SaveChanges();
             return Okay();
@@ -246,6 +252,13 @@ namespace LetterHeadServer.Controllers
         [AuthenticationFilter()]
         public ActionResult IosNotificationToken(string token)
         {
+            var existing = db.Users.Where(u => u.IosNotificationToken == token && u.Id != currentUser.Id).ToList();
+            foreach (var user in existing)
+            {
+                user.IosNotificationToken = "";
+            }
+
+
             currentUser.IosNotificationToken = token;
             db.SaveChanges();
             return Okay();
