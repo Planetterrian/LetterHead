@@ -118,8 +118,12 @@ public class HomePage : Page
 
         AchievementManager.Instance.CheckServerAchievements();
 
-        if (!TutorialShown() || (TutorialShown() && PlayerPrefs.GetInt("DontShowTutorialToggle" + ClientManager.Instance.UserId(), 0) == 0))
+        if (!TutorialShown() || (TutorialShown() && PlayerPrefs.GetInt("DontShowTutorialToggle" + ClientManager.Instance.UserId(), 0) == 0) && ClientManager.Instance.IsNewLogin)
+        {
             ShowTutorial();
+        }
+
+        ClientManager.Instance.IsNewLogin = false;
     }
 
     public void CloseTutorial()

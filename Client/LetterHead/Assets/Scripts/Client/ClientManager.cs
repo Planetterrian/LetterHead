@@ -10,6 +10,8 @@ public class ClientManager : Singleton<ClientManager>
 {
     public UserInfo myUserInfo;
 
+    private int lastUserId;
+
     private string sessionId;
     public string SessionId
     {
@@ -18,6 +20,7 @@ public class ClientManager : Singleton<ClientManager>
     }
 
     public bool CanDoDaily { get; set; }
+    public bool IsNewLogin { get; set; }
 
     protected override void Awake()
     {
@@ -60,6 +63,12 @@ public class ClientManager : Singleton<ClientManager>
         Srv.Instance.POST("User/MyInfo", new Dictionary<string, string>() { { "isFirstLoad", isFirstLoad ? "True" : "False"} }, s =>
         {
             myUserInfo = JsonConvert.DeserializeObject<UserInfo>(s);
+
+            if (lastUserId != myUserInfo.Id)
+            {
+                IsNewLogin = true;
+                lastUserId = myUserInfo.Id;
+            }
 
             if(myUserInfo.IsPremium)
                 AdManager.Instance.DisableAds();
