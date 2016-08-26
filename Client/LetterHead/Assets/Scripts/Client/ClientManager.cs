@@ -26,7 +26,8 @@ public class ClientManager : Singleton<ClientManager>
         SessionId = PlayerPrefs.GetString("sessId", "");
 
 /*
-        SessionId = "72450ca5-75cd-456e-a367-a6ff89dd1c77";
+
+        SessionId = "f34b8e64-9457-4d2e-944b-7cf06d904836";
         Debug.LogError("USING MANUAL SESSID");
 */
 
