@@ -245,7 +245,7 @@ namespace LetterHeadServer.Models
 
             CurrentUserTurn.SendNotification(new NotificationDetails()
             {
-                content = "It's your turn in your match against " + Users.First(u => u.Id != CurrentUserTurn.Id).Username,
+                content = "It's your turn in your match against " + Users.First(u => u.Id != CurrentUserTurn.Id).Username + ".",
                 tag = "match" + Id,
                 title = "LetterHead - Your turn",
                 type = NotificationDetails.Type.YourTurn
