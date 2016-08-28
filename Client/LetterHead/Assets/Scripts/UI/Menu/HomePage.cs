@@ -137,10 +137,10 @@ public class HomePage : Page
         return PlayerPrefs.GetInt("TutShown" + ClientManager.Instance.UserId(), 0) == 1;
     }
 
-    private void ShowTutorial()
+    public void ShowTutorial()
     {
-        Debug.Log("Showing tutorial");
         dontShowTutorialToggle.isOn = PlayerPrefs.GetInt("DontShowTutorialToggle" + ClientManager.Instance.UserId(), 0) == 1;
+
         PlayerPrefs.SetInt("TutShown" + ClientManager.Instance.UserId(), 1);
         tutorialWindow.ShowModal();
         tutorialWindow.GetComponentInChildren<ScrollRect>().verticalNormalizedPosition = 1;
