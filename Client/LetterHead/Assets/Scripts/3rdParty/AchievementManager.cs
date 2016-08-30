@@ -169,8 +169,8 @@ public class AchievementManager : Singleton<AchievementManager>
         if (pct > 1)
             pct = 1;
 
-        if (GetAchievementProgress(_achievementID) == pct)
-            return;
+        //if (GetAchievementProgress(_achievementID) == pct)
+        //    return;
 
         PlayerPrefs.SetFloat("ach_" + _achievementID, pct);
 
