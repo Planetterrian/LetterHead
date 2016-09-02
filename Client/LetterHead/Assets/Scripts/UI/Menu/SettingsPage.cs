@@ -20,8 +20,6 @@ public class SettingsPage : Page
 
     public Button premiumUpgradeButton;
 
-    public TextMeshProUGUI aboutVersionText;
-
     private void Awake()
     {
     }
