@@ -475,13 +475,28 @@ namespace LetterHeadServer.Controllers
         }
 
         [AuthenticationFilter]
+        public ActionResult ChangeSettings(string settings)
+        {
+            currentUser.Settings_Sound = settings.Substring(0, 1) == "1";
+            currentUser.Settings_Music = settings.Substring(1, 1) == "1";
+            currentUser.Settings_ClearWords = settings.Substring(2, 1) == "1";
+            db.SaveChanges();
+
+            return Okay();
+        }
+
+        
+        [AuthenticationFilter]
         public ActionResult MyInfo(bool isFirstLoad)
         {
             if (isFirstLoad)
             {
                 BackgroundJob.Enqueue(() => new BackendController().RefreshFacebookInfo(currentUser.Id));
             }
-            return Json(currentUser.DTO());
+
+            var userInfo = currentUser.DTO();
+            userInfo.Settings = (currentUser.Settings_Sound ? "1" : "0") + (currentUser.Settings_Music ? "1" : "0") + (currentUser.Settings_ClearWords ? "1" : "0");
+            return Json(userInfo);
         }
 
         [AuthenticationFilter]

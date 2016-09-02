@@ -46,7 +46,7 @@ public class PowerupsPage : Page
             return false;
 
         var date = DateTime.Now.Date.ToString();
-        var curDone = PlayerPrefs.GetInt("ad_" + date, 0);
+        var curDone = PlayerPrefs.GetInt("ad_" + date + ClientManager.Instance.UserId(), 0);
         if (curDone > 4)
             return false;
 
@@ -110,10 +110,10 @@ public class PowerupsPage : Page
             var boosterType = GetRandomPowerup();
 
             var date = DateTime.Now.Date.ToString();
-            var curDone = PlayerPrefs.GetInt("ad_" + date, 0);
-            PlayerPrefs.SetInt("ad_" + date, curDone + 1);
-            Debug.Log("Cur Done = " + PlayerPrefs.GetInt("ad_" + date, 0));
-            Debug.Log("Date = " + date);
+            var curDone = PlayerPrefs.GetInt("ad_" + date + ClientManager.Instance.UserId(), 0);
+            PlayerPrefs.SetInt("ad_" + date + ClientManager.Instance.UserId(), curDone + 1);
+            //Debug.Log("Cur Done = " + PlayerPrefs.GetInt("ad_" + date, 0));
+            //Debug.Log("Date = " + date);
 
             Srv.Instance.POST("User/RewardedAd", new Dictionary<string, string>() { { "type", ((int)boosterType).ToString() } }, s =>
             {

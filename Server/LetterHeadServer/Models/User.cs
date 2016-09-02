@@ -17,6 +17,9 @@ namespace LetterHeadServer.Models
         public User()
         {
             Friends = new HashSet<User>();
+            Settings_Music = true;
+            Settings_ClearWords = true;
+            Settings_Sound = true;
         }
 
         public int Id { get; set; }
@@ -44,6 +47,10 @@ namespace LetterHeadServer.Models
         public int Stat_GamesTied { get; set; }
         public int Stat_BestScore { get; set; }
         public int Stat_TotalScore { get; set; }
+
+        public bool Settings_Music { get; set; }
+        public bool Settings_Sound { get; set; }
+        public bool Settings_ClearWords { get; set; }
 
         public string AndroidNotificationToken { get; set; }
         public string IosNotificationToken { get; set; }

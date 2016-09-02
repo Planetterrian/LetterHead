@@ -70,7 +70,11 @@ public class ClientManager : Singleton<ClientManager>
                 lastUserId = myUserInfo.Id;
             }
 
-            if(myUserInfo.IsPremium)
+            PersistManager.Instance.SoundEnabled = myUserInfo.Settings.Substring(0, 1) == "1";
+            PersistManager.Instance.MusicEnabled = myUserInfo.Settings.Substring(1, 1) == "1";
+            PersistManager.Instance.ClearWord = myUserInfo.Settings.Substring(2, 1) == "1";
+            
+            if (myUserInfo.IsPremium)
                 AdManager.Instance.DisableAds();
             else
             {

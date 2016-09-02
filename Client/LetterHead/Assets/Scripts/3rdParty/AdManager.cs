@@ -56,7 +56,6 @@ public class AdManager : Singleton<AdManager>
     {
         if (AdsEnabled())
         {
-            ShowBanner();
             LoadInterstitial();
         }
 
@@ -65,41 +64,17 @@ public class AdManager : Singleton<AdManager>
 
     private void LoadRewardedVideo()
     {
-/*        rewardBasedVideo = RewardBasedVideoAd.Instance;
 
-        rewardBasedVideo.OnAdRewarded += RewardBasedVideoOnOnAdRewarded;
-        rewardBasedVideo.OnAdClosed += (sender, args) =>
-        {
-            Debug.Log("Rewarded ad closed");
-        };
-
-        rewardBasedVideo.OnAdLoaded += (sender, args) =>
-        {
-            Debug.Log("Rewarded ad loaded");
-        };
-
-        rewardBasedVideo.OnAdFailedToLoad += (sender, args) =>
-        {
-            Debug.Log("Failed to load rewarded ad. " + args.Message);
-        };
-
-        AdRequest request = new AdRequest.Builder().Build();
-        request.TestDevices.Add("96f0159b9494d5c6174f95f199b659bc");
-        rewardBasedVideo.LoadAd(request, rewardedAdUnitId);*/
     }
 
     private void RewardBasedVideoOnOnAdRewarded(ShowResult result)
     {
         Debug.Log("Rewarded video completed");
         onRewardAdCompleted(result);
-/*
-        AdRequest request = new AdRequest.Builder().Build();
-        rewardBasedVideo.LoadAd(request, rewardedAdUnitId);*/
     }
 
     public bool HasRewardedVideo()
     {
-        //return rewardBasedVideo.IsLoaded();
         return Advertisement.IsReady("rewardedVideo");
     }
 
@@ -111,17 +86,12 @@ public class AdManager : Singleton<AdManager>
                                             {
                                                 resultCallback = RewardBasedVideoOnOnAdRewarded
         });
-        //rewardBasedVideo.Show();
     }
 
     private void LoadInterstitial()
     {
-        // Initialize an InterstitialAd.
         interstitial = new InterstitialAd(interstitialAdUnitId);
-        // Create an empty ad request.
         AdRequest request = new AdRequest.Builder().Build();
-        //request.TestDevices.Add("96f0159b9494d5c6174f95f199b659bc");
-        // Load the interstitial with the request.
         interstitial.LoadAd(request);
         interstitial.OnAdLoaded += (sender, args) =>
         {
@@ -135,10 +105,7 @@ public class AdManager : Singleton<AdManager>
 
         interstitial.OnAdClosed += (sender, args) =>
         {
-            interstitial = new InterstitialAd(interstitialAdUnitId);
-            AdRequest request2 = new AdRequest.Builder().Build();
-            // Load the interstitial with the request.
-            interstitial.LoadAd(request2);
+            LoadInterstitial();
         };
     }
 
@@ -175,12 +142,13 @@ public class AdManager : Singleton<AdManager>
 
     private void RequestBanner()
     {
-        if(bannerView == null)
+        if (bannerView == null)
+        {
+            ShowBanner();
             return;
+        }
 
         AdRequest request = new AdRequest.Builder().Build();
-        //request.TestDevices.Add("96f0159b9494d5c6174f95f199b659bc");
-        // Load the banner with the request.
         bannerView.LoadAd(request);
     }
 

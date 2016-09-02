@@ -24,7 +24,6 @@ public class SettingsPage : Page
 
     private void Awake()
     {
-        aboutVersionText.text = "Version " + Application.version;
     }
 
     private void Start()
@@ -46,19 +45,27 @@ public class SettingsPage : Page
         notificationsToggle.isOn = PersistManager.Instance.NotificationsEnabled;
     }
 
+    private string SettingsString()
+    {
+        return (PersistManager.Instance.SoundEnabled ? "1" : "0") + (PersistManager.Instance.MusicEnabled ? "1" : "0") + (PersistManager.Instance.ClearWord ? "1" : "0");
+    }
+
     public void OnMusicToggleChanged()
     {
         PersistManager.Instance.MusicEnabled = musicEnabledToggle.isOn;
+        Srv.Instance.POST("User/ChangeSettings", new Dictionary<string, string>() {{"settings", SettingsString()}}, s => { });
     }
 
     public void OnSoundToggleChanged()
     {
         PersistManager.Instance.SoundEnabled = soundEnabledToggle.isOn;
+        Srv.Instance.POST("User/ChangeSettings", new Dictionary<string, string>() {{"settings", SettingsString()}}, s => { });
     }
 
     public void OnClearWordToggleChanged()
     {
         PersistManager.Instance.ClearWord = clearWordToggle.isOn;
+        Srv.Instance.POST("User/ChangeSettings", new Dictionary<string, string>() {{"settings", SettingsString()}}, s => { });
     }
 
     public void OnNotificationsToggleChanged()
