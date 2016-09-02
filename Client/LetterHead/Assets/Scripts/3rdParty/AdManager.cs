@@ -135,6 +135,7 @@ public class AdManager : Singleton<AdManager>
 
         interstitial.OnAdClosed += (sender, args) =>
         {
+            interstitial = new InterstitialAd(interstitialAdUnitId);
             AdRequest request2 = new AdRequest.Builder().Build();
             // Load the interstitial with the request.
             interstitial.LoadAd(request2);
