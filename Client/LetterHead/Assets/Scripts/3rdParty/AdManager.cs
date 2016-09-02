@@ -120,7 +120,7 @@ public class AdManager : Singleton<AdManager>
         interstitial = new InterstitialAd(interstitialAdUnitId);
         // Create an empty ad request.
         AdRequest request = new AdRequest.Builder().Build();
-        request.TestDevices.Add("96f0159b9494d5c6174f95f199b659bc");
+        //request.TestDevices.Add("96f0159b9494d5c6174f95f199b659bc");
         // Load the interstitial with the request.
         interstitial.LoadAd(request);
         interstitial.OnAdLoaded += (sender, args) =>
@@ -178,7 +178,7 @@ public class AdManager : Singleton<AdManager>
             return;
 
         AdRequest request = new AdRequest.Builder().Build();
-        request.TestDevices.Add("96f0159b9494d5c6174f95f199b659bc");
+        //request.TestDevices.Add("96f0159b9494d5c6174f95f199b659bc");
         // Load the banner with the request.
         bannerView.LoadAd(request);
     }

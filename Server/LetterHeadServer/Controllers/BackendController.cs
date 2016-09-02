@@ -24,6 +24,34 @@ namespace LetterHeadServer.Controllers
             return "Started Jobs";
         }
 
+        public string AverageScore(int userId)
+        {
+            var user = db.Users.Find(userId);
+
+            var matches = user.Matches;
+
+            var Stat_GamesPlayedNoResigner = 0;
+            var Stat_TotalScore = 0;
+
+            foreach (var match in matches)
+            {
+                if (match.Resigner == null)
+                {
+                    // Check stats for games that didn't have a resigner
+                    Stat_GamesPlayedNoResigner++;
+
+                    var score = match.UserScore(user);
+
+                    Stat_TotalScore += score;
+                    Response.Write("Match " + match.Id + " - Score = " + score + "<br>");
+                }
+            }
+
+            return "<p><b>Total Score = " + Stat_TotalScore + " Games Played = " + Stat_GamesPlayedNoResigner + " Average = " + (Stat_TotalScore/Stat_GamesPlayedNoResigner) +
+                "<p>User stats reports " + user.Stat_TotalScore + " total score with " + user.Stat_GamesPlayedNoResigner + " games played (" + (user.Stat_TotalScore / user.Stat_GamesPlayedNoResigner) + " average)";
+        }
+
+
         public string NewDailyGame()
         {
             DailyGame.CreateNewDailyGame();
