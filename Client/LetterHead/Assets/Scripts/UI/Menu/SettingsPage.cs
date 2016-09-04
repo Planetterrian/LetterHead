@@ -45,7 +45,7 @@ public class SettingsPage : Page
 
     private string SettingsString()
     {
-        return (PersistManager.Instance.SoundEnabled ? "1" : "0") + (PersistManager.Instance.MusicEnabled ? "1" : "0") + (PersistManager.Instance.ClearWord ? "1" : "0");
+        return (PersistManager.Instance.SoundEnabled ? "1" : "0") + (PersistManager.Instance.MusicEnabled ? "1" : "0") + (PersistManager.Instance.ClearWord ? "1" : "0") + (PersistManager.Instance.NotificationsEnabled ? "1" : "0");
     }
 
     public void OnMusicToggleChanged()
@@ -78,6 +78,8 @@ public class SettingsPage : Page
         {
             NotificationManager.Instance.UnregisterForNotifications();
         }
+
+        Srv.Instance.POST("User/ChangeSettings", new Dictionary<string, string>() { { "settings", SettingsString() } }, s => { });
     }
 
     public void UpgradeToPremiumClicked()

@@ -20,6 +20,7 @@ namespace LetterHeadServer.Models
             Settings_Music = true;
             Settings_ClearWords = true;
             Settings_Sound = true;
+            Settings_Notifications = true;
         }
 
         public int Id { get; set; }
@@ -51,6 +52,7 @@ namespace LetterHeadServer.Models
         public bool Settings_Music { get; set; }
         public bool Settings_Sound { get; set; }
         public bool Settings_ClearWords { get; set; }
+        public bool Settings_Notifications { get; set; }
 
         public string AndroidNotificationToken { get; set; }
         public string IosNotificationToken { get; set; }

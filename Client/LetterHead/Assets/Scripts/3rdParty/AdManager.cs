@@ -171,7 +171,10 @@ public class AdManager : Singleton<AdManager>
     public void DisableAds()
     {
         adShown = false;
-        bannerView.Hide();
+
+        if(bannerView != null)
+            bannerView.Hide();
+
         OnBannerAdHidden.Invoke();
     }
 

@@ -480,6 +480,7 @@ namespace LetterHeadServer.Controllers
             currentUser.Settings_Sound = settings.Substring(0, 1) == "1";
             currentUser.Settings_Music = settings.Substring(1, 1) == "1";
             currentUser.Settings_ClearWords = settings.Substring(2, 1) == "1";
+            currentUser.Settings_Notifications = settings.Substring(3, 1) == "1";
             db.SaveChanges();
 
             return Okay();
@@ -495,7 +496,7 @@ namespace LetterHeadServer.Controllers
             }
 
             var userInfo = currentUser.DTO();
-            userInfo.Settings = (currentUser.Settings_Sound ? "1" : "0") + (currentUser.Settings_Music ? "1" : "0") + (currentUser.Settings_ClearWords ? "1" : "0");
+            userInfo.Settings = (currentUser.Settings_Sound ? "1" : "0") + (currentUser.Settings_Music ? "1" : "0") + (currentUser.Settings_ClearWords ? "1" : "0") + (currentUser.Settings_Notifications ? "1" : "0");
             return Json(userInfo);
         }
 

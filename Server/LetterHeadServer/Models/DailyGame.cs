@@ -71,7 +71,7 @@ namespace LetterHeadServer.Models
 
         private void EndExistingGames(ApplicationDbContext context)
         {
-            var games = context.Matches.Where(m => m.DailyGame.Id == Id).ToList();
+            var games = context.Matches.Where(m => m.DailyGame.Id == Id && m.CurrentState != LetterHeadShared.DTO.Match.MatchState.Ended).ToList();
 
             foreach (var game in games)
             {

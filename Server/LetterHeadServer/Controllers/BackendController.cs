@@ -28,7 +28,7 @@ namespace LetterHeadServer.Controllers
         {
             var user = db.Users.Find(userId);
 
-            var matches = user.Matches;
+            var matches = user.Matches.Where(m => m.CurrentState == LetterHeadShared.DTO.Match.MatchState.Ended);
 
             var Stat_GamesPlayedNoResigner = 0;
             var Stat_TotalScore = 0;
