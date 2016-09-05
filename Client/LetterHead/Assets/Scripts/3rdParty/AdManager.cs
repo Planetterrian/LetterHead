@@ -4,6 +4,7 @@ using System.Collections;
 using GoogleMobileAds.Api;
 using UnityEngine.Advertisements;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 public class AdManager : Singleton<AdManager>
 {
@@ -87,6 +88,11 @@ public class AdManager : Singleton<AdManager>
                                             {
                                                 resultCallback = RewardBasedVideoOnOnAdRewarded
         });
+    }
+
+    internal bool ShouldShowBanner()
+    {
+        return SceneManager.GetActiveScene().name == "menu";
     }
 
     private void LoadInterstitial()

@@ -77,7 +77,7 @@ public class ClientManager : Singleton<ClientManager>
 
             if (myUserInfo.IsPremium)
                 AdManager.Instance.DisableAds();
-            else
+            else if(AdManager.Instance.ShouldShowBanner())
             {
                 AdManager.Instance.EnableAds();
             }
