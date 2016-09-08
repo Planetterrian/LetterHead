@@ -28,7 +28,7 @@ namespace LetterHeadServer.Controllers
     {
         private User currentUser;
         private Match match;
-        private RealTimeMatch.RealTimeListener rtm;
+        private RealTimeMatch.RealTimeListener matchListener;
         private ApplicationDbContext db;
         private WebSocket socket;
         private SemaphoreSlim sendSemaphore = new SemaphoreSlim(1);
@@ -36,8 +36,14 @@ namespace LetterHeadServer.Controllers
         public HttpResponseMessage Get(string sessionId, int matchId)
         {
             db = new ApplicationDbContext();
-            currentUser = UserManager.GetUserBySession(db, sessionId);
+            var session = UserManager.GetUserSession(db, sessionId);
 
+            if (session == null)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.Forbidden, "Invalid session");
+            }
+
+            currentUser = session.User;
             if (currentUser == null)
             {
                 return Request.CreateErrorResponse(HttpStatusCode.Forbidden, "Invalid session");
@@ -62,7 +68,18 @@ namespace LetterHeadServer.Controllers
         private async Task ProcessSocket(AspNetWebSocketContext context)
         {
             var matchRtm = RealTimeMatchManager.GetMatch(match.Id);
-            rtm = matchRtm.AddListener(this);
+
+            // Find if this user already has a real time connection
+            var existingListener = matchRtm.Listeners.FirstOrDefault(l => l.realTimeController.currentUser.Id == currentUser.Id);
+            if (existingListener != null)
+            {
+                matchRtm.AddMessage(new RealTimeMatch.Message(controller =>
+                {
+                    controller.KickUser();
+                }), existingListener);
+            }
+
+            matchListener = matchRtm.AddListener(this);
 
             Task<WebSocketReceiveResult> socketReceive = null;
             Task<RealTimeMatch.Message> rtmReceive = null;
@@ -79,7 +96,7 @@ namespace LetterHeadServer.Controllers
                 }
 
                 if (rtmReceive == null || rtmReceive.IsCompleted)
-                    rtmReceive = rtm.ReceiveMessage();
+                    rtmReceive = matchListener.ReceiveMessage();
 
                 await Task.WhenAny(new Task[] {socketReceive, rtmReceive});
 
@@ -96,6 +113,13 @@ namespace LetterHeadServer.Controllers
                 }
             }
 
+            matchRtm.RemoveListener(this);
+        }
+
+        private void KickUser()
+        {
+            var matchRtm = RealTimeMatchManager.GetMatch(match.Id);
+            socket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Kicked", CancellationToken.None);
             matchRtm.RemoveListener(this);
         }
 

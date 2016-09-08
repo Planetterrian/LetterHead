@@ -23,17 +23,23 @@ namespace LetterHeadServer.Classes
             }
         }
 
+        public void AddMessage(Message message, RealTimeListener target)
+        {
+            target.messages.Add(message);
+            target.onMessageResetEvent.Set();
+        }
+
         public void RemoveListener(RealTimeController realTimeController)
         {
-            Listeners.RemoveAll(r => r.obj == realTimeController);
+            Listeners.RemoveAll(r => r.realTimeController == realTimeController);
         }
 
 
-        public RealTimeListener AddListener(Object obj)
+        public RealTimeListener AddListener(RealTimeController obj)
         {
             var listener = new RealTimeListener()
                            {
-                               obj = obj,
+                               realTimeController = obj,
                                onMessageResetEvent = new AutoResetEvent(false)
                            };
 
@@ -44,7 +50,7 @@ namespace LetterHeadServer.Classes
 
         public class RealTimeListener
         {
-            public Object obj;
+            public RealTimeController realTimeController;
             public AutoResetEvent onMessageResetEvent;
             public List<Message> messages = new List<Message>();
 

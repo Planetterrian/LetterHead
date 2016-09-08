@@ -62,7 +62,8 @@ namespace LetterHeadServer.Models
         public virtual ICollection<Match> Matches { get; set; }
         public virtual ICollection<Invite> Invites { get; set; }
         public virtual ICollection<User> Friends { get; set; }
-
+        public virtual ICollection<Session> Sessions { get; set; }
+        
 
         public List<int> PowerupCountList { get; set; }
         public string PowerupCountListJoined
@@ -82,11 +83,6 @@ namespace LetterHeadServer.Models
                     PowerupCountList = value.Split(',').Select(int.Parse).ToList();
             }
         }
-        
-        [Index]
-        [MaxLength(64)]
-        public string SessionId { get; set; }
-
 
         public int PowerupCount(LetterHeadShared.Powerup.Type powerupType)
         {
@@ -106,9 +102,19 @@ namespace LetterHeadServer.Models
             PowerupCountList[(int)powerupType] += qty;
         }
 
-        public void GenerateNewSessionId()
+        public Session GenerateNewSession()
         {
-            SessionId = Guid.NewGuid().ToString();
+            var sessionId = Guid.NewGuid().ToString();
+
+            var session = new Session();
+            session.User = this;
+            session.CreatedOn = DateTime.Now;
+            session.LastLoggedIn = DateTime.Now;
+            session.SessionId = sessionId;
+
+            Sessions.Add(session);
+
+            return session;
         }
 
         public Match GetMatch(ApplicationDbContext db, DailyGame dailyGame)

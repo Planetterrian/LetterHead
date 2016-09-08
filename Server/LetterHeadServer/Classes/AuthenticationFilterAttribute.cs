@@ -27,10 +27,12 @@ namespace LetterHeadServer.Classes
             var sessionId = filterContext.HttpContext.Request.Headers["SessionId"];
             if (sessionId != null)
             {
-                var user = UserManager.GetUserBySession(db, sessionId);
-                if (user != null)
+                var session = UserManager.GetUserSession(db, sessionId);
+                if (session != null)
                 {
-                    LoginUser(filterContext, db, user.Id);
+                    LoginUser(filterContext, db, session.User.Id);
+                    session.LastLoggedIn = DateTime.Now;
+                    db.SaveChanges();
                     return;
                 }
                 else if(!_allowLoggedOut)

@@ -45,11 +45,11 @@ namespace LetterHeadServer.Controllers
 
                 UserManager.CreateUser(db, model.Email, model.Password);
                 var user = UserManager.LoginUserWithEmail(db, model);
-                user.GenerateNewSessionId();
+                var session = user.GenerateNewSession();
                 db.SaveChanges();
 
 
-                return Json(user.SessionId);
+                return Json(session.SessionId);
             }
             else
             {
@@ -170,7 +170,6 @@ namespace LetterHeadServer.Controllers
             }
 
             account.PasswordHash = Crypto.HashPassword(newpassword);
-            account.SessionId = "";
             account.LostPasswordToken = "";
             db.SaveChanges();
 
@@ -207,10 +206,11 @@ namespace LetterHeadServer.Controllers
             };
 
             var user = UserManager.LoginUserFromFacebook(db, facebookUser);
-            user.GenerateNewSessionId();
+            var session = user.GenerateNewSession();
+
             db.SaveChanges();
 
-            return Json(user.SessionId, JsonRequestBehavior.AllowGet);
+            return Json(session.SessionId, JsonRequestBehavior.AllowGet);
         }
 
         private static dynamic GetFacebookInfo(string token)
@@ -450,10 +450,10 @@ namespace LetterHeadServer.Controllers
                 return Error("Invalid email / password");
             }
 
-            user.GenerateNewSessionId();
+            var session = user.GenerateNewSession();
             db.SaveChanges();
 
-            return Json(user.SessionId, JsonRequestBehavior.AllowGet);
+            return Json(session.SessionId, JsonRequestBehavior.AllowGet);
         }
 
 

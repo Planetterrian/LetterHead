@@ -104,9 +104,10 @@ namespace LetterHeadServer.Classes
         }
 */
 
-        public static User GetUserBySession(ApplicationDbContext db, string sessionId)
+        public static Session GetUserSession(ApplicationDbContext db, string sessionId)
         {
-            return db.Users.FirstOrDefault(u => u.SessionId == sessionId);
+            var session = db.Sessions.FirstOrDefault(u => u.SessionId == sessionId);
+            return session;
         }
     }
 }
