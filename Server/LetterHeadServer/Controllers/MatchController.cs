@@ -84,10 +84,8 @@ namespace LetterHeadServer.Controllers
                 return Error("You can't access that match.");
             }
 
-            if (currentUser.SoloHighScore < match.SingleScore)
+            if (currentUser.HighScoreMatchId == match.Id)
             {
-                currentUser.SoloHighScore = match.SingleScore;
-                db.SaveChanges();
                 return Json("Y");
             }
 

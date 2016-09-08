@@ -345,7 +345,10 @@ namespace LetterHeadServer.Models
 
                     var score = UserScore(user);
                     if (score > user.Stat_BestScore)
+                    {
                         user.Stat_BestScore = score;
+                        user.HighScoreMatchId = Id;
+                    }
 
                     user.Stat_TotalScore += score;
                 }

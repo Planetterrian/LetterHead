@@ -40,7 +40,7 @@ namespace LetterHeadServer.Models
         public string LostPasswordToken { get; set; }
         public DateTime SignupDate { get; set; }
         public DateTime? LastFreePowerup { get; set; }
-        public int SoloHighScore { get; set; }
+        public int HighScoreMatchId { get; set; }
 
         public int Stat_GamesPlayedNoResigner { get; set; }
         public int Stat_GamesWon { get; set; }
