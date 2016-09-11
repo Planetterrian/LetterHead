@@ -84,7 +84,7 @@ namespace LetterHeadServer.Classes
             }
 
             // Ensure there's at least 2 vowels
-            if (vowelCount < 2 || vowelCount > 7)
+            if (vowelCount < 2 || vowelCount > 4)
                 letterString = GenerateBoard();
 
             return letterString;
