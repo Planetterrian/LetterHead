@@ -12,6 +12,7 @@ public class WebSocketManager : Singleton<WebSocketManager>
     public WebSocket MakeNew(string url)
     {
         var ws = new WebSocket(url);
+
         ws.Log.Output = (data, s) =>
         {
             Debug.Log(data.Message);
