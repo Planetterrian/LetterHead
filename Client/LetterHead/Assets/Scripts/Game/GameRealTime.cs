@@ -96,7 +96,7 @@ public class GameRealTime : Singleton<GameRealTime>
                         return;
                     }
 
-                    DialogWindowTM.Instance.Show("Disconnected", "You have been disconnected from the server. (" + args.Code + " " + args.Reason + ")", () =>
+                    DialogWindowTM.Instance.Show("Disconnected", "You have been disconnected from the server.", () =>
                     {
                         PersistManager.Instance.LoadMenu();
                     });
