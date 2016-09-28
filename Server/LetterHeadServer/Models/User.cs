@@ -112,6 +112,9 @@ namespace LetterHeadServer.Models
             session.LastLoggedIn = DateTime.Now;
             session.SessionId = sessionId;
 
+            if(Sessions == null)
+                Sessions = new List<Session>();
+
             Sessions.Add(session);
 
             return session;

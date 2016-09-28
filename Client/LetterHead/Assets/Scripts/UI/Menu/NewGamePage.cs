@@ -47,6 +47,8 @@ public class NewGamePage : Page
 
     public void DailyGameClicked()
     {
+        DialogWindowTM.Instance.Show("New Game", "One moment...", () => { }, () => { }, "");
+
         Srv.Instance.POST("Match/RequestDailyGameStart", null, s =>
         {
             var matchId = JsonConvert.DeserializeObject<int>(s);
@@ -56,6 +58,8 @@ public class NewGamePage : Page
 
     public void SoloGameClicked()
     {
+        DialogWindowTM.Instance.Show("New Game", "One moment...", () => { }, () => { }, "");
+
         Srv.Instance.POST("Match/RequestSoloGameStart", null, s =>
         {
             var matchId = JsonConvert.DeserializeObject<int>(s);
