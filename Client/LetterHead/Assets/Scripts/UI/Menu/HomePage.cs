@@ -37,7 +37,7 @@ public class HomePage : Page
         RefreshMatches();
     }
 
-    private class ListInfo
+    public class ListInfo
     {
         public List<Match> Matches;
         public List<Invite> Invites;

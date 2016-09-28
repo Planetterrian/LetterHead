@@ -20,6 +20,21 @@ public class NewGamePage : Page
         Refresh();
     }
 
+    private void OnApplicationFocus(bool state)
+    {
+        print(state);
+        if (state)
+        {
+            Srv.Instance.POST("Match/List", null, s =>
+            {
+                var list = JsonConvert.DeserializeObject<HomePage.ListInfo>(s);
+                ClientManager.Instance.CanDoDaily = list.CanDoDaily;
+                Refresh();
+            });
+        }
+    }
+
+
     public void Refresh()
     {
         dailyGameButton.interactable = ClientManager.Instance.CanDoDaily;
