@@ -28,7 +28,7 @@ namespace LetterHeadServer.Models
         {
             var db = ApplicationDbContext.Get();
 
-            var current = Current();
+            var current = Current(db);
             current?.End(db);
 
             var letterArray = new List<string>();
@@ -48,9 +48,9 @@ namespace LetterHeadServer.Models
             db.SaveChanges();
         }
 
-        public static DailyGame Current()
+        public static DailyGame Current(ApplicationDbContext context = null)
         {
-            var db = ApplicationDbContext.Get();
+            var db = context ?? ApplicationDbContext.Get();
 
             return db.DailyGames.OrderByDescending(d => d.Id).FirstOrDefault();
         }

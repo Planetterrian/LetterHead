@@ -120,7 +120,7 @@ namespace LetterHeadServer.Controllers
                 if ((DateTime.Now - match.CurrentRound().ActivatedOn.Value).TotalDays > 7)
                 {
                     match.Resign(match.CurrentUserTurn);
-                    Response.Write("Resigned " + match.Id + "<br>");
+                    Response?.Write("Resigned " + match.Id + "<br>");
                 }
             }
 
@@ -139,7 +139,7 @@ namespace LetterHeadServer.Controllers
                 if ((DateTime.Now - match.EndedOn.Value).TotalDays > 30)
                 {
                     db.Matches.Remove(match);
-                    Response.Write("Deleted " + match.Id + "<br>");
+                    Response?.Write("Deleted " + match.Id + "<br>");
                 }
             }
 
