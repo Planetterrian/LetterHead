@@ -1,11 +1,12 @@
 // Copyright 2014 Google Inc. All Rights Reserved.
 
-#import "GADUInterstitial.h"
-
 @import CoreGraphics;
+@import Foundation;
+@import GoogleMobileAds;
 @import UIKit;
 
-#import "GADUPluginUtil.h"
+#import "GADUInterstitial.h"
+
 #import "UnityAppController.h"
 
 @interface GADUInterstitial () <GADInterstitialDelegate>
@@ -13,12 +14,17 @@
 
 @implementation GADUInterstitial
 
++ (UIViewController *)unityGLViewController {
+  return ((UnityAppController *)[UIApplication sharedApplication].delegate).rootViewController;
+}
+
 - (id)initWithInterstitialClientReference:(GADUTypeInterstitialClientRef *)interstitialClient
                                  adUnitID:(NSString *)adUnitID {
   self = [super init];
   if (self) {
     _interstitialClient = interstitialClient;
-    _interstitial = [[GADInterstitial alloc] initWithAdUnitID:adUnitID];
+    _interstitial = [[GADInterstitial alloc] init];
+    _interstitial.adUnitID = adUnitID;
     _interstitial.delegate = self;
   }
   return self;
@@ -38,7 +44,7 @@
 
 - (void)show {
   if (self.interstitial.isReady) {
-    UIViewController *unityController = [GADUPluginUtil unityGLViewController];
+    UIViewController *unityController = [GADUInterstitial unityGLViewController];
     [self.interstitial presentFromRootViewController:unityController];
   } else {
     NSLog(@"GoogleMobileAdsPlugin: Interstitial is not ready to be shown.");
@@ -53,12 +59,10 @@
   }
 }
 - (void)interstitial:(GADInterstitial *)ad didFailToReceiveAdWithError:(GADRequestError *)error {
-  if (self.adFailedCallback) {
-    NSString *errorMsg = [NSString
-        stringWithFormat:@"Failed to receive ad with error: %@", [error localizedFailureReason]];
-    self.adFailedCallback(self.interstitialClient,
-                          [errorMsg cStringUsingEncoding:NSUTF8StringEncoding]);
-  }
+  NSString *errorMsg = [NSString
+      stringWithFormat:@"Failed to receive ad with error: %@", [error localizedFailureReason]];
+  self.adFailedCallback(self.interstitialClient,
+                        [errorMsg cStringUsingEncoding:NSUTF8StringEncoding]);
 }
 
 - (void)interstitialWillPresentScreen:(GADInterstitial *)ad {

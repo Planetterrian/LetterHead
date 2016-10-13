@@ -16,10 +16,10 @@
 
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 using GoogleMobileAds.Api;
 using GoogleMobileAds.Common;
-using UnityEngine;
 
 namespace GoogleMobileAds.Android
 {
@@ -27,86 +27,78 @@ namespace GoogleMobileAds.Android
     {
         private AndroidJavaObject bannerView;
 
-        public BannerClient() : base(Utils.UnityAdListenerClassName)
+        public event EventHandler<EventArgs> OnAdLoaded = delegate {};
+        public event EventHandler<AdFailedToLoadEventArgs> OnAdFailedToLoad = delegate {};
+        public event EventHandler<EventArgs> OnAdOpening = delegate {};
+        public event EventHandler<EventArgs> OnAdClosed = delegate {};
+        public event EventHandler<EventArgs> OnAdLeavingApplication = delegate {};
+
+        public BannerClient() : base(Utils.UnityBannerAdListenerClassName)
         {
             AndroidJavaClass playerClass = new AndroidJavaClass(Utils.UnityActivityClassName);
             AndroidJavaObject activity =
                     playerClass.GetStatic<AndroidJavaObject>("currentActivity");
-            this.bannerView = new AndroidJavaObject(
+            bannerView = new AndroidJavaObject(
                 Utils.BannerViewClassName, activity, this);
         }
 
-        public event EventHandler<EventArgs> OnAdLoaded;
-
-        public event EventHandler<AdFailedToLoadEventArgs> OnAdFailedToLoad;
-
-        public event EventHandler<EventArgs> OnAdOpening;
-
-        public event EventHandler<EventArgs> OnAdClosed;
-
-        public event EventHandler<EventArgs> OnAdLeavingApplication;
-
         // Creates a banner view.
-        public void CreateBannerView(string adUnitId, AdSize adSize, AdPosition position)
-        {
-            this.bannerView.Call(
-                    "create",
+        public void CreateBannerView(String adUnitId, AdSize adSize, AdPosition position) {
+            bannerView.Call("create",
                     new object[3] { adUnitId, Utils.GetAdSizeJavaObject(adSize), (int)position });
         }
 
         // Loads an ad.
         public void LoadAd(AdRequest request)
         {
-            this.bannerView.Call("loadAd", Utils.GetAdRequestJavaObject(request));
+            bannerView.Call("loadAd", Utils.GetAdRequestJavaObject(request));
         }
 
         // Displays the banner view on the screen.
-        public void ShowBannerView()
-        {
-            this.bannerView.Call("show");
+        public void ShowBannerView() {
+            bannerView.Call("show");
         }
 
         // Hides the banner view from the screen.
         public void HideBannerView()
         {
-            this.bannerView.Call("hide");
+            bannerView.Call("hide");
         }
 
         // Destroys the banner view.
         public void DestroyBannerView()
         {
-            this.bannerView.Call("destroy");
+            bannerView.Call("destroy");
         }
 
         #region Callbacks from UnityBannerAdListener.
 
-        public void onAdLoaded()
+        void onAdLoaded()
         {
-            this.OnAdLoaded(this, EventArgs.Empty);
+            OnAdLoaded(this, EventArgs.Empty);
         }
 
-        public void onAdFailedToLoad(string errorReason)
+        void onAdFailedToLoad(string errorReason)
         {
-            AdFailedToLoadEventArgs args = new AdFailedToLoadEventArgs()
-            {
+            AdFailedToLoadEventArgs args = new AdFailedToLoadEventArgs() {
                 Message = errorReason
             };
-            this.OnAdFailedToLoad(this, args);
+            OnAdFailedToLoad(this, args);
         }
 
-        public void onAdOpened()
+        void onAdOpened()
         {
-            this.OnAdOpening(this, EventArgs.Empty);
+            OnAdOpening(this, EventArgs.Empty);
         }
 
-        public void onAdClosed()
+        void onAdClosed()
         {
-            this.OnAdClosed(this, EventArgs.Empty);
+            OnAdClosed(this, EventArgs.Empty);
         }
 
-        public void onAdLeftApplication()
+        void onAdLeftApplication()
         {
-            this.OnAdLeavingApplication(this, EventArgs.Empty);
+            OnAdLeavingApplication(this, EventArgs.Empty);
         }
 
         #endregion

@@ -1,12 +1,13 @@
 // Copyright 2014 Google Inc. All Rights Reserved.
 
-#import "GADURewardBasedVideoAd.h"
-
 @import CoreGraphics;
+@import Foundation;
+@import GoogleMobileAds;
 @import UIKit;
 
-#import "GADUPluginUtil.h"
 #import "UnityAppController.h"
+
+#import "GADURewardBasedVideoAd.h"
 
 @interface GADURewardBasedVideoAd () <GADRewardBasedVideoAdDelegate>
 @end
@@ -60,12 +61,10 @@
 
 - (void)rewardBasedVideoAd:(GADRewardBasedVideoAd *)rewardBasedVideoAd
     didFailToLoadWithError:(NSError *)error {
-  if (self.adFailedCallback) {
-    NSString *errorMsg = [NSString
-        stringWithFormat:@"Failed to receive ad with error: %@", [error localizedFailureReason]];
-    self.adFailedCallback(self.rewardBasedVideoAdClient,
-                          [errorMsg cStringUsingEncoding:NSUTF8StringEncoding]);
-  }
+  NSString *errorMsg = [NSString
+      stringWithFormat:@"Failed to receive ad with error: %@", [error localizedFailureReason]];
+  self.adFailedCallback(self.rewardBasedVideoAdClient,
+                        [errorMsg cStringUsingEncoding:NSUTF8StringEncoding]);
 }
 
 - (void)rewardBasedVideoAdDidOpen:(GADRewardBasedVideoAd *)rewardBasedVideoAd {

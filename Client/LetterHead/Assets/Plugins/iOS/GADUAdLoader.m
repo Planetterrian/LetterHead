@@ -2,9 +2,10 @@
 
 #import "GADUAdLoader.h"
 
+@import GoogleMobileAds;
+
 #import "GADUNativeCustomTemplateAd.h"
 #import "GADUObjectCache.h"
-#import "GADUPluginUtil.h"
 #import "UnityAppController.h"
 
 @interface GADUAdLoader () <GADAdLoaderDelegate, GADNativeCustomTemplateAdLoaderDelegate>
@@ -12,6 +13,10 @@
 @end
 
 @implementation GADUAdLoader
+
++ (UIViewController *)unityGLViewController {
+  return ((UnityAppController *)[UIApplication sharedApplication].delegate).rootViewController;
+}
 
 - (instancetype)initWithAdLoaderClientReference:(GADUTypeAdLoaderClientRef *)adLoaderClient
                                        adUnitID:(NSString *)adUnitID
@@ -21,7 +26,7 @@
   if (self) {
     _adLoaderClient = adLoaderClient;
     _adLoader = [[GADAdLoader alloc] initWithAdUnitID:adUnitID
-                                   rootViewController:[GADUPluginUtil unityGLViewController]
+                                   rootViewController:[GADUAdLoader unityGLViewController]
                                               adTypes:@[ kGADAdLoaderAdTypeNativeCustomTemplate ]
                                               options:nil];
     _adLoader.delegate = self;
@@ -56,11 +61,11 @@
     didReceiveNativeCustomTemplateAd:(GADNativeCustomTemplateAd *)nativeCustomTemplateAd {
   if (self.adReceivedCallback) {
     GADUObjectCache *cache = [GADUObjectCache sharedInstance];
-    GADUNativeCustomTemplateAd *internalNativeAd =
-        [[GADUNativeCustomTemplateAd alloc] initWithAd:nativeCustomTemplateAd];
-    [cache.references setObject:internalNativeAd forKey:[internalNativeAd gadu_referenceKey]];
+    [cache.references setObject:self forKey:[self gadu_referenceKey]];
     self.adReceivedCallback(
-        self.adLoaderClient, (__bridge GADUTypeNativeCustomTemplateAdRef)internalNativeAd,
+        self.adLoaderClient,
+        (__bridge GADUTypeNativeCustomTemplateAdRef)
+            [[GADUNativeCustomTemplateAd alloc] initWithAd:nativeCustomTemplateAd],
         [nativeCustomTemplateAd.templateID cStringUsingEncoding:NSUTF8StringEncoding]);
   }
 }

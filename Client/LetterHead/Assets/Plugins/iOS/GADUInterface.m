@@ -4,7 +4,6 @@
 #import "GADUBanner.h"
 #import "GADUInterstitial.h"
 #import "GADUNativeCustomTemplateAd.h"
-#import "GADUNativeExpressAd.h"
 #import "GADUObjectCache.h"
 #import "GADURequest.h"
 #import "GADURewardBasedVideoAd.h"
@@ -15,28 +14,13 @@
 static NSString *GADUStringFromUTF8String(const char *bytes) { return bytes ? @(bytes) : nil; }
 
 /// Returns a C string from a C array of UTF8-encoded bytes.
-static const char *cStringCopy(const char *string) {
+static char *cStringCopy(const char *string) {
   if (!string) {
     return NULL;
   }
   char *res = (char *)malloc(strlen(string) + 1);
   strcpy(res, string);
   return res;
-}
-
-/// Returns a C string from a C array of UTF8-encoded bytes.
-static const char **cStringArrayCopy(NSArray *array) {
-  if (array == nil) {
-    return nil;
-  }
-
-  const char **stringArray;
-
-  stringArray = malloc(array.count * sizeof(char *));
-  for (int i = 0; i < array.count; i++) {
-    stringArray[i] = cStringCopy([array[i] UTF8String]);
-  }
-  return stringArray;
 }
 
 /// Defines the native ad types.
@@ -76,14 +60,14 @@ GADUTypeBannerRef GADUCreateSmartBannerView(GADUTypeBannerClientRef *bannerClien
 }
 
 /// Creates a GADUInterstitial and returns its reference.
-GADUTypeInterstitialRef GADUCreateInterstitial(GADUTypeInterstitialClientRef *interstitialClient,
-                                               const char *adUnitID) {
+GADUTypeBannerRef GADUCreateInterstitial(GADUTypeInterstitialClientRef *interstitialClient,
+                                         const char *adUnitID) {
   GADUInterstitial *interstitial = [[GADUInterstitial alloc]
       initWithInterstitialClientReference:interstitialClient
                                  adUnitID:GADUStringFromUTF8String(adUnitID)];
   GADUObjectCache *cache = [GADUObjectCache sharedInstance];
   [cache.references setObject:interstitial forKey:[interstitial gadu_referenceKey]];
-  return (__bridge GADUTypeInterstitialRef)interstitial;
+  return (__bridge GADUTypeBannerRef)interstitial;
 }
 
 /// Creates a GADURewardBasedVideo and returns its reference.
@@ -170,39 +154,6 @@ void GADUSetRewardBasedVideoAdCallbacks(
   internalRewardBasedVideoAd.willLeaveCallback = willLeaveCallback;
 }
 
-/// Sets the native express callback methods to be invoked during native express ad events.
-void GADUSetNativeExpressAdCallbacks(
-    GADUTypeNativeExpressAdRef nativeExpressAd,
-    GADUNativeExpressAdViewDidReceiveAdCallback adReceivedCallback,
-    GADUNativeExpressAdViewDidFailToReceiveAdWithErrorCallback adFailedCallback,
-    GADUNativeExpressAdViewWillPresentScreenCallback willPresentScreenCallback,
-    GADUNativeExpressAdViewDidDismissScreenCallback didDismissScreenCallback,
-    GADUNativeExpressAdViewWillLeaveApplicationCallback willLeaveAppCallback) {
-  GADUNativeExpressAd *internalNativeExpressAd = (__bridge GADUNativeExpressAd *)nativeExpressAd;
-  internalNativeExpressAd.adReceivedCallback = adReceivedCallback;
-  internalNativeExpressAd.adFailedCallback = adFailedCallback;
-  internalNativeExpressAd.willPresentScreenCallback = willPresentScreenCallback;
-  internalNativeExpressAd.didDismissScreenCallback = didDismissScreenCallback;
-  internalNativeExpressAd.willLeaveAppCallback = willLeaveAppCallback;
-}
-
-/// Creates a GADNativeExpressAdView with the specified width, height, and position. Returns
-/// a reference to the GADUNativeExpressAdView.
-GADUTypeNativeExpressAdRef GADUCreateNativeExpressAdView(
-    GADUTypeNativeExpressAdClientRef *nativeExpressAdClient, const char *adUnitID, NSInteger width,
-    NSInteger height, GADAdPosition adPosition) {
-  GADUNativeExpressAd *nativeExpressAd = [[GADUNativeExpressAd alloc]
-      initWithNativeExpressAdClientReference:nativeExpressAdClient
-                                    adUnitID:GADUStringFromUTF8String(adUnitID)
-                                       width:width
-                                      height:height
-                                  adPosition:adPosition];
-
-  GADUObjectCache *cache = [GADUObjectCache sharedInstance];
-  [cache.references setObject:nativeExpressAd forKey:[nativeExpressAd gadu_referenceKey]];
-  return (__bridge GADUTypeNativeExpressAdRef)nativeExpressAd;
-}
-
 /// Sets the banner callback methods to be invoked during native ad events.
 void GADUSetAdLoaderCallbacks(
     GADUTypeAdLoaderRef adLoader,
@@ -229,24 +180,6 @@ void GADUShowBannerView(GADUTypeBannerRef banner) {
 void GADURemoveBannerView(GADUTypeBannerRef banner) {
   GADUBanner *internalBanner = (__bridge GADUBanner *)banner;
   [internalBanner removeBannerView];
-}
-
-/// Hides the GADNativeExpressAdView.
-void GADUHideNativeExpressAdView(GADUTypeNativeExpressAdRef nativeExpressAd) {
-  GADUNativeExpressAd *internalNativeExpressAd = (__bridge GADUNativeExpressAd *)nativeExpressAd;
-  [internalNativeExpressAd hideNativeExpressAdView];
-}
-
-/// Shows the GADNativeExpressAdView.
-void GADUShowNativeExpressAdView(GADUTypeBannerRef nativeExpressAd) {
-  GADUNativeExpressAd *internalNativeExpressAd = (__bridge GADUNativeExpressAd *)nativeExpressAd;
-  [internalNativeExpressAd showNativeExpressAdView];
-}
-
-/// Removes the GADNativeExpressAdView from the view hierarchy.
-void GADURemoveNativeExpressAdView(GADUTypeNativeExpressAdRef nativeExpressAd) {
-  GADUNativeExpressAd *internalNativeExpressAd = (__bridge GADUNativeExpressAd *)nativeExpressAd;
-  [internalNativeExpressAd removeNativeExpressAdView];
 }
 
 /// Returns YES if the GADInterstitial is ready to be shown.
@@ -352,14 +285,6 @@ void GADURequestRewardBasedVideoAd(GADUTypeRewardBasedVideoAdRef rewardBasedVide
                              withAdUnitID:GADUStringFromUTF8String(adUnitID)];
 }
 
-/// Makes a native express ad request.
-void GADURequestNativeExpressAd(GADUTypeNativeExpressAdRef nativeExpressAd,
-                                GADUTypeRequestRef request) {
-  GADUNativeExpressAd *internalNativeExpressAd = (__bridge GADUNativeExpressAd *)nativeExpressAd;
-  GADURequest *internalRequest = (__bridge GADURequest *)request;
-  [internalNativeExpressAd loadRequest:[internalRequest request]];
-}
-
 /// Makes a native ad request.
 void GADURequestNativeAd(GADUTypeAdLoaderRef adLoader, GADUTypeRequestRef request) {
   GADUAdLoader *internalAdLoader = (__bridge GADUAdLoader *)adLoader;
@@ -368,7 +293,7 @@ void GADURequestNativeAd(GADUTypeAdLoaderRef adLoader, GADUTypeRequestRef reques
 }
 
 /// Return the template ID of the native custom template ad.
-const char *GADUNativeCustomTemplateAdTemplateID(
+char *GADUNativeCustomTemplateAdTemplateID(
     GADUTypeNativeCustomTemplateAdRef nativeCustomTemplateAd) {
   GADUNativeCustomTemplateAd *internalNativeCustomTemplateAd =
       (__bridge GADUNativeCustomTemplateAd *)nativeCustomTemplateAd;
@@ -376,7 +301,7 @@ const char *GADUNativeCustomTemplateAdTemplateID(
 }
 
 /// Returns the image corresponding to the specifed key as a base64 encoded byte array.
-const char *GADUNativeCustomTemplateAdImageAsBytesForKey(
+char *GADUNativeCustomTemplateAdImageAsBytesForKey(
     GADUTypeNativeCustomTemplateAdRef nativeCustomTemplateAd, const char *key) {
   GADUNativeCustomTemplateAd *internalNativeCustomTemplateAd =
       (__bridge GADUNativeCustomTemplateAd *)nativeCustomTemplateAd;
@@ -387,7 +312,7 @@ const char *GADUNativeCustomTemplateAdImageAsBytesForKey(
 }
 
 /// Returns the string corresponding to the specifed key.
-const char *GADUNativeCustomTemplateAdStringForKey(
+char *GADUNativeCustomTemplateAdStringForKey(
     GADUTypeNativeCustomTemplateAdRef nativeCustomTemplateAd, const char *key) {
   GADUNativeCustomTemplateAd *internalNativeCustomTemplateAd =
       (__bridge GADUNativeCustomTemplateAd *)nativeCustomTemplateAd;
@@ -414,20 +339,16 @@ void GADUNativeCustomTemplateAdPerformClickOnAssetWithKey(
 }
 
 /// Returns the list of available asset keys for a custom native template ad.
-const char **GADUNativeCustomTemplateAdAvailableAssetKeys(
+char *GADUNativeCustomTemplateAdAvailableAssetKeys(
     GADUTypeNativeCustomTemplateAdRef nativeCustomTemplateAd) {
   GADUNativeCustomTemplateAd *internalNativeCustomTemplateAd =
       (__bridge GADUNativeCustomTemplateAd *)nativeCustomTemplateAd;
-  NSArray *availableAssetKeys = [internalNativeCustomTemplateAd availableAssetKeys];
-  return cStringArrayCopy(availableAssetKeys);
-}
-
-/// Returns the number of available asset keys for a custom native template ad.
-int GADUNativeCustomTemplateAdNumberOfAvailableAssetKeys(
-    GADUTypeNativeCustomTemplateAdRef nativeCustomTemplateAd) {
-  GADUNativeCustomTemplateAd *internalNativeCustomTemplateAd =
-      (__bridge GADUNativeCustomTemplateAd *)nativeCustomTemplateAd;
-  return (int)[internalNativeCustomTemplateAd availableAssetKeys].count;
+  NSArray *assetKeys = [internalNativeCustomTemplateAd availableAssetKeys];
+  NSDictionary *assetNameDict = @{ @"assets" : assetKeys };
+  NSData *jsonArray =
+      [NSJSONSerialization dataWithJSONObject:assetNameDict options:kNilOptions error:nil];
+  NSString *base64String = [jsonArray base64Encoding];
+  return cStringCopy([base64String UTF8String]);
 }
 
 /// Sets the Unity native custom template ad client reference on GADUNativeCustomTemplateAd.

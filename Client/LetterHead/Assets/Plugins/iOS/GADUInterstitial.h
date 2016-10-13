@@ -1,9 +1,11 @@
 // Copyright 2014 Google Inc. All Rights Reserved.
 
-@import Foundation;
-@import GoogleMobileAds;
+#import <Foundation/Foundation.h>
 
 #import "GADUTypes.h"
+
+@class GADInterstitial;
+@class GADRequest;
 
 /// A wrapper around GADInterstitial. Includes the ability to create GADInterstitial objects, load
 /// them with ads, show them, and listen for ad events.
