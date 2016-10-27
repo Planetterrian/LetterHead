@@ -75,7 +75,7 @@ public class ClientManager : Singleton<ClientManager>
             PersistManager.Instance.ClearWord = myUserInfo.Settings.Substring(2, 1) == "1";
             PersistManager.Instance.NotificationsEnabled = myUserInfo.Settings.Substring(3, 1) == "1";
 
-            if (myUserInfo.IsPremium)
+            if (IsPremium())
                 AdManager.Instance.DisableAds();
             else if(AdManager.Instance.ShouldShowBanner())
             {
@@ -115,5 +115,10 @@ public class ClientManager : Singleton<ClientManager>
     {
         PlayerPrefs.SetString("sessId", "");
         myUserInfo = null;
+    }
+
+    public bool IsPremium()
+    {
+        return PlayerPrefs.GetInt("PurchaseMade", 0) == 1;
     }
 }

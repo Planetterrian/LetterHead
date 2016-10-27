@@ -307,7 +307,7 @@ namespace LetterHeadServer.Controllers
                     currentUser.AddPowerup(Powerup.Type.StealTime, 15);
                     currentUser.AddPowerup(Powerup.Type.StealLetter, 15);
                     break;
-                case "com.we3workshop.lhead.premium2":
+                case "com.we3workshop.lhead.premium3":
                     currentUser.AddPowerup(Powerup.Type.DoOver, 2);
                     currentUser.AddPowerup(Powerup.Type.Shield, 2);
                     currentUser.AddPowerup(Powerup.Type.StealTime, 2);

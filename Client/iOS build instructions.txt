@@ -1,0 +1,12 @@
+Build project
+Open in XCode
+Drag the google ads framework into the frameworks folder (copy if necessary)
+Select development team
+Ensure version number is correct
+Enable push notifications
+Enable notifications background mode
+Disable bitcode under build settings
+Delete the frameworks/cocoapods file
+Add the lines from "admob plist extras.txt" to the plist
+Archive
+

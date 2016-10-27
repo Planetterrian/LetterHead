@@ -50,7 +50,7 @@ public class AdManager : Singleton<AdManager>
         if (ClientManager.Instance.myUserInfo == null)
             return true;
 
-        return !ClientManager.Instance.myUserInfo.IsPremium;
+        return !ClientManager.Instance.IsPremium();
     }
 
     // Use this for initialization
