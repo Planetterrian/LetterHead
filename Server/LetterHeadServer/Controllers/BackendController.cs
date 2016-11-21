@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Net;
+using System.Net.Http;
 using System.Web;
+using System.Web.Http;
 using System.Web.Mvc;
 using Facebook;
 using Hangfire;
@@ -13,6 +16,21 @@ namespace LetterHeadServer.Controllers
 {
     public class BackendController : BaseLetterHeadController
     {
+        public ActionResult Index(string password)
+        {
+            if (password != "l3tterHeAd000")
+            {
+                Response.StatusCode = 401;
+                Response.End();
+                return null;
+            }
+
+            ViewBag.UserCount = db.Users.Count();
+            var yesterday = DateTime.Now.AddDays(-1);
+            ViewBag.Last24 = db.Users.Where(u => u.SignupDate > yesterday).OrderByDescending(u => u.SignupDate).ToList();
+            return View();
+        }
+
         public string StartJobs()
         {
             TimeZoneInfo easternZone = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");

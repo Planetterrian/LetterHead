@@ -295,10 +295,10 @@
     <Content Include="Views\User\RegisterEmailWeb.cshtml" />
     <Content Include="Views\User\NewPassword.cshtml" />
     <Content Include="Views\User\NewPasswordSubmit.cshtml" />
+    <Content Include="Views\Backend\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Certificates\" />
-    <Folder Include="Views\Backend\" />
     <Folder Include="Views\BaseLetterHead\" />
     <Folder Include="Views\Match\" />
   </ItemGroup>

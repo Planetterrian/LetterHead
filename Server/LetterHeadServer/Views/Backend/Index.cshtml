@@ -1,0 +1,24 @@
+﻿@using LetterHeadServer.Models
+@model dynamic
+
+@{
+    ViewBag.Title = "User Admin";
+}
+
+<h2>User Admin</h2>
+<p><b>User Count:</b> @ViewBag.UserCount</p>
+<p><b>Recent signups:</b>
+</p>
+<table width="90%">
+    <tr>
+        <th>Id</th><th>Date</th><th>Match Count</th><th>Email</th><th>Facebook Id</th>
+    </tr>
+    @foreach (var signupO in ViewBag.Last24)
+    {
+        var signup = (User) signupO;
+        var games = signup.Matches;
+        <tr>
+            <td>@signup.Id</td><td>@signup.SignupDate.ToLongDateString()</td><td>@games.Count()</td><td>@signup.Email</td><td>@signup.FacebookId</td>
+        </tr>
+    }
+</table>
