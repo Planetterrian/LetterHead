@@ -31,6 +31,12 @@ public class LoginScene : GuiScene
 
     }
 
+    public class LoginResult
+    {
+        public string SessionId;
+        public int MatchCount;
+    }
+
     private void FacebookLoginCallback(ILoginResult result)
     {
         if (result.Cancelled)
@@ -47,13 +53,13 @@ public class LoginScene : GuiScene
 
         DialogWindowTM.Instance.Show("Facebook", "We are processing your login... Please wait.", () => { }, () => { }, "");
 
-        Srv.Instance.POST("User/FacebookLogin", new Dictionary<string, string>() {{"token", result.AccessToken.TokenString}}, (s) =>
+        Srv.Instance.POST("User/FacebookLogin", new Dictionary<string, string>() {{"token", result.AccessToken.TokenString}, { "version", "2"} }, (s) =>
         {
-            var sessionId = JsonConvert.DeserializeObject<string>(s);
+            var facebookLoginResult = JsonConvert.DeserializeObject<LoginResult>(s);
             AchievementManager.Instance.Set("facebook");
-            ClientManager.Instance.SetSessionId(sessionId, true, b =>
+            ClientManager.Instance.SetSessionId(facebookLoginResult.SessionId, true, b =>
             {
-                MenuGui.Instance.LoadDashboard();
+                MenuGui.Instance.LoadDashboard(facebookLoginResult.MatchCount == 0 ? PersistManager.NewGamePage : PersistManager.DashboardPage);
                 DialogWindowTM.Instance.Hide();
             });
         }, s =>

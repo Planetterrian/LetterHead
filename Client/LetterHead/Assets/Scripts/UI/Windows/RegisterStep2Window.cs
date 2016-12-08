@@ -49,7 +49,7 @@ public class RegisterStep2Window : MonoBehaviour
                                                       if (s == "1")
                                                       {
                                                           GetComponent<WindowController>().Hide();
-                                                          MenuGui.Instance.LoadDashboard();
+                                                          MenuGui.Instance.LoadDashboard(PersistManager.NewGamePage);
                                                           ClientManager.Instance.RefreshMyInfo(false);
                                                       }
                                                   }, s =>

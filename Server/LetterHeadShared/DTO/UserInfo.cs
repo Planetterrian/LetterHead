@@ -8,6 +8,7 @@ namespace LetterHeadShared.DTO
     public class UserInfo
     {
         public int Id;
+        public int MatchCount;
         public string Username;
         public string AvatarUrl;
         public bool IsPremium;

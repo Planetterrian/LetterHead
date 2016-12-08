@@ -14,6 +14,14 @@ public class PersistManager : Singleton<PersistManager>
     [HideInInspector]
     public int initialDashPage = 1;
 
+    public const int DashboardPage = 1;
+    public const int NewGamePage = 2;
+
+    public void SetInitialDashPage(int page)
+    {
+        initialDashPage = page;
+    }
+
     public bool MusicEnabled
     {
         get { return PlayerPrefs.GetInt("MusicEnabled", 1) == 1; }

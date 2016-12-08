@@ -24,8 +24,6 @@ public class EmailLoginWindow : MonoBehaviour
 
     public void OnEmailSubmit()
     {
-        Debug.Log("ONS");
-
         TimerManager.AddEvent(0.6f, () => passwordInput.Select());
     }
 
@@ -65,12 +63,13 @@ public class EmailLoginWindow : MonoBehaviour
 
         Srv.Instance.POST("User/LoginEmail", new Dictionary<string, string>()
                                         {
-                                            {"Email", email}, {"Password", password}
+                                            {"Email", email}, {"Password", password}, {"version", "2"}
                                         }, s =>
                                         {
 
-                                            var sessionId = JsonConvert.DeserializeObject<string>(s);
-                                            ClientManager.Instance.SetSessionId(sessionId, true, b =>
+                                            var loginResult = JsonConvert.DeserializeObject<LoginScene.LoginResult>(s);
+
+                                            ClientManager.Instance.SetSessionId(loginResult.SessionId, true, b =>
                                             {
                                                 DialogWindowTM.Instance.Hide();
                                                 GetComponent<WindowController>().Hide();
@@ -81,9 +80,9 @@ public class EmailLoginWindow : MonoBehaviour
                                                 }
                                                 else
                                                 {
-                                                    MenuGui.Instance.LoadDashboard();
+                                                    MenuGui.Instance.LoadDashboard(loginResult.MatchCount == 0 ? PersistManager.NewGamePage : PersistManager.DashboardPage);
                                                 }
-                                                
+
                                             });
                                         }, s =>
                                         {

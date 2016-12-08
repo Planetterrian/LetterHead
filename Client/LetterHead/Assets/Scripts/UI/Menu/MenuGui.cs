@@ -62,7 +62,7 @@ public class MenuGui : Singleton<MenuGui>
                     }
                     else
                     {
-                        LoadDashboard();
+                        MenuGui.Instance.LoadDashboard(ClientManager.Instance.myUserInfo.MatchCount == 0 ? PersistManager.NewGamePage : PersistManager.DashboardPage);
                     }
                 }
                 else
@@ -104,8 +104,9 @@ public class MenuGui : Singleton<MenuGui>
         sceneManager.SetGuiScene(loginScene);
     }
 
-    public void LoadDashboard()
+    public void LoadDashboard(int initialPage)
     {
+        PersistManager.Instance.SetInitialDashPage(initialPage);
         sceneManager.SetGuiScene(dashboardScene);
     }
 

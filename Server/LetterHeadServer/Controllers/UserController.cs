@@ -189,7 +189,7 @@ namespace LetterHeadServer.Controllers
             return View(account);
         }
 
-        public ActionResult FacebookLogin(string token)
+        public ActionResult FacebookLogin(string token, int version = 1)
         {
             var info = GetFacebookInfo(token);
             if (info.error != null)
@@ -210,7 +210,18 @@ namespace LetterHeadServer.Controllers
 
             db.SaveChanges();
 
-            return Json(session.SessionId, JsonRequestBehavior.AllowGet);
+            if (version == 1)
+            {
+                return Json(session.SessionId, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(new
+                {
+                    SessionId = session.SessionId,
+                    MatchCount = db.Matches.Count(m => m.Users.Any(u => u.Id == user.Id))
+                });
+            }
         }
 
         private static dynamic GetFacebookInfo(string token)
@@ -449,7 +460,7 @@ namespace LetterHeadServer.Controllers
             return Json(match?.DTO(true));
         }
 
-        public ActionResult LoginEmail([Bind(Exclude = "Id")] UserRegistrationModel model)
+        public ActionResult LoginEmail([Bind(Exclude = "Id")] UserRegistrationModel model, int version = 1)
         {
             var user = UserManager.LoginUserWithEmail(db, model);
 
@@ -461,7 +472,18 @@ namespace LetterHeadServer.Controllers
             var session = user.GenerateNewSession();
             db.SaveChanges();
 
-            return Json(session.SessionId, JsonRequestBehavior.AllowGet);
+            if (version == 1)
+            {
+                return Json(session.SessionId, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(new
+                {
+                    SessionId = session.SessionId,
+                    MatchCount = db.Matches.Count(m => m.Users.Any(u => u.Id == user.Id))
+                });
+            }
         }
 
 
@@ -505,6 +527,10 @@ namespace LetterHeadServer.Controllers
 
             var userInfo = currentUser.DTO();
             userInfo.Settings = (currentUser.Settings_Sound ? "1" : "0") + (currentUser.Settings_Music ? "1" : "0") + (currentUser.Settings_ClearWords ? "1" : "0") + (currentUser.Settings_Notifications ? "1" : "0");
+
+            if (isFirstLoad)
+                userInfo.MatchCount = db.Matches.Count(m => m.Users.Any(u => u.Id == currentUser.Id));
+
             return Json(userInfo);
         }
 
