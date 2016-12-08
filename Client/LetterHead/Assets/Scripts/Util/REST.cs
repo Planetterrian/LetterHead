@@ -56,7 +56,7 @@ public class REST : MonoBehaviour
         {
             var results = www.text;
 
-            OnResults(results, onComplete, onError);
+            OnResults(results, onComplete, onError, www.url);
         }
         else
         {
@@ -68,7 +68,7 @@ public class REST : MonoBehaviour
         }
     }
 
-    protected virtual void OnResults(string results, Action<string> onComplete, Action<string> onError)
+    protected virtual void OnResults(string results, Action<string> onComplete, Action<string> onError, string url)
     {
         if (onComplete != null)
             onComplete(results);

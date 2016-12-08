@@ -53,10 +53,10 @@ public class Srv : REST
         return null;
     }
 
-    protected override void OnResults(string results, Action<string> onComplete, Action<string> onError)
+    protected override void OnResults(string results, Action<string> onComplete, Action<string> onError, string url)
     {
         if(Application.isEditor)
-            Debug.Log(results);
+            Debug.Log(url + ": " + results);
 
         try
         {
@@ -73,7 +73,7 @@ public class Srv : REST
             // ignored
         }
 
-        base.OnResults(results, onComplete, onError);
+        base.OnResults(results, onComplete, onError, url);
     }
 
 }

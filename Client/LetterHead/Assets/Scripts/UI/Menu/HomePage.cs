@@ -52,7 +52,12 @@ public class HomePage : Page
         }
     }
 
-    public void RefreshMatches()
+    public bool AreMatchesRefreshing()
+    {
+        return matchesRefreshing;
+    }
+
+    public void RefreshMatches(Action refreshCallback = null)
     {
         if(matchesRefreshing)
             return;
@@ -85,6 +90,10 @@ public class HomePage : Page
             clearAllButton.SetActive(completedMatches.Count > 0);
 
             matchesRefreshing = false;
+
+            if (refreshCallback != null)
+                refreshCallback();
+
         }, s =>
         {
             matchesRefreshing = false;
@@ -270,9 +279,22 @@ public class HomePage : Page
     {
         DialogWindowTM.Instance.Show("Clear Matches", "Are you sure you want to clear all completed matches?", () =>
         {
+            DialogWindowTM.Instance.Show("Clear Matches", "Clearing matches...", () => { },
+                () => { }, "");
+
             Srv.Instance.POST("Match/ClearAll", null, s =>
             {
-                RefreshMatches();
+                if (AreMatchesRefreshing())
+                {
+                    DialogWindowTM.Instance.Hide();
+                }
+                else
+                {
+                    RefreshMatches(() =>
+                    {
+                        DialogWindowTM.Instance.Hide();
+                    });
+                }
             });
         }, () => { });
 
