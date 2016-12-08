@@ -75,7 +75,37 @@ namespace LetterHeadServer.Controllers
             return View();
         }
 
+        public ActionResult MatchStatistics()
+        {
+            var filterUserid = 2;
 
+            if (!IsAuthenticated())
+            {
+                return RedirectToAction("Login");
+            }
+
+            var solo = db.Matches.Where(m => m.Users.Count == 1 && m.DailyGame == null && !m.Users.Any(u => u.Id == filterUserid)).ToList();
+            var daily = db.Matches.Where(m => m.DailyGame != null && !m.Users.Any(u => u.Id == filterUserid)).ToList();
+            var match = db.Matches.Where(m => m.Users.Count == 2 && !m.Users.Any(u => u.Id == filterUserid)).ToList();
+
+            ViewBag.solo_total = solo.Count();
+            ViewBag.daily_total = daily.Count();
+            ViewBag.match_total = match.Count();
+
+
+            ViewBag.solo_completed = solo.Count(m => m.CurrentState == LetterHeadShared.DTO.Match.MatchState.Ended && m.Resigner == null && m.CurrentRoundNumber == 8);
+            ViewBag.daily_completed = daily.Count(m => m.CurrentState == LetterHeadShared.DTO.Match.MatchState.Ended && m.Resigner == null && m.CurrentRoundNumber == 8);
+            ViewBag.match_completed = match.Count(m => m.CurrentState == LetterHeadShared.DTO.Match.MatchState.Ended && m.Resigner == null && m.CurrentRoundNumber == 8);
+
+            ViewBag.solo_round1 = solo.Count(m => m.CurrentRoundNumber == 0);
+            ViewBag.daily_round1 = daily.Count(m => m.CurrentRoundNumber == 0);
+            ViewBag.match_round1 = match.Count(m => m.CurrentRoundNumber == 0);
+
+            ViewBag.totalUsers = db.Users.Count();
+            ViewBag.zeroMatchUsers = db.Users.Count(u => u.Matches.Count == 0);
+
+            return View();
+        }
 
         public ActionResult Login()
         {

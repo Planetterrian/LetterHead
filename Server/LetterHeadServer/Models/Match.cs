@@ -277,8 +277,7 @@ namespace LetterHeadServer.Models
 
         public void RandomizeUsers()
         {
-            TurnOrderUserIds.AddRange(Users.Select(u => u.Id));
-            TurnOrderUserIds = TurnOrderUserIds.OrderBy(u => Guid.NewGuid()).ToList();
+            TurnOrderUserIds.AddRange(Users.Select(u => u.Id).Reverse());
             CurrentUserTurn = Users.First(u => u.Id == TurnOrderUserIds[0]);
         }
 

@@ -1,0 +1,34 @@
+﻿@model dynamic
+
+@{
+    ViewBag.Title = "Match Stats";
+}
+
+<h2>Match Statistics</h2>
+
+<table width="50%">
+    <tr>
+        <th>Type</th><th>Total</th><th>Completed</th><th>Round 1 Only</th>
+    </tr>
+    <tr>
+        <td>Solo</td>
+        <td>@ViewBag.solo_total</td>
+        <td>@ViewBag.solo_completed (@Math.Round(((ViewBag.solo_completed/(float) ViewBag.solo_total)*100), 2)%)</td>
+        <td>@ViewBag.solo_round1 (@Math.Round(((ViewBag.solo_round1/(float) ViewBag.solo_total)*100), 2)%)</td>
+    </tr>
+    <tr>
+        <td>Daily</td>
+        <td>@ViewBag.daily_total</td>
+        <td>@ViewBag.daily_completed (@Math.Round(((ViewBag.daily_completed/(float) ViewBag.daily_total)*100), 2)%)</td>
+        <td>@ViewBag.daily_round1 (@Math.Round(((ViewBag.daily_round1/(float) ViewBag.daily_total)*100), 2)%)</td>
+    </tr>
+    <tr>
+        <td>Versus</td>
+        <td>@ViewBag.match_total</td>
+        <td>@ViewBag.match_completed (@Math.Round(((ViewBag.match_completed/(float) ViewBag.match_total)*100), 2)%)</td>
+        <td>@ViewBag.match_round1 (@Math.Round(((ViewBag.match_round1/(float) ViewBag.match_total)*100), 2)%)</td>
+    </tr>
+</table>
+<br/>
+<b>Total Users:</b> @ViewBag.totalUsers<br/>
+<b>Zero Match Users:</b> @ViewBag.zeroMatchUsers (@Math.Round(((ViewBag.zeroMatchUsers / (float)ViewBag.totalUsers) * 100), 2)%)
