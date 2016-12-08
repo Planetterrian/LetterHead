@@ -41,6 +41,8 @@ namespace LetterHeadServer.Models
         public DateTime SignupDate { get; set; }
         public DateTime? LastFreePowerup { get; set; }
         public int HighScoreMatchId { get; set; }
+        public int NotificationBadgeCount { get; set; }
+
 
         public int Stat_GamesPlayedNoResigner { get; set; }
         public int Stat_GamesWon { get; set; }

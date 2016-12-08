@@ -77,7 +77,7 @@ namespace LetterHeadServer.Classes
 "\t\t\t\"body\": \"" + message.content.Replace("\"", "\\\"") + "\",\n" +
 "\t\t\t\"action-loc-key\": \"VIEW\"\n" +
 "\t\t},\n" +
-"\t\t\"badge\": 1\n";
+"\t\t\"badge\": " + user.NotificationBadgeCount + "\n";
 
             if (message.type == NotificationDetails.Type.Invite)
                 payload += "\t\t,\"sound\": \"DoorKnock.wav\"\n";

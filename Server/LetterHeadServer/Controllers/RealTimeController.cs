@@ -60,6 +60,9 @@ namespace LetterHeadServer.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.Forbidden, "Can't access that match");
             }
 
+            currentUser.NotificationBadgeCount = 0;
+            db.SaveChanges();
+
             HttpContext.Current.AcceptWebSocketRequest(ProcessSocket);
             return Request.CreateResponse(HttpStatusCode.SwitchingProtocols);
         }

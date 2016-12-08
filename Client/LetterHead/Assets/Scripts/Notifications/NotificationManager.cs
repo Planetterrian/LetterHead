@@ -18,6 +18,7 @@ public class NotificationManager : Singleton<NotificationManager>
         if (state)
         {
             NPBinding.NotificationService.ClearNotifications();
+            Srv.Instance.POST("User/ResetNotificationCount", null, s => { });
         }
     }
 

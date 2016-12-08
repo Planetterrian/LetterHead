@@ -233,6 +233,9 @@ namespace LetterHeadServer.Controllers
                 canDoDaily = false;
             }
 
+            currentUser.NotificationBadgeCount = 0;
+            db.SaveChanges();
+
             return Json(new { Matches = matchDTOs, Invites = currentUser.Invites.Select(i => i.DTO()), CanDoDaily = canDoDaily } );
         }
 

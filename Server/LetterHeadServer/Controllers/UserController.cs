@@ -265,6 +265,14 @@ namespace LetterHeadServer.Controllers
         }
 
         [AuthenticationFilter()]
+        public ActionResult ResetNotificationCount()
+        {
+            currentUser.NotificationBadgeCount = 0;
+            db.SaveChanges();
+            return Okay();
+        }
+
+        [AuthenticationFilter()]
         public ActionResult IapPurchase(string productId, string receipt)
         {
             productId = productId.ToLower();
@@ -355,7 +363,7 @@ namespace LetterHeadServer.Controllers
 
             var badWords = Startup.BadWords;
             var lowerName = username.ToLower();
-            if (badWords.Any(lowerName.Contains))
+            if (badWords.Contains(lowerName))
             {
                 actionResult = Error("That Player Name contains inappropriate words.");
                 return true;

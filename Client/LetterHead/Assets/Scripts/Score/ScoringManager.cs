@@ -168,11 +168,13 @@ public class ScoringManager : Singleton<ScoringManager>, IGameHandler
         return category.GetScore(Words(), UniqueLetterCount(), ExistingCategoryScores());
     }
 
-    private List<int> ExistingCategoryScores()
+    public List<int> ExistingCategoryScores(bool mine = true)
     {
         var scores = new int[categoryManager.Categories.Count];
 
-        var rounds = GameManager.Instance.MyRounds().Where(m => m.Number <= GameManager.Instance.MatchDetails.CurrentRoundNumber);
+        var rawRounds = mine ? GameManager.Instance.MyRounds() : GameManager.Instance.OpponentRounds();
+
+        var rounds = rawRounds.Where(m => m.Number <= GameManager.Instance.MatchDetails.CurrentRoundNumber);
         foreach (var round in rounds)
         {
             if (string.IsNullOrEmpty(round.CategoryName))

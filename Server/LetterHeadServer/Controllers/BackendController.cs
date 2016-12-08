@@ -234,6 +234,9 @@ namespace LetterHeadServer.Controllers
             if (user == null)
                 return;
 
+            user.NotificationBadgeCount++;
+            db.SaveChanges();
+
             var sender = new NotificationSender();
 
             if (!string.IsNullOrEmpty(user.AndroidNotificationToken))

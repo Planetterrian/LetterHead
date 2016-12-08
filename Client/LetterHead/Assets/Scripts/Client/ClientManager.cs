@@ -22,11 +22,19 @@ public class ClientManager : Singleton<ClientManager>
     public bool CanDoDaily { get; set; }
     public bool IsNewLogin { get; set; }
 
+    public string editorSessionId;
+
     protected override void Awake()
     {
         base.Awake();
 
         SessionId = PlayerPrefs.GetString("sessId", "");
+
+        if (Application.isEditor && !string.IsNullOrEmpty(editorSessionId))
+        {
+            SessionId = editorSessionId;
+            Debug.Log("USING EDITOR SESSION ID");
+        }
 
 /*
 
