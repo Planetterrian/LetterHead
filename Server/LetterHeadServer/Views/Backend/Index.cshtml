@@ -6,8 +6,41 @@
 }
 
 <h2>User Admin</h2>
-<p><b>User Count:</b> @ViewBag.UserCount</p>
-<p><b>Recent signups:</b>
+<table width="90%">
+    <tr>
+        <td>
+            <p><b>Total User Count:</b> @ViewBag.UserCount</p>
+        </td>
+        <td>
+            <p><b>Active in Last 48 Hours:</b> @ViewBag.last2ActiveCount</p>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <p><b>Active in Last 7 Days:</b> @ViewBag.last7ActiveCount</p>
+        </td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>
+            <p><b>Today's Daily Games</b> @ViewBag.newDaily</p>
+        </td>
+        <td>
+            <p><b>Today's Solo Games</b> @ViewBag.newSolo</p>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <p><b>Today's Vs. Games</b> @ViewBag.newMatches</p>
+        </td>
+        <td></td>
+    </tr>
+
+</table>
+<p>
+    
+</p>
+<p><h3>Recent signups:</h3>
 </p>
 <table width="90%">
     <tr>

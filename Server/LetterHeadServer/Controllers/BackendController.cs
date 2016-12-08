@@ -11,24 +11,86 @@ using Facebook;
 using Hangfire;
 using LetterHeadServer.Classes;
 using LetterHeadServer.Models;
+using MatchRound = LetterHeadShared.DTO.MatchRound;
 
 namespace LetterHeadServer.Controllers
 {
     public class BackendController : BaseLetterHeadController
     {
-        public ActionResult Index(string password)
+        private bool IsAuthenticated()
         {
-            if (password != "l3tterHeAd000")
+            return HttpContext.Session["authenticated"] != null && (bool)HttpContext.Session["authenticated"] == true;
+        }
+
+        public ActionResult Index()
+        {
+            if (!IsAuthenticated())
             {
-                Response.StatusCode = 401;
-                Response.End();
-                return null;
+                return RedirectToAction("Login");
             }
 
             ViewBag.UserCount = db.Users.Count();
             var yesterday = DateTime.Now.AddDays(-1);
             ViewBag.Last24 = db.Users.Where(u => u.SignupDate > yesterday).OrderByDescending(u => u.SignupDate).ToList();
+
+            var last2ActiveCount = 0;
+            var last7ActiveCount = 0;
+
+            var users = db.Users.ToList();
+            foreach (var user in users)
+            {
+                var lastRound = db.MatchRounds.Where(m => (m.CurrentState == MatchRound.RoundState.Active || m.CurrentState == MatchRound.RoundState.Ended) &&
+                                                          m.User.Id == user.Id).OrderByDescending(o => o.StartedOn).FirstOrDefault();
+
+                if (lastRound != null && lastRound.StartedOn.HasValue)
+                {
+                    if((DateTime.Now - lastRound.StartedOn.Value).TotalDays <= 2)
+                    {
+                        last2ActiveCount++;
+                    }
+
+                    if ((DateTime.Now - lastRound.StartedOn.Value).TotalDays <= 7)
+                    {
+                        last7ActiveCount++;
+                    }
+                }
+            }
+
+            ViewBag.last2ActiveCount = last2ActiveCount;
+            ViewBag.last7ActiveCount = last7ActiveCount;
+
+            var curDaily = DailyGame.Current(db);
+            if (curDaily == null)
+            {
+                ViewBag.newDaily = 0;
+            }
+            else
+            {
+                ViewBag.newDaily = db.Matches.Count(m => m.DailyGame != null && m.DailyGame.Id == curDaily.Id);
+            }
+
+            ViewBag.newSolo = db.Matches.Count(m => m.CreatedOn > yesterday && m.DailyGame == null && m.Users.Count == 1);
+            ViewBag.newMatches = db.Matches.Count(m => m.CreatedOn > yesterday && m.DailyGame == null && m.Users.Count == 2);
+
             return View();
+        }
+
+
+
+        public ActionResult Login()
+        {
+            return View();
+        }
+
+        public ActionResult LoginPost(string password)
+        {
+            if (password == "l3tterHeAd000")
+            {
+                HttpContext.Session["authenticated"] = true;
+                return RedirectToAction("Index");
+            }
+
+            return RedirectToAction("Login");
         }
 
         public string StartJobs()

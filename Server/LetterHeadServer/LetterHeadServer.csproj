@@ -296,6 +296,7 @@
     <Content Include="Views\User\NewPassword.cshtml" />
     <Content Include="Views\User\NewPasswordSubmit.cshtml" />
     <Content Include="Views\Backend\Index.cshtml" />
+    <Content Include="Views\Backend\Login.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Certificates\" />
