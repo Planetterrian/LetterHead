@@ -37,7 +37,7 @@ namespace VoxelBusters.NativePlugins
 		private void Start ()
 		{
 			// Ask for review
-			AskForReview();
+			//AskForReview();
 		}
 
 		private void OnApplicationPause (bool _pauseStatus)
@@ -86,6 +86,16 @@ namespace VoxelBusters.NativePlugins
 			// Show rate me 
 			ShowRateMeDialog();
 		}
+
+	    public void AskForReviewAttempt()
+	    {
+            // Dont show if user has rated this version or else if user has asked not to show
+            if (!CanAskForReview())
+                return;
+
+            // Show rate me 
+            ShowRateMeDialog();
+        }
 
 		/// <summary>
 		/// Show review prompt now irrespective of settings.

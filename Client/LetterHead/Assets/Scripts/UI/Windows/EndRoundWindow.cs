@@ -296,6 +296,7 @@ public class EndRoundWindow : WindowController
         {
             if (GameManager.Instance.MatchDetails.CurrentState == Match.MatchState.Ended)
             {
+                DashboardScene.showReview = true;
                 PersistManager.Instance.LoadMenu();
             }
             else
@@ -318,6 +319,7 @@ public class EndRoundWindow : WindowController
             }
             else
             {
+                DashboardScene.showReview = true;
                 PersistManager.Instance.LoadMenu();
             }
         }

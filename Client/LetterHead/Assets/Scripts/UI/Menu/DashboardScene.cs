@@ -9,6 +9,8 @@ public class DashboardScene : GuiScene
     public PagedRect pagination;
     public HomePage homePage;
 
+    public static bool showReview;
+
     public override void OnBeginShow()
     {
         base.OnBeginShow();
@@ -17,5 +19,11 @@ public class DashboardScene : GuiScene
         pagination.SetCurrentPage(PersistManager.Instance.initialDashPage, true);
 
         homePage.ClearMatches();
+
+        if (showReview)
+        {
+            showReview = false;
+            NPBinding.Utility.RateMyApp.AskForReviewAttempt();
+        }
     }
 }
