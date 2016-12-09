@@ -57,13 +57,24 @@ public class HomePage : Page
         return matchesRefreshing;
     }
 
-    public void RefreshMatches(Action refreshCallback = null)
+    // For events to use
+    public void RefreshMatches(bool showCog = false)
+    {
+        RefreshMatches(null, showCog);
+    }
+
+    public void RefreshMatches(Action refreshCallback, bool showCog = false)
     {
         if(matchesRefreshing)
             return;
 
         if(!ClientManager.Instance.PlayerDataLoaded())
             return;
+
+        if (showCog)
+        {
+            MenuGui.Instance.loadingEffect.loading = true;
+        }
 
         matchesRefreshing = true;
         lastPoll = Time.time;
@@ -91,12 +102,22 @@ public class HomePage : Page
 
             matchesRefreshing = false;
 
+            if (showCog)
+            {
+                MenuGui.Instance.loadingEffect.loading = false;
+            }
+
             if (refreshCallback != null)
                 refreshCallback();
 
         }, s =>
         {
             matchesRefreshing = false;
+
+            if (showCog)
+            {
+                MenuGui.Instance.loadingEffect.loading = false;
+            }
         });
     }
 

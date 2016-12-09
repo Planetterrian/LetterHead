@@ -20,6 +20,9 @@ public class SwipeDetector : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     public SwipeEvent OnHorizontalSwipe;
     public SwipeEvent OnVerticalSwipe;
 
+    public UnityEvent OnDragEndEvent;
+    public UnityEvent OnDragStartEvent;
+
     public ScrollRect scrollRect;
 
     public void OnDrag(PointerEventData eventData)
@@ -50,7 +53,7 @@ public class SwipeDetector : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         dragOffset = Vector2.zero;
         dragStartPos = eventData.position;
         eventData.eligibleForClick = false;
-
+        OnDragStartEvent.Invoke();
     }
 
     public void OnEndDrag(PointerEventData eventData)
@@ -70,5 +73,6 @@ public class SwipeDetector : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         }
 
         eventData.eligibleForClick = false;
+        OnDragEndEvent.Invoke();
     }
 }

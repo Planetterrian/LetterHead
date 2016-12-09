@@ -5,6 +5,7 @@ using LetterHeadShared.DTO;
 using TMPro;
 using UI.Pagination;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class DashboardRow : MonoBehaviour
@@ -57,7 +58,14 @@ public class DashboardRow : MonoBehaviour
 
     void Start()
     {
-        GetComponent<SwipeDetector>().scrollRect = homePage.GetComponent<ScrollRect>();
+        var scrollRect = homePage.GetComponent<ScrollRect>();
+        GetComponent<SwipeDetector>().scrollRect = scrollRect;
+
+        var trigger = gameObject.AddComponent<EventTrigger>();
+        GetComponentInChildren<SwipeDetector>().OnDragEndEvent.AddListener(() =>
+        {
+            scrollRect.GetComponentInChildren<PullToRefresh>().OnScrollRelease();
+        });
     }
 
     public void OnSwipe(bool isRight)
