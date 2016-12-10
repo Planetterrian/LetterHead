@@ -290,9 +290,14 @@ public class HomePage : Page
 
     public void ClearMatch(Match matchInfo)
     {
+        MenuGui.Instance.loadingEffect.loading = true;
+
         Srv.Instance.POST("Match/Clear", new Dictionary<string, string>() { { "matchId", matchInfo.Id.ToString() } }, s =>
         {
-            RefreshMatches();
+            RefreshMatches(true);
+        }, s =>
+        {
+            MenuGui.Instance.loadingEffect.loading = false;
         });
     }
 

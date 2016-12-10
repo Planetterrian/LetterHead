@@ -4,40 +4,39 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEngine;
+using UnityEngine.Experimental.Networking;
 
 public class REST : MonoBehaviour
 {
-    public virtual WWW GET(string url, System.Action<string> onComplete, System.Action<string> onError = null)
+    public virtual UnityWebRequest GET(string url, System.Action<string> onComplete, System.Action<string> onError = null)
     {
-        WWW www = new WWW(url);
+        var www = UnityWebRequest.Get(url);
+       
         StartCoroutine(WaitForRequest(www, onComplete, onError));
         return www;
     }
 
-    public virtual WWW POST(string url, Dictionary<string, string> post, System.Action<string> onComplete, System.Action<string> onError = null)
+    public virtual UnityWebRequest POST(string url, Dictionary<string, string> post, System.Action<string> onComplete, System.Action<string> onError = null)
     {
-        WWWForm form = new WWWForm();
-
-        if (post != null)
+        if (post == null)
         {
-            foreach (KeyValuePair<string, string> post_arg in post)
-            {
-                form.AddField(post_arg.Key, post_arg.Value);
-            }
-        }
-        else
-        {
-            form.AddField("x", ""); // prevent 0 buffer error
+            post = new Dictionary<string, string>();
+            post.Add("x", "");
         }
 
-        var headers = form.headers;
+        var www = UnityWebRequest.Post(url, post);
+
         var additionalHeaders = GetAdditionalHeaders();
         if (additionalHeaders != null)
         {
-            additionalHeaders.ToList().ForEach(x => headers[x.Key] = x.Value);
+            foreach (var additionalHeader in additionalHeaders)
+            {
+                www.SetRequestHeader(additionalHeader.Key, additionalHeader.Value);
+            }
         }
 
-        WWW www = new WWW(url, form.data, headers);
+
+        //WWW www = new WWW(url, form.data, headers);
 
         StartCoroutine(WaitForRequest(www, onComplete, onError));
         return www;
@@ -48,14 +47,13 @@ public class REST : MonoBehaviour
         return null;
     }
 
-    private IEnumerator WaitForRequest(WWW www, Action<string> onComplete, Action<string> onError)
+    private IEnumerator WaitForRequest(UnityWebRequest www, Action<string> onComplete, Action<string> onError)
     {
-        yield return www;
+        yield return www.Send();
         // check for errors
         if (www.error == null)
         {
-            var results = www.text;
-
+            var results = www.downloadHandler.data.Length == 0 ? "" : www.downloadHandler.text;
             OnResults(results, onComplete, onError, www.url);
         }
         else
@@ -64,7 +62,7 @@ public class REST : MonoBehaviour
                 onError(www.error);
 
             Debug.Log(www.error);
-            Debug.Log(www.text);
+            Debug.Log(www.downloadHandler.text);
         }
     }
 

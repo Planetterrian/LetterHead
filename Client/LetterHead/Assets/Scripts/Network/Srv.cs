@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
 using UnityEngine;
+using UnityEngine.Experimental.Networking;
 
 public class Srv : REST
 {
@@ -32,19 +33,19 @@ public class Srv : REST
         return baseUrl;
     }
 
-    public override WWW GET(string url, Action<string> onComplete, Action<string> onError = null)
+    public override UnityWebRequest GET(string url, Action<string> onComplete, Action<string> onError = null)
     {
         return base.GET(Url() + url, onComplete, onError);  
     }
 
-    public override WWW POST(string url, Dictionary<string, string> post, Action<string> onComplete, Action<string> onError = null)
+    public override UnityWebRequest POST(string url, Dictionary<string, string> post, Action<string> onComplete, Action<string> onError = null)
     {
         return base.POST(Url() + url, post, onComplete, onError);
     }
 
     protected override Dictionary<string, string> GetAdditionalHeaders()
     {
-        if (!string.IsNullOrEmpty(ClientManager.Instance.SessionId))
+        if (ClientManager.Instance && !string.IsNullOrEmpty(ClientManager.Instance.SessionId))
         {
             return new Dictionary<string, string>() {
                     { "SessionId", ClientManager.Instance.SessionId }};
