@@ -117,7 +117,7 @@ public class TutorialManager : Singleton<TutorialManager>
             OnActivated = manager =>
             {
                 SetTutorialMessage(
-                                "Great job! Now you need to select a score for this round. You can hold your finger down on a category for more information. \nTouch anywhere to continue ",
+                                "Great job! Now you need to select a score for this round. You can hold your finger down on a category for more information. \nTouch anywhere to continue.",
                                 new Vector2(0.45f, 0.5f), true);
             }
         };
