@@ -171,5 +171,10 @@ namespace LetterHeadServer.Models
 
             return easternTime.Date > LastFreePowerup.Value;
         }
+
+        public int MatchCount(ApplicationDbContext db)
+        {
+            return db.Matches.Count(m => m.Users.Any(u => u.Id == Id));
+        }
     }
 }

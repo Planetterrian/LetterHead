@@ -9,7 +9,12 @@ using UnityEngine.UI;
 public class NewGamePage : Page
 {
     public WindowController friendsWindow;
+
     public Button dailyGameButton;
+    public Button soloGameButton;
+    public Button versusGameButton;
+    public Button friendsGameButton;
+    public Button leaderbaordGameButton;
 
     public static NewGamePage Instance;
 
@@ -37,7 +42,7 @@ public class NewGamePage : Page
 
     public void Refresh()
     {
-        dailyGameButton.interactable = ClientManager.Instance.CanDoDaily;
+        dailyGameButton.interactable = ClientManager.Instance.CanDoDaily && !TutorialManager.Instance.ShouldDisableNewGameButtons();
     }
 
     void Awake()
@@ -75,6 +80,8 @@ public class NewGamePage : Page
     {
         DialogWindowTM.Instance.Show("New Game", "One moment...", () => { }, () => { }, "");
 
+        TutorialManager.Instance.OnSoloGameClicked();
+
         Srv.Instance.POST("Match/RequestSoloGameStart", null, s =>
         {
             var matchId = JsonConvert.DeserializeObject<int>(s);
@@ -82,4 +89,12 @@ public class NewGamePage : Page
         }, DialogWindowTM.Instance.Error);
     }
 
+    public void EnableOnlySoloGame()
+    {
+        dailyGameButton.interactable = false;
+        friendsGameButton.interactable = false;
+        leaderbaordGameButton.interactable = false;
+        soloGameButton.interactable = true;
+        versusGameButton.interactable = false;
+    }
 }

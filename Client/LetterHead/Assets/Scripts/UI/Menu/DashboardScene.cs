@@ -8,6 +8,7 @@ public class DashboardScene : GuiScene
 {
     public PagedRect pagination;
     public HomePage homePage;
+    public NewGamePage newGamePage;
 
     public static bool showReview;
 

@@ -92,6 +92,7 @@ public class PersistManager : Singleton<PersistManager>
     public void LoadMenu(int _initialDashPage = 1)
     {
         initialDashPage = _initialDashPage;
+        TutorialManager.Instance.HideTutorial();
         SceneManager.LoadScene("menu");
     }
 }

@@ -62,6 +62,10 @@ public class CategoryBox : MonoBehaviour, IGameHandler
         if (CategoryInvalid(category))
             return;
 
+        if (GameScene.Instance.CurrentState == GameScene.State.Active && !TutorialManager.Instance.AllowEarlyScoreSelect())
+            return;
+
+
         if (scoreText == "0" || scoreText == "")
         {
             DialogWindowTM.Instance.Show("Select Score", "Lock in the " + category.name + " category for " + scoreText + " points?", () => DoCategorySelect(category), () => { }, "Confirm", "Cancel");

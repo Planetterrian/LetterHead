@@ -36,6 +36,7 @@ public abstract class GameManager : Singleton<GameManager>
     public UnityEvent OnMatchDetailsLoadedEvent;
     private bool isDestroyed;
     public int currentRoundScore;
+    public bool realTimeConnected;
 
     public MatchRound MyCurrentRound()
     {
@@ -217,6 +218,7 @@ public abstract class GameManager : Singleton<GameManager>
         gameScene.CurrentState = GameScene.State.Active;
 
         BoardManager.Instance.RevealLetters();
+        TutorialManager.Instance.OnGameStarted();
     }
 
     public void StartGame(float timeRemaining)
@@ -229,6 +231,9 @@ public abstract class GameManager : Singleton<GameManager>
     {
         if(IsMyRound() && MyCurrentRound().CurrentState == MatchRound.RoundState.Active)
             GameRealTime.Instance.RequestStart();
+
+        realTimeConnected = true;
+        TutorialManager.Instance.OnRealTimeConnected();
     }
 
     public bool HasCategoryBeenUsed(Category category)

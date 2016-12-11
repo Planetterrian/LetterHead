@@ -17,6 +17,8 @@ public class MenuGui : Singleton<MenuGui>
 
     public LoadingEffect loadingEffect;
 
+    public PageButton[] pageButtons;
+
     private static bool firstLoad = true;
     private bool bannerShown;
 
@@ -106,7 +108,17 @@ public class MenuGui : Singleton<MenuGui>
 
     public void LoadDashboard(int initialPage)
     {
-        PersistManager.Instance.SetInitialDashPage(initialPage);
+        TutorialManager.Instance.ActivateCurrentTutorial();
+
+        if (TutorialManager.Instance.ForcedDashboardPage() != -1)
+        {
+            PersistManager.Instance.SetInitialDashPage(TutorialManager.Instance.ForcedDashboardPage());
+        }
+        else
+        {
+            PersistManager.Instance.SetInitialDashPage(initialPage);
+        }
+
         sceneManager.SetGuiScene(dashboardScene);
     }
 

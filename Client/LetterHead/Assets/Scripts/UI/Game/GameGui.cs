@@ -163,7 +163,7 @@ public class GameGui : Singleton<GameGui>
             shuffleButton.interactable = true;
             lever.SetState(Lever.State.Off);
 
-            if (GameManager.Instance.IsMyRound())
+            if (GameManager.Instance.IsMyRound() && TutorialManager.Instance.AllowEarlyScoreSelect())
             {
                 categoryBox.HighlightSelectableCategories();
             }

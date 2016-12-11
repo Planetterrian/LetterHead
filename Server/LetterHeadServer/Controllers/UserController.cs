@@ -219,7 +219,7 @@ namespace LetterHeadServer.Controllers
                 return Json(new
                 {
                     SessionId = session.SessionId,
-                    MatchCount = db.Matches.Count(m => m.Users.Any(u => u.Id == user.Id))
+                    MatchCount = user.MatchCount(db)
                 });
             }
         }
@@ -478,10 +478,10 @@ namespace LetterHeadServer.Controllers
             }
             else
             {
-                return Json(new
+                return Json(data: new
                 {
                     SessionId = session.SessionId,
-                    MatchCount = db.Matches.Count(m => m.Users.Any(u => u.Id == user.Id))
+                    MatchCount = user.MatchCount(db),
                 });
             }
         }
@@ -529,7 +529,7 @@ namespace LetterHeadServer.Controllers
             userInfo.Settings = (currentUser.Settings_Sound ? "1" : "0") + (currentUser.Settings_Music ? "1" : "0") + (currentUser.Settings_ClearWords ? "1" : "0") + (currentUser.Settings_Notifications ? "1" : "0");
 
             if (isFirstLoad)
-                userInfo.MatchCount = db.Matches.Count(m => m.Users.Any(u => u.Id == currentUser.Id));
+                userInfo.MatchCount = currentUser.MatchCount(db);
 
             return Json(userInfo);
         }

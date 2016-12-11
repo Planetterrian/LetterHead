@@ -26,6 +26,7 @@ public class GameScene : Singleton<GameScene>
         {
             currentState = value;
             OnStateChanged.Invoke();
+            TutorialManager.Instance.OnGameStateChanged();
         }
     }
 
