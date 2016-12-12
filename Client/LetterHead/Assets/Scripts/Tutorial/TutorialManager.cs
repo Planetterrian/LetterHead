@@ -16,12 +16,18 @@ public class TutorialManager : Singleton<TutorialManager>
     {
         get
         {
-            return PlayerPrefs.GetInt("TutorialStep", 0);
+            if (ClientManager.Instance.myUserInfo == null)
+                return -1;
+
+            return PlayerPrefs.GetInt("TutorialStep" + ClientManager.Instance.myUserInfo.Id, 0);
         }
 
         set
         {
-            PlayerPrefs.SetInt("TutorialStep", value);
+            if (ClientManager.Instance.myUserInfo == null)
+                return;
+
+            PlayerPrefs.SetInt("TutorialStep" + ClientManager.Instance.myUserInfo.Id, value);
         }
     }
 
