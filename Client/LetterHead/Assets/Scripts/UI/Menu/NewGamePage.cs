@@ -9,6 +9,7 @@ using UnityEngine.UI;
 public class NewGamePage : Page
 {
     public WindowController friendsWindow;
+    public InviteUsernameWindow inviteUsernameWindow;
 
     public Button dailyGameButton;
     public Button soloGameButton;
@@ -53,6 +54,11 @@ public class NewGamePage : Page
     public void OnInviteFriendClicked()
     {
         friendsWindow.ShowModal();
+    }
+
+    public void OnInviteUsernameClicked()
+    {
+        inviteUsernameWindow.ShowModal();
     }
 
     public void OnRandomOpponentClicked()

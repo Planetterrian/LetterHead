@@ -291,31 +291,59 @@ namespace LetterHeadServer.Controllers
                     return Error("Invalid User");
                 }
 
-                if (targetUser.Invites.Any(i => i.Inviter.Id == currentUser.Id))
+                return DoInvite(targetUser);
+            }
+        }
+
+
+        public ActionResult InviteByUsername(string username)
+        {
+            lock (matchLock)
+            {
+                if (string.IsNullOrEmpty(username))
                 {
-                    return Error("You already sent an invite to that user.");
+                    return Error("Please enter a username");
                 }
 
-                var invite = new Invite()
-                             {
-                                 InviteSentOn = DateTime.Now,
-                                 Inviter = currentUser,
-                                 User = targetUser
-                             };
+                var targetUser = db.Users.FirstOrDefault(u => u.Username == username);
+                if (targetUser == null)
+                {
+                    return Error("Invalid User");
+                }
 
-                targetUser.Invites.Add(invite);
-                db.SaveChanges();
-
-                targetUser.SendNotification(new NotificationDetails()
-                                            {
-                                                content = "You have a Letter Head match invitation from " + currentUser.Username + ".",
-                                                tag = "",
-                                                title = "Leter Head Match Invite",
-                                                type = NotificationDetails.Type.Invite
-                                            });
-
-                return Okay();
+                return DoInvite(targetUser);
             }
+        }
+
+        private ActionResult DoInvite(User targetUser)
+        {
+            if(targetUser.Id == currentUser.Id)
+                return Error("You cannot invite yourself!");
+
+            if (targetUser.Invites.Any(i => i.Inviter.Id == currentUser.Id))
+            {
+                return Error("You already sent an invite to that user.");
+            }
+
+            var invite = new Invite()
+            {
+                InviteSentOn = DateTime.Now,
+                Inviter = currentUser,
+                User = targetUser
+            };
+
+            targetUser.Invites.Add(invite);
+            db.SaveChanges();
+
+            targetUser.SendNotification(new NotificationDetails()
+            {
+                content = "You have a Letter Head match invitation from " + currentUser.Username + ".",
+                tag = "",
+                title = "Leter Head Match Invite",
+                type = NotificationDetails.Type.Invite
+            });
+
+            return Okay();
         }
 
         public ActionResult Resign(int matchId)
