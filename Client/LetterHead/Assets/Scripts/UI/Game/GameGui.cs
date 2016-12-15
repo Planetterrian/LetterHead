@@ -50,6 +50,7 @@ public class GameGui : Singleton<GameGui>
     public RectTransform adPlaceholder;
     public RectTransform viewport;
     private bool bannerShown;
+    private bool dontHideNextMatchButton;
 
 
     private void Start()
@@ -221,6 +222,8 @@ public class GameGui : Singleton<GameGui>
         timer.SetTimer(GameManager.Instance.MatchDetails.RoundTimeSeconds);
         roundNumberLabel.text = "Round " + (GameManager.Instance.MatchDetails.CurrentRoundNumber + 1) + "/" + GameManager.Instance.MatchDetails.MaxRounds;
 
+        dontHideNextMatchButton = GameManager.Instance.MatchDetails.CurrentState != Match.MatchState.Ended;
+
         if (GameManager.Instance.MatchDetails.Users.Count > 1)
         {
             rightAvatarBox.gameObject.SetActive(true);
@@ -287,7 +290,7 @@ public class GameGui : Singleton<GameGui>
     {
         lastNextMatchPoll = Time.time;
 
-        if (GameManager.Instance.MatchDetails == null || GameManager.Instance.MatchDetails.CurrentState == Match.MatchState.Ended || !GameManager.Instance.IsMyRound())
+        if (!dontHideNextMatchButton && (GameManager.Instance.MatchDetails == null || GameManager.Instance.MatchDetails.CurrentState == Match.MatchState.Ended || !GameManager.Instance.IsMyRound()))
         {
             nextMatchButton.gameObject.SetActive(false);
             return;
@@ -296,8 +299,12 @@ public class GameGui : Singleton<GameGui>
         Srv.Instance.POST("User/NextAvailableMatch", new Dictionary<string, string>() {{"currentMatchId", GameManager.Instance.MatchId.ToString()}}, s =>
         {
             nextMatchInfo = JsonConvert.DeserializeObject<Match>(s);
-            nextMatchButton.gameObject.SetActive(nextMatchInfo != null);
-            nextMatchText.color = nextMatchButton != null ? Color.black : new Color(0.75f, 0.75f, 0.75f);
+
+            if (nextMatchButton && nextMatchButton.gameObject)
+            {
+                nextMatchButton.gameObject.SetActive(nextMatchInfo != null);
+                nextMatchText.color = nextMatchButton != null ? Color.black : new Color(0.75f, 0.75f, 0.75f);
+            }
         }, null);
     }
 

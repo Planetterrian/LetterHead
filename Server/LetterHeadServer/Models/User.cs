@@ -174,7 +174,7 @@ namespace LetterHeadServer.Models
 
         public int MatchCount(ApplicationDbContext db)
         {
-            return db.Matches.Count(m => m.Users.Any(u => u.Id == Id));
+            return db.Matches.Count(m => m.Users.Any(u => u.Id == Id) && (m.CurrentState == LetterHeadShared.DTO.Match.MatchState.Running || m.CurrentState == LetterHeadShared.DTO.Match.MatchState.Pregame));
         }
     }
 }
