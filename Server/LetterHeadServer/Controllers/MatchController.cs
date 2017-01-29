@@ -191,7 +191,7 @@ namespace LetterHeadServer.Controllers
                 if (existingMatch != null)
                 {
                     existingMatch.Users.Add(currentUser);
-                    existingMatch.Initizile(db);
+                    existingMatch.Initizile(db, false);
                 }
                 else
                 {

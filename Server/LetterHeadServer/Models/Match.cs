@@ -275,9 +275,13 @@ namespace LetterHeadServer.Models
             return Rounds.Where(r => r.User.Id == user.Id).ToList();
         }
 
-        public void RandomizeUsers()
+        public void SetupUserOrder(bool randomOrder = true)
         {
             TurnOrderUserIds.AddRange(Users.Select(u => u.Id).Reverse());
+
+            if(randomOrder)
+                TurnOrderUserIds = TurnOrderUserIds.OrderBy(u => Guid.NewGuid()).ToList();
+            
             CurrentUserTurn = Users.First(u => u.Id == TurnOrderUserIds[0]);
         }
 
@@ -427,14 +431,14 @@ namespace LetterHeadServer.Models
             return scores.ToList();
         }
 
-        public void Initizile(ApplicationDbContext db)
+        public void Initizile(ApplicationDbContext db, bool randomOrder = true)
         {
             CurrentState = LetterHeadShared.DTO.Match.MatchState.Pregame;
             AddRounds(db);
             db.SaveChanges();
 
             GenerateRandomBoard();
-            RandomizeUsers();
+            SetupUserOrder(randomOrder);
             db.SaveChanges();
 
             OnNewTurn();

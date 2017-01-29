@@ -106,7 +106,7 @@ namespace LetterHeadServer.Models
                 round.Letters = RoundLetters(index);
             }
 
-            match.RandomizeUsers();
+            match.SetupUserOrder();
 
             context.SaveChanges();
 

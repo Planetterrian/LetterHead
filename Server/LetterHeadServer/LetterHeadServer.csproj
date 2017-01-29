@@ -217,6 +217,7 @@
     <Compile Include="Classes\UserManager.cs" />
     <Compile Include="Controllers\BackendController.cs" />
     <Compile Include="Controllers\BaseLetterHeadController.cs" />
+    <Compile Include="Controllers\ChatController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MatchController.cs" />
     <Compile Include="Controllers\RealTimeController.cs" />
@@ -302,6 +303,7 @@
   <ItemGroup>
     <Folder Include="Certificates\" />
     <Folder Include="Views\BaseLetterHead\" />
+    <Folder Include="Views\Chat\" />
     <Folder Include="Views\Match\" />
   </ItemGroup>
   <ItemGroup>

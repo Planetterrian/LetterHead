@@ -174,6 +174,7 @@ public abstract class GameManager : Singleton<GameManager>
                 LoadMatchDetails(() =>
                 {
                     AchievementManager.Instance.CheckServerAchievements();
+                    GameGui.Instance.UpdateAvatarBoxes();
 
                     var myScore = MatchDetails.UserScore(MatchDetails.IndexOfUser(ClientManager.Instance.UserId()));
                     if (myScore >= 500)

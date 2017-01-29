@@ -213,27 +213,40 @@ public class GameGui : Singleton<GameGui>
         return true;
     }
 
-    public void OnMatchDetailsLoaded()
+    public void UpdateAvatarBoxes()
     {
-        OnGameStateChanged();
-        NextMatchPolling();
-
         SetAvatarBox(leftAvatarBox, GameManager.Instance.MatchDetails.Users[0].Id == ClientManager.Instance.UserId() ? 0 : 1);
-        timer.SetTimer(GameManager.Instance.MatchDetails.RoundTimeSeconds);
-        roundNumberLabel.text = "Round " + (GameManager.Instance.MatchDetails.CurrentRoundNumber + 1) + "/" + GameManager.Instance.MatchDetails.MaxRounds;
-
-        dontHideNextMatchButton = GameManager.Instance.MatchDetails.CurrentState != Match.MatchState.Ended;
 
         if (GameManager.Instance.MatchDetails.Users.Count > 1)
         {
             rightAvatarBox.gameObject.SetActive(true);
-            SetAvatarBox(rightAvatarBox, GameManager.Instance.MatchDetails.Users[0].Id != ClientManager.Instance.UserId() ? 0 : 1);
-            ShowPowerups();
+            SetAvatarBox(rightAvatarBox,
+                GameManager.Instance.MatchDetails.Users[0].Id != ClientManager.Instance.UserId() ? 0 : 1);
         }
         else
         {
             rightAvatarBox.gameObject.SetActive(false);
+        }
 
+    }
+
+    public void OnMatchDetailsLoaded()
+    {
+        OnGameStateChanged();
+        NextMatchPolling();
+        UpdateAvatarBoxes();
+
+        timer.SetTimer(GameManager.Instance.MatchDetails.RoundTimeSeconds);
+        roundNumberLabel.text = "Round " + (GameManager.Instance.MatchDetails.CurrentRoundNumber + 1) + "/" + GameManager.Instance.MatchDetails.MaxRounds;
+        
+        dontHideNextMatchButton = GameManager.Instance.MatchDetails.CurrentState != Match.MatchState.Ended;
+
+        if (GameManager.Instance.MatchDetails.Users.Count > 1)
+        {
+            ShowPowerups();
+        }
+        else
+        {
             if (GameManager.Instance.MatchDetails.IsDaily)
             {
                 // Daily game
