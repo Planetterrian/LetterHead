@@ -24,6 +24,7 @@ namespace LetterHeadShared.DTO
         public int MaxRounds;
         public int SingleScore;
         public bool IsDaily;
+        public int UnreadChatMessageCount;
         public string DateString;
         public string DateStringShort;
         public string LastTurnInfo;

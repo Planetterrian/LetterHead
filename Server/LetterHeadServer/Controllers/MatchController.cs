@@ -216,6 +216,8 @@ namespace LetterHeadServer.Controllers
             {
                 var dto = match.DTO(true);
                 dto.LastTurnInfo = match.LastTurnString(currentUser);
+                if (match.Users.Count > 1)
+                    dto.UnreadChatMessageCount = ChatMessage.UnreadCount(db, currentUser, match.Users.First(m => m.Id != currentUser.Id).Id);
                 matchDTOs.Add(dto);
             }
 

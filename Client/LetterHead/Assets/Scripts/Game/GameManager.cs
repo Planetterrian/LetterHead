@@ -301,6 +301,20 @@ public abstract class GameManager : Singleton<GameManager>
         return "";
     }
 
+    public string OpponentAvatarUrl()
+    {
+        if (MatchDetails == null)
+            return "";
+
+        foreach (var userInfo in MatchDetails.Users)
+        {
+            if (userInfo.Id != ClientManager.Instance.UserId())
+                return userInfo.AvatarUrl;
+        }
+
+        return "";
+    }
+
     public MatchRound GetLastOpponentRound()
     {
         if (MatchDetails == null)

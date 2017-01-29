@@ -227,6 +227,7 @@
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\ApplicationDbContext.cs" />
+    <Compile Include="Models\ChatMessage.cs" />
     <Compile Include="Models\DailyGame.cs" />
     <Compile Include="Models\FacebookUserInfo.cs" />
     <Compile Include="Models\Invite.cs" />

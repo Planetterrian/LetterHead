@@ -28,6 +28,11 @@ public static class DateTimeHelper
 
         double delta = ts.TotalSeconds;
 
+        if (delta < 10)
+        {
+            return "just now";
+        }
+
         if (delta < 1 * MINUTE)
         {
             return isFuture ? (ts.Seconds == 1 ? "one second" : ts.Seconds + " seconds") : ts.Seconds == 1 ? "one second ago" : ts.Seconds + " seconds ago";
@@ -79,6 +84,11 @@ public static class DateTimeHelper
         var ts = DateTime.UtcNow.Ticks < dateTime.Ticks ? new TimeSpan(dateTime.Ticks - DateTime.UtcNow.Ticks) : new TimeSpan(DateTime.UtcNow.Ticks - dateTime.Ticks);
 
         double delta = ts.TotalSeconds;
+
+        if (delta < 10)
+        {
+            return "just now";
+        }
 
         if (delta < 1 * MINUTE)
         {

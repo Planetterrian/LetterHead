@@ -72,6 +72,9 @@ namespace MyWebApplication
                     ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.User.Id));
 
                 cfg.CreateMap<Invite, LetterHeadShared.DTO.Invite>();
+                cfg.CreateMap<ChatMessage, LetterHeadShared.DTO.ChatMessage>()
+                    .ForMember(dest => dest.SenderName, opt => opt.MapFrom(src => src.Sender.Username))
+                    .ForMember(dest => dest.SentAgo, opt => opt.MapFrom(src => (DateTime.Now - src.SentOn).TotalSeconds));
             }).CreateMapper();
 
             CategoryManager = new CategoryManager();

@@ -16,6 +16,9 @@ public class TutorialManager : Singleton<TutorialManager>
     {
         get
         {
+            if (Application.isEditor && editorStep == -1)
+                return editorStep;
+
             if (ClientManager.Instance.myUserInfo == null)
                 return -1;
 
@@ -140,9 +143,6 @@ public class TutorialManager : Singleton<TutorialManager>
             }
         };
 
-
-        if (Application.isEditor && editorStep != -2)
-            CurrentStepNumber = editorStep;
     }
 
     private bool GameIsActive()

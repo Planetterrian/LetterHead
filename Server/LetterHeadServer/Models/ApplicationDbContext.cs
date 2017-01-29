@@ -12,6 +12,7 @@ namespace LetterHeadServer.Models
         public DbSet<Models.DailyGame> DailyGames { get; set; }
         public DbSet<Models.Session> Sessions { get; set; }
         public DbSet<Models.Match> Matches { get; set; }
+        public DbSet<Models.ChatMessage> ChatMessages { get; set; }
         public DbSet<Models.MatchRound> MatchRounds { get; set; }
         
         public static ApplicationDbContext Create()

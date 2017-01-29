@@ -166,8 +166,7 @@ namespace TMPro
         public override void SetVerticesDirty()
         {
             //Debug.Log("SetVerticesDirty() on Object ID: " + this.GetInstanceID());
-
-            if (m_verticesAlreadyDirty || this == null || !this.IsActive())
+            if (m_verticesAlreadyDirty || this == null || !this.IsActive() || CanvasUpdateRegistry.IsRebuildingGraphics())
                 return;
 
             m_verticesAlreadyDirty = true;
