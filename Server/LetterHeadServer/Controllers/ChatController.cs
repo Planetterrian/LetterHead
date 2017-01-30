@@ -52,6 +52,14 @@ namespace LetterHeadServer.Controllers
                 Message = content
             };
 
+            to.SendNotification(new NotificationDetails()
+            {
+                content = currentUser.Username + ": " + content,
+                tag = currentUser.Username,
+                title = "Letterhead Chat",
+                type = NotificationDetails.Type.Chat
+            });
+
             db.ChatMessages.Add(message);
             db.SaveChanges();
             return Okay();

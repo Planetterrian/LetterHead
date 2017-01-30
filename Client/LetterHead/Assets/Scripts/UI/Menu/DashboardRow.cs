@@ -19,6 +19,10 @@ public class DashboardRow : MonoBehaviour
     public TextMeshProUGUI soloGameLabel;
     public TextMeshProUGUI lastTurnLabel;
 
+    public Image unreadMessageIcon;
+    public TextMeshProUGUI unreadMessageLabel;
+
+
     public GameObject barBottom;
 
     public GameObject backBoxMy;
@@ -164,6 +168,17 @@ public class DashboardRow : MonoBehaviour
             opponentInfo = MatchInfo.Users[0];
             rematchButton.SetActive(false);
         }
+
+        if (MatchInfo.UnreadChatMessageCount > 0)
+        {
+            unreadMessageIcon.gameObject.SetActive(true);
+            unreadMessageLabel.text = MatchInfo.UnreadChatMessageCount.ToString();
+        }
+        else
+        {
+            unreadMessageIcon.gameObject.SetActive(false);
+        }
+
 
         backBoxMy.SetActive(type == RowType.MyTurn);
         backBoxTheir.SetActive(type == RowType.TheirTurn);

@@ -219,6 +219,6 @@ public struct NotificationDetails
 
     public enum Type
     {
-        Invite, Buzz, YourTurn
+        Invite, Buzz, YourTurn, Chat
     }
 }
