@@ -104,6 +104,7 @@ namespace uTools {
                         }
                         Sample(mFactor, true);
 
+                        loopCount = 0;
                         enabled = false;
                     }
 
@@ -123,6 +124,7 @@ namespace uTools {
                             onFinished.Invoke();
                         }
                         Sample(mFactor, true);
+                        loopCount = 0;
 
                         enabled = false;
                     }

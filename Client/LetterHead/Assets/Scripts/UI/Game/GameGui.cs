@@ -24,6 +24,7 @@ public class GameGui : Singleton<GameGui>
     public CategoryBox opponentCategoryBox;
     public CanvasFade opponentCategoryBoxFade;
     public Chomper chomper;
+    public ChatNoticeBubble chatNoticeBubble;
 
     public TimerElement timer;
 
@@ -235,6 +236,7 @@ public class GameGui : Singleton<GameGui>
         OnGameStateChanged();
         NextMatchPolling();
         UpdateAvatarBoxes();
+        chatNoticeBubble.SetCount(GameManager.Instance.MatchDetails.UnreadChatMessageCount);
 
         timer.SetTimer(GameManager.Instance.MatchDetails.RoundTimeSeconds);
         roundNumberLabel.text = "Round " + (GameManager.Instance.MatchDetails.CurrentRoundNumber + 1) + "/" + GameManager.Instance.MatchDetails.MaxRounds;

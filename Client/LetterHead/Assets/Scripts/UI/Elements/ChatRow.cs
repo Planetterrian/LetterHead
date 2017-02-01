@@ -24,7 +24,9 @@ public class ChatRow : MonoBehaviour
 
         timeAgoText.text = DateTimeHelper.GetFriendlyRelativeTimeShort(sentOn);
         lastTimeAgoUpdate = Time.time;
-        avatarBox.SetAvatarImage(senderImage);
+
+        if(avatarBox)
+            avatarBox.SetAvatarImage(senderImage);
 
         layout.preferredHeight = message.preferredHeight + 22.324f;
         if (layout.preferredHeight < 55)

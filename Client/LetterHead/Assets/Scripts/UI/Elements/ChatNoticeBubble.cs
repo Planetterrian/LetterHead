@@ -38,28 +38,32 @@ public class ChatNoticeBubble : MonoBehaviour
                 s =>
                 {
                     var count = JsonConvert.DeserializeObject<int>(s);
-                    if (count == 0)
-                    {
-                        countLabel.text = "";
-                    }
-                    else
-                    {
-                        if (count > lastMessageCount)
-                        {
-                            tween.Play();
-                        }
-
-                        lastMessageCount = count;
-                        countLabel.text = count.ToString();
-                    }
+                    SetCount(count);
                 });
+        }
+    }
+
+    public void SetCount(int count)
+    {
+        if (count == 0)
+        {
+            countLabel.text = "";
+        }
+        else
+        {
+            if (count > lastMessageCount)
+            {
+                tween.Play();
+            }
+
+            lastMessageCount = count;
+            countLabel.text = count.ToString();
         }
     }
 
     public void ShowChatWindow()
     {
-        lastMessageCount = 0;
-        countLabel.text = "";
+        SetCount(0);
         chatWindow.ShowModal();
     }
 }

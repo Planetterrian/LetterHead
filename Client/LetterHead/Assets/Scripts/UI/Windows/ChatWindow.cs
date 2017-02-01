@@ -10,6 +10,7 @@ using UnityEngine.UI;
 public class ChatWindow : MonoBehaviour
 {
     public GameObject chatRowPrefab;
+    public GameObject chatRowPrefabMe;
     public Transform chatRowsParent;
     public TMP_InputField inputBox;
     public Button submitButton;
@@ -99,20 +100,24 @@ public class ChatWindow : MonoBehaviour
 
     public void AddMessage(ChatMessage message)
     {
-        var rowGo = GameObject.Instantiate(chatRowPrefab);
-        var row = rowGo.GetComponent<ChatRow>();
-        row.transform.SetParent(chatRowsParent);
-        row.transform.ResetToOrigin();
+        GameObject rowGo;
 
         string imageUrl;
         if (message.SenderName == ClientManager.Instance.myUserInfo.Username)
         {
             imageUrl = ClientManager.Instance.myUserInfo.AvatarUrl;
+            rowGo = GameObject.Instantiate(chatRowPrefabMe);
         }
         else
         {
             imageUrl = GameManager.Instance.OpponentAvatarUrl();
+            rowGo = GameObject.Instantiate(chatRowPrefab);
         }
+
+        var row = rowGo.GetComponent<ChatRow>();
+        row.transform.SetParent(chatRowsParent);
+        row.transform.ResetToOrigin();
+
 
         row.Set(message.SenderName, imageUrl, message.Message, (DateTime.UtcNow - TimeSpan.FromSeconds(message.SentAgo)));
 
