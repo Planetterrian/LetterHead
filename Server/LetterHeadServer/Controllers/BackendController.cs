@@ -234,6 +234,16 @@ namespace LetterHeadServer.Controllers
                 }
             }
 
+            // Not started (but matched)
+            var oldMatchTime = DateTime.Now - TimeSpan.FromDays(7);
+            oldMatches = db.Matches.Where(m => m.CurrentState == LetterHeadShared.DTO.Match.MatchState.Pregame && m.CreatedOn < oldMatchTime).ToList();
+            foreach (var match in oldMatches)
+            {
+                match.Resign(match.CurrentUserTurn);
+                Response?.Write("Resigned " + match.Id + " (pregame)<br>");
+            }
+
+
             db.SaveChanges();
 
             return "Done";

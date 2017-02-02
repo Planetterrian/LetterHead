@@ -471,8 +471,10 @@ namespace LetterHeadServer.Controllers
             }
 
             var dto = match.DTO();
-            dto.UnreadChatMessageCount = ChatMessage.UnreadCount(db, currentUser,
-                match.Users.First(m => m.Id != currentUser.Id).Id);
+
+            if(match.Users.Count > 1)
+                dto.UnreadChatMessageCount = ChatMessage.UnreadCount(db, currentUser,
+                    match.Users.First(m => m.Id != currentUser.Id).Id);
 
             return Json(dto);
         }
