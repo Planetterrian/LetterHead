@@ -244,7 +244,7 @@ public class PowerupManager : Singleton<PowerupManager>
     {
         if (stealTimeActive)
         {
-            GameManager.Instance.ReduceTime(20);
+            GameManager.Instance.ReduceTime(30);
         }
         if (stealLetterActive)
         {

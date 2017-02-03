@@ -385,9 +385,15 @@ namespace LetterHeadServer.Models
 
         public void GenerateRandomBoard()
         {
-            foreach (var round in Rounds)
+            for (int i = 0; i < MaxRounds; i++)
             {
-                round.Letters = BoardHelper.GenerateBoard();
+                var i1 = i;
+                var rounds = Rounds.Where(r => r.Number == i1);
+                var letters = BoardHelper.GenerateBoard();
+                foreach (var round in rounds)
+                {
+                    round.Letters = letters;
+                }
             }
         }
 

@@ -8,23 +8,21 @@ namespace LetterHeadServer.Controllers
 {
     public class HomeController : Controller
     {
-        public ActionResult Index()
+        public string Tip()
         {
-            return View();
-        }
+            var tips = new []
+            {
+                "tip",
+                "tip2",
+                "tip3",
+                "tip4",
+                "tip5",
+            };
 
-        public ActionResult About()
-        {
-            ViewBag.Message = "Your application description page.";
+            var rand = new Random();
+            var tip = tips[rand.Next(tips.Length)];
 
-            return View();
-        }
-
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your contact page.";
-
-            return View();
+            return tip;
         }
     }
 }

@@ -425,7 +425,7 @@ namespace LetterHeadServer.Controllers
             if (round.StealTimeDelay > 0)
             {
                 // Shielding a steal time
-                round.StartedOn = round.StartedOn.Value.AddSeconds(20);
+                round.StartedOn = round.StartedOn.Value.AddSeconds(30);
                 round.ScheduleRoundEnd();
             }
             if (round.StealLetterDelay > 0)
