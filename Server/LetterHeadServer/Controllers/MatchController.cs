@@ -513,7 +513,7 @@ namespace LetterHeadServer.Controllers
                     return Okay();
                 }
 
-                var category = Startup.CategoryManager.GetCategory(categoryName);
+                var category = match.CategoryManager().GetCategory(categoryName);
                 if (category == null)
                 {
                     return Error("No category selected.");

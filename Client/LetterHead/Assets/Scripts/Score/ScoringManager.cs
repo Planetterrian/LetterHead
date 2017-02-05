@@ -10,10 +10,14 @@ public class ScoringManager : Singleton<ScoringManager>, IGameHandler
     private List<string> submittedWords = new List<string>();
 
     private Category currentCategory;
-    public CategoryManager categoryManager = new CategoryManager();
     public int usedLetterIds;
     public int currentRoundScore;
     public Color usedTileColor;
+
+    public CategoryManager GetCategoryManager
+    {
+        get { return GameManager.Instance.MatchDetails.CategoryManager(); }
+    }
 
     private void Start()
     {
@@ -170,7 +174,7 @@ public class ScoringManager : Singleton<ScoringManager>, IGameHandler
 
     public List<int> ExistingCategoryScores(bool mine = true)
     {
-        var scores = new int[categoryManager.Categories.Count];
+        var scores = new int[GetCategoryManager.Categories.Count];
 
         var rawRounds = mine ? GameManager.Instance.MyRounds() : GameManager.Instance.OpponentRounds();
 
@@ -180,7 +184,7 @@ public class ScoringManager : Singleton<ScoringManager>, IGameHandler
             if (string.IsNullOrEmpty(round.CategoryName))
                 continue;
 
-            var categoryIndex = categoryManager.GetCategoryIndex(round.CategoryName);
+            var categoryIndex = GetCategoryManager.GetCategoryIndex(round.CategoryName);
             scores[categoryIndex] = round.Score;
         }
 

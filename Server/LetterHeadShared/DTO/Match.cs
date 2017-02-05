@@ -28,6 +28,19 @@ namespace LetterHeadShared.DTO
         public string DateString;
         public string DateStringShort;
         public string LastTurnInfo;
+        public CategoryManager.Type ScoringType;
+
+        private CategoryManager categoryManager;
+
+        public CategoryManager CategoryManager()
+        {
+            if (categoryManager == null)
+            {
+                categoryManager = LetterHeadShared.CategoryManager.GetManagerForScoringType(ScoringType);
+            }
+
+            return categoryManager;
+        }
 
         public int UserScore(int userIndex)
         {

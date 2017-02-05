@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using Hangfire;
 using LetterHeadServer.Classes;
+using LetterHeadShared;
 using MyWebApplication;
 
 namespace LetterHeadServer.Models
@@ -75,6 +76,7 @@ namespace LetterHeadServer.Models
         public DateTime? EndedOn { get; set; }
         public int RoundTimeSeconds { get; set; }
         public int SingleScore { get; set; }
+        public CategoryManager.Type ScoringType { get; set; }
 
         public int MaxRounds { get; set; }
 
@@ -83,9 +85,21 @@ namespace LetterHeadServer.Models
 
         public int CurrentRoundNumber { get; set; }
 
+        private CategoryManager categoryManager;
+
         public Match()
         {
             TurnOrderUserIds = new List<int>();
+        }
+
+        public CategoryManager CategoryManager()
+        {
+            if (categoryManager == null)
+            {
+                categoryManager = LetterHeadShared.CategoryManager.GetManagerForScoringType(ScoringType);
+            }
+
+            return categoryManager;
         }
 
         public static Match New(ApplicationDbContext db, List<User> users, int roundCount = 9)
@@ -308,11 +322,11 @@ namespace LetterHeadServer.Models
 
         public int MatchBonus(User user)
         {
-            var bigWord = Startup.CategoryManager.GetCategory("Big Word Bonus");
+            var bigWord = CategoryManager().GetCategory("Big Word Bonus");
             var rounds = Rounds.Where(r => r.User.Id == user.Id);
 
             var bigWordBonus = rounds.Sum(round => bigWord.GetScore(round.Words, 0, new List<int>()));
-            var upperBonus = Startup.CategoryManager.GetCategory("Upper Bonus").GetScore(null, 0, CategoryScores(user));
+            var upperBonus = CategoryManager().GetCategory("Upper Bonus").GetScore(null, 0, CategoryScores(user));
 
             return bigWordBonus + upperBonus;
         }
@@ -421,7 +435,7 @@ namespace LetterHeadServer.Models
 
         public List<int> CategoryScores(User user)
         {
-            var scores = new int[Startup.CategoryManager.Categories.Count];
+            var scores = new int[CategoryManager().Categories.Count];
 
             var rounds = Rounds.Where(m => m.User.Id == user.Id && m.Number <= CurrentRoundNumber);
             foreach (var round in rounds)
@@ -429,7 +443,7 @@ namespace LetterHeadServer.Models
                 if (string.IsNullOrEmpty(round.CategoryName))
                     continue;
 
-                var categoryIndex = Startup.CategoryManager.GetCategoryIndex(round.CategoryName);
+                var categoryIndex = CategoryManager().GetCategoryIndex(round.CategoryName);
                 if(categoryIndex != -1)
                     scores[categoryIndex] = round.Score;
             }

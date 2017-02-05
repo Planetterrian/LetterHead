@@ -101,7 +101,7 @@ namespace LetterHeadServer.Models
 
         public int CalculateScore(List<string> words, int uniqueLetters, List<int> existingCategoryScores)
         {
-            var category = Startup.CategoryManager.GetCategory(CategoryName);
+            var category = Match.CategoryManager().GetCategory(CategoryName);
 
             return category.GetScore(words, uniqueLetters, existingCategoryScores);
         }

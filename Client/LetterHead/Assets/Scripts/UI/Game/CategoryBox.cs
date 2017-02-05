@@ -17,6 +17,7 @@ public class CategoryBox : MonoBehaviour, IGameHandler
     private Dictionary<CategoryRow, Category> categoryScoreFunctions = new Dictionary<CategoryRow, Category>();
 
     public CategoryHighlighter currentSelectedCategoryImage;
+    private bool initilized;
 
     void Start()
     {
@@ -27,26 +28,35 @@ public class CategoryBox : MonoBehaviour, IGameHandler
             GameScene.Instance.OnStateChanged.AddListener(OnGameStateChanged);
         }
 
-        for (int index = 0; index < ScoringManager.Instance.categoryManager.Categories.Count; index++)
-        {
-            var category = ScoringManager.Instance.categoryManager.Categories[index];
-            categoryRows[index].Set(category, this);
-
-            categoryScoreFunctions[categoryRows[index]] = category;
-        }
-
         RefreshMyRounds();
     }
 
     private void OnMatchDetailsLoaded()
     {
+        InitilizeRows();
+
         if (!string.IsNullOrEmpty(GameManager.Instance.CurrentRound().CategoryName))
         {
-            var category = ScoringManager.Instance.categoryManager.GetCategory(GameManager.Instance.CurrentRound().CategoryName);
+            var category = ScoringManager.Instance.GetCategoryManager.GetCategory(GameManager.Instance.CurrentRound().CategoryName);
             GameManager.Instance.SelectCategory(category, true);
         }
 
         Refresh(GameManager.Instance.MyRounds());
+    }
+
+    private void InitilizeRows()
+    {
+        if(initilized)
+            return;
+
+        initilized = true;
+        for (int index = 0; index < ScoringManager.Instance.GetCategoryManager.Categories.Count; index++)
+        {
+            var category = ScoringManager.Instance.GetCategoryManager.Categories[index];
+            categoryRows[index].Set(category, this);
+
+            categoryScoreFunctions[categoryRows[index]] = category;
+        }
     }
 
     private void OnGameStateChanged()
@@ -92,6 +102,8 @@ public class CategoryBox : MonoBehaviour, IGameHandler
 
     public void HighlightSelectableCategories()
     {
+        InitilizeRows();
+
         foreach (var categoryRow in categoryRows)
         {
             if (CategoryInvalid(categoryRow.category))
@@ -171,7 +183,7 @@ public class CategoryBox : MonoBehaviour, IGameHandler
     {
         currentSelectedCategoryImage.gameObject.SetActive(true);
 
-        var box = categoryScoreFunctions.First(c => c.Value == category).Key;
+        var box = categoryScoreFunctions.First(c => c.Value.name == category.name).Key;
         currentSelectedCategoryImage.transform.position = box.scoreLabel.transform.position;
 
         if (instant)

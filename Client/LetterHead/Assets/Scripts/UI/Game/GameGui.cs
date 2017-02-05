@@ -339,7 +339,7 @@ public class GameGui : Singleton<GameGui>
 
         if (round != null && !string.IsNullOrEmpty(round.CategoryName))
         {
-            opponentCategoryBox.SetCurrentlySelectedCategory(ScoringManager.Instance.categoryManager.GetCategory(round.CategoryName), true);
+            opponentCategoryBox.SetCurrentlySelectedCategory(ScoringManager.Instance.GetCategoryManager.GetCategory(round.CategoryName), true);
         }
 
         opponentCategoryBoxFade.FadeIn();
