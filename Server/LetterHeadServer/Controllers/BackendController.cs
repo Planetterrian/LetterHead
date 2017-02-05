@@ -124,16 +124,22 @@ namespace LetterHeadServer.Controllers
             return RedirectToAction("Login");
         }
 
+        public string DoDailyGameCrons()
+        {
+            foreach (CategoryManager.Type scoringType in Enum.GetValues(typeof(CategoryManager.Type)))
+            {
+                DailyGame.CreateNewDailyGame(scoringType);
+            }
+
+            return "Done";
+        }
+
         public string StartJobs()
         {
             TimeZoneInfo easternZone = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
 
 
-            foreach (CategoryManager.Type scoringType in Enum.GetValues(typeof (CategoryManager.Type)))
-            {
-                RecurringJob.AddOrUpdate(() => DailyGame.CreateNewDailyGame(scoringType), Cron.Daily, easternZone);
-            }
-
+            RecurringJob.AddOrUpdate(() => new BackendController().DoDailyGameCrons(), Cron.Daily);
             RecurringJob.AddOrUpdate(() => new BackendController().AutoResignMatches(), Cron.Daily);
             RecurringJob.AddOrUpdate(() => new BackendController().ClearCompletedMatches(), Cron.Daily);
             
