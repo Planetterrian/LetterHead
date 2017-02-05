@@ -14,6 +14,7 @@ public class LeaderboardWindow : WindowController
     public Button nextButton;
     public TextMeshProUGUI dateString;
     public TextMeshProUGUI myRankLabel;
+    public TextMeshProUGUI titleLabel;
     public GameObject rowPrefab;
     public Transform scrollParent;
 
@@ -31,6 +32,7 @@ public class LeaderboardWindow : WindowController
         dateString.text = "";
         scrollParent.DeleteChildren();
         dayOffset = 0;
+        titleLabel.text = "Leaderboard (" + NewGamePage.ScoringType().ToString() + ")";
         Refresh();
     }
 
@@ -74,7 +76,7 @@ public class LeaderboardWindow : WindowController
 
         MenuGui.Instance.loadingEffect.loading = true;
 
-        Srv.Instance.POST("Match/DailyLeaderbaord", new Dictionary<string, string>() { { "dayOffset", dayOffset.ToString() } }, s =>
+        Srv.Instance.POST("Match/DailyLeaderbaord", new Dictionary<string, string>() { { "dayOffset", dayOffset.ToString()}, { "scoringType", NewGamePage.ScoringType().ToString() } }, s =>
         {
             scrollParent.DeleteChildren();
 

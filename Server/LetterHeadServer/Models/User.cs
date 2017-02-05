@@ -7,6 +7,7 @@ using System.Linq.Expressions;
 using System.Web;
 using Hangfire;
 using LetterHeadServer.Controllers;
+using LetterHeadShared;
 using LetterHeadShared.DTO;
 using MyWebApplication;
 
@@ -124,6 +125,9 @@ namespace LetterHeadServer.Models
 
         public Match GetMatch(ApplicationDbContext db, DailyGame dailyGame)
         {
+            if (dailyGame == null)
+                return null;
+
             return db.Matches.FirstOrDefault(m => m.Users.Any(u => u.Id == Id) && m.DailyGame != null && m.DailyGame.Id == dailyGame.Id);
         }
 

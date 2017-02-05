@@ -189,7 +189,7 @@ public class DashboardRow : MonoBehaviour
         lastTurnLabel.text = MatchInfo.LastTurnInfo;
         usernameLabel.text = opponentInfo.Username;
         avatarBox.SetAvatarImage(opponentInfo.AvatarUrl);
-        roundLabel.text = "Round " + (MatchInfo.CurrentRoundNumber + 1) + "/" + MatchInfo.MaxRounds;
+        roundLabel.text = "Round " + (MatchInfo.CurrentRoundNumber + 1) + "/" + MatchInfo.MaxRounds + " (" + MatchInfo.ScoringType.ToString() + ")";
 
         if (type == RowType.Completed)
         {

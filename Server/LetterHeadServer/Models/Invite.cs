@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
+using LetterHeadShared;
 using MyWebApplication;
 
 namespace LetterHeadServer.Models
@@ -15,6 +16,7 @@ namespace LetterHeadServer.Models
 
         public virtual User Inviter { get; set; }
         public DateTime InviteSentOn { get; set; }
+        public CategoryManager.Type ScoringType { get; set; }
 
         public LetterHeadShared.DTO.Invite DTO()
         {

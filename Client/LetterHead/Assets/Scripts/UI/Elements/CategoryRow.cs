@@ -55,9 +55,17 @@ public class CategoryRow : MonoBehaviour
 
     public void Set(Category category, CategoryBox categoryBox)
     {
+        if (category == null)
+        {
+            nameLabel.text = "";
+        }
+        else
+        {
+            nameLabel.text = category.name;
+        }
+
         this.category = category;
         this.categoryBox = categoryBox;
-        nameLabel.text = category.name;
 
         scoreLabel.text = "";
     }

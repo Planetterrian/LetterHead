@@ -21,9 +21,9 @@ namespace LetterHeadServer.Controllers
         private static object matchLock = new object();
 
         // GET: Match
-        public ActionResult RequestDailyGameStart()
+        public ActionResult RequestDailyGameStart(CategoryManager.Type scoringType = CategoryManager.Type.Legacy)
         {
-            var dailyGame = DailyGame.Current();
+            var dailyGame = DailyGame.Current(scoringType);
             if (dailyGame == null)
             {
                 return Error("No daily game available.");
@@ -51,10 +51,10 @@ namespace LetterHeadServer.Controllers
             }
         }
 
-        public ActionResult RequestSoloGameStart()
+        public ActionResult RequestSoloGameStart(CategoryManager.Type scoringType = CategoryManager.Type.Legacy)
         {
-            var rounds = (Environment.UserName == "Pete") ? 1 : 9;
-            var match = Match.New(db, new List<User>() {currentUser}, rounds);
+            var rounds = (Environment.UserName == "Pete") ? 5 : 9;
+            var match = Match.New(db, new List<User>() {currentUser}, scoringType, rounds);
 
             match.Initizile(db);
 
@@ -71,7 +71,7 @@ namespace LetterHeadServer.Controllers
             public string Username;
         }
 
-        public ActionResult IsSoloHighScore(int matchId)
+        public ActionResult IsSoloHighScore(int matchId, CategoryManager.Type scoringType = CategoryManager.Type.Legacy)
         {
             var match = Match.GetById(db, matchId);
             if (match == null)
@@ -92,9 +92,9 @@ namespace LetterHeadServer.Controllers
             return Json("N");
         }
 
-        public ActionResult DailyLeaderbaord(int dayOffset = 0, int maxResults = 25)
+        public ActionResult DailyLeaderbaord(int dayOffset = 0, int maxResults = 25, CategoryManager.Type scoringType = CategoryManager.Type.Legacy)
         {
-            var curDailyId = DailyGame.Current().Id;
+            var curDailyId = DailyGame.Current(scoringType).Id;
 
             if (dayOffset > 0)
             {
@@ -110,9 +110,9 @@ namespace LetterHeadServer.Controllers
 
             var dailyMatch = db.DailyGames.Find(curDailyId);
 
-            var totalPlayers = db.Matches.Count(m => m.DailyGame != null && m.DailyGame.Id == curDailyId);
+            var totalPlayers = db.Matches.Count(m => m.DailyGame != null && m.DailyGame.Id == curDailyId && m.ScoringType == scoringType);
 
-            var top5 = db.Matches.Where(m => m.DailyGame != null && m.DailyGame.Id == curDailyId).OrderByDescending(m => m.SingleScore).Take(maxResults).ToList();
+            var top5 = db.Matches.Where(m => m.DailyGame != null && m.DailyGame.Id == curDailyId && m.ScoringType == scoringType).OrderByDescending(m => m.SingleScore).Take(maxResults).ToList();
             Match currentUserMatch = null;
             var currentUserRank = -1;
 
@@ -129,7 +129,7 @@ namespace LetterHeadServer.Controllers
 
             if (currentUserMatch == null)
             {
-                var allMatches = db.Matches.Where(m => m.DailyGame != null && m.DailyGame.Id == curDailyId).OrderByDescending(m => m.SingleScore).ToList();
+                var allMatches = db.Matches.Where(m => m.DailyGame != null && m.DailyGame.Id == curDailyId && m.ScoringType == scoringType).OrderByDescending(m => m.SingleScore).ToList();
                 for (int index = 0; index < allMatches.Count; index++)
                 {
                     var match = allMatches[index];
@@ -176,17 +176,17 @@ namespace LetterHeadServer.Controllers
                         });
         }
 
-        public ActionResult Random()
+        public ActionResult Random(CategoryManager.Type scoringType = CategoryManager.Type.Legacy)
         {
             lock (matchLock)
             {
-                var curPending = currentUser.Matches.Count(m => m.CurrentState == LetterHeadShared.DTO.Match.MatchState.WaitingForPlayers);
+                var curPending = currentUser.Matches.Count(m => m.CurrentState == LetterHeadShared.DTO.Match.MatchState.WaitingForPlayers && m.ScoringType == scoringType);
                 if (curPending > 0)
                 {
                     return Error("You are already searching for a random opponent.");
                 }
 
-                var existingMatch = db.Matches.FirstOrDefault(m => m.CurrentState == LetterHeadShared.DTO.Match.MatchState.WaitingForPlayers && m.Users.Count == 1);
+                var existingMatch = db.Matches.FirstOrDefault(m => m.CurrentState == LetterHeadShared.DTO.Match.MatchState.WaitingForPlayers && m.Users.Count == 1 && m.ScoringType == scoringType);
 
                 if (existingMatch != null)
                 {
@@ -195,7 +195,7 @@ namespace LetterHeadServer.Controllers
                 }
                 else
                 {
-                    var match = Match.New(db, new List<User>() {currentUser});
+                    var match = Match.New(db, new List<User>() {currentUser}, scoringType);
                 }
 
                 db.SaveChanges();
@@ -220,8 +220,9 @@ namespace LetterHeadServer.Controllers
                     dto.UnreadChatMessageCount = ChatMessage.UnreadCount(db, currentUser, match.Users.First(m => m.Id != currentUser.Id).Id);
                 matchDTOs.Add(dto);
             }
-
-            var dailyGame = DailyGame.Current();
+            
+            // Legacy daily
+            var dailyGame = DailyGame.Current(CategoryManager.Type.Legacy);
             var dailyMatch = currentUser.GetMatch(db, dailyGame);
             var canDoDaily = true;
 
@@ -235,10 +236,37 @@ namespace LetterHeadServer.Controllers
                 canDoDaily = false;
             }
 
+
+            var canDoDailyArray = new bool[Enum.GetValues(typeof(CategoryManager.Type)).Length];
+
+            foreach (CategoryManager.Type scoringType in Enum.GetValues(typeof(CategoryManager.Type)))
+            {
+                dailyGame = DailyGame.Current(scoringType);
+
+                if (dailyGame == null)
+                {
+                    canDoDailyArray[(int)scoringType] = false;
+                    continue;
+                }
+
+                dailyMatch = currentUser.GetMatch(db, dailyGame);
+                canDoDailyArray[(int)scoringType] = true;
+
+                if (dailyMatch != null && dailyMatch.CurrentState == LetterHeadShared.DTO.Match.MatchState.Ended)
+                {
+                    canDoDailyArray[(int)scoringType] = false;
+                }
+
+                if (!dailyGame.CanStart())
+                {
+                    canDoDailyArray[(int)scoringType] = false;
+                }
+            }
+
             currentUser.NotificationBadgeCount = 0;
             db.SaveChanges();
 
-            return Json(new { Matches = matchDTOs, Invites = currentUser.Invites.Select(i => i.DTO()), CanDoDaily = canDoDaily } );
+            return Json(new { Matches = matchDTOs, Invites = currentUser.Invites.Select(i => i.DTO()), CanDoDaily = canDoDaily, CanDoDailyArray = canDoDailyArray } );
         }
 
         public ActionResult AcceptInvite(int inviteId)
@@ -254,7 +282,7 @@ namespace LetterHeadServer.Controllers
                 var users = new List<User>() {currentUser, invite.Inviter};
                 users = users.OrderBy(u => Guid.NewGuid()).ToList();
 
-                var match = Match.New(db, users);
+                var match = Match.New(db, users, invite.ScoringType);
                 match.Initizile(db);
                 currentUser.Invites.Remove(invite);
                 db.Entry(invite).State = EntityState.Deleted;
@@ -283,7 +311,7 @@ namespace LetterHeadServer.Controllers
             }
         }
 
-        public ActionResult Invite(int userId)
+        public ActionResult Invite(int userId, CategoryManager.Type scoringType = CategoryManager.Type.Legacy)
         {
             lock (matchLock)
             {
@@ -293,12 +321,12 @@ namespace LetterHeadServer.Controllers
                     return Error("Invalid User");
                 }
 
-                return DoInvite(targetUser);
+                return DoInvite(targetUser, scoringType);
             }
         }
 
 
-        public ActionResult InviteByUsername(string username)
+        public ActionResult InviteByUsername(string username, CategoryManager.Type scoringType = CategoryManager.Type.Legacy)
         {
             lock (matchLock)
             {
@@ -313,11 +341,11 @@ namespace LetterHeadServer.Controllers
                     return Error("Invalid User");
                 }
 
-                return DoInvite(targetUser);
+                return DoInvite(targetUser, scoringType);
             }
         }
 
-        private ActionResult DoInvite(User targetUser)
+        private ActionResult DoInvite(User targetUser, CategoryManager.Type scoringType)
         {
             if(targetUser.Id == currentUser.Id)
                 return Error("You cannot invite yourself!");
@@ -331,7 +359,8 @@ namespace LetterHeadServer.Controllers
             {
                 InviteSentOn = DateTime.Now,
                 Inviter = currentUser,
-                User = targetUser
+                User = targetUser,
+                ScoringType = scoringType
             };
 
             targetUser.Invites.Add(invite);

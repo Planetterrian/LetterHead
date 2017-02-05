@@ -28,6 +28,11 @@ public class CategoryBox : MonoBehaviour, IGameHandler
             GameScene.Instance.OnStateChanged.AddListener(OnGameStateChanged);
         }
 
+        foreach (var categoryRow in categoryRows)
+        {
+            categoryRow.Set(null, this);
+        }
+        
         RefreshMyRounds();
     }
 
@@ -146,7 +151,7 @@ public class CategoryBox : MonoBehaviour, IGameHandler
 
                 totalScore += score;
             }
-            if (scoreFunc.Value.name == "Upper Bonus")
+            else if (scoreFunc.Value.name == "Upper Bonus")
             {
                 score = scoreFunc.Value.GetScore(new List<string>(), 0,
                     ScoringManager.Instance.ExistingCategoryScores(isPrimary));

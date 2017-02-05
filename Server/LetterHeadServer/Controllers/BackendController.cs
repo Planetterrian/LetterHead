@@ -11,6 +11,7 @@ using Facebook;
 using Hangfire;
 using LetterHeadServer.Classes;
 using LetterHeadServer.Models;
+using LetterHeadShared;
 using MatchRound = LetterHeadShared.DTO.MatchRound;
 
 namespace LetterHeadServer.Controllers
@@ -58,15 +59,15 @@ namespace LetterHeadServer.Controllers
 
             ViewBag.last2ActiveCount = last2ActiveCount;
             ViewBag.last7ActiveCount = last7ActiveCount;
+            ViewBag.newDaily = 0;
 
-            var curDaily = DailyGame.Current(db);
-            if (curDaily == null)
+            foreach (CategoryManager.Type scoringType in Enum.GetValues(typeof (CategoryManager.Type)))
             {
-                ViewBag.newDaily = 0;
-            }
-            else
-            {
-                ViewBag.newDaily = db.Matches.Count(m => m.DailyGame != null && m.DailyGame.Id == curDaily.Id);
+                var curDaily = DailyGame.Current(scoringType, db);
+                if (curDaily != null)
+                {
+                    ViewBag.newDaily += db.Matches.Count(m => m.DailyGame != null && m.DailyGame.Id == curDaily.Id);
+                }
             }
 
             ViewBag.newSolo = db.Matches.Count(m => m.CreatedOn > yesterday && m.DailyGame == null && m.Users.Count == 1);
@@ -127,7 +128,12 @@ namespace LetterHeadServer.Controllers
         {
             TimeZoneInfo easternZone = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
 
-            RecurringJob.AddOrUpdate(() => DailyGame.CreateNewDailyGame(), Cron.Daily, easternZone);
+
+            foreach (CategoryManager.Type scoringType in Enum.GetValues(typeof (CategoryManager.Type)))
+            {
+                RecurringJob.AddOrUpdate(() => DailyGame.CreateNewDailyGame(scoringType), Cron.Daily, easternZone);
+            }
+
             RecurringJob.AddOrUpdate(() => new BackendController().AutoResignMatches(), Cron.Daily);
             RecurringJob.AddOrUpdate(() => new BackendController().ClearCompletedMatches(), Cron.Daily);
             
@@ -162,10 +168,10 @@ namespace LetterHeadServer.Controllers
         }
 
 
-        public string NewDailyGame()
+        public string NewDailyGame(CategoryManager.Type scoringType = CategoryManager.Type.Normal)
         {
-            DailyGame.CreateNewDailyGame();
-            return "New daily game created";
+            DailyGame.CreateNewDailyGame(scoringType);
+            return "New " + scoringType + " daily game created";
         }
 
         public ActionResult Matchmaking()
@@ -175,7 +181,7 @@ namespace LetterHeadServer.Controllers
 
         public string TestGame(int userId, int userId2)
         {
-            var match = Match.New(db, new List<User>() { db.Users.Find(userId), db.Users.Find(userId2) }, 1);
+            var match = Match.New(db, new List<User>() { db.Users.Find(userId), db.Users.Find(userId2) }, CategoryManager.Type.Normal, 1);
             match.Initizile(db);
 
             db.SaveChanges();

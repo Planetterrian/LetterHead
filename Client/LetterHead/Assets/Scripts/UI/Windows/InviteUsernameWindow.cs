@@ -21,7 +21,7 @@ public class InviteUsernameWindow : WindowController
 
         DialogWindowTM.Instance.Show("Invite", "Sending invite to " + username + ".", () => { }, () => { }, "");
 
-        Srv.Instance.POST("Match/InviteByUsername", new Dictionary<string, string>() {{"username", username } }, s =>
+        Srv.Instance.POST("Match/InviteByUsername", new Dictionary<string, string>() {{"username", username }, {"scoringType", NewGamePage.ScoringType().ToString()} }, s =>
         {
             DialogWindowTM.Instance.Show("Invite", "Invite sent to " + username + ".", () => { });
             submitButton.interactable = true;

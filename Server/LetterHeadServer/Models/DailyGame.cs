@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 using LetterHeadServer.Classes;
+using LetterHeadShared;
 
 namespace LetterHeadServer.Models
 {
@@ -16,6 +17,7 @@ namespace LetterHeadServer.Models
         public string LettersEncoded { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime? EndDate { get; set; }
+        public CategoryManager.Type ScoringType { get; set; }
 
         public string RoundLetters(int roundNumber)
         {
@@ -24,11 +26,11 @@ namespace LetterHeadServer.Models
 
         private const int RoundCount = 9;
 
-        public static void CreateNewDailyGame()
+        public static void CreateNewDailyGame(CategoryManager.Type scoringType)
         {
             var db = ApplicationDbContext.Get();
 
-            var current = Current(db);
+            var current = Current(scoringType, db);
             current?.End(db);
 
             var letterArray = new List<string>();
@@ -36,23 +38,23 @@ namespace LetterHeadServer.Models
             for (int i = 0; i < RoundCount; i++)
             {
                 letterArray.Add(BoardHelper.GenerateBoard());
-                //letterArray.Add("nipiusreij");
             }
 
             db.DailyGames.Add(new DailyGame()
             {
                 StartDate = DateTime.Now,
-                LettersEncoded =  String.Join(",", letterArray)
+                LettersEncoded =  String.Join(",", letterArray),
+                ScoringType = scoringType
             });
 
             db.SaveChanges();
         }
 
-        public static DailyGame Current(ApplicationDbContext context = null)
+        public static DailyGame Current(CategoryManager.Type scoringType, ApplicationDbContext context = null)
         {
             var db = context ?? ApplicationDbContext.Get();
 
-            return db.DailyGames.OrderByDescending(d => d.Id).FirstOrDefault();
+            return db.DailyGames.Where(m => m.ScoringType == scoringType).OrderByDescending(d => d.Id).FirstOrDefault();
         }
 
         private void End(ApplicationDbContext context)
@@ -90,7 +92,7 @@ namespace LetterHeadServer.Models
         {
             var rounds = (Environment.UserName == "Pete") ? 2 : 9;
 
-            var match = Match.New(context, new List<User>(){ currentUser }, rounds);
+            var match = Match.New(context, new List<User>(){ currentUser }, ScoringType, rounds);
             match.DailyGame = this;
             match.CurrentState = LetterHeadShared.DTO.Match.MatchState.Pregame;
                         context.SaveChanges();

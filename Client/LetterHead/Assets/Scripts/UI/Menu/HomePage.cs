@@ -41,7 +41,7 @@ public class HomePage : Page
     {
         public List<Match> Matches;
         public List<Invite> Invites;
-        public bool CanDoDaily;
+        public bool[] CanDoDailyArray;
     }
 
     void OnApplicationFocus(bool state)
@@ -79,13 +79,13 @@ public class HomePage : Page
         matchesRefreshing = true;
         lastPoll = Time.time;
 
-        Srv.Instance.POST("Match/List", null, s =>
+        Srv.Instance.POST("Match/List", new Dictionary<string, string>() { { "scoringType", NewGamePage.ScoringType().ToString() } }, s =>
         {
             var list = JsonConvert.DeserializeObject<ListInfo>(s);
             var matches = list.Matches;
             invites = list.Invites;
 
-            ClientManager.Instance.CanDoDaily = list.CanDoDaily;
+            ClientManager.Instance.CanDoDaily = list.CanDoDailyArray;
 
             if(NewGamePage.Instance)
                 NewGamePage.Instance.Refresh();
@@ -190,7 +190,7 @@ public class HomePage : Page
 
             SoundManager.Instance.PlayClip("Invite");
 
-            DialogWindowTM.Instance.Show("Invite", "You have a match invite from " + invite.Inviter.Username + ". Do you want to accept?",
+            DialogWindowTM.Instance.Show("Invite", "You have a match invite from " + invite.Inviter.Username + " (" + invite.ScoringType.ToString() + "). Do you want to accept?",
                 () =>
                 {
                     Srv.Instance.POST("Match/AcceptInvite",

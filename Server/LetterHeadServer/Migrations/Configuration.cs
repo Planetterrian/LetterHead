@@ -1,4 +1,5 @@
 using LetterHeadServer.Models;
+using LetterHeadShared;
 
 namespace LetterHeadServer.Migrations
 {
@@ -19,7 +20,8 @@ namespace LetterHeadServer.Migrations
         {
             if (!context.DailyGames.Any())
             {
-                DailyGame.CreateNewDailyGame();
+                DailyGame.CreateNewDailyGame(CategoryManager.Type.Normal);
+                DailyGame.CreateNewDailyGame(CategoryManager.Type.Advanced);
             }
         }
     }

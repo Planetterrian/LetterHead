@@ -10,7 +10,7 @@ namespace LetterHeadShared
     {
         public enum Type
         {
-            Advanced, Normal, Expert
+            Legacy, Normal, Advanced, Expert
         }
 
         protected List<Category> categories = new List<Category>();
@@ -41,6 +41,8 @@ namespace LetterHeadShared
 
         public static CategoryManager GetManagerForScoringType(Type scoringType)
         {
+            if (scoringType == Type.Legacy)
+                return new CategoryManagerLegacy();
             if (scoringType == Type.Normal)
                 return new CategoryManagerNormal();
             else if (scoringType == Type.Advanced)

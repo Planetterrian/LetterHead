@@ -258,7 +258,7 @@ public class EndRoundWindow : WindowController
 
     private void LoadDailyLeaderboard()
     {
-        Srv.Instance.POST("Match/DailyLeaderbaord", new Dictionary<string, string>() { {"maxResults", "5"} }, s =>
+        Srv.Instance.POST("Match/DailyLeaderbaord", new Dictionary<string, string>() { {"maxResults", "5"}, {"scoringType", GameManager.Instance.MatchDetails.ScoringType.ToString() }}, s =>
         {
             var scores = JsonConvert.DeserializeObject<LeaderboardWindow.LeaderboardData>(s);
 

@@ -19,7 +19,7 @@ public class ClientManager : Singleton<ClientManager>
         private set { sessionId = value; }
     }
 
-    public bool CanDoDaily { get; set; }
+    public bool[] CanDoDaily { get; set; }
     public bool IsNewLogin { get; set; }
 
     public string editorSessionId;
@@ -27,6 +27,8 @@ public class ClientManager : Singleton<ClientManager>
     protected override void Awake()
     {
         base.Awake();
+
+        CanDoDaily = new bool[32];
 
         SessionId = PlayerPrefs.GetString("sessId", "");
 

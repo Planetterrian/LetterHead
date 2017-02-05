@@ -102,9 +102,9 @@ namespace LetterHeadServer.Models
             return categoryManager;
         }
 
-        public static Match New(ApplicationDbContext db, List<User> users, int roundCount = 9)
+        public static Match New(ApplicationDbContext db, List<User> users, CategoryManager.Type scoringType, int roundCount = 9)
         {
-            var roundTime = (Environment.UserName == "Pete") ? 20 : 120;
+            var roundTime = (Environment.UserName == "Pete") ? 120 : 120;
             
             var match = new Match()
                 {
@@ -114,6 +114,7 @@ namespace LetterHeadServer.Models
                     Rounds = new List<MatchRound>(),
                     Users = users,
                     MaxRounds = roundCount,
+                    ScoringType = scoringType
             };
 
             if(users.Count > 0)
