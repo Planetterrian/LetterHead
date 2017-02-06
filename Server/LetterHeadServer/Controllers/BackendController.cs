@@ -139,7 +139,7 @@ namespace LetterHeadServer.Controllers
             TimeZoneInfo easternZone = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
 
 
-            RecurringJob.AddOrUpdate(() => new BackendController().DoDailyGameCrons(), Cron.Daily);
+            RecurringJob.AddOrUpdate(() => new BackendController().DoDailyGameCrons(), Cron.Daily, easternZone);
             RecurringJob.AddOrUpdate(() => new BackendController().AutoResignMatches(), Cron.Daily);
             RecurringJob.AddOrUpdate(() => new BackendController().ClearCompletedMatches(), Cron.Daily);
             

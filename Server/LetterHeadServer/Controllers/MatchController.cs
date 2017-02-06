@@ -94,12 +94,13 @@ namespace LetterHeadServer.Controllers
 
         public ActionResult DailyLeaderbaord(int dayOffset = 0, int maxResults = 25, CategoryManager.Type scoringType = CategoryManager.Type.Legacy)
         {
-            var curDailyId = DailyGame.Current(scoringType).Id;
+            var curDaily = DailyGame.Current(scoringType);
+            var curDailyId = curDaily.Id;
 
             if (dayOffset > 0)
             {
-                var newId = curDailyId - dayOffset;
-                var match = db.DailyGames.Find(newId);
+                var date = curDaily.StartDate - TimeSpan.FromDays(dayOffset);
+                var match = db.DailyGames.FirstOrDefault(d => DbFunctions.TruncateTime(d.StartDate) == DbFunctions.TruncateTime(date));
                 if (match == null)
                 {
                     return Error("No daily game found");
