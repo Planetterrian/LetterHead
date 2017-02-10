@@ -221,6 +221,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MatchController.cs" />
     <Compile Include="Controllers\RealTimeController.cs" />
+    <Compile Include="Controllers\TooltipsController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -235,6 +236,7 @@
     <Compile Include="Models\MatchBuzz.cs" />
     <Compile Include="Models\MatchRound.cs" />
     <Compile Include="Models\Session.cs" />
+    <Compile Include="Models\Tooltip.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\UserRegistrationModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -300,6 +302,11 @@
     <Content Include="Views\Backend\Index.cshtml" />
     <Content Include="Views\Backend\Login.cshtml" />
     <Content Include="Views\Backend\MatchStatistics.cshtml" />
+    <Content Include="Views\Tooltips\Create.cshtml" />
+    <Content Include="Views\Tooltips\Delete.cshtml" />
+    <Content Include="Views\Tooltips\Details.cshtml" />
+    <Content Include="Views\Tooltips\Edit.cshtml" />
+    <Content Include="Views\Tooltips\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Certificates\" />

@@ -14,7 +14,8 @@ namespace LetterHeadServer.Models
         public DbSet<Models.Match> Matches { get; set; }
         public DbSet<Models.ChatMessage> ChatMessages { get; set; }
         public DbSet<Models.MatchRound> MatchRounds { get; set; }
-        
+        public System.Data.Entity.DbSet<LetterHeadServer.Models.Tooltip> Tooltips { get; set; }
+
         public static ApplicationDbContext Create()
         {
             return new ApplicationDbContext();
@@ -63,5 +64,6 @@ namespace LetterHeadServer.Models
         WithRequired()
         .WillCascadeOnDelete(true);
         }
+
     }
 }
