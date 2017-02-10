@@ -239,7 +239,7 @@ public class GameGui : Singleton<GameGui>
         chatNoticeBubble.SetCount(GameManager.Instance.MatchDetails.UnreadChatMessageCount);
 
         timer.SetTimer(GameManager.Instance.MatchDetails.RoundTimeSeconds);
-        roundNumberLabel.text = "Round " + (GameManager.Instance.MatchDetails.CurrentRoundNumber + 1) + "/" + GameManager.Instance.MatchDetails.MaxRounds;
+        roundNumberLabel.text = "Round " + (GameManager.Instance.MatchDetails.CurrentRoundNumber + 1) + "/" + GameManager.Instance.MatchDetails.MaxRounds + "(" + GameManager.Instance.MatchDetails.ScoringType + ")";
         
         dontHideNextMatchButton = GameManager.Instance.MatchDetails.CurrentState != Match.MatchState.Ended;
 
