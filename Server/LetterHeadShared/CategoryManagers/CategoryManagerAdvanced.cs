@@ -32,7 +32,7 @@ namespace LetterHeadShared.CategoryManagers
 
             categories.Add(new Category()
             {
-                name = "20 Words",
+                name = "Word Count",
                 description = "2 points for each word.  No max.  Goal: 20 words.",
                 GetScore = (words, uniqueLetterCount, existingScores) => words.Count * 2
             });
@@ -50,7 +50,7 @@ namespace LetterHeadShared.CategoryManagers
                         upperScore += existingScores[i];
                     }
 
-                    if (upperScore >= 100)
+                    if (upperScore >= 110)
                         return 35;
 
                     return 0;
