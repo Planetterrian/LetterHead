@@ -217,7 +217,7 @@ public class DashboardRow : MonoBehaviour
             if (MatchInfo.IsDaily)
             {
                 dailyGameLabel.gameObject.SetActive(true);
-                dailyGameLabel.text = "DAILY GAME - " + MatchInfo.DateStringShort;
+                dailyGameLabel.text = "DAILY - " + MatchInfo.DateStringShort;
             }
             else
                 soloGameLabel.gameObject.SetActive(true);
