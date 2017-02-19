@@ -10,7 +10,7 @@ namespace LetterHeadServer.Controllers
     {
         public string Tip()
         {
-            var tooltip = db.Tooltips.OrderBy(r => Guid.NewGuid()).First();
+            var tooltip = db.Tooltips.Where(t => t.Active).OrderBy(r => Guid.NewGuid()).First();
             return tooltip.Content;
         }
     }

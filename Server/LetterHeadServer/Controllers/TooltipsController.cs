@@ -109,7 +109,7 @@ namespace LetterHeadServer.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Content")] Tooltip tooltip)
+        public ActionResult Edit([Bind(Include = "Id,Content,Active")] Tooltip tooltip)
         {
             if (!IsAuthenticated())
             {
