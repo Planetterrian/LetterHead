@@ -1,0 +1,26 @@
+﻿@model dynamic
+
+@{
+    ViewBag.Title = "Top Users";
+}
+
+<h2>Top Users</h2>
+<table width="70%">
+    <thead>
+    <th>User</th>
+    <th>Total Games</th>
+    <th>Average Score</th>
+    <th>Win %</th>
+    <th>Best Score</th>
+    </thead>
+    @foreach (dynamic item in ViewBag.results)
+    {
+        <tr>
+            <td>@item.User.Username</td>
+            <td>@item.Stats.gamesPlayed</td>
+            <td>@item.Stats.averageScore</td>
+            <td>@(Math.Round((item.Stats.gamesWon / (float)item.Stats.gamesPlayed), 1) * 100)</td>
+            <td>@item.Stats.bestScore</td>
+        </tr>
+    }
+</table>

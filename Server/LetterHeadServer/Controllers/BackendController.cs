@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Net;
@@ -73,6 +74,32 @@ namespace LetterHeadServer.Controllers
             ViewBag.newSolo = db.Matches.Count(m => m.CreatedOn > yesterday && m.DailyGame == null && m.Users.Count == 1);
             ViewBag.newMatches = db.Matches.Count(m => m.CreatedOn > yesterday && m.DailyGame == null && m.Users.Count == 2);
 
+            return View();
+        }
+
+        public ActionResult TopUsers()
+        {
+            if (!IsAuthenticated())
+            {
+                return RedirectToAction("Login");
+            }
+
+            var users = db.Users.OrderByDescending(u => (u.Stat_GamesWon + u.Stat_GamesLost + u.Stat_GamesTied)).Take(20).ToList();
+
+            var ret = new List<dynamic>();
+
+            foreach (var user in users)
+            {
+                var stats = user.Stats(db);
+
+                dynamic data = new ExpandoObject();
+                data.User = user;
+                data.Stats = stats;
+
+                ret.Add(data);
+            }
+
+            ViewBag.results = ret;
             return View();
         }
 

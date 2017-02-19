@@ -307,6 +307,7 @@
     <Content Include="Views\Tooltips\Details.cshtml" />
     <Content Include="Views\Tooltips\Edit.cshtml" />
     <Content Include="Views\Tooltips\Index.cshtml" />
+    <Content Include="Views\Backend\TopUsers.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Certificates\" />
