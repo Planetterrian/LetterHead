@@ -51,6 +51,7 @@ namespace LetterHeadServer.Controllers
                 SentOn = DateTime.Now,
                 Message = content
             };
+/*
 
             to.SendNotification(new NotificationDetails()
             {
@@ -59,6 +60,7 @@ namespace LetterHeadServer.Controllers
                 title = "Letterhead Chat",
                 type = NotificationDetails.Type.Chat
             });
+*/
 
             db.ChatMessages.Add(message);
             db.SaveChanges();
