@@ -339,7 +339,7 @@ public class HomePage : Page
         var opponentInfo = matchInfo.Users.FirstOrDefault(u => u.Id != ClientManager.Instance.UserId());
 
         DialogWindowTM.Instance.Show("Invite", "Sending invite to " + opponentInfo.Username + ".", () => { }, () => { }, "");
-        Srv.Instance.POST("Match/Invite", new Dictionary<string, string>() { { "userId", opponentInfo.Id.ToString() } },
+        Srv.Instance.POST("Match/Invite", new Dictionary<string, string>() { { "userId", opponentInfo.Id.ToString() }, { "scoringType", matchInfo.ScoringType.ToString() } },
             (s) =>
             {
                 DialogWindowTM.Instance.Show("Invite", "Invite sent!", () => { });
