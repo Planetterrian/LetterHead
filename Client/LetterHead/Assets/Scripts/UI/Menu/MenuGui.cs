@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using LetterHeadShared;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -129,6 +130,13 @@ public class MenuGui : Singleton<MenuGui>
 
     public void ShowLeaderboard()
     {
+        LeaderboardWindow.Instance.scoringType = NewGamePage.ScoringType();
+        LeaderboardWindow.Instance.ShowModal();
+    }
+
+    public void ShowLegacyLeaderboard()
+    {
+        LeaderboardWindow.Instance.scoringType = CategoryManager.Type.Legacy;
         LeaderboardWindow.Instance.ShowModal();
     }
 }

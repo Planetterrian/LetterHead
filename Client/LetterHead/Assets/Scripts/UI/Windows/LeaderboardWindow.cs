@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using LetterHeadShared;
 using Newtonsoft.Json;
 using TMPro;
 using UnityEngine;
@@ -18,6 +19,8 @@ public class LeaderboardWindow : WindowController
     public GameObject rowPrefab;
     public Transform scrollParent;
 
+    public CategoryManager.Type scoringType;
+
     private int dayOffset;
 
     protected override void Awake()
@@ -32,7 +35,7 @@ public class LeaderboardWindow : WindowController
         dateString.text = "";
         scrollParent.DeleteChildren();
         dayOffset = 0;
-        titleLabel.text = "Leaderboard (" + NewGamePage.ScoringType().ToString() + ")";
+        titleLabel.text = "Leaderboard (" + scoringType.ToString() + ")";
         Refresh();
     }
 
@@ -76,7 +79,7 @@ public class LeaderboardWindow : WindowController
 
         MenuGui.Instance.loadingEffect.loading = true;
 
-        Srv.Instance.POST("Match/DailyLeaderbaord", new Dictionary<string, string>() { { "dayOffset", dayOffset.ToString()}, { "scoringType", NewGamePage.ScoringType().ToString() } }, s =>
+        Srv.Instance.POST("Match/DailyLeaderbaord", new Dictionary<string, string>() { { "dayOffset", dayOffset.ToString()}, { "scoringType", scoringType.ToString() } }, s =>
         {
             scrollParent.DeleteChildren();
 
