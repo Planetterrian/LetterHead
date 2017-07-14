@@ -16,6 +16,8 @@ public class TutorialManager : Singleton<TutorialManager>
     {
         get
         {
+            return -1;
+
             if (Application.isEditor && editorStep == -1)
                 return editorStep;
 
