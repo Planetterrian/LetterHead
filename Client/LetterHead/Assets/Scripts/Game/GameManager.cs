@@ -116,6 +116,11 @@ public abstract class GameManager : Singleton<GameManager>
     {
         base.Awake();
 
+        if (DateTime.Now.Year < 0)
+        { // actually never run but Unity doesn't know :)
+            Debug.Log(new List<bool>());
+        }
+
         gameScene = GameScene.Instance;
         GameGui.Instance.timer.OnTimeExpired.AddListener(OnTimerExpired);
     }
