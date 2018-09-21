@@ -12,15 +12,15 @@ namespace LetterHeadShared.CategoryManagers
             categories.Add(new Category()
             {
                 name = "Roll Call",
-                description = "1 point for the first time each letter used.  Max 10 points.  Goal: Use all 10 letters!",
-                GetScore = (words, uniqueLetterCount, existingScores) => uniqueLetterCount * 1
+                description = "2 points for the first time each letter used.  Max 20 points.  Goal: Use all 10 letters!",
+                GetScore = (words, uniqueLetterCount, existingScores) => uniqueLetterCount * 2
             });
 
             categories.Add(new Category()
             {
                 name = "3 & 4 Letters",
-                description = "1 point for each 3-letter and 4-letter word.  No max.  Goal: 15 words.",
-                GetScore = (words, uniqueLetterCount, existingScores) => words.Count(w => w.Length == 3 || w.Length == 4) * 1
+                description = "2 points for each 3-letter and 4-letter word.  No max.  Goal: 15 words.",
+                GetScore = (words, uniqueLetterCount, existingScores) => words.Count(w => w.Length == 3 || w.Length == 4) * 2
             });
 
             categories.Add(new Category()
@@ -33,14 +33,14 @@ namespace LetterHeadShared.CategoryManagers
             categories.Add(new Category()
             {
                 name = "Word Count",
-                description = "1 point for each word.  No max.  Goal: 20 words.",
-                GetScore = (words, uniqueLetterCount, existingScores) => words.Count * 1
+                description = "2 points for each word.  No max.  Goal: 20 words.",
+                GetScore = (words, uniqueLetterCount, existingScores) => words.Count * 2
             });
 
             categories.Add(new Category()
             {
                 name = "Upper Bonus",
-                description = "Score at least 65 points in the above categories to earn and additional 35 points.",
+                description = "Score at least 110 points in the above categories to earn and additional 35 points.",
                 alwaysActive = true,
                 GetScore = (words, uniqueLetterCount, existingScores) =>
                 {
@@ -50,7 +50,7 @@ namespace LetterHeadShared.CategoryManagers
                         upperScore += existingScores[i];
                     }
 
-                    if (upperScore >= 65)
+                    if (upperScore >= 110)
                         return 35;
 
                     return 0;
