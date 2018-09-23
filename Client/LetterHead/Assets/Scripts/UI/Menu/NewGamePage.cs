@@ -27,9 +27,9 @@ public class NewGamePage : Page
     {
         base.OnShow();
 
-        if (ScoringType() == CategoryManager.Type.Normal)
+        if (ScoringType() == CategoryManager.Type.Normal || ScoringType() == CategoryManager.Type.NormalRetro)
             normalGameToggle.isOn = true;
-        else if (ScoringType() == CategoryManager.Type.Advanced)
+        else if (ScoringType() == CategoryManager.Type.Advanced || ScoringType() == CategoryManager.Type.AdvancedRetro)
             advancedGameToggle.isOn = true;
 
         Refresh();
@@ -50,16 +50,23 @@ public class NewGamePage : Page
 
     public static CategoryManager.Type ScoringType()
     {
-        var scoringType = (CategoryManager.Type)PlayerPrefs.GetInt("DefaultScoringType" + ClientManager.Instance.UserId(), 1);
+        var scoringType = (CategoryManager.Type)PlayerPrefs.GetInt("DefaultScoringType" + ClientManager.Instance.UserId(), (int)CategoryManager.Type.NormalRetro);
+
+        // Convert to retro mode
+        if (scoringType == CategoryManager.Type.Normal)
+            scoringType = CategoryManager.Type.NormalRetro;
+        else if (scoringType == CategoryManager.Type.Advanced)
+            scoringType = CategoryManager.Type.AdvancedRetro;
+
         return scoringType;
     }
 
     public void OnScoringTypeChanged()
     {
         if (normalGameToggle.isOn)
-            PlayerPrefs.SetInt("DefaultScoringType" + ClientManager.Instance.UserId(), (int)CategoryManager.Type.Normal);
+            PlayerPrefs.SetInt("DefaultScoringType" + ClientManager.Instance.UserId(), (int)CategoryManager.Type.NormalRetro);
         else if (advancedGameToggle.isOn)
-            PlayerPrefs.SetInt("DefaultScoringType" + ClientManager.Instance.UserId(), (int)CategoryManager.Type.Advanced);
+            PlayerPrefs.SetInt("DefaultScoringType" + ClientManager.Instance.UserId(), (int)CategoryManager.Type.AdvancedRetro);
 
         Refresh();
     }

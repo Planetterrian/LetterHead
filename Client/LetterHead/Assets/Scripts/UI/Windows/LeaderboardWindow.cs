@@ -35,7 +35,7 @@ public class LeaderboardWindow : WindowController
         dateString.text = "";
         scrollParent.DeleteChildren();
         dayOffset = 0;
-        titleLabel.text = "Leaderboard (" + scoringType.ToString() + ")";
+        titleLabel.text = "Leaderboard (" + GameManager.ModeName(scoringType) + ")";
         Refresh();
     }
 

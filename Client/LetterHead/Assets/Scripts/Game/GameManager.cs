@@ -337,5 +337,17 @@ public abstract class GameManager : Singleton<GameManager>
         return null;
     }
 
+    public static string ModeName(CategoryManager.Type type)
+    {
+        switch (type)
+        {
+            case CategoryManager.Type.NormalRetro:
+                return "Normal";
+            case CategoryManager.Type.AdvancedRetro:
+                return "Advanced";
+            default:
+                return type.ToString();
+        }
+    }
 
 }

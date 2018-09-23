@@ -25,6 +25,7 @@
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -264,7 +265,9 @@
     <None Include="Properties\PublishProfiles\letterhead %282%29.pubxml" />
     <None Include="Properties\PublishProfiles\letterhead %283%29.pubxml" />
     <None Include="Properties\PublishProfiles\letterhead - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\letterhead - FTP1.pubxml" />
     <None Include="Properties\PublishProfiles\letterhead - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\letterhead - Web Deploy1.pubxml" />
     <None Include="Properties\PublishProfiles\letterhead.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />

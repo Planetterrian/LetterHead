@@ -41,9 +41,11 @@
   <ItemGroup>
     <Compile Include="CategoryManager.cs" />
     <Compile Include="CategoryManagers\CategoryManagerAdvanced.cs" />
+    <Compile Include="CategoryManagers\CategoryManagerAdvancedRetro.cs" />
     <Compile Include="CategoryManagers\CategoryManagerExpert.cs" />
     <Compile Include="CategoryManagers\CategoryManagerLegacy.cs" />
     <Compile Include="CategoryManagers\CategoryManagerNormal.cs" />
+    <Compile Include="CategoryManagers\CategoryManagerNormalRetro.cs" />
     <Compile Include="DTO\ChatMessage.cs" />
     <Compile Include="DTO\Invite.cs" />
     <Compile Include="DTO\Match.cs" />
