@@ -12,48 +12,49 @@ namespace LetterHeadShared.CategoryManagers
             categories.Add(new Category()
             {
                 name = "Roll Call",
-                description = "2 points for the first time each letter used.  Max 20 points.  Goal: Use all 10 letters!",
-                GetScore = (words, uniqueLetterCount, existingScores) => uniqueLetterCount * 2
+                description = "Use all letters at least once.  Worth 20 points.",
+                GetScore = (words, uniqueLetterCount, existingScores) => uniqueLetterCount == 10 ? 20 : 0
             });
 
             categories.Add(new Category()
             {
                 name = "3 & 4 Letters",
-                description = "2 points for each 3-letter and 4-letter word.  No max.  Goal: 10 words.",
-                GetScore = (words, uniqueLetterCount, existingScores) => words.Count(w => w.Length == 3 || w.Length == 4) * 2
+                description = "Make at least 15 3-letter and 4-letter words.  Worth 30 points.",
+                GetScore = (words, uniqueLetterCount, existingScores) => words.Count(w => w.Length == 3 || w.Length == 4) >= 15 ? 30 : 0
             });
 
             categories.Add(new Category()
             {
                 name = "5 & 6 Letters",
-                description = "2 points for each 5-letter and 6-letter word.  No max.  Goal: 5 words.",
-                GetScore = (words, uniqueLetterCount, existingScores) => words.Count(w => w.Length == 5 || w.Length == 6) * 2
+                description = "Make at least 10 5-letter and 6-letter words.  Worth 30 points.",
+                GetScore = (words, uniqueLetterCount, existingScores) => words.Count(w => w.Length == 5 || w.Length == 6) >= 10 ? 30 : 0
             });
 
             categories.Add(new Category()
             {
-                name = "Word Count",
-                description = "2 points for each word.  No max.  Goal: 10 words.",
-                GetScore = (words, uniqueLetterCount, existingScores) => words.Count * 2
+                name = "20 Words",
+                description = "Make at least 20 words.  Worth 40 points.",
+                GetScore = (words, uniqueLetterCount, existingScores) => words.Count >= 20 ? 40 : 0
             });
 
             categories.Add(new Category()
             {
                 name = "Upper Bonus",
-                description = "Score at least 70 points in the above categories to earn and additional 35 points.",
+                description = "Successfully complete all of the above categories for an additional 35 points.",
                 alwaysActive = true,
                 GetScore = (words, uniqueLetterCount, existingScores) =>
                 {
-                    var upperScore = 0;
+                    var score = 35;
                     for (var i = 0; i < 4; i++)
                     {
-                        upperScore += existingScores[i];
+                        if (existingScores[i] == 0)
+                        {
+                            score = 0;
+                            break;
+                        }
                     }
 
-                    if (upperScore >= 70)
-                        return 35;
-
-                    return 0;
+                    return score;
                 }
             });
 
@@ -133,5 +134,6 @@ namespace LetterHeadShared.CategoryManagers
             });
 
         }
+
     }
 }
