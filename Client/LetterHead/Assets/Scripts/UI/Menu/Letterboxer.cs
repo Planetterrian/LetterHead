@@ -25,9 +25,7 @@ public class Letterboxer : MonoBehaviour
     public Vector2 landscapeMaxAspectRatio = new Vector2(16.0f, 9.0f);
     public Vector2 portraitMinAspectRatio = new Vector2(9.0f, 16.0f);
     public Vector2 portraitMaxAspectRatio = new Vector2(2.0f, 3.0f);
-
-    public CanvasScaler scaler;
-
+    
     Camera cam = null;
     int screenWidth = 0;        // 0 forces camAspect to be set correctly on Awake.
     int screenHeight = 0;
@@ -41,12 +39,6 @@ public class Letterboxer : MonoBehaviour
     void Awake()
     {
         cam = GetComponent<Camera>();
-
-        if (scaler)
-        {
-            originalScalerSize = scaler.referenceResolution;
-        }
-
         Update();
     }
 
@@ -123,11 +115,5 @@ public class Letterboxer : MonoBehaviour
         effectiveScreenWidth = (int)(rect.width * (float)screenWidth);
         effectiveScreenHeight = (int)(rect.height * (float)screenHeight);
         cam.rect = rect;
-
-        if (scaler)
-        {
-            var newY = scaler.referenceResolution.y / rect.height;
-            scaler.referenceResolution = new Vector2(scaler.referenceResolution.x, newY);
-        }
     }
 }
