@@ -61,7 +61,7 @@ namespace LetterHeadShared.CategoryManagers
             categories.Add(new Category()
             {
                 name = "Starter",
-                description = "Make at least 10 words that start with the same letter.  Worth 25 points.",
+                description = "Make at least 5 words that start with the same letter.  Worth 25 points.",
                 GetScore = (words, uniqueLetterCount, existingScores) =>
                 {
                     var leterDict = new Dictionary<char, int>();
@@ -77,7 +77,7 @@ namespace LetterHeadShared.CategoryManagers
                         }
                     }
 
-                    if (leterDict.Any(letterDictKV => letterDictKV.Value >= 10))
+                    if (leterDict.Any(letterDictKV => letterDictKV.Value >= 5))
                     {
                         return 25;
                     }
