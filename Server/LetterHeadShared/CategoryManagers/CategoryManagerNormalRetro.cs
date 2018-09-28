@@ -19,15 +19,15 @@ namespace LetterHeadShared.CategoryManagers
             categories.Add(new Category()
             {
                 name = "3 & 4 Letters",
-                description = "Make at least 15 3-letter and 4-letter words.  Worth 30 points.",
-                GetScore = (words, uniqueLetterCount, existingScores) => words.Count(w => w.Length == 3 || w.Length == 4) >= 15 ? 30 : 0
+                description = "Make at least ten 3-letter and 4-letter words.  Worth 30 points.",
+                GetScore = (words, uniqueLetterCount, existingScores) => words.Count(w => w.Length == 3 || w.Length == 4) >= 10 ? 30 : 0
             });
 
             categories.Add(new Category()
             {
                 name = "5 & 6 Letters",
-                description = "Make at least 10 5-letter and 6-letter words.  Worth 30 points.",
-                GetScore = (words, uniqueLetterCount, existingScores) => words.Count(w => w.Length == 5 || w.Length == 6) >= 10 ? 30 : 0
+                description = "Make at least five 5-letter and 6-letter words.  Worth 30 points.",
+                GetScore = (words, uniqueLetterCount, existingScores) => words.Count(w => w.Length == 5 || w.Length == 6) >= 5 ? 30 : 0
             });
 
             categories.Add(new Category()
@@ -89,17 +89,17 @@ namespace LetterHeadShared.CategoryManagers
             categories.Add(new Category()
             {
                 name = "Small Straight",
-                description = "Make at least one 3-letter, 4-letter, 5-letter, and 6-letter word.  Worth 30 points.",
+                description = "Make at least one 3-letter, 4-letter, and 5-letter word.  Worth 30 points.",
                 GetScore = (words, uniqueLetterCount, existingScores) => words.Count(w => w.Length == 3) > 0 && words.Count(w => w.Length == 4) > 0 &&
-                 words.Count(w => w.Length == 5) > 0 && words.Count(w => w.Length == 6) > 0 ? 30 : 0
+                 words.Count(w => w.Length == 5) > 0 ? 30 : 0
             });
 
             categories.Add(new Category()
             {
                 name = "Large Straight",
-                description = "Make at least one 3-letter, 4-letter, 5-letter, 6-letter, and 7-letter letter word.  Worth 40 points.",
+                description = "Make at least one 3-letter, 4-letter, 5-letter, and 6-letter letter word.  Worth 40 points.",
                 GetScore = (words, uniqueLetterCount, existingScores) => words.Count(w => w.Length == 3) > 0 && words.Count(w => w.Length == 4) > 0 &&
-                 words.Count(w => w.Length == 5) > 0 && words.Count(w => w.Length == 6) > 0 && words.Count(w => w.Length == 7) > 0 ? 40 : 0
+                 words.Count(w => w.Length == 5) > 0 && words.Count(w => w.Length == 6) > 0  ? 40 : 0
             });
 
             categories.Add(new Category()

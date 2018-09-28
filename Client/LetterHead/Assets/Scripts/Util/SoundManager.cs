@@ -15,6 +15,13 @@ public class SoundManager : Singleton<SoundManager>
 	void Start () {
 	    foreach (var audioClip in clips)
 	    {
+	        if (!audioClip)
+	        {
+                Debug.LogError("!! MISSING AUDIO CLIPS IN SOUND MANAGER !!");
+                Debug.LogError("!! MISSING AUDIO CLIPS IN SOUND MANAGER !!");
+                Debug.LogError("!! MISSING AUDIO CLIPS IN SOUND MANAGER !!");
+	            return;
+	        }
 	        clipDictionary.Add(audioClip.name, audioClip);
 	    }
 
