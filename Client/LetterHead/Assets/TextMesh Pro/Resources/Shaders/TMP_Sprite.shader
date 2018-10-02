@@ -1,10 +1,8 @@
-// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
-
-Shader "TMPro/Sprite"
+Shader "TextMeshPro/Sprite"
 {
 	Properties
 	{
-		[PerRendererData] _MainTex ("Sprite Texture", 2D) = "white" {}
+		_MainTex ("Sprite Texture", 2D) = "white" {}
 		_Color ("Tint", Color) = (1,1,1,1)
 		
 		_StencilComp ("Stencil Comparison", Float) = 8
@@ -14,7 +12,7 @@ Shader "TMPro/Sprite"
 		_StencilReadMask ("Stencil Read Mask", Float) = 255
 
 		_ColorMask ("Color Mask", Float) = 15
-		_ClipRect ("Clip Rect", vector) = (-10000, -10000, 10000, 10000)
+		_ClipRect ("Clip Rect", vector) = (-32767, -32767, 32767, 32767)
 
 		[Toggle(UNITY_UI_ALPHACLIP)] _UseUIAlphaClip ("Use Alpha Clip", Float) = 0
 	}
@@ -55,6 +53,7 @@ Shader "TMPro/Sprite"
 			#include "UnityCG.cginc"
 			#include "UnityUI.cginc"
 
+			#pragma multi_compile __ UNITY_UI_CLIP_RECT
 			#pragma multi_compile __ UNITY_UI_ALPHACLIP
 			
 			struct appdata_t
@@ -75,10 +74,6 @@ Shader "TMPro/Sprite"
 			fixed4 _Color;
 			fixed4 _TextureSampleAdd;
 			float4 _ClipRect;
-
-#if UNITY_VERSION < 530
-			bool _UseClipRect;
-#endif
 
 			v2f vert(appdata_t IN)
 			{
@@ -102,15 +97,12 @@ Shader "TMPro/Sprite"
 			{
 				half4 color = (tex2D(_MainTex, IN.texcoord) + _TextureSampleAdd) * IN.color;
 				
-#if UNITY_VERSION < 530
-				if (_UseClipRect)
+				#if UNITY_UI_CLIP_RECT
 					color.a *= UnityGet2DClipping(IN.worldPosition.xy, _ClipRect);
-#else
-				color.a *= UnityGet2DClipping(IN.worldPosition.xy, _ClipRect);
-#endif
-				
+				#endif
+
 				#ifdef UNITY_UI_ALPHACLIP
-				clip (color.a - 0.001);
+					clip (color.a - 0.001);
 				#endif
 
 				return color;
