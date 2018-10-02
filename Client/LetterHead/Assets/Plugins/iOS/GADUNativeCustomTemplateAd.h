@@ -1,7 +1,8 @@
 // Copyright 2014 Google Inc. All Rights Reserved.
 
-@import Foundation;
-@import GoogleMobileAds;
+#import <Foundation/Foundation.h>
+
+#import <GoogleMobileAds/GoogleMobileAds.h>
 
 #import "GADUTypes.h"
 
@@ -21,7 +22,7 @@
     GADUNativeCustomTemplateDidReceiveClickCallback didReceiveClickCallback;
 
 /// The custom template ID for the ad.
-- (NSString *) templateID;
+- (NSString *)templateID;
 
 /// Returns the string corresponding to the specified key.
 - (NSString *)stringForKey:(NSString *)key;

@@ -12,78 +12,129 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#if UNITY_IOS
+
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using UnityEngine;
 
 using GoogleMobileAds.Api;
 using GoogleMobileAds.Common;
+using UnityEngine;
 
 namespace GoogleMobileAds.iOS
 {
-    public class CustomNativeTemplateClient : ICustomNativeTemplateClient
+    internal class CustomNativeTemplateClient : ICustomNativeTemplateClient, IDisposable
     {
-        [System.Serializable]
-        public struct AssetNamesArrayWrapper
-        {
-            public string[] assets;
-        }
-
-        private IntPtr customNativeAd;
+        private IntPtr customNativeAdPtr;
+        private IntPtr customNativeTemplateAdClientPtr;
         private Action<CustomNativeTemplateAd, string> clickHandler;
 
-        internal delegate void GADUNativeCustomTemplateDidReceiveClick(
-            IntPtr nativeCustomTemplateAd, string error);
+        // This property should be used when setting the customNativeAdPtr.
+        private IntPtr CustomNativeAdPtr
+        {
+            get
+            {
+                return this.customNativeAdPtr;
+            }
+
+            set
+            {
+                Externs.GADURelease(this.customNativeAdPtr);
+                this.customNativeAdPtr = value;
+            }
+        }
 
         public CustomNativeTemplateClient(
             IntPtr customNativeAd, Action<CustomNativeTemplateAd, string> clickHandler)
         {
-            this.customNativeAd = customNativeAd;
+            this.customNativeAdPtr = customNativeAd;
             this.clickHandler = clickHandler;
 
-            IntPtr customNativeCustomTemplateAdClientPtr = (IntPtr)GCHandle.Alloc(this);
+            this.customNativeTemplateAdClientPtr = (IntPtr)GCHandle.Alloc(this);
 
-            Externs.GADUSetNativeCustomTemplateAdUnityClient(customNativeAd,
-                                                             customNativeCustomTemplateAdClientPtr);
+            Externs.GADUSetNativeCustomTemplateAdUnityClient(
+                    customNativeAd,
+                    this.customNativeTemplateAdClientPtr);
 
-            Externs.GADUSetNativeCustomTemplateAdCallbacks(customNativeAd,
-                NativeCustomTemplateDidReceiveClickCallback);
+            Externs.GADUSetNativeCustomTemplateAdCallbacks(
+                    customNativeAd,
+                    NativeCustomTemplateDidReceiveClickCallback);
         }
+
+        internal delegate void GADUNativeCustomTemplateDidReceiveClick(
+            IntPtr nativeCustomTemplateAd, string error);
 
         public List<string> GetAvailableAssetNames()
         {
-            string encodedJson = Externs.GADUNativeCustomTemplateAdAvailableAssetKeys(
-                    customNativeAd);
-            string decodedJson = System.Text.Encoding.UTF8.GetString(
-                    System.Convert.FromBase64String(encodedJson));
-            AssetNamesArrayWrapper assetNamesWrapper = JsonUtility.FromJson<AssetNamesArrayWrapper>(
-                    decodedJson);
-            return new List<string>(assetNamesWrapper.assets);
+            IntPtr unmanagedAssetArray =
+                    Externs.GADUNativeCustomTemplateAdAvailableAssetKeys(this.CustomNativeAdPtr);
+            int numOfAssets =
+                    Externs.GADUNativeCustomTemplateAdNumberOfAvailableAssetKeys(
+                            this.CustomNativeAdPtr);
+
+            IntPtr[] intPtrArray = new IntPtr[numOfAssets];
+            string[] managedAssetArray = new string[numOfAssets];
+            Marshal.Copy(unmanagedAssetArray, intPtrArray, 0, numOfAssets);
+
+            for (int i = 0; i < numOfAssets; i++)
+            {
+                managedAssetArray[i] = Marshal.PtrToStringAuto(intPtrArray[i]);
+                Marshal.FreeHGlobal(intPtrArray[i]);
+            }
+
+            Marshal.FreeHGlobal(unmanagedAssetArray);
+            return new List<string>(managedAssetArray);
         }
 
         public string GetTemplateId()
         {
-            return Externs.GADUNativeCustomTemplateAdTemplateID(customNativeAd);
+            return Externs.GADUNativeCustomTemplateAdTemplateID(this.CustomNativeAdPtr);
         }
 
         public byte[] GetImageByteArray(string key)
         {
             string bytesString = Externs.GADUNativeCustomTemplateAdImageAsBytesForKey(
-                customNativeAd, key);
+                this.CustomNativeAdPtr, key);
+            if (bytesString == null)
+            {
+                return null;
+            }
+
             return System.Convert.FromBase64String(bytesString);
         }
 
         public string GetText(string key)
         {
-            return Externs.GADUNativeCustomTemplateAdStringForKey(customNativeAd, key);
+            return Externs.GADUNativeCustomTemplateAdStringForKey(this.CustomNativeAdPtr, key);
         }
 
         public void PerformClick(string assetName)
         {
             bool customClickAction = this.clickHandler != null;
             Externs.GADUNativeCustomTemplateAdPerformClickOnAssetWithKey(
-                customNativeAd, assetName, customClickAction);
+                this.CustomNativeAdPtr, assetName, customClickAction);
+        }
+
+        public void RecordImpression()
+        {
+            Externs.GADUNativeCustomTemplateAdRecordImpression(this.CustomNativeAdPtr);
+        }
+
+        public void DestroyCustomNativeTemplateAd()
+        {
+            this.CustomNativeAdPtr = IntPtr.Zero;
+        }
+
+        public void Dispose()
+        {
+            this.DestroyCustomNativeTemplateAd();
+            ((GCHandle)this.customNativeTemplateAdClientPtr).Free();
+        }
+
+        ~CustomNativeTemplateClient()
+        {
+            this.Dispose();
         }
 
         [MonoPInvokeCallback(typeof(GADUNativeCustomTemplateDidReceiveClick))]
@@ -91,20 +142,21 @@ namespace GoogleMobileAds.iOS
             IntPtr nativeCustomAd, string assetName)
         {
             CustomNativeTemplateClient client = IntPtrToAdLoaderClient(nativeCustomAd);
-            CustomNativeTemplateAd nativeAd = new CustomNativeTemplateAd(client);
-            client.clickHandler(nativeAd, assetName);
-        }
+            if (client.clickHandler != null)
+            {
+                CustomNativeTemplateAd nativeAd = new CustomNativeTemplateAd(client);
+                client.clickHandler(nativeAd, assetName);
+            }
 
-        public void RecordImpression()
-        {
-            Externs.GADUNativeCustomTemplateAdRecordImpression(customNativeAd);
         }
 
         private static CustomNativeTemplateClient IntPtrToAdLoaderClient(
-                IntPtr customNativeTemplateAd)
+            IntPtr customNativeTemplateAd)
         {
             GCHandle handle = (GCHandle)customNativeTemplateAd;
             return handle.Target as CustomNativeTemplateClient;
         }
     }
 }
+
+#endif

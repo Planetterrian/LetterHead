@@ -1,5 +1,19 @@
 // Copyright 2014 Google Inc. All Rights Reserved.
 
+/// Positions to place an ad.
+typedef NS_ENUM(NSUInteger, GADAdPosition) {
+  kGADAdPositionCustom = -1,              ///< Custom ad position.
+  kGADAdPositionTopOfScreen = 0,          ///< Top of screen.
+  kGADAdPositionBottomOfScreen = 1,       ///< Bottom of screen.
+  kGADAdPositionTopLeftOfScreen = 2,      ///< Top left of screen.
+  kGADAdPositionTopRightOfScreen = 3,     ///< Top right of screen.
+  kGADAdPositionBottomLeftOfScreen = 4,   ///< Bottom left of screen.
+  kGADAdPositionBottomRightOfScreen = 5,  ///< Bottom right of screen.
+  kGADAdPositionCenterOfScreen = 6        ///< Bottom right of screen.
+};
+
+typedef NS_ENUM(NSInteger, GADUAdSize) { kGADUAdSizeUseFullWidth = -1 };
+
 /// Base type representing a GADU* pointer.
 typedef const void *GADUTypeRef;
 
@@ -35,6 +49,12 @@ typedef const void *GADUTypeNativeCustomTemplateAdRef;
 
 /// Type representing a GADURequest.
 typedef const void *GADUTypeRequestRef;
+
+/// Type representing a NSMutableDictionary of extras.
+typedef const void *GADUTypeMutableDictionaryRef;
+
+/// Type representing a GADUAdNetworkExtras.
+typedef const void *GADUTypeAdNetworkExtrasRef;
 
 /// Callback for when a banner ad request was successfully loaded.
 typedef void (*GADUAdViewDidReceiveAdCallback)(GADUTypeBannerClientRef *bannerClient);
@@ -107,6 +127,10 @@ typedef void (*GADURewardBasedVideoAdDidRewardCallback)(
 /// Callback for when an application will background or terminate because of an reward based video
 /// click.
 typedef void (*GADURewardBasedVideoAdWillLeaveApplicationCallback)(
+    GADUTypeRewardBasedVideoAdClientRef *rewardBasedVideoClient);
+
+/// Callback for when a reward based video ad completes playing.
+typedef void (*GADURewardBasedVideoAdDidCompleteCallback)(
     GADUTypeRewardBasedVideoAdClientRef *rewardBasedVideoClient);
 
 /// Callback for when a native custom template ad request was successfully loaded.

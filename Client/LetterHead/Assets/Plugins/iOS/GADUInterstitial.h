@@ -2,10 +2,9 @@
 
 #import <Foundation/Foundation.h>
 
-#import "GADUTypes.h"
+#import <GoogleMobileAds/GoogleMobileAds.h>
 
-@class GADInterstitial;
-@class GADRequest;
+#import "GADUTypes.h"
 
 /// A wrapper around GADInterstitial. Includes the ability to create GADInterstitial objects, load
 /// them with ads, show them, and listen for ad events.
@@ -35,6 +34,9 @@
 
 /// The will leave application callback into Unity.
 @property(nonatomic, assign) GADUInterstitialWillLeaveApplicationCallback willLeaveCallback;
+
+// Returns the mediation adapter class name.
+@property(nonatomic, readonly, copy) NSString *mediationAdapterClassName;
 
 /// Makes an ad request. Additional targeting options can be supplied with a request object.
 - (void)loadRequest:(GADRequest *)request;

@@ -1,13 +1,13 @@
 // Copyright 2014 Google Inc. All Rights Reserved.
 
-@import CoreGraphics;
-@import Foundation;
-@import GoogleMobileAds;
-@import UIKit;
-
-#import "UnityAppController.h"
-
 #import "GADURewardBasedVideoAd.h"
+
+#import <CoreGraphics/CoreGraphics.h>
+#import <UIKit/UIKit.h>
+
+#import "GADUPluginUtil.h"
+#import "UnityAppController.h"
+#import "UnityInterface.h"
 
 @interface GADURewardBasedVideoAd () <GADRewardBasedVideoAdDelegate>
 @end
@@ -20,7 +20,7 @@
 }
 
 - (instancetype)initWithRewardBasedVideoClientReference:
-        (GADUTypeRewardBasedVideoAdClientRef *)rewardBasedVideoAdClient {
+    (GADUTypeRewardBasedVideoAdClientRef *)rewardBasedVideoAdClient {
   self = [super init];
   if (self) {
     _rewardBasedVideoAdClient = rewardBasedVideoAdClient;
@@ -51,6 +51,13 @@
   }
 }
 
+- (void)setUserId:(NSString *)userId {
+  self.rewardBasedVideo.userIdentifier = userId;
+}
+
+- (NSString *)mediationAdapterClassName {
+  return [self.rewardBasedVideo adNetworkClassName];
+}
 #pragma mark GADRewardBasedVideoAdDelegate implementation
 
 - (void)rewardBasedVideoAdDidReceiveAd:(GADRewardBasedVideoAd *)rewardBasedVideoAd {
@@ -61,13 +68,19 @@
 
 - (void)rewardBasedVideoAd:(GADRewardBasedVideoAd *)rewardBasedVideoAd
     didFailToLoadWithError:(NSError *)error {
-  NSString *errorMsg = [NSString
-      stringWithFormat:@"Failed to receive ad with error: %@", [error localizedFailureReason]];
-  self.adFailedCallback(self.rewardBasedVideoAdClient,
-                        [errorMsg cStringUsingEncoding:NSUTF8StringEncoding]);
+  if (self.adFailedCallback) {
+    NSString *errorMsg = [NSString
+        stringWithFormat:@"Failed to receive ad with error: %@", [error localizedFailureReason]];
+    self.adFailedCallback(self.rewardBasedVideoAdClient,
+                          [errorMsg cStringUsingEncoding:NSUTF8StringEncoding]);
+  }
 }
 
 - (void)rewardBasedVideoAdDidOpen:(GADRewardBasedVideoAd *)rewardBasedVideoAd {
+  if ([GADUPluginUtil pauseOnBackground]) {
+    UnityPause(YES);
+  }
+
   if (self.didOpenCallback) {
     self.didOpenCallback(self.rewardBasedVideoAdClient);
   }
@@ -80,6 +93,10 @@
 }
 
 - (void)rewardBasedVideoAdDidClose:(GADRewardBasedVideoAd *)rewardBasedVideoAd {
+  if (UnityIsPaused()) {
+    UnityPause(NO);
+  }
+
   if (self.didCloseCallback) {
     self.didCloseCallback(self.rewardBasedVideoAdClient);
   }
@@ -99,6 +116,12 @@
 - (void)rewardBasedVideoAdWillLeaveApplication:(GADRewardBasedVideoAd *)rewardBasedVideoAd {
   if (self.willLeaveCallback) {
     self.willLeaveCallback(self.rewardBasedVideoAdClient);
+  }
+}
+
+- (void)rewardBasedVideoAdDidCompletePlaying:(GADRewardBasedVideoAd *)rewardBasedVideoAd {
+  if (self.didCompleteCallback) {
+    self.didCompleteCallback(self.rewardBasedVideoAdClient);
   }
 }
 

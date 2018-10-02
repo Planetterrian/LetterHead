@@ -12,17 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using UnityEngine;
-
 using GoogleMobileAds.Api;
 using GoogleMobileAds.Common;
 
 namespace GoogleMobileAds
 {
-    internal class GoogleMobileAdsClientFactory
+    public class GoogleMobileAdsClientFactory
     {
-        internal static IBannerClient BuildBannerClient()
+        public static IBannerClient BuildBannerClient()
         {
             #if UNITY_EDITOR
                 // Testing UNITY_EDITOR first because the editor also responds to the currently
@@ -37,7 +34,7 @@ namespace GoogleMobileAds
             #endif
         }
 
-        internal static IInterstitialClient BuildInterstitialClient()
+        public static IInterstitialClient BuildInterstitialClient()
         {
             #if UNITY_EDITOR
                 // Testing UNITY_EDITOR first because the editor also responds to the currently
@@ -52,7 +49,7 @@ namespace GoogleMobileAds
             #endif
         }
 
-        internal static IRewardBasedVideoAdClient BuildRewardBasedVideoAdClient()
+        public static IRewardBasedVideoAdClient BuildRewardBasedVideoAdClient()
         {
             #if UNITY_EDITOR
                 // Testing UNITY_EDITOR first because the editor also responds to the currently
@@ -67,7 +64,7 @@ namespace GoogleMobileAds
             #endif
         }
 
-        internal static IAdLoaderClient BuildAdLoaderClient(AdLoader adLoader)
+        public static IAdLoaderClient BuildAdLoaderClient(AdLoader adLoader)
         {
             #if UNITY_EDITOR
                 // Testing UNITY_EDITOR first because the editor also responds to the currently
@@ -76,8 +73,22 @@ namespace GoogleMobileAds
             #elif UNITY_ANDROID
                 return new GoogleMobileAds.Android.AdLoaderClient(adLoader);
             #elif (UNITY_5 && UNITY_IOS) || UNITY_IPHONE
-                //return new GoogleMobileAds.iOS.AdLoaderClient();
-                return null;
+                return new GoogleMobileAds.iOS.AdLoaderClient(adLoader);
+            #else
+                return new GoogleMobileAds.Common.DummyClient();
+            #endif
+        }
+
+        public static IMobileAdsClient MobileAdsInstance()
+        {
+            #if UNITY_EDITOR
+                // Testing UNITY_EDITOR first because the editor also responds to the currently
+                // selected platform.
+                return new GoogleMobileAds.Common.DummyClient();
+            #elif UNITY_ANDROID
+                return GoogleMobileAds.Android.MobileAdsClient.Instance;
+            #elif (UNITY_5 && UNITY_IOS) || UNITY_IPHONE
+                return GoogleMobileAds.iOS.MobileAdsClient.Instance;
             #else
                 return new GoogleMobileAds.Common.DummyClient();
             #endif

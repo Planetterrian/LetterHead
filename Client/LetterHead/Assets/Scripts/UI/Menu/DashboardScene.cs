@@ -24,7 +24,7 @@ public class DashboardScene : GuiScene
         if (showReview)
         {
             showReview = false;
-            NPBinding.Utility.RateMyApp.AskForReviewAttempt();
+            NPBinding.Utility.RateMyApp.AskForReview();
         }
     }
 }

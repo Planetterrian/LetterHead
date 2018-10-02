@@ -361,7 +361,7 @@ namespace PrefabEvolution
 			if (Event.current.type == EventType.DragUpdated || Event.current.type == EventType.DragExited)
 				Higlight = HighLightMode.None;
 
-			if (Event.current.type == EventType.layout)
+			if (Event.current.type == EventType.Layout)
 				return;
 
 			DrawHighlight(rect);

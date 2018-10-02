@@ -15,7 +15,6 @@
 #if UNITY_ANDROID
 
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 using GoogleMobileAds.Api;
@@ -23,17 +22,18 @@ using GoogleMobileAds.Common;
 
 namespace GoogleMobileAds.Android
 {
-    internal class RewardBasedVideoAdClient : AndroidJavaProxy, IRewardBasedVideoAdClient
+    public class RewardBasedVideoAdClient : AndroidJavaProxy, IRewardBasedVideoAdClient
     {
         private AndroidJavaObject androidRewardBasedVideo;
 
-        public event EventHandler<EventArgs> OnAdLoaded = delegate {};
-        public event EventHandler<AdFailedToLoadEventArgs> OnAdFailedToLoad = delegate {};
-        public event EventHandler<EventArgs> OnAdOpening = delegate {};
-        public event EventHandler<EventArgs> OnAdStarted = delegate {};
-        public event EventHandler<EventArgs> OnAdClosed = delegate {};
-        public event EventHandler<Reward> OnAdRewarded = delegate {};
-        public event EventHandler<EventArgs> OnAdLeavingApplication = delegate {};
+        public event EventHandler<EventArgs> OnAdLoaded = delegate { };
+        public event EventHandler<AdFailedToLoadEventArgs> OnAdFailedToLoad = delegate { };
+        public event EventHandler<EventArgs> OnAdOpening = delegate { };
+        public event EventHandler<EventArgs> OnAdStarted = delegate { };
+        public event EventHandler<EventArgs> OnAdClosed = delegate { };
+        public event EventHandler<Reward> OnAdRewarded = delegate { };
+        public event EventHandler<EventArgs> OnAdLeavingApplication = delegate { };
+        public event EventHandler<EventArgs> OnAdCompleted = delegate { };
 
         public RewardBasedVideoAdClient()
             : base(Utils.UnityRewardBasedVideoAdListenerClassName)
@@ -47,24 +47,40 @@ namespace GoogleMobileAds.Android
 
         #region IRewardBasedVideoClient implementation
 
-        public void CreateRewardBasedVideoAd() {
+        public void CreateRewardBasedVideoAd()
+        {
             androidRewardBasedVideo.Call("create");
         }
 
-        public void LoadAd(AdRequest request, string adUnitId) {
+        public void LoadAd(AdRequest request, string adUnitId)
+        {
             androidRewardBasedVideo.Call("loadAd", Utils.GetAdRequestJavaObject(request), adUnitId);
         }
 
-        public bool IsLoaded() {
+        public bool IsLoaded()
+        {
             return androidRewardBasedVideo.Call<bool>("isLoaded");
         }
 
-        public void ShowRewardBasedVideoAd() {
+        public void ShowRewardBasedVideoAd()
+        {
             androidRewardBasedVideo.Call("show");
         }
 
-        public void DestroyRewardBasedVideoAd() {
+        public void SetUserId(string userId)
+        {
+            androidRewardBasedVideo.Call("setUserId", userId);
+        }
+
+        public void DestroyRewardBasedVideoAd()
+        {
             androidRewardBasedVideo.Call("destroy");
+        }
+
+        // Returns the mediation adapter class name.
+        public string MediationAdapterClassName()
+        {
+            return this.androidRewardBasedVideo.Call<string>("getMediationAdapterClassName");
         }
 
         #endregion
@@ -73,44 +89,75 @@ namespace GoogleMobileAds.Android
 
         void onAdLoaded()
         {
-            OnAdLoaded(this, EventArgs.Empty);
+            if (this.OnAdLoaded != null)
+            {
+                this.OnAdLoaded(this, EventArgs.Empty);
+            }
         }
 
         void onAdFailedToLoad(string errorReason)
         {
-            AdFailedToLoadEventArgs args = new AdFailedToLoadEventArgs() {
-                Message = errorReason
-            };
-            OnAdFailedToLoad(this, args);
+            if (this.OnAdFailedToLoad != null)
+            {
+                AdFailedToLoadEventArgs args = new AdFailedToLoadEventArgs()
+                {
+                    Message = errorReason
+                };
+                this.OnAdFailedToLoad(this, args);
+            }
         }
 
         void onAdOpened()
         {
-            OnAdOpening(this , EventArgs.Empty);
+            if (this.OnAdOpening != null)
+            {
+                this.OnAdOpening(this, EventArgs.Empty);
+            }
         }
 
         void onAdStarted()
         {
-            OnAdStarted(this, EventArgs.Empty);
+            if (this.OnAdStarted != null)
+            {
+                this.OnAdStarted(this, EventArgs.Empty);
+            }
         }
 
         void onAdClosed()
         {
-            OnAdClosed(this, EventArgs.Empty);
+            if (this.OnAdClosed != null)
+            {
+                this.OnAdClosed(this, EventArgs.Empty);
+            }
         }
 
         void onAdRewarded(string type, float amount)
         {
-            Reward args = new Reward() {
-                Type = type,
-                Amount = amount
-            };
-            OnAdRewarded(this, args);
+            if (this.OnAdRewarded != null)
+            {
+                Reward args = new Reward()
+                {
+                    Type = type,
+                    Amount = amount
+                };
+                this.OnAdRewarded(this, args);
+            }
         }
 
         void onAdLeftApplication()
         {
-            OnAdLeavingApplication(this, EventArgs.Empty);
+            if (this.OnAdLeavingApplication != null)
+            {
+                this.OnAdLeavingApplication(this, EventArgs.Empty);
+            }
+        }
+
+        void onAdCompleted()
+        {
+            if (this.OnAdCompleted != null)
+            {
+                this.OnAdCompleted(this, EventArgs.Empty);
+            }
         }
 
         #endregion
@@ -118,4 +165,3 @@ namespace GoogleMobileAds.Android
 }
 
 #endif
-
