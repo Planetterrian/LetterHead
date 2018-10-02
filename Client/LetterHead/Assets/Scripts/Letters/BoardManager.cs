@@ -483,18 +483,31 @@ public class BoardManager : Singleton<BoardManager>
         }
     }
 
-    public Tile GetTileWithLetter(string letter)
+    public Tile GetTileWithLetter(string letter, bool nonSelectedOnly = false)
     {
         foreach (var tile in tiles)
         {
             if (tile.letterDefinition.letter.ToLower() == letter.ToLower())
             {
+                if(nonSelectedOnly && tile.IsSelected())
+                    continue;
+
                 return tile;
             }
         }
 
         return null;
     }
+
+    public void OnBackspace()
+    {
+        if(Speller.Instance.tiles.Count == 0)
+            return;
+
+        var lastTile = Speller.Instance.tiles.Last.Value;
+        lastTile.TryDeselect();
+    }
+
 
     public void ColorSelectedTiles(Color color)
     {

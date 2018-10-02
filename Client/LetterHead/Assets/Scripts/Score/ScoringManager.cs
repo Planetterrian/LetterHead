@@ -35,8 +35,20 @@ public class ScoringManager : Singleton<ScoringManager>, IGameHandler
         OnWordsChanged(true);
     }
 
+    public void OnKeyboardInput(string letter)
+    {
+        var tile = BoardManager.Instance.GetTileWithLetter(letter, true);
+        if (!tile)
+            return;
+
+        tile.TrySelect();
+    }
+
     public void OnWordSubmit()
     {
+        if (!GameGui.Instance.CanClickBoardTile())
+            return;
+
         var word = Speller.Instance.CurrentWord();
 
         if (WordManager.Instance.IsWordValid(word) && CanAcceptWord(word) && !WordManager.Instance.IsBadWord(word))

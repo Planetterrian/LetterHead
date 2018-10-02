@@ -137,6 +137,9 @@ public class GameGui : Singleton<GameGui>
 
     public void ClearClicked()
     {
+        if(!CanClickBoardTile())
+            return;
+
         BoardManager.Instance.ClearCurrentWord();
     }
 

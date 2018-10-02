@@ -187,39 +187,49 @@ public class Tile : MonoBehaviour
     {
         if (Mode == Tile.TileMode.Grid)
         {
-            if (!GameGui.Instance.CanClickBoardTile())
-                return;
-
-            if (!CanBeSelected()) 
-                return;
-
-            if (IsSelected())
-            {
-                BoardManager.Instance.DeselectTile(this);
-                if (!SoundManager.Instance.Muted())
-                    deselectSound.Play();
-            }
-            else
-            {
-                BoardManager.Instance.SelectTile(this);
-                if (!SoundManager.Instance.Muted())
-                    selectSound.Play();
-            }
+            TrySelect();
         }
         else if (Mode == Tile.TileMode.SpelledWord)
         {
             if (!GameGui.Instance.CanClickSpellerTile())
                 return;
 
-            var originalTile = BoardManager.Instance.GetTileById(referencedTileID);
+            TryDeselect();
+        }
+    }
 
-            if (originalTile)
-            {
-                BoardManager.Instance.DeselectTile(originalTile);
-            }
+    public void TryDeselect()
+    {
+        var originalTile = BoardManager.Instance.GetTileById(referencedTileID);
 
+        if (originalTile)
+        {
+            BoardManager.Instance.DeselectTile(originalTile);
+        }
+
+        if (!SoundManager.Instance.Muted())
+            deselectSound.Play();
+    }
+
+    public void TrySelect()
+    {
+        if (!GameGui.Instance.CanClickBoardTile())
+            return;
+
+        if (!CanBeSelected())
+            return;
+
+        if (IsSelected())
+        {
+            BoardManager.Instance.DeselectTile(this);
             if (!SoundManager.Instance.Muted())
                 deselectSound.Play();
+        }
+        else
+        {
+            BoardManager.Instance.SelectTile(this);
+            if (!SoundManager.Instance.Muted())
+                selectSound.Play();
         }
     }
 
