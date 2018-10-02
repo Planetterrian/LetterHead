@@ -27,7 +27,7 @@ public class TipDisplay : MonoBehaviour
         var www = UnityWebRequest.Get("http://letterhead.azurewebsites.net/Home/Tip");
         yield return www.Send();
 
-        if(!www.isError && text)
+        if(!www.isNetworkError && text)
             text.text = www.downloadHandler.text;
     }
 }
