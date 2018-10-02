@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 using VoxelBusters.Utility;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace VoxelBusters.NativePlugins.Demo
 {
@@ -18,6 +20,7 @@ namespace VoxelBusters.NativePlugins.Demo
 		private		const	string 		kKeyForLongValue		= "long-key";
 		private		const	string 		kKeyForDoubleValue		= "double-key";
 		private		const	string 		kKeyForStringValue		= "string-key";
+		private		const	string 		kKeyForDictionaryValue	= "dictionary-key";
 
 		#endregion
 
@@ -28,6 +31,8 @@ namespace VoxelBusters.NativePlugins.Demo
 		private		long	m_longValue			= 0L;
 		private		double	m_doubleValue		= 0D;
 		private		string	m_stringValue		= "";
+
+		private		Dictionary<string, string> m_dictionaryValue = new Dictionary<string, string>();
 
 		#endregion
 
@@ -47,8 +52,9 @@ namespace VoxelBusters.NativePlugins.Demo
 		protected override void OnEnable ()
 		{
 			base.OnEnable();
-			
+
 			// Register to event
+			CloudServices.KeyValueStoreDidInitialiseEvent		+= OnKeyValueStoreDidInitialise;
 			CloudServices.KeyValueStoreDidSynchroniseEvent		+= OnKeyValueStoreDidSynchronise;
 			CloudServices.KeyValueStoreDidChangeExternallyEvent	+= OnKeyValueStoreChanged;
 		}
@@ -58,6 +64,7 @@ namespace VoxelBusters.NativePlugins.Demo
 			base.OnDisable();
 			
 			// Deregister to event
+			CloudServices.KeyValueStoreDidInitialiseEvent		-= OnKeyValueStoreDidInitialise;
 			CloudServices.KeyValueStoreDidSynchroniseEvent		-= OnKeyValueStoreDidSynchronise;
 			CloudServices.KeyValueStoreDidChangeExternallyEvent	-= OnKeyValueStoreChanged;
 		}
@@ -130,6 +137,16 @@ namespace VoxelBusters.NativePlugins.Demo
 
 				if (GUILayout.Button("Get String"))
 					GetString();
+			}
+			GUILayout.EndHorizontal();
+
+			GUILayout.BeginHorizontal();
+			{
+				if (GUILayout.Button("Set Dictionary"))
+					SetDictionary();
+
+				if (GUILayout.Button("Get Dictionary"))
+					GetDictionary();
 			}
 			GUILayout.EndHorizontal();
 			
@@ -238,6 +255,21 @@ namespace VoxelBusters.NativePlugins.Demo
 			AddNewResult(string.Format("String value stored in cloud: {0}", m_stringValue));
 		}
 
+		private void SetDictionary ()
+		{
+			m_dictionaryValue.Add ("Key", "Value");
+			NPBinding.CloudServices.SetDictionary(kKeyForDictionaryValue, m_dictionaryValue);
+		}
+
+		private void GetDictionary ()
+		{
+			Dictionary<string, object> dict		= NPBinding.CloudServices.GetDictionary(kKeyForDictionaryValue) as Dictionary<string, object>;
+			m_dictionaryValue = dict.ToDictionary (kvp => kvp.Key, kvp => (string)kvp.Value);
+
+			AddNewResult(string.Format("Dictionary value stored in cloud: {0}", m_dictionaryValue));
+		}
+
+
 		private void Synchronise ()
 		{
 			NPBinding.CloudServices.Synchronise();
@@ -253,6 +285,18 @@ namespace VoxelBusters.NativePlugins.Demo
 		#endregion
 
 		#region Callback
+
+		private void OnKeyValueStoreDidInitialise (bool _success)
+		{
+			if (_success)
+			{
+				AddNewResult("Successfully Initialised keys and values.");
+			}
+			else
+			{
+				AddNewResult("Failed initialising keys and values.");
+			}
+		}
 
 		private void OnKeyValueStoreDidSynchronise (bool _success)
 		{

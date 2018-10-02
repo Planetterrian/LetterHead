@@ -21,7 +21,7 @@ namespace VoxelBusters.Utility
 
 		#region Properties
 
-		public bool			AutoFixOrientation 
+		public bool AutoFixOrientation 
 		{ 
 			get; 
 			set; 
@@ -33,7 +33,7 @@ namespace VoxelBusters.Utility
 			set;
 		}
 
-		public Completion	OnCompletion 
+		public Completion OnCompletion 
 		{ 
 			get; 
 			set; 
@@ -83,10 +83,20 @@ namespace VoxelBusters.Utility
 			{
 				Stream  _textureStream 	= new MemoryStream(WWWObject.bytes);	
 
-				ExifFile _exifFile 		= ExifFile.Read(_textureStream);
+				ExifFile _exifFile 		= null;
+
+				try
+				{
+					_exifFile = ExifFile.Read(_textureStream);
+				}
+				catch(System.Exception e)
+				{
+					Debug.LogError("[DownloadTexture] Failed loading Exif data : " + e);
+				}
 
 				// Scale texture first before rotating for performance.
-				_tempTexture	=	_tempTexture.Scale(ScaleFactor);
+				if (ScaleFactor != 1f)
+					_tempTexture	=	_tempTexture.Scale(ScaleFactor);
 				
 				if(_exifFile != null && _exifFile.Properties.ContainsKey(ExifTag.Orientation))
 				{
@@ -134,6 +144,12 @@ namespace VoxelBusters.Utility
 						// Rotate by -90
 						_finalTexture	= _tempTexture.Rotate(-90);
 						break;
+
+					default:
+						//If unknown orientation, just copying original texture
+						_finalTexture = _tempTexture;
+						Debug.LogWarning("[DownloadTexture] Unknown orientation found : " + _orientation);
+						break;
 					}
 					
 				}
@@ -146,7 +162,9 @@ namespace VoxelBusters.Utility
 			else
 		#endif
 			{
-				_tempTexture	= _tempTexture.Scale(ScaleFactor);
+				if (ScaleFactor != 1f)
+					_tempTexture	= _tempTexture.Scale(ScaleFactor);
+				
 				_finalTexture	= _tempTexture;
 			}
 

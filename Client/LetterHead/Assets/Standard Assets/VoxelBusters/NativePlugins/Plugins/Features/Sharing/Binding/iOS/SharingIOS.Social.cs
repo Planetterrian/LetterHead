@@ -1,10 +1,9 @@
-﻿using UnityEngine;
+﻿#if USES_SHARING && UNITY_IOS
+using UnityEngine;
 using System.Collections;
-
-#if USES_SHARING && UNITY_IOS
 using System.Runtime.InteropServices;
 using VoxelBusters.Utility;
-using VoxelBusters.DebugPRO;
+using VoxelBusters.UASUtils;
 
 namespace VoxelBusters.NativePlugins
 {
@@ -12,12 +11,6 @@ namespace VoxelBusters.NativePlugins
 
 	public partial class SharingIOS : Sharing 
 	{
-		private enum eSocialShareServiceType
-		{
-			FB		= 0,
-			TWITTER
-		}
-
 		#region Native Methods
 		
 		[DllImport("__Internal")]
@@ -34,7 +27,7 @@ namespace VoxelBusters.NativePlugins
 		public override bool IsFBShareServiceAvailable ()
 		{
 			bool _isAvailable	= isSocialShareServiceAvailable((int)eSocialShareServiceType.FB);
-			Console.Log(Constants.kDebugTag, "[Sharing:FB] Is service available=" + _isAvailable);
+			DebugUtility.Logger.Log(Constants.kDebugTag, "[Sharing:FB] Is service available=" + _isAvailable);
 			
 			return _isAvailable;
 		}
@@ -42,7 +35,7 @@ namespace VoxelBusters.NativePlugins
 		public override bool IsTwitterShareServiceAvailable ()
 		{
 			bool _isAvailable	= isSocialShareServiceAvailable((int)eSocialShareServiceType.TWITTER);
-			Console.Log(Constants.kDebugTag, "[Sharing:Twitter] Is service available=" + _isAvailable);
+			DebugUtility.Logger.Log(Constants.kDebugTag, "[Sharing:Twitter] Is service available=" + _isAvailable);
 			
 			return _isAvailable;
 		}
@@ -75,6 +68,16 @@ namespace VoxelBusters.NativePlugins
 			            _composer.ImageData, 					_dataArrayLength);
 		}
 		
+		#endregion
+
+		#region Nested Types
+
+		private enum eSocialShareServiceType
+		{
+			FB		= 0,
+			TWITTER
+		}
+			
 		#endregion
 	}
 }

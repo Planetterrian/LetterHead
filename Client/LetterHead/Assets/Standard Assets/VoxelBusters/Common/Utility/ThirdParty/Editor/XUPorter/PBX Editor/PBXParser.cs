@@ -176,7 +176,7 @@ namespace VoxelBusters.ThirdParty.XUPorter
 
 	public class PBXParser
 	{
-		public const string PBX_HEADER_TOKEN = "// !$*UTF8*$!\n";
+		public const string PBX_HEADER_TOKEN = "// !$*UTF8*$!";
 		public const char WHITESPACE_SPACE = ' ';
 		public const char WHITESPACE_TAB = '\t';
 		public const char WHITESPACE_NEWLINE = '\n';
@@ -218,7 +218,7 @@ namespace VoxelBusters.ThirdParty.XUPorter
 		public string Encode( PBXDictionary pbxData, bool readable = false )
 		{
 			this.resolver = new PBXResolver( pbxData );
-			StringBuilder builder = new StringBuilder( PBX_HEADER_TOKEN, BUILDER_CAPACITY );
+			StringBuilder builder = new StringBuilder( PBX_HEADER_TOKEN + WHITESPACE_NEWLINE, BUILDER_CAPACITY );
 
 			bool success = SerializeValue( pbxData, builder, readable );
 			this.resolver = null;

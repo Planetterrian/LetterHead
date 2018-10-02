@@ -7,7 +7,7 @@
     android:background="@color/np_transparent"
     android:gravity="right"
     android:orientation="vertical"
-    android:paddingTop="1dp"
+    android:paddingTop="0dp"
     tools:ignore="ContentDescription" >
 
     <LinearLayout
@@ -19,6 +19,7 @@
         android:contentDescription="TODO"
         android:gravity="top"
         android:showDividers="end"
+        android:clickable="true"
         tools:ignore="HardcodedText" >
 
         <ImageButton

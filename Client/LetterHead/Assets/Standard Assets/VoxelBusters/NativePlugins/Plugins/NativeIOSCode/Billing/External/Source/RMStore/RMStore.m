@@ -155,14 +155,14 @@ typedef void (^RMStoreSuccessBlock)();
         _products = [NSMutableDictionary dictionary];
         _productsRequestDelegates = [NSMutableSet set];
         _restoredTransactions = [NSMutableArray array];
-        [[SKPaymentQueue defaultQueue] addTransactionObserver:self];
+//      [[SKPaymentQueue defaultQueue] addTransactionObserver:self];
     }
     return self;
 }
 
 - (void)dealloc
 {
-    [[SKPaymentQueue defaultQueue] removeTransactionObserver:self];
+//  [[SKPaymentQueue defaultQueue] removeTransactionObserver:self];
 }
 
 + (RMStore *)defaultStore

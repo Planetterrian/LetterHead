@@ -1,7 +1,6 @@
-﻿using UnityEngine;
+﻿#if USES_ADDRESS_BOOK && UNITY_EDITOR
+using UnityEngine;
 using System.Collections;
-
-#if USES_ADDRESS_BOOK && UNITY_EDITOR
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +8,7 @@ using VoxelBusters.Utility;
 
 namespace VoxelBusters.NativePlugins.Internal
 {
-	public class EditorAddressBook : AdvancedScriptableObject <EditorAddressBook>
+	public class EditorAddressBook : SharedScriptableObject<EditorAddressBook>
 	{
 		#region Constants
 		

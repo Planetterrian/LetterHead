@@ -88,9 +88,9 @@ namespace VoxelBusters.NativePlugins.Demo
 				return;
 			}
 
-			if (m_products.Length == 0)
+			if (m_products == null)
 			{
-				GUILayout.Box("We couldn't find any product information. Please configure product details.");
+				GUILayout.Box("We couldn't find any product information. Please configure product details in NPSettings-> Billing Settings.");
 				return;
 			}
 			

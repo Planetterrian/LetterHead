@@ -8,7 +8,7 @@ using VoxelBusters.Utility;
 namespace VoxelBusters.NativePlugins.Internal
 {
 	[CustomEditor(typeof(EditorAddressBook))]
-	public class EditorAddressBookInspector : AdvancedScriptableObjectInspector 
+	public class EditorAddressBookInspector : CustomScriptableObjectEditor 
 	{
 		#region Methods
 

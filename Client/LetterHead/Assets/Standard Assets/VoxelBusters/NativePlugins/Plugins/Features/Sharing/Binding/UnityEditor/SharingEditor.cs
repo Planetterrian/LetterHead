@@ -1,8 +1,7 @@
-﻿using UnityEngine;
+﻿#if USES_SHARING && UNITY_EDITOR
+using UnityEngine;
 using System.Collections;
-
-#if USES_SHARING && UNITY_EDITOR
-using VoxelBusters.DebugPRO;
+using VoxelBusters.UASUtils;
 
 namespace VoxelBusters.NativePlugins
 {
@@ -27,7 +26,7 @@ namespace VoxelBusters.NativePlugins
 			base.Share (_message, _URLString, _imageByteArray, _excludedOptionsJsonString, _onCompletion);
 			
 			// Feature isnt supported
-			Console.LogError(Constants.kDebugTag, Constants.kNotSupportedInEditor);
+			DebugUtility.Logger.LogError(Constants.kDebugTag, Constants.kNotSupportedInEditor);
 			
 			// Post failed event
 			SharingFinished(SharingFailedResponse());

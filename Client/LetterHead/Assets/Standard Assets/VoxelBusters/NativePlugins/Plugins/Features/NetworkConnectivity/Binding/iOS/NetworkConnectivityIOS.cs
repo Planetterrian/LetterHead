@@ -1,7 +1,6 @@
-﻿using UnityEngine;
+﻿#if USES_NETWORK_CONNECTIVITY && UNITY_IOS
+using UnityEngine;
 using System.Collections;
-
-#if USES_NETWORK_CONNECTIVITY && UNITY_IOS
 using System.Runtime.InteropServices;
 
 namespace VoxelBusters.NativePlugins
@@ -11,7 +10,7 @@ namespace VoxelBusters.NativePlugins
 		#region Native Methods
 
 		[DllImport("__Internal")]
-		private static extern void setNewIPAddress (string _newIPAddress);
+		private static extern void cpnpNetworkConnectivitySetHostAddress (string _newIPAddress);
 
 		#endregion
 
@@ -22,9 +21,7 @@ namespace VoxelBusters.NativePlugins
 			base.Initialise ();
 
 			NetworkConnectivitySettings _settings = NPSettings.NetworkConnectivity;
-
-			// Set new IP address
-			setNewIPAddress(_settings.IPAddress);
+			cpnpNetworkConnectivitySetHostAddress(_settings.HostAddress);
 		}
 
 		#endregion

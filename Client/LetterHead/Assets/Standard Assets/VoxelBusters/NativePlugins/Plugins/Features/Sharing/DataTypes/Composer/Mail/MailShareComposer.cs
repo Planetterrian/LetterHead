@@ -2,7 +2,7 @@
 using System.Collections;
 using System.IO;
 using VoxelBusters.Utility;
-using VoxelBusters.DebugPRO;
+using VoxelBusters.UASUtils;
 
 namespace VoxelBusters.NativePlugins
 {
@@ -147,7 +147,7 @@ namespace VoxelBusters.NativePlugins
 		{
 			get
 			{
-				return !ImageAsyncDownloadInProgress && !m_attachmentDownloadInProgress;
+				return !(ImageAsyncDownloadInProgress || m_attachmentDownloadInProgress);
 			}
 		}
 
@@ -209,7 +209,7 @@ namespace VoxelBusters.NativePlugins
 				}
 				else
 				{
-					Console.LogWarning(Constants.kDebugTag, "[Sharing] The operation could not be completed. Error=" + _error);
+					DebugUtility.Logger.LogWarning(Constants.kDebugTag, "[Sharing] The operation could not be completed. Error=" + _error);
 				}
 			};
 			_request.StartRequest();

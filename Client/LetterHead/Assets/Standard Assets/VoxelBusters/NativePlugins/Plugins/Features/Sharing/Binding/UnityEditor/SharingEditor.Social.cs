@@ -1,8 +1,7 @@
-﻿using UnityEngine;
+﻿#if USES_SHARING && UNITY_EDITOR
+using UnityEngine;
 using System.Collections;
-
-#if USES_SHARING && UNITY_EDITOR
-using VoxelBusters.DebugPRO;
+using VoxelBusters.UASUtils;
 
 namespace VoxelBusters.NativePlugins
 {
@@ -14,14 +13,14 @@ namespace VoxelBusters.NativePlugins
 		
 		public override bool IsFBShareServiceAvailable ()
 		{
-			Console.LogError(Constants.kDebugTag, Constants.kNotSupportedInEditor);
+			DebugUtility.Logger.LogError(Constants.kDebugTag, Constants.kNotSupportedInEditor);
 
 			return base.IsTwitterShareServiceAvailable();
 		}
 		
 		public override bool IsTwitterShareServiceAvailable ()
 		{
-			Console.LogError(Constants.kDebugTag, Constants.kNotSupportedInEditor);
+			DebugUtility.Logger.LogError(Constants.kDebugTag, Constants.kNotSupportedInEditor);
 
 			return base.IsTwitterShareServiceAvailable();
 		}

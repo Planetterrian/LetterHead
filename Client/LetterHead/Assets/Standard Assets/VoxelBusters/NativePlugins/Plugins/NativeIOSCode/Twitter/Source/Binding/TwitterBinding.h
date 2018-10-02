@@ -9,23 +9,21 @@
 #import <Foundation/Foundation.h>
 
 // Init
-UIKIT_EXTERN void initTwitterKit (const char* consumerKey, const char* consumerSecret);
+UIKIT_EXTERN void cpnpTwitterInitTwitterKit (const char* consumerKey, const char* consumerSecret);
 
 // Account
-UIKIT_EXTERN void twitterLogin ();
-UIKIT_EXTERN void twitterLogout ();
-UIKIT_EXTERN bool twitterIsLoggedIn ();
-UIKIT_EXTERN char* twitterGetAuthToken ();
-UIKIT_EXTERN char* twitterGetAuthTokenSecret ();
-UIKIT_EXTERN char* twitterGetUserID ();
-UIKIT_EXTERN char* twitterGetUserName ();
+UIKIT_EXTERN void cpnpTwitterLogin (bool requiresEmailAccess);
+UIKIT_EXTERN void cpnpTwitterLogoutUserID (const char* userID);
+UIKIT_EXTERN bool cpnpTwitterIsUserLoggedIn (const char* userID);
+
+UIKIT_EXTERN char* cpnpTwitterGetSessionDictionaryWithUserID (const char* userID);
 
 // Tweet
-UIKIT_EXTERN void showTweetComposer (const char* message, 	const char* URLString,
-									 UInt8* imgByteArray, 	int imgByteArrayLength);
+UIKIT_EXTERN void cpnpTwitterShowTweetComposer (const char* message, 	const char* URLString,
+												UInt8* imgByteArray, 	int imgByteArrayLength);
 
 // Requests
-UIKIT_EXTERN void twitterRequestAccountDetails ();
-UIKIT_EXTERN void twitterRequestEmailAccess ();
-UIKIT_EXTERN void twitterURLRequest (const char* methodType, 	const char* URLString,
-									 const char* parameters);
+UIKIT_EXTERN void cpnpTwitterRequestAccountDetailsWithUserID (const char* userID);
+UIKIT_EXTERN void cpnpTwitterRequestEmailWithUserID (const char* userID);
+UIKIT_EXTERN void cpnpTwitterSendURLRequest (const char* userID,		const char* methodType,
+											 const char* URLString,		const char* parameters);

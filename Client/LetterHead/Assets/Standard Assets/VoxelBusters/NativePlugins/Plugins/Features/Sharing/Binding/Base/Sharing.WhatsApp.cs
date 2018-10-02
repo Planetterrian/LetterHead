@@ -2,7 +2,7 @@
 using System.Collections;
 using System.IO;
 using VoxelBusters.Utility;
-using VoxelBusters.DebugPRO;
+using VoxelBusters.UASUtils;
 
 namespace VoxelBusters.NativePlugins
 {
@@ -19,8 +19,8 @@ namespace VoxelBusters.NativePlugins
 		public virtual bool IsWhatsAppServiceAvailable ()
 		{
 			bool _isAvailable	= false;
-			Console.Log(Constants.kDebugTag, "[Sharing] Is service available=" + _isAvailable);
-			
+			DebugUtility.Logger.Log(Constants.kDebugTag, "[Sharing] Is service available=" + _isAvailable);
+
 			return _isAvailable;
 		}
 
@@ -49,7 +49,8 @@ namespace VoxelBusters.NativePlugins
 			// Sharing on whatsapp isnt supported
 			if (string.IsNullOrEmpty(_message) || !IsWhatsAppServiceAvailable())
 			{
-				Console.Log(Constants.kDebugTag, "[Sharing] Failed to share text");
+				DebugUtility.Logger.LogWarning(Constants.kDebugTag, "[Sharing] Failed to share text");
+
 				WhatsAppShareFinished(WhatsAppShareFailedResponse());
 				return;
 			}
@@ -80,7 +81,7 @@ namespace VoxelBusters.NativePlugins
 				}
 				else
 				{
-					Console.LogError(Constants.kDebugTag, "[Sharing] The operation could not be completed. Error=" + _error);
+					DebugUtility.Logger.LogError(Constants.kDebugTag, "[Sharing] The operation could not be completed. Error=" + _error);
 					ShareImageOnWhatsApp((byte[])null, _onCompletion);
 					return;
 				}
@@ -93,7 +94,7 @@ namespace VoxelBusters.NativePlugins
 		{
 			if (_texture == null)
 			{
-				Console.LogError(Constants.kDebugTag, "[Sharing] Texture is null");
+				DebugUtility.Logger.LogError(Constants.kDebugTag, "[Sharing] Texture is null");
 				ShareImageOnWhatsApp((byte[])null, _onCompletion);
 				return;
 			}
@@ -117,7 +118,7 @@ namespace VoxelBusters.NativePlugins
 			// Sharing on whatsapp isnt supported
 			if (_imageByteArray == null || !IsWhatsAppServiceAvailable())
 			{
-				Console.LogError(Constants.kDebugTag, "[Sharing] Failed to share image");
+				DebugUtility.Logger.LogError(Constants.kDebugTag, "[Sharing] Failed to share image");
 				WhatsAppShareFinished(WhatsAppShareFailedResponse());
 				return;
 			}		

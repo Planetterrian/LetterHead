@@ -46,6 +46,10 @@ namespace VoxelBusters.NativePlugins
 				internal const string 	IS_LOCAL_USER_AUTHENTICATED		=	"isSignedIn";
 				internal const string 	SIGN_OUT_LOCAL_USER				=	"signOut";
 				internal const string 	LOAD_PROFILE_PICTURE			=	"loadProfilePicture";
+
+				//Others
+				internal const string 	SET_SHOW_DEFAULT_ERROR_DIALOGS			=	"setShowDefaultErrorDialogs";
+				internal const string 	LOAD_EXTERNAL_AUTHENTICATION_DETAILS	= 	"loadExternalAuthenticationDetails";
 			}
 		}
 

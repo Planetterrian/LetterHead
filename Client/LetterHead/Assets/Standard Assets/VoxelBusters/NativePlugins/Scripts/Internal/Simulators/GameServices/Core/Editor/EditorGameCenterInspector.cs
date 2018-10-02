@@ -8,7 +8,7 @@ using VoxelBusters.Utility;
 namespace VoxelBusters.NativePlugins.Internal
 {
 	[CustomEditor(typeof(EditorGameCenter))]
-	public class EditorGameCenterInspector : AdvancedScriptableObjectInspector 
+	public class EditorGameCenterInspector : CustomScriptableObjectEditor 
 	{
 		#region Unity Methods
 		

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using VoxelBusters.Utility;
-using VoxelBusters.DebugPRO;
+using VoxelBusters.UASUtils;
 
 namespace VoxelBusters.NativePlugins
 {
@@ -18,7 +18,7 @@ namespace VoxelBusters.NativePlugins
 		public virtual bool IsMessagingServiceAvailable ()
 		{
 			bool _isAvailable	= false;
-			Console.Log(Constants.kDebugTag, "[Sharing] Is service available=" + _isAvailable);
+			DebugUtility.Logger.Log(Constants.kDebugTag, "[Sharing] Is service available=" + _isAvailable);
 			
 			return _isAvailable;
 		}

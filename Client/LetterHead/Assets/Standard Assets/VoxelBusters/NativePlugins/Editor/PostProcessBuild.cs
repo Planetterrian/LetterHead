@@ -1,14 +1,17 @@
-﻿#if UNITY_EDITOR && !(UNITY_WINRT || UNITY_WEBPLAYER || UNITY_WEBGL)
+#if UNITY_EDITOR && !(UNITY_WINRT || UNITY_WEBPLAYER || UNITY_WEBGL)
 using UnityEngine;
 using UnityEditor;
 using UnityEditor.Callbacks;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Text.RegularExpressions;
 using VoxelBusters.Utility;
+using VoxelBusters.UASUtils;
 using VoxelBusters.ThirdParty.XUPorter;
-using PlayerSettings = UnityEditor.PlayerSettings;
+
+using PlayerSettings	= UnityEditor.PlayerSettings;
+using Features			= VoxelBusters.NativePlugins.ApplicationSettings.Features;
+using AddonServices		= VoxelBusters.NativePlugins.ApplicationSettings.AddonServices;
 
 namespace VoxelBusters.NativePlugins
 {
@@ -21,10 +24,10 @@ namespace VoxelBusters.NativePlugins
 		// File folders
 		private const string	kRelativePathNativePluginsFolder		= Constants.kPluginAssetsPath;
 		private	const string	kRelativePathIOSNativeCodeFolder		= kRelativePathNativePluginsFolder + "/Plugins/NativeIOSCode";
-		private const string	kRelativePathXcodeModDataCollectionFile	= kRelativePathNativePluginsFolder + "/XCodeModData.txt";
+		private const string	kRelativePathXcodeModDataCollectionFile	= kRelativePathNativePluginsFolder + "/XcodeModifier.txt";
 		private const string 	kRelativePathInfoPlistFile				= "Info.plist";
 		private const string 	kRelativePathInfoPlistBackupFile		= "Info.backup.plist";
-		private	const string	kRelativePathNativePluginsTempFolder	= "NativePlugins";
+		private	const string	kRelativePathNativePluginsSDKFolder		= "NativePlugins";
 
 		// Mod keys
 		private	const string	kModKeyAddressBook						= "NativePlugins-AddressBook";
@@ -37,50 +40,47 @@ namespace VoxelBusters.NativePlugins
 		private	const string	kModKeyNotification						= "NativePlugins-Notification";
 		private	const string	kModKeySharing							= "NativePlugins-Sharing";
 		private	const string	kModKeyTwitter							= "NativePlugins-Twitter";
-		private	const string	kModKeyTwitterFramework					= "NativePlugins-TwitterFramework";
+		private	const string	kModKeyTwitterSDK						= "NativePlugins-TwitterSDK";
 		private	const string	kModKeyWebView							= "NativePlugins-WebView";
 		private	const string	kModKeySoomlaGrow						= "NativePlugins-SoomlaGrow";
+		private	const string	kModKeyStoreReview 						= "NativePlugins-StoreReview";
 
 		// PlayerPrefs keys
 		private	const string	kTwitterConfigKey						= "twitter-config";
-	
+
 		// Fabric data
 		private const string 	kFabricKitJsonStringFormat				= "{{\"Fabric\":{{\"APIKey\":\"{0}\",\"Kits\":[{{\"KitInfo\":{{\"consumerKey\":\"\",\"consumerSecret\":\"\"}},\"KitName\":\"Twitter\"}}]}}}}";
-		
+
 		// Pch file modification
 		private const string 	kPrecompiledFileRelativeDirectoryPath	= "Classes/";
 		private const string 	kPrecompiledHeaderExtensionPattern		= "*.pch";
-		private const string	kPrecompiledHeaderRegexPattern			= @"#ifdef __OBJC__(\n?\t?[#|//](.)*)*";
-		private const string	kPrecompiledHeaderEndIfTag				= "#endif";
-		private const string	kPrecompiledHeaderInsertText			= "#import \"Defines.h\"";
+		private const string	kPCHInsertHeaders						= "#ifdef __OBJC__\n\t#import \"Defines.h\"\n#endif\n";
 
 		#endregion
 
 		#region Static Fields
 
-		private static Plist	infoPlist								= null;
+		private static Plist				infoPlist					= null;
 
 		#endregion
 
 		#region Methods
 
 		[PostProcessBuild(0)]
-		public static void OnPostProcessBuildActionStart (BuildTarget _target, string _buildPath) 
+		public static void OnPostProcessBuildActionStart(BuildTarget target, string buildPath) 
 		{			
-			string 	_targetStr	= _target.ToString();
-			
+			string 	_targetStr	= target.ToString();
 			if (_targetStr.Equals("iOS") || _targetStr.Equals("iPhone"))
 			{
-				iOSPostProcessBuild(_target, _buildPath);
+				ExecutePostProcessAction(buildPath);
 				return;
 			}
 		}
-		
-		[PostProcessBuild(1000)]
-		public static void OnPostProcessBuildActionFinish (BuildTarget _target, string _buildPath) 
+
+		[PostProcessBuild(int.MaxValue-1000)]
+		public static void OnPostProcessBuildActionFinish(BuildTarget target, string buildPath) 
 		{
-			string 	_targetStr	= _target.ToString();
-			
+			string 	_targetStr	= target.ToString();
 			if (_targetStr.Equals("iOS") || _targetStr.Equals("iPhone"))
 			{
 				CleanupProject();
@@ -88,37 +88,41 @@ namespace VoxelBusters.NativePlugins
 			}
 		}
 
-		private static void iOSPostProcessBuild (BuildTarget _target, string _buildPath) 
+		private static void ExecutePostProcessAction(string buildPath) 
 		{
-			// Load plist info
-			string 	_infoPlistFilePath	= GetInfoPlistFilePath(_buildPath);
+			// Load plist
+			string 	_infoPlistFilePath	= GetInfoPlistFilePath(buildPath);
 			infoPlist					= Plist.LoadPlistAtPath(_infoPlistFilePath);
 
-			// Removing old automation related files
+			// Prepare project
 			CleanupProject();
+			CreateTempFolder();
 
-			// Post process actions
-			ProcessFeatureSpecificOperations();
+			Features _supportedFeatures	= NPSettings.Application.SupportedFeatures;
+			if (_supportedFeatures.UsesTwitter)
+				DecompressTwitterSDKFiles();
+
+			if (_supportedFeatures.UsesBilling)
+				AddBuildInfoToBillingClass();
+			
+			// execute actions specific to features used within app
 			GenerateXcodeModFiles();
-			ModifyInfoPlist(_buildPath);
-			ModifyPchFile(_buildPath);
+			UpdateInfoPlist(buildPath);
+			ModifyPchFile(buildPath);
+
+			// release properties
+			infoPlist 	= null;
 		}
 
-		private static void CleanupProject ()
+		private static void CleanupProject()
 		{
-			// Remove xmod files
-			string		_nativeCodePath	= AssetsUtility.AssetPathToAbsolutePath(kRelativePathIOSNativeCodeFolder);
-			string[] 	_modFiles		= Directory.GetFiles(_nativeCodePath, "*.xcodemods", SearchOption.AllDirectories);
-			
-			foreach (string _filePath in _modFiles)
+			string[] _files = Directory.GetFiles(kRelativePathIOSNativeCodeFolder, "*.xcodemods", SearchOption.AllDirectories);
+			foreach (string _path in _files)
 			{
-				// Delete file
-				File.SetAttributes(_filePath, FileAttributes.Normal);
-				File.Delete(_filePath);
-
-				// Delete meta file
-				string	_metaFilePath	= _filePath + ".meta";
-
+				File.SetAttributes(_path, FileAttributes.Normal);
+				File.Delete(_path);
+				
+				string	_metaFilePath	= _path + ".meta";
 				if (File.Exists(_metaFilePath))
 				{
 					File.SetAttributes(_metaFilePath, FileAttributes.Normal);
@@ -127,138 +131,130 @@ namespace VoxelBusters.NativePlugins
 			}
 		}
 
-		private static void ProcessFeatureSpecificOperations ()
+		private static void CreateTempFolder()
 		{
-			// Remove NP temp folder
-			if (Directory.Exists(kRelativePathNativePluginsTempFolder))
+			// prepare the folder to contain generated files
+			if (Directory.Exists(kRelativePathNativePluginsSDKFolder))
 			{
-				IOExtensions.AssignPermissionRecursively(kRelativePathNativePluginsTempFolder, FileAttributes.Normal);
-				Directory.Delete(kRelativePathNativePluginsTempFolder, true);
+				IOExtensions.AssignPermissionRecursively(kRelativePathNativePluginsSDKFolder, FileAttributes.Normal);
+				Directory.Delete(kRelativePathNativePluginsSDKFolder, true);
 			}
-
-			// Create temp folder to place extracted files
-			Directory.CreateDirectory(kRelativePathNativePluginsTempFolder);
-
-			// Add player settings info to receipt verification code
-			ApplicationSettings.Features	_supportedFeatures	= NPSettings.Application.SupportedFeatures;
-
-			if (_supportedFeatures.UsesBilling)
-				AddBuildInfoToReceiptVerificationManger();
-
-			// Decompress zip files and add it to project
-			if (_supportedFeatures.UsesTwitter)
-				DecompressTwitterFrameworkFiles();
+			Directory.CreateDirectory(kRelativePathNativePluginsSDKFolder);
 		}
-		
-		private static void AddBuildInfoToReceiptVerificationManger ()
+
+		private static void DecompressTwitterSDKFiles()
 		{
-			string		_rvFilePath			= Path.Combine(kRelativePathIOSNativeCodeFolder, "Billing/Source/ReceiptVerification/Manager/ReceiptVerificationManager.m");
-			string[]	_contents			= File.ReadAllLines(_rvFilePath);
-			int			_lineCount			= _contents.Length;
-			
+			string	_projectPath					= AssetDatabaseUtils.GetProjectPath();
+			string	_twitterNativeCodeFolderPath	= Path.Combine(_projectPath, kRelativePathIOSNativeCodeFolder + "/Twitter");
+
+			if (!Directory.Exists(_twitterNativeCodeFolderPath)) 
+				return;
+
+			foreach (string _filePath in Directory.GetFiles(_twitterNativeCodeFolderPath, "*.gz", SearchOption.AllDirectories))
+				Zip.DecompressToDirectory(_filePath, kRelativePathNativePluginsSDKFolder);
+		}
+
+		private static void AddBuildInfoToBillingClass()
+		{
+			#if USES_BILLING
+			string		_rvFilePath	= Path.Combine(kRelativePathIOSNativeCodeFolder, "Billing/Source/ReceiptVerification/Manager/ReceiptVerificationManager.m");
+			string[]	_contents	= File.ReadAllLines(_rvFilePath);
+			int			_lineCount	= _contents.Length;
+
+			// find the line which needs to be updated
+			int	_targetLineIndex	= -1;
 			for (int _iter = 0; _iter < _lineCount; _iter++)
 			{
-				string	_curLine			= _contents[_iter];
-				
+				string	_curLine	= _contents[_iter];
 				if (!_curLine.StartsWith("const"))
 					continue;
-				
+
 				if (_curLine.Contains("bundleIdentifier"))
 				{
-					const string _kBundleVersionKey		= "CFBundleVersion";
-
-					_contents[_iter]		= string.Format("const NSString *bundleIdentifier\t= @\"{0}\";", PlayerSettings.bundleIdentifier);
-					_contents[_iter + 1]	= string.Format("const NSString *bundleVersion\t\t= @\"{0}\";", infoPlist[_kBundleVersionKey]);
+					_targetLineIndex = _iter;
 					break;
 				}
 			}
-			
-			// Now rewrite updated contents
-			File.WriteAllLines(_rvFilePath, _contents);
+
+			if (_targetLineIndex != -1)
+			{
+				// get the value corresponding to the player preference
+				const string _kBundleVersionKey		= "CFBundleVersion";
+
+				string	_bundleIdentifier	= "nil";
+				string	_bundleVersion		= "nil";
+				if (NPSettings.Billing.iOS.MakeCopyOfBuildInfo)
+				{
+#if UNITY_5_6_OR_NEWER
+					_bundleIdentifier		= string.Format("@\"{0}\"", PlayerSettings.applicationIdentifier);
+#else
+					_bundleIdentifier		= string.Format("@\"{0}\"", PlayerSettings.bundleIdentifier);
+#endif
+					_bundleVersion 			= string.Format("@\"{0}\"", infoPlist[_kBundleVersionKey]);
+				}
+
+				// replace the existing details with new
+				_contents[_targetLineIndex]		= string.Format("const NSString *bundleIdentifier\t= {0};", _bundleIdentifier);
+				_contents[_targetLineIndex + 1]	= string.Format("const NSString *bundleVersion\t\t= {0};", _bundleVersion);
+
+				// commit the new changes
+				File.WriteAllLines(_rvFilePath, _contents);
+			}
+			#endif
 		}
-		
-		private static void DecompressTwitterFrameworkFiles ()
+
+		private static void	GenerateXcodeModFiles()
 		{
-			string		_projectPath					= AssetsUtility.GetProjectPath();
-			string		_twitterNativeCodeFolderPath	= Path.Combine(_projectPath, kRelativePathIOSNativeCodeFolder + "/Twitter");
-			string		_twitterTempFolderPath			= Path.Combine(_projectPath, kRelativePathNativePluginsTempFolder + "/Twitter");
-			
-			if (!Directory.Exists(_twitterNativeCodeFolderPath)) 
-				return;
-			
-			Directory.CreateDirectory(_twitterTempFolderPath);
-			
-			// ***********************
-			// Framework Section
-			// ***********************
-			string[] 	_zippedFiles		= Directory.GetFiles(_twitterNativeCodeFolderPath, "*.gz", SearchOption.AllDirectories);
-			string		_destFolder			= Path.Combine(_twitterTempFolderPath, "Framework");
-			
-			Directory.CreateDirectory(_destFolder);
-			
-			// Iterate through each zip files
-			foreach (string _curZippedFile in _zippedFiles) 
-				Zip.DecompressToDirectory(_curZippedFile, _destFolder);
-		}
+			string	_modDataStr	= File.ReadAllText(kRelativePathXcodeModDataCollectionFile);
+			if (_modDataStr == null)
+				throw new System.IO.FileNotFoundException("Couldn't find mod data file.");
 
-		private static void	GenerateXcodeModFiles ()
-		{
-			string		_xcodeModDataCollectionText	= File.ReadAllText(kRelativePathXcodeModDataCollectionFile);
+			// create mod file related to supported features
+			Dictionary<string, object>	_modDataDict			= (Dictionary<string, object>)JSONUtility.FromJSON(_modDataStr);
+			Features 					_supportedFeatures		= NPSettings.Application.SupportedFeatures;	
+			AddonServices 				_supportedAddonServices	= NPSettings.Application.SupportedAddonServices;
 
-			if (_xcodeModDataCollectionText == null)
-				return;
-
-			IDictionary							_xcodeModDataCollectionDict	= JSONUtility.FromJSON(_xcodeModDataCollectionText) as IDictionary;
-			ApplicationSettings.Features		_supportedFeatures			= NPSettings.Application.SupportedFeatures;
-			ApplicationSettings.AddonServices	_supportedAddonServices		= NPSettings.Application.SupportedAddonServices;
-
-			// Create mod file related to supported features
-			ExtractAndSerializeXcodeModInfo(_xcodeModDataCollectionDict,		kModKeyCommon, 			kRelativePathIOSNativeCodeFolder);
+			ExtractAndSerializeXcodeModInfo(_modDataDict,		kModKeyCommon, 			kRelativePathIOSNativeCodeFolder);
 
 			if (_supportedFeatures.UsesAddressBook)
-				ExtractAndSerializeXcodeModInfo(_xcodeModDataCollectionDict,	kModKeyAddressBook,		kRelativePathIOSNativeCodeFolder);
+				ExtractAndSerializeXcodeModInfo(_modDataDict,	kModKeyAddressBook,		kRelativePathIOSNativeCodeFolder);
 
 			if (_supportedFeatures.UsesBilling)
-				ExtractAndSerializeXcodeModInfo(_xcodeModDataCollectionDict,	kModKeyBilling, 		kRelativePathIOSNativeCodeFolder);
+				ExtractAndSerializeXcodeModInfo(_modDataDict,	kModKeyBilling, 		kRelativePathIOSNativeCodeFolder);
 
 			if (_supportedFeatures.UsesCloudServices)
-				ExtractAndSerializeXcodeModInfo(_xcodeModDataCollectionDict,	kModKeyCloudServices, 	kRelativePathIOSNativeCodeFolder);
+				ExtractAndSerializeXcodeModInfo(_modDataDict,	kModKeyCloudServices, 	kRelativePathIOSNativeCodeFolder);
 
 			if (_supportedFeatures.UsesGameServices)
-				ExtractAndSerializeXcodeModInfo(_xcodeModDataCollectionDict,	kModKeyGameServices, 	kRelativePathIOSNativeCodeFolder);
-			
+				ExtractAndSerializeXcodeModInfo(_modDataDict,	kModKeyGameServices, 	kRelativePathIOSNativeCodeFolder);
+
 			if (_supportedFeatures.UsesMediaLibrary)
-				ExtractAndSerializeXcodeModInfo(_xcodeModDataCollectionDict,	kModKeyMediaLibrary, 	kRelativePathIOSNativeCodeFolder);
+				ExtractAndSerializeXcodeModInfo(_modDataDict,	kModKeyMediaLibrary, 	kRelativePathIOSNativeCodeFolder);
 			
 			if (_supportedFeatures.UsesNetworkConnectivity)
-				ExtractAndSerializeXcodeModInfo(_xcodeModDataCollectionDict,	kModKeyNetworkConnectivity, kRelativePathIOSNativeCodeFolder);
+				ExtractAndSerializeXcodeModInfo(_modDataDict,	kModKeyNetworkConnectivity, kRelativePathIOSNativeCodeFolder);
 
 			if (_supportedFeatures.UsesNotificationService)
-				ExtractAndSerializeXcodeModInfo(_xcodeModDataCollectionDict,	kModKeyNotification, 	kRelativePathIOSNativeCodeFolder);
-			
+				ExtractAndSerializeXcodeModInfo(_modDataDict,	kModKeyNotification, 	kRelativePathIOSNativeCodeFolder);
+
 			if (_supportedFeatures.UsesSharing)
-				ExtractAndSerializeXcodeModInfo(_xcodeModDataCollectionDict,	kModKeySharing, 		kRelativePathIOSNativeCodeFolder);
+				ExtractAndSerializeXcodeModInfo(_modDataDict,	kModKeySharing, 		kRelativePathIOSNativeCodeFolder);
 
 			if (_supportedFeatures.UsesTwitter)
 			{
-				ExtractAndSerializeXcodeModInfo(_xcodeModDataCollectionDict,	kModKeyTwitter, 		kRelativePathIOSNativeCodeFolder);
-				ExtractAndSerializeXcodeModInfo(_xcodeModDataCollectionDict,	kModKeyTwitterFramework,kRelativePathNativePluginsTempFolder);
+				ExtractAndSerializeXcodeModInfo(_modDataDict,	kModKeyTwitter, 		kRelativePathIOSNativeCodeFolder);
+				ExtractAndSerializeXcodeModInfo(_modDataDict,	kModKeyTwitterSDK,		kRelativePathNativePluginsSDKFolder);
 			}
 
 			if (_supportedFeatures.UsesWebView)
-				ExtractAndSerializeXcodeModInfo(_xcodeModDataCollectionDict,	kModKeyWebView, 		kRelativePathIOSNativeCodeFolder);
+				ExtractAndSerializeXcodeModInfo(_modDataDict,	kModKeyWebView, 		kRelativePathIOSNativeCodeFolder);
 
 			// Create mod file related to supported addon features
 			if (_supportedAddonServices.UsesSoomlaGrow)
-				ExtractAndSerializeXcodeModInfo(_xcodeModDataCollectionDict, 	kModKeySoomlaGrow,		kRelativePathIOSNativeCodeFolder);
-		}
+				ExtractAndSerializeXcodeModInfo(_modDataDict, 	kModKeySoomlaGrow,		kRelativePathIOSNativeCodeFolder);
 
-		private static void ExtractAndSerializeXcodeModInfo (IDictionary _modCollectionDict, string _modKey, string _folderRelativePath)
-		{
-			IDictionary		_modInfoDict	= (IDictionary)_modCollectionDict[_modKey];
-			string			_newModFileName	= _modKey + ".xcodemods";
-
-			File.WriteAllText(Path.Combine(_folderRelativePath, _newModFileName), _modInfoDict.ToJSON());
+			if (NPSettings.Utility.RateMyApp.IsEnabled)
+				ExtractAndSerializeXcodeModInfo(_modDataDict, 	kModKeyStoreReview,		kRelativePathIOSNativeCodeFolder);
 		}
 
 //		{
@@ -276,135 +272,165 @@ namespace VoxelBusters.NativePlugins
 //			}
 //		}
 
-		private static void ModifyInfoPlist (string _buildPath)
-		{
-			ApplicationSettings.Features 	_supportedFeatures			= NPSettings.Application.SupportedFeatures;
-			Dictionary<string, object> 		_newPermissionsDict			= new Dictionary<string, object>();
+		private static void UpdateInfoPlist(string buildPath)
+		{	
+			Debug.Log ("[PostProcessBuild] : ModifyInfoPlist : " + buildPath);
 
-			// Add twitter info 
-#if USES_TWITTER
+			Dictionary<string, object> 	_newPermissionsDict		= new Dictionary<string, object>();
+
+			// In this section, we add additional information required for proper functioning of used native features
+			ApplicationSettings _applicationSettings 	= NPSettings.Application;
+			Features 			_supportedFeatures		= _applicationSettings.SupportedFeatures;	
+			#if USES_TWITTER
+			if (_supportedFeatures.UsesTwitter)
 			{
 				const string 	_kFabricKitRootKey 		= "Fabric";
+
 				TwitterSettings _twitterSettings		= NPSettings.SocialNetworkSettings.TwitterSettings;
 				string 			_fabricJsonStr			= string.Format(kFabricKitJsonStringFormat, _twitterSettings.ConsumerKey);
-				IDictionary 	_fabricJsonDictionary	= (IDictionary)JSONUtility.FromJSON(_fabricJsonStr);
 
-				// Add fabric
+				IDictionary 	_fabricJsonDictionary	= (IDictionary)JSONUtility.FromJSON(_fabricJsonStr);
 				_newPermissionsDict[_kFabricKitRootKey]	= _fabricJsonDictionary[_kFabricKitRootKey];
 			}
-#endif
-
-			// Add background process details
-#if USES_NOTIFICATION_SERVICE && USES_ONE_SIGNAL
-			const string		_kUIBackgroundModesKey	= "UIBackgroundModes";
-			IList				_backgroundModesList	= (IList)infoPlist.GetKeyPathValue(_kUIBackgroundModesKey);
-
-			if (_backgroundModesList == null)
-				_backgroundModesList					= new List<string>();
-
-			const string		_kRemoteNotificationProcess	= "remote-notification";
+			#endif
 			
-			if (!_backgroundModesList.Contains(_kRemoteNotificationProcess))
-				_backgroundModesList.Add(_kRemoteNotificationProcess);
-			
-			_newPermissionsDict[_kUIBackgroundModesKey]	= _backgroundModesList;
-#endif
+			// In this section, we add extra flags required as per Apple guidelines
+			if (_supportedFeatures.UsesNotificationService)
+			{
+				if (_supportedFeatures.NotificationService.usesRemoteNotification)
+				{
+					const string	_kUIBackgroundModesKey		= "UIBackgroundModes";
+					IList	_backgroundModesList				= AddUniqueValues(sourceList: (IList)infoPlist.GetKeyPathValue(_kUIBackgroundModesKey),
+					                                                              values: "remote-notification");
+					_newPermissionsDict[_kUIBackgroundModesKey]	= _backgroundModesList;
+				}
+			}
 
-			// Device capablities addition
 			if (_supportedFeatures.UsesGameServices)
 			{
 				const string	_kDeviceCapablitiesKey	= "UIRequiredDeviceCapabilities";
-				const string	_kGameKitKey			= "gamekit";
-				IList			_deviceCapablitiesList	= (IList)infoPlist.GetKeyPathValue(_kDeviceCapablitiesKey);
-
-				if (_deviceCapablitiesList == null)
-					_deviceCapablitiesList				= new List<string>();
-
-				if (!_deviceCapablitiesList.Contains(_kGameKitKey))
-					_deviceCapablitiesList.Add(_kGameKitKey);
-
+				IList			_deviceCapablitiesList	= AddUniqueValues(sourceList: (IList)infoPlist.GetKeyPathValue(_kDeviceCapablitiesKey),
+				                                                          values: "gamekit");
 				_newPermissionsDict[_kDeviceCapablitiesKey]	= _deviceCapablitiesList;
 			}
 
-			// Query scheme related key inclusion
 			if (_supportedFeatures.UsesSharing)
 			{
 				const string	_kQuerySchemesKey		= "LSApplicationQueriesSchemes";
-				const string	_kWhatsAppKey			= "whatsapp";
-				IList			_queriesSchemesList		= (IList)infoPlist.GetKeyPathValue(_kQuerySchemesKey);
-
-				if (_queriesSchemesList == null)
-					_queriesSchemesList					= new List<string>();
-
-				if (!_queriesSchemesList.Contains(_kWhatsAppKey))
-					_queriesSchemesList.Add(_kWhatsAppKey);
-
+				IList			_queriesSchemesList		= AddUniqueValues(sourceList: (IList)infoPlist.GetKeyPathValue(_kQuerySchemesKey),
+				                                                          values: new string[] { "whatsapp", "fb", "twitter" });
 				_newPermissionsDict[_kQuerySchemesKey]	= _queriesSchemesList;
 			}
 
-			// Apple transport security
 			if (_supportedFeatures.UsesNetworkConnectivity || _supportedFeatures.UsesWebView)
 			{
 				const string	_kATSKey				= "NSAppTransportSecurity";
 				const string	_karbitraryLoadsKey		= "NSAllowsArbitraryLoads";
-				IDictionary		_transportSecurityDict	= (IDictionary)infoPlist.GetKeyPathValue(_kATSKey);
 
+				IDictionary		_transportSecurityDict	= (IDictionary)infoPlist.GetKeyPathValue(_kATSKey);
 				if (_transportSecurityDict == null)
 					_transportSecurityDict				= new Dictionary<string, object>();
 
-				_transportSecurityDict[_karbitraryLoadsKey]	= true;
-				_newPermissionsDict[_kATSKey]			= _transportSecurityDict;
+				_transportSecurityDict[_karbitraryLoadsKey]	= true.ToString();
+				_newPermissionsDict[_kATSKey]				= _transportSecurityDict;
 			}
+
+			// Add privacy info
+			const string	_kPermissionContacts			= "NSContactsUsageDescription";
+			const string	_kPermissionCamera				= "NSCameraUsageDescription";
+			const string	_kPermissionPhotoLibrary		= "NSPhotoLibraryUsageDescription";
+			const string	_kPermissionModifyPhotoLibrary	= "NSPhotoLibraryAddUsageDescription";
+
+			if (_supportedFeatures.UsesAddressBook)
+			{
+				_newPermissionsDict[_kPermissionContacts]	= _applicationSettings.IOS.AddressBookUsagePermissionDescription;
+			}
+
+			if (_supportedFeatures.UsesMediaLibrary)
+			{
+				if (_supportedFeatures.MediaLibrary.usesCamera)
+					_newPermissionsDict[_kPermissionCamera]			= _applicationSettings.IOS.CameraUsagePermissionDescription;
+
+				if (_supportedFeatures.MediaLibrary.usesPhotoAlbum) 
+				{
+					_newPermissionsDict [_kPermissionPhotoLibrary]			= _applicationSettings.IOS.PhotoAlbumUsagePermissionDescription;
+					_newPermissionsDict [_kPermissionModifyPhotoLibrary]	= _applicationSettings.IOS.PhotoAlbumModifyUsagePermissionDescription;
+				}
+			}
+
+            if (_supportedFeatures.UsesSharing)
+            {
+                _newPermissionsDict[_kPermissionModifyPhotoLibrary] = _applicationSettings.IOS.PhotoAlbumModifyUsagePermissionDescription;
+            }
 
 			if (_newPermissionsDict.Count == 0)
 				return;
 
-			// First create a backup of old data
-			string			_infoPlistBackupSavePath	= GetInfoPlistBackupFilePath(_buildPath);
-
+			// Create a backup of old plist
+			string	_infoPlistBackupSavePath	= GetInfoPlistBackupFilePath(buildPath);
 			infoPlist.Save(_infoPlistBackupSavePath);
 
-			// Now add new permissions
+			// Save the plist with new permissions
 			foreach (string _key in _newPermissionsDict.Keys)
 				infoPlist.AddValue(_key, _newPermissionsDict[_key]);
 
-			// Save these changes
-			string			_infoPlistSavePath			= GetInfoPlistFilePath(_buildPath);
-
+			string	_infoPlistSavePath			= GetInfoPlistFilePath(buildPath);
 			infoPlist.Save(_infoPlistSavePath);
 		}
 
-		private static void ModifyPchFile (string _buildPath)
+		private static void ModifyPchFile(string buildPath)
 		{
-			string 		_pchFileDirectory	= Path.Combine(_buildPath, kPrecompiledFileRelativeDirectoryPath);
+			string 		_pchFileDirectory	= Path.Combine(buildPath, kPrecompiledFileRelativeDirectoryPath);
 			string[] 	_pchFiles 			= Directory.GetFiles(_pchFileDirectory, kPrecompiledHeaderExtensionPattern);
 			string 		_pchFilePath 		= null;
 
-			// There will be only one file per project if it exists.
+			// Check whether file exists
 			if (_pchFiles.Length > 0)
 				_pchFilePath =  _pchFiles[0];
 
 			if (File.Exists(_pchFilePath))
 			{
 				string 	_fileContents 		= File.ReadAllText(_pchFilePath);
-
-				// Make sure content doesnt exist
-				if (_fileContents.Contains(kPrecompiledHeaderInsertText))
-					return;
-
-				Regex 	_regex				= new Regex(kPrecompiledHeaderRegexPattern);
-				Match 	_match 				= _regex.Match(_fileContents);
-				int		_endOfPatternIndex	= _match.Groups[0].Index + _match.Groups[0].Length;
-
-				// We should append text within end tag
-				if (_match.Value.Contains(kPrecompiledHeaderEndIfTag))
-					_endOfPatternIndex	-= kPrecompiledHeaderEndIfTag.Length;
-
-				string 	_updatedContents	= _fileContents.Insert(_endOfPatternIndex, "\t" + kPrecompiledHeaderInsertText + "\n");
-
-				// Write updated text
-				File.WriteAllText(_pchFilePath, _updatedContents);
+				if (!_fileContents.Contains("Defines.h"))
+				{
+					string 	_updatedContents	= _fileContents + "\n\n" + kPCHInsertHeaders;
+					File.WriteAllText(_pchFilePath, _updatedContents);
+				}
 			}
+		}
+
+		#endregion
+
+		#region Misc Methods
+
+		private static void ExtractAndSerializeXcodeModInfo(Dictionary<string, object> modifierCollectionDict, string key, string relativePath)
+		{
+			object _modifierData;
+			if (modifierCollectionDict.TryGetValue(key, out _modifierData))
+			{
+				string	_modifierFileName	= key + ".xcodemods";
+				File.WriteAllText(Path.Combine(relativePath, _modifierFileName), JSONUtility.ToJSON(_modifierData));
+
+				return;
+			}
+
+			DebugUtility.Logger.Log("Couldn't create modifier file for key: " + key);
+		}
+
+		private static IList AddUniqueValues<T>(IList sourceList, params T[] values)
+		{
+			if (sourceList == null)
+				sourceList = new List<T>();
+
+			foreach (T _value in values)
+			{
+				if (sourceList.Contains(_value))
+					continue;
+				
+				sourceList.Add(_value);
+			}
+
+			return sourceList;
 		}
 
 		private static string GetInfoPlistFilePath (string _buildPath)
@@ -416,7 +442,7 @@ namespace VoxelBusters.NativePlugins
 		{
 			return Path.Combine(_buildPath, kRelativePathInfoPlistBackupFile);
 		}
-		
+
 		#endregion
 	}
 }

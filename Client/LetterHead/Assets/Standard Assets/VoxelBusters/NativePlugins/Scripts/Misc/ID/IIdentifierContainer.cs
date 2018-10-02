@@ -13,7 +13,7 @@ namespace VoxelBusters.NativePlugins
 			set;
 		}
 
-		PlatformID[] PlatformIDs
+		PlatformValue[] PlatformIDs
 		{
 			get;
 			set;

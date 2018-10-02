@@ -29,9 +29,14 @@ namespace VoxelBusters.Utility
 			if (EnumMaskFieldAttribute.IsEnum())
 			{
 				EditorGUI.BeginChangeCheck();
+#if UNITY_2017_3_OR_NEWER
+				System.Enum _enumValue	= EditorGUI.EnumFlagsField(_position, _label, EnumMaskFieldAttribute.GetEnumValue(_property));
+#else
 				System.Enum _enumValue	= EditorGUI.EnumMaskField(_position, _label, EnumMaskFieldAttribute.GetEnumValue(_property));
+#endif
 				if (EditorGUI.EndChangeCheck())
 					_property.intValue	= System.Convert.ToInt32(_enumValue);
+				
 			}
 			else
 			{

@@ -1,8 +1,7 @@
-﻿using UnityEngine;
+﻿#if UNITY_ANDROID
+using UnityEngine;
 using System.Collections;
-
-#if UNITY_ANDROID
-using VoxelBusters.DebugPRO;
+using VoxelBusters.UASUtils;
 
 namespace VoxelBusters.NativePlugins
 {
@@ -21,7 +20,7 @@ namespace VoxelBusters.NativePlugins
 			else
 			{
 				//Return always closed if not implemented.
-				Console.LogWarning(Constants.kDebugTag, "This status not implemented. sending closed event. [Fix this] " + _resultString);
+				DebugUtility.Logger.LogWarning(Constants.kDebugTag, "This status not implemented. sending closed event. [Fix this] " + _resultString);
 				_shareResult = eShareResult.CLOSED;
 			}
 		}

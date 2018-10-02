@@ -1,10 +1,9 @@
-﻿using UnityEngine;
+﻿#if USES_SHARING && UNITY_IOS
+using UnityEngine;
 using System.Collections;
-
-#if USES_SHARING && UNITY_IOS
 using System.Runtime.InteropServices;
 using VoxelBusters.Utility;
-using VoxelBusters.DebugPRO;
+using VoxelBusters.UASUtils;
 
 namespace VoxelBusters.NativePlugins
 {
@@ -30,7 +29,7 @@ namespace VoxelBusters.NativePlugins
 		public override bool IsWhatsAppServiceAvailable ()
 		{
 			bool _isAvailable	= canShareOnWhatsApp();
-			Console.Log(Constants.kDebugTag, "[Sharing:WhatsApp] Is service available=" + _isAvailable);
+			DebugUtility.Logger.Log(Constants.kDebugTag, "[Sharing:WhatsApp] Is service available=" + _isAvailable);
 			
 			return _isAvailable;
 		}

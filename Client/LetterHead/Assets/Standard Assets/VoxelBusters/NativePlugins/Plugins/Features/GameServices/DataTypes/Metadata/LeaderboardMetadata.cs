@@ -13,7 +13,7 @@ namespace VoxelBusters.NativePlugins
 		private		string			m_globalID;
 		[SerializeField]
 		[Tooltip("Collection of identifiers, where each identifier is used to identify achievement in a specific platform game server.")]
-		private		PlatformID[]	m_platformIDs;
+		private		PlatformValue[]	m_platformIDs;
 		
 		#endregion
 
@@ -25,20 +25,18 @@ namespace VoxelBusters.NativePlugins
 			{
 				return m_globalID;
 			}
-			
 			set
 			{
 				m_globalID	= value;
 			}
 		}
 		
-		public PlatformID[] PlatformIDs
+		public PlatformValue[] PlatformIDs
 		{
 			get
 			{
 				return m_platformIDs;
 			}
-			
 			set
 			{
 				m_platformIDs	= value;
@@ -59,7 +57,6 @@ namespace VoxelBusters.NativePlugins
 		internal static LeaderboardMetadata Create (IDContainer _container)
 		{
 			LeaderboardMetadata _newObject	= new LeaderboardMetadata();
-
 			_newObject.m_globalID			= _container.GlobalID;
 			_newObject.m_platformIDs		= _container.PlatformIDs;
 

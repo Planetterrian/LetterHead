@@ -28,6 +28,13 @@ namespace VoxelBusters.NativePlugins
 	/// </remarks>
 	public partial class CloudServices : MonoBehaviour 
 	{
+		#region Fields
+	
+		protected bool m_isInitialised = false;
+
+		#endregion
+
+
 		#region Initialise
 
 		/// <summary>
@@ -155,6 +162,15 @@ namespace VoxelBusters.NativePlugins
 			return null;
 		}
 
+		/// <summary>
+		/// Returns true if initialised.
+		/// </summary>
+		/// <returns>True if initialisation is finished. Else false.</returns>
+		public bool IsInitialised ()
+		{
+			return m_isInitialised;
+		}
+
 		#endregion
 
 		#region Sync Values
@@ -177,6 +193,13 @@ namespace VoxelBusters.NativePlugins
 		/// </summary>
 		/// <param name="_key">The key corresponding to the value you want to remove.</param>
 		public virtual void RemoveKey (string _key)
+		{}
+
+
+		/// <summary>
+		/// Removes the values associated with the all keys from the cloud data store.
+		/// </summary>
+		public virtual void RemoveAllKeys ()
 		{}
 
 		#endregion

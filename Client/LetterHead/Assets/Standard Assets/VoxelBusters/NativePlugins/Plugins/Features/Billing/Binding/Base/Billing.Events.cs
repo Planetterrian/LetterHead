@@ -1,10 +1,9 @@
-﻿using UnityEngine;
+﻿#if USES_BILLING
+using UnityEngine;
 using System.Collections;
-
-#if USES_BILLING
 using System.Collections.Generic;
 using VoxelBusters.Utility;
-using VoxelBusters.DebugPRO;
+using VoxelBusters.UASUtils;
 
 namespace VoxelBusters.NativePlugins
 {
@@ -25,7 +24,6 @@ namespace VoxelBusters.NativePlugins
 		///	Delegate that will be called when Store completes processing product purchase request.
 		///	</summary>
 		///	<param name="_transaction">The <see cref="BillingTransaction"/> object holds payment details of the requested product.</param>
-		/// <param name="_error">If the operation was successful, this value is nil; otherwise, this parameter holds the description of the problem that occurred.</param>
 		public delegate void BuyProductCompletion (BillingTransaction _transaction);
 
 		///	<summary>
@@ -75,6 +73,7 @@ namespace VoxelBusters.NativePlugins
 		/// 		else
 		/// 		{
 		/// 			// Something went wrong
+		/// 			// Show an alert message informing user that store initialisation failed
 		/// 		}
 		/// 	}
 		/// }
@@ -119,15 +118,24 @@ namespace VoxelBusters.NativePlugins
 		/// 				// Product was not purchased; Insert code to handle failed purchase scenario
 		/// 			}
 		/// 		}
+		/// 		else if (_transaction.VerificationState == eBillingTransactionVerificationState.FAILED)
+		/// 		{
+		/// 			// Something went wrong!
+		/// 			// At this point, we recommend you not to credit the associated item
+		/// 		}
 		/// 		else
 		/// 		{
-		/// 			// Receipt not verified, think again before crediting the item!
+		/// 			// Received transaction object is not validated yet!
+		/// 			// This can happen only when developer opts out of inbuilt receipt validation
+		/// 			// Now its your responsiblity to provide appropriate receipt validation status for this transaction
+		/// 			// Skipping this step will cause unusual behaviour
+		/// 			_transaction.OnCustomVerificationFinished(_newVerificationState);
 		/// 		}	
 		/// 	}
 		/// }
 		/// </code>
 		/// </example>
-		public static BuyProductCompletion DidFinishProductPurchaseEvent;
+		public static event BuyProductCompletion DidFinishProductPurchaseEvent;
 
 		/// <summary>
 		/// Event that will be called when restored transaction details are received from the Store.
@@ -163,21 +171,31 @@ namespace VoxelBusters.NativePlugins
 		/// 				{
 		/// 					// Insert code to restore product associated with this transaction
 		/// 				}
+		/// 				else if (_transaction.VerificationState == eBillingTransactionVerificationState.FAILED)
+		/// 				{
+		/// 					// Something went wrong!
+		/// 					// At this point, we recommend you not to credit the associated item
+		/// 				}
 		/// 				else
 		/// 				{
-		/// 					// Receipt not verified, think again before crediting the item!
-		/// 				}
+		/// 					// Received transaction object is not validated yet!
+		/// 					// This can happen only when developer opts out of inbuilt receipt validation
+		/// 					// Now its your responsiblity to provide appropriate receipt validation status for this transaction
+		/// 					// Skipping this step will cause unusual behaviour
+		/// 					_transaction.OnCustomVerificationFinished(_newVerificationState);
+		/// 				}	
 		/// 			}
 		/// 		}
 		/// 		else
 		/// 		{
 		/// 			// Something went wrong
+		/// 			// Display an alert informing user that restore request failed
 		/// 		}
 		/// 	}
 		/// }
 		/// </code>
 		/// </example>
-		public static RestorePurchasesCompletion DidFinishRestoringPurchasesEvent;
+		public static event RestorePurchasesCompletion DidFinishRestoringPurchasesEvent;
 		
 		#endregion
 
@@ -188,15 +206,15 @@ namespace VoxelBusters.NativePlugins
 		
 		protected void DidReceiveBillingProducts (BillingProduct[] _storeProducts, string _error)
 		{
-			Console.Log(Constants.kDebugTag, "[Billing] Request for billing products finished successfully.");
-			
+			DebugUtility.Logger.Log(Constants.kDebugTag, "[Billing] Request for billing products finished successfully.");
+
 			// Cache information
 			m_storeProducts	= _storeProducts;
 
 			// Update product type information
 			if (_storeProducts != null)
 			{
-				foreach (MutableBillingProduct _currentStoreProduct in _storeProducts)
+				foreach (BillingProductMutable _currentStoreProduct in _storeProducts)
 				{
 					int 	_productIndex	= System.Array.FindIndex(m_requestedProducts, (BillingProduct _requestedProduct) => _currentStoreProduct.ProductIdentifier.Equals(_requestedProduct.ProductIdentifier));
 					
@@ -218,19 +236,18 @@ namespace VoxelBusters.NativePlugins
 		
 		protected void DidFinishProductPurchase (string _dataStr)
 		{
-			// Extract required data
 			BillingTransaction[] 	_transactions;
 			string					_error;
-			
 			ExtractTransactionResponseData(_dataStr, out _transactions, out _error);
 
-			// Invoke handler
+			ProcessPurchaseTransactions(_transactions);
+
 			DidFinishProductPurchase(_transactions, _error);
 		}
 
 		protected void DidFinishProductPurchase (BillingTransaction[] _transactions, string _error)
 		{
-			Console.Log(Constants.kDebugTag, "[Billing] Received product purchase information.");
+			DebugUtility.Logger.Log(Constants.kDebugTag, "[Billing] Received product purchase information.");
 
 			// Send event
 			if (DidFinishProductPurchaseEvent != null)
@@ -255,19 +272,18 @@ namespace VoxelBusters.NativePlugins
 
 		protected void DidFinishRestoringPurchases (string _dataStr)
 		{
-			// Extract required data
 			BillingTransaction[] 	_transactions;
 			string					_error;
-
 			ExtractTransactionResponseData(_dataStr, out _transactions, out _error);
 
-			// Invoke handler
+			ProcessRestoredTransactions(_transactions);
+
 			DidFinishRestoringPurchases(_transactions, _error);
 		}
 
 		protected void DidFinishRestoringPurchases (BillingTransaction[] _transactions, string _error)
 		{
-			Console.Log(Constants.kDebugTag, "[Billing] Received restored purchases information.");
+			DebugUtility.Logger.Log(Constants.kDebugTag, "[Billing] Received restored purchases information.");
 
 			// Send event
 			if (DidFinishRestoringPurchasesEvent != null)
@@ -285,6 +301,12 @@ namespace VoxelBusters.NativePlugins
 			_transactions	= null;
 			_error			= null;
 		}
+
+		protected virtual void ProcessPurchaseTransactions (BillingTransaction[] _transactions)
+		{}
+		
+		protected virtual void ProcessRestoredTransactions (BillingTransaction[] _transactions)
+		{}
 
 		#endregion
 

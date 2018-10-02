@@ -3,26 +3,27 @@ using System.Collections;
 
 #if UNITY_EDITOR
 using System.Xml;
+using UnityEditor;
 
 namespace VoxelBusters.Utility
 {
-	public partial class AndroidManifestGenerator 
+	public partial class AndroidManifestGenerator
 	{
 		#region Methods
-		
-		public void SaveManifest (string _packageName, string _path)
+
+		public void SaveManifest (string _packageName, string _path, string _minSDKVersion, string _targetSDKVersion)
 		{
-			SaveManifest(_packageName, "1", "1.0", _path);
+			SaveManifest(_packageName, _path, "1", "1.0", _minSDKVersion, _targetSDKVersion);
 		}
-		
-		public void SaveManifest (string _packageName, string _versionCode, string _versionName, string _path)
+
+		public void SaveManifest (string _packageName, string _path, string _versionCode, string _versionName, string _minSDKVersion, string _targetSDKVersion)
 		{
 			// Settings
 			XmlWriterSettings _settings 	= new XmlWriterSettings();
 			_settings.Encoding 				= new System.Text.UTF8Encoding(true);
 			_settings.ConformanceLevel 		= ConformanceLevel.Document;
 			_settings.Indent 				= true;
-			
+
 			// Generate and write manifest
 			using (XmlWriter _xmlWriter = XmlWriter.Create(_path, _settings))
 			{
@@ -32,13 +33,23 @@ namespace VoxelBusters.Utility
 					// Manifest
 					//********************
 					_xmlWriter.WriteComment("AUTO GENERATED MANIFEST FILE FROM AndroidManifestGenerator. DONT MODIFY HERE.");
-					
-					_xmlWriter.WriteStartElement("manifest");					
-					_xmlWriter.WriteAttributeString("xmlns:android", 		"http://schemas.android.com/apk/res/android");
-					_xmlWriter.WriteAttributeString("package", 				_packageName);
-					_xmlWriter.WriteAttributeString("android:versionCode", 	_versionCode);
-					_xmlWriter.WriteAttributeString("android:versionName", 	_versionName);
+
+					_xmlWriter.WriteStartElement("manifest");
+					WriteAttributeString(_xmlWriter, "xmlns", "android", null, "http://schemas.android.com/apk/res/android");
+					WriteAttributeString(_xmlWriter, null, "package", null, _packageName);
+					WriteAttributeString(_xmlWriter, "android", "versionCode", null, _versionCode);
+					WriteAttributeString(_xmlWriter, "android", "versionName", null, _versionName);
+
 					{
+						//Specify min and target versions
+
+						_xmlWriter.WriteStartElement("uses-sdk");
+						{
+							WriteAttributeString(_xmlWriter, "android", "minSdkVersion", null, _minSDKVersion);
+							WriteAttributeString(_xmlWriter, "android", "targetSdkVersion", null, _targetSDKVersion);
+						}
+						_xmlWriter.WriteEndElement();
+
 						//********************
 						// Application
 						//********************
@@ -47,7 +58,7 @@ namespace VoxelBusters.Utility
 							WriteApplicationProperties(_xmlWriter);
 						}
 						_xmlWriter.WriteEndElement();
-						
+
 						//********************
 						// Permission
 						//********************
@@ -59,112 +70,169 @@ namespace VoxelBusters.Utility
 				_xmlWriter.WriteEndDocument();
 			}
 		}
-		
+
 		protected virtual void WriteApplicationProperties (XmlWriter _xmlWriter)
 		{}
-		
+
 		protected virtual void WritePermissions (XmlWriter _xmlWriter)
 		{}
-		
-		protected void WriteActivity (XmlWriter _xmlWriter, string _name, string _theme = null, string _orientation = null, string _configChanges = null, string _comment = null)
+
+		protected void WriteActivity (XmlWriter _xmlWriter, string _name, string _theme = null, string _orientation = null, string _configChanges = null, string _exported = null, string _comment = null)
 		{
 			if (_comment != null)
 				_xmlWriter.WriteComment(_comment);
-			
+
 			_xmlWriter.WriteStartElement("activity");
 			{
-				_xmlWriter.WriteAttributeString("android:name", 					_name);
-				
+				WriteAttributeString(_xmlWriter, "android", "name", null, _name);
+
 				if (_theme != null)
-					_xmlWriter.WriteAttributeString("android:theme", 				_theme);
-				
+					WriteAttributeString(_xmlWriter, "android", "theme", null, _theme);
+
 				if (_orientation != null)
-					_xmlWriter.WriteAttributeString("android:screenOrientation", 	_orientation);
-				
+					WriteAttributeString(_xmlWriter, "android", "screenOrientation", null, _orientation);
+
 				if (_configChanges != null)
-					_xmlWriter.WriteAttributeString("android:configChanges", 		_configChanges);
+					WriteAttributeString(_xmlWriter, "android", "configChanges", null, _configChanges);
+
+				if (_exported != null)
+					WriteAttributeString(_xmlWriter, "android", "exported", null, _exported);
+
 			}
 			_xmlWriter.WriteEndElement();
 		}
-		
-		protected void WriteAction (XmlWriter _xmlWriter, string _name, string _comment = null)
+
+		protected void WriteAction (XmlWriter _xmlWriter, string _name, string _permission = null, string _comment = null)
 		{
 			if (_comment != null)
 				_xmlWriter.WriteComment(_comment);
-			
+
 			_xmlWriter.WriteStartElement("action");
 			{
-				_xmlWriter.WriteAttributeString("android:name", 	_name);
+				WriteAttributeString(_xmlWriter, "android", "name", null, _name);
+
+				if (_permission != null)
+					WriteAttributeString(_xmlWriter, "android", "permission", null, _permission);
 			}
 			_xmlWriter.WriteEndElement();
 		}
-		
+
 		protected void WriteCategory (XmlWriter _xmlWriter, string _name, string _comment = null)
 		{
 			if (_comment != null)
 				_xmlWriter.WriteComment(_comment);
-			
+
 			_xmlWriter.WriteStartElement("category");
 			{
-				_xmlWriter.WriteAttributeString("android:name", 	_name);
+				WriteAttributeString(_xmlWriter, "android", "name", null, _name);
 			}
 			_xmlWriter.WriteEndElement();
 		}
-		
+
 		protected void WriteService (XmlWriter _xmlWriter, string _name, string _comment = null)
 		{
 			if (_comment != null)
 				_xmlWriter.WriteComment(_comment);
-			
+
 			_xmlWriter.WriteStartElement("service");
 			{
-				_xmlWriter.WriteAttributeString("android:name", 	_name);
+				WriteAttributeString(_xmlWriter, "android", "name", null, _name);
 			}
 			_xmlWriter.WriteEndElement();
 		}
-		
+
+		protected void WriteService (XmlWriter _xmlWriter, string _name, string _permission, string _comment = null)
+		{
+			if (_comment != null)
+				_xmlWriter.WriteComment(_comment);
+
+			_xmlWriter.WriteStartElement("service");
+			{
+				WriteAttributeString(_xmlWriter, "android", "name", null, _name);
+				WriteAttributeString(_xmlWriter, "android", "permission", null, _permission);
+			}
+			_xmlWriter.WriteEndElement();
+		}
+
 		protected void WritePermission (XmlWriter _xmlWriter, string _name, string _protectionLevel, string _comment = null)
 		{
 			if (_comment != null)
 				_xmlWriter.WriteComment(_comment);
-			
+
 			_xmlWriter.WriteStartElement("permission");
 			{
-				_xmlWriter.WriteAttributeString("android:name", 			_name);
-				_xmlWriter.WriteAttributeString("android:protectionLevel", 	_protectionLevel);
+				WriteAttributeString(_xmlWriter, "android", "name", null, _name);
+				WriteAttributeString(_xmlWriter, "android", "protectionLevel", null, _protectionLevel);
 			}
 			_xmlWriter.WriteEndElement();
 		}
-		
+
 		protected void WriteUsesPermission (XmlWriter _xmlWriter, string _name, Feature[] _features = null, string _comment = null)
 		{
 			if (_comment != null)
 				_xmlWriter.WriteComment(_comment);
-			
+
 			_xmlWriter.WriteStartElement("uses-permission");
 			{
-				_xmlWriter.WriteAttributeString("android:name", 			_name);
+				WriteAttributeString(_xmlWriter, "android", "name", null, _name);
 			}
 			_xmlWriter.WriteEndElement();
-			
+
 			if (_features != null)
 			{
 				int				_count		= _features.Length;
-				
+
 				for (int _iter = 0; _iter < _count; _iter++)
 				{
 					Feature		_curFeature	= _features[_iter];
-					
+
 					_xmlWriter.WriteStartElement("uses-feature");
 					{
-						_xmlWriter.WriteAttributeString("android:name", 	_curFeature.Name);
-						_xmlWriter.WriteAttributeString("android:required", _curFeature.Required ? "true" : "false");
+						WriteAttributeString(_xmlWriter, "android", "name", null, _curFeature.Name);
+						WriteAttributeString(_xmlWriter, "android", "required", null, _curFeature.Required ? "true" : "false");
 					}
 					_xmlWriter.WriteEndElement();
 				}
 			}
 		}
-		
+
+		protected void WriteAttributeString (XmlWriter _xmlWriter, string _prefix, string _localName, string _nameSpace, string _value)
+		{
+#if NET_4_6
+			if (GetAPICompatibilityLevel() == ApiCompatibilityLevel.NET_4_6)
+			{
+				if (string.IsNullOrEmpty (_prefix) && string.IsNullOrEmpty (_nameSpace))
+					_xmlWriter.WriteAttributeString (_localName, _value);
+				else
+					_xmlWriter.WriteAttributeString (_prefix, _localName, _nameSpace, _value);
+			}
+			else
+#endif
+			{
+				if (!string.IsNullOrEmpty (_nameSpace))
+				{
+					_xmlWriter.WriteAttributeString (_prefix + ":" + _localName, _nameSpace, _value);
+				}
+				else if (!string.IsNullOrEmpty (_prefix))
+				{
+					_xmlWriter.WriteAttributeString (_prefix + ":" + _localName, _value);
+				}
+				else
+				{
+					_xmlWriter.WriteAttributeString (_localName, _value);
+				}
+			}
+		}
+
+		private ApiCompatibilityLevel GetAPICompatibilityLevel ()
+		{
+#if !UNITY_5_6_OR_NEWER
+			return UnityEditor.PlayerSettings.apiCompatibilityLevel;
+#else
+			return UnityEditor.PlayerSettings.GetApiCompatibilityLevel(EditorUserBuildSettings.selectedBuildTargetGroup);
+#endif
+		}
+
 		#endregion
 	}
 }

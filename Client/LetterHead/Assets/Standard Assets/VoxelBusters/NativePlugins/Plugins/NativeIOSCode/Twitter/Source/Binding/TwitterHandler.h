@@ -16,20 +16,18 @@
 + (void)InitTwitterKitWithConsumerKey:(NSString *)consumerKey consumerSecret:(NSString *)consumerSecret;
 
 // Related to login
-- (void)login;
-- (void)logout;
-- (BOOL)isLoggedIn;
-- (NSString *)authToken;
-- (NSString *)authTokenSecret;
-- (NSString *)userID;
-- (NSString *)userName;
+- (void)login:(BOOL)requiresEmailAccess;
+- (void)logoutUserID:(NSString *)userID;
+- (BOOL)isUserLoggedIn:(NSString *)userID;
+
+- (NSDictionary *)getSessionDictionaryWithUserID:(NSString *)userID;
 
 // Tweet
 - (void)showTweetComposerWithMessage:(NSString *)message URL:(NSString *)URLString image:(UIImage *)image;
 
 // Advanced
-- (void)requestAccountDetails;
-- (void)requestEmailAccess;
-- (void)URLRequestWithMethod:(NSString *)method URL:(NSString *)URLString parameters:(NSDictionary *)parameters;
+- (void)requestAccountDetailsWithUserID:(NSString *)userID;
+- (void)requestEmailWithUserID:(NSString *)userID;
+- (void)sendURLRequestUsingClientWithUserID:(NSString *)userID method:(NSString *)method URL:(NSString *)URLString parameters:(NSDictionary *)parameters;
 
 @end

@@ -63,8 +63,8 @@ void webviewLoadData (UInt8* dataArray, 	int dataArrayLength,
 
 void webviewEvaluateJavaScriptFromString (const char* javaScript, const char* tag)
 {
-    [[WebViewHandler Instance] evaluateJavaScriptFromString:ConvertToNSString(javaScript)
-                                        usingWebViewWithTag:ConvertToNSString(tag)];
+    [[WebViewHandler Instance] evaluateJavaScript:ConvertToNSString(javaScript)
+                              usingWebViewWithTag:ConvertToNSString(tag)];
 }
 
 void webviewReload (const char* tag)

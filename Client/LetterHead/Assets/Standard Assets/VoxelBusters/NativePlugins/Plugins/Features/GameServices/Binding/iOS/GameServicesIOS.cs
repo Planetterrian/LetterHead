@@ -1,11 +1,9 @@
-﻿using UnityEngine;
+﻿#if USES_GAME_SERVICES && UNITY_IOS
+using UnityEngine;
 using System.Collections;
-
-#if USES_GAME_SERVICES && UNITY_IOS
 using System;
 using System.Runtime.InteropServices;
 using VoxelBusters.Utility;
-using VoxelBusters.DebugPRO;
 
 namespace VoxelBusters.NativePlugins
 {

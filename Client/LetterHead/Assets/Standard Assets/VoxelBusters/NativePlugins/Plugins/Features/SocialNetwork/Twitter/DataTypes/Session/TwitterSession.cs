@@ -4,43 +4,16 @@ using System.Collections;
 namespace VoxelBusters.NativePlugins
 {
 	/// <summary>
-	/// Represents an immutable object, that encapsulates the authorization details of an Twitter session.
+	/// Represents an immutable object, that encapsulates user's session authenticated with the Twitter API.
 	/// </summary>
-	public class TwitterSession 
+	public class TwitterSession : TwitterAuthSession
 	{
 		#region Properties
-
-		/// <summary>
-		/// The authorization token. (read-only)
-		/// </summary>
-		public string AuthToken 
-		{ 
-			get; 
-			protected set; 
-		}
-
-		/// <summary>
-		/// The authorization token secret. (read-only)
-		/// </summary>
-		public string AuthTokenSecret 
-		{ 
-			get; 
-			protected set; 
-		}
 
 		/// <summary>
 		/// The username associated with the access token. (read-only)
 		/// </summary>
 		public string UserName 
-		{ 
-			get; 
-			protected set; 
-		}
-
-		/// <summary>
-		/// The user ID associated with the access token. (read-only)
-		/// </summary>
-		public string UserID 
 		{ 
 			get; 
 			protected set; 
@@ -52,10 +25,8 @@ namespace VoxelBusters.NativePlugins
 		
 		protected TwitterSession ()
 		{
-			AuthToken		= string.Empty;
-			AuthTokenSecret	= string.Empty;
-			UserName		= string.Empty;
-			UserID			= string.Empty;
+			// Set properties
+			UserName	= null;
 		}
 		
 		#endregion

@@ -1,9 +1,8 @@
-﻿using UnityEngine;
+﻿#if USES_TWITTER && UNITY_ANDROID
+using UnityEngine;
 using System.Collections;
-
-#if USES_TWITTER && UNITY_ANDROID
 using VoxelBusters.Utility;
-using VoxelBusters.DebugPRO;
+using VoxelBusters.UASUtils;
 
 namespace VoxelBusters.NativePlugins
 {
@@ -40,18 +39,18 @@ namespace VoxelBusters.NativePlugins
 
 		#region Account API's
 			
-		public override void Login (TWTRLoginCompletion _onCompletion)
+		public override void Login (bool _requiresEmailAccess, TWTRLoginCompletion _onCompletion)
 		{
 			if (IsInitialised())
 			{
-				base.Login(_onCompletion);
+				base.Login(_requiresEmailAccess, _onCompletion);
 
 				// Native method is called
 				Plugin.Call(Native.Methods.LOGIN);
 			}
 			else
 			{
-				Console.LogError(Constants.kDebugTag, "Twitter is not yet initialised! Call Initialise method first.");
+				DebugUtility.Logger.LogError(Constants.kDebugTag, "Twitter is not yet initialised! Call Initialise method first.");
 			}
 		}
 		
@@ -59,7 +58,7 @@ namespace VoxelBusters.NativePlugins
 		{
 			if (!IsLoggedIn())
 			{
-				Console.LogWarning(Constants.kDebugTag, "Already logged out.");
+				DebugUtility.Logger.LogWarning(Constants.kDebugTag, "Already logged out.");
 				return;
 			}
 
@@ -67,46 +66,24 @@ namespace VoxelBusters.NativePlugins
 
 			// Native method is called
 			Plugin.Call(Native.Methods.LOGOUT);
+			TwitterLogoutFinished();
 		}
 		
 		public override bool IsLoggedIn ()
 		{
 			bool _isLoggedIn	= Plugin.Call<bool>(Native.Methods.IS_LOGGED_IN);
-			Console.Log(Constants.kDebugTag, "[Twitter] IsLoggedIn=" + _isLoggedIn);
+			DebugUtility.Logger.Log(Constants.kDebugTag, "[Twitter] IsLoggedIn=" + _isLoggedIn);
 			
 			return _isLoggedIn;
 		}
-		
-		public override string GetAuthToken ()
+
+		public override TwitterAuthSession GetSessionWithUserID (string _userID = null)
 		{
-			string _authToken	= Plugin.Call<string>(Native.Methods.GET_AUTH_TOKEN);
-			Console.Log(Constants.kDebugTag, "[Twitter] AuthToken=" + _authToken);
+			string _sessionJSONString	= Plugin.Call<string>(Native.Methods.GET_AUTH_SESSION, _userID);
+			if (string.IsNullOrEmpty(_sessionJSONString))
+				return null;
 			
-			return _authToken;
-		}
-		
-		public override string GetAuthTokenSecret ()
-		{
-			string _authTokenSecret	= Plugin.Call<string>(Native.Methods.GET_AUTH_TOKEN_SECRET);
-			Console.Log(Constants.kDebugTag, "[Twitter] AuthTokenSecret=" + _authTokenSecret);
-			
-			return _authTokenSecret;
-		}
-		
-		public override string GetUserID ()
-		{
-			string _userID	= Plugin.Call<string>(Native.Methods.GET_USER_ID);
-			Console.Log(Constants.kDebugTag, "[Twitter] UserID=" + _userID);
-			
-			return _userID;
-		}
-		
-		public override string GetUserName ()
-		{
-			string _userName	= Plugin.Call<string>(Native.Methods.GET_USER_NAME);
-			Console.Log(Constants.kDebugTag, "[Twitter] UserName=" + _userName);
-			
-			return _userName;
+			return new AndroidTwitterSession((IDictionary)JSONUtility.FromJSON(_sessionJSONString));
 		}
 
 		#endregion
@@ -144,9 +121,9 @@ namespace VoxelBusters.NativePlugins
 			Plugin.Call(Native.Methods.REQUEST_EMAIL_ACCESS);
 		}
 		
-		protected override void URLRequest (string _methodType, string _URL, IDictionary _parameters, TWTRResonse _onCompletion)
+		protected override void SendURLRequest (string _methodType, string _URL, IDictionary _parameters, TWTRResponse _onCompletion)
 		{
-			base.URLRequest(_methodType, _URL, _parameters, _onCompletion);
+			base.SendURLRequest(_methodType, _URL, _parameters, _onCompletion);
 
 			// Native method is called
 			Plugin.Call(Native.Methods.URL_REQUEST, _methodType, _URL, _parameters.ToJSON());

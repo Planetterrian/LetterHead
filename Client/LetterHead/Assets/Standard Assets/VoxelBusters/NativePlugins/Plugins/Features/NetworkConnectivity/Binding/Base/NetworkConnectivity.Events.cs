@@ -1,8 +1,7 @@
-﻿using UnityEngine;
+﻿#if USES_NETWORK_CONNECTIVITY
+using UnityEngine;
 using System.Collections;
-
-#if USES_NETWORK_CONNECTIVITY
-using VoxelBusters.DebugPRO;
+using VoxelBusters.UASUtils;
 
 namespace VoxelBusters.NativePlugins
 {
@@ -75,7 +74,7 @@ namespace VoxelBusters.NativePlugins
 		protected void ConnectivityChanged (bool _connected)
 		{
 			IsConnected = _connected;
-			Console.Log(Constants.kDebugTag, "[NetworkConnectivity] Connectivity changed, IsConnected=" + IsConnected);
+			DebugUtility.Logger.Log(Constants.kDebugTag, "[NetworkConnectivity] Connectivity changed, IsConnected=" + IsConnected);
 			
 			// Trigger event in handler
 			if (NetworkConnectivityChangedEvent != null)

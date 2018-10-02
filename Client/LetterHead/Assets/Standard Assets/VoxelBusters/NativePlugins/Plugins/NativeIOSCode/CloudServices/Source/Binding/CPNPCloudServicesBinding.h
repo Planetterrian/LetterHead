@@ -32,3 +32,4 @@ UIKIT_EXTERN bool cpnpCloudServicesSynchronise ();
 
 // Removing values
 UIKIT_EXTERN void cpnpCloudServicesRemoveKey (const char *key);
+UIKIT_EXTERN void cpnpCloudServicesRemoveAllKeys ();

@@ -1,10 +1,8 @@
-﻿using UnityEngine;
+﻿#if USES_NETWORK_CONNECTIVITY && UNITY_ANDROID
+using UnityEngine;
 using System.Collections;
-
-#if USES_NETWORK_CONNECTIVITY && UNITY_ANDROID
 using System.Collections.Generic;
 using VoxelBusters.Utility;
-using VoxelBusters.DebugPRO;
 
 namespace VoxelBusters.NativePlugins
 {
@@ -28,12 +26,11 @@ namespace VoxelBusters.NativePlugins
 			base.Initialise ();
 
 			NetworkConnectivitySettings _settings = NPSettings.NetworkConnectivity;
-
-			Plugin.Call(Native.Methods.INITIALIZE,_settings.IPAddress, 
+			Plugin.Call(Native.Methods.INITIALIZE,_settings.HostAddress, 
 			            							_settings.Android.Port, 
-													_settings.Android.TimeGapBetweenPolling, 
-													_settings.Android.TimeOutPeriod,
-													_settings.Android.MaxRetryCount);
+													_settings.TimeGapBetweenPolling, 
+													_settings.TimeOutPeriod,
+													_settings.MaxRetryCount);
 			
 		}	
 

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
-using VoxelBusters.DebugPRO;
 using System.Runtime.CompilerServices;
+using VoxelBusters.UASUtils;
 
 [assembly: InternalsVisibleTo("Assembly-CSharp")]
 namespace VoxelBusters.NativePlugins
@@ -37,7 +37,7 @@ namespace VoxelBusters.NativePlugins
 		{
 			if (achievementDescriptionList == null)
 			{
-				Console.LogError(Constants.kDebugTag, "[GameServices] Please fetch achievement description list before accessing achievement properties.");
+				DebugUtility.Logger.LogError(Constants.kDebugTag, "[GameServices] Please fetch achievement description list before accessing achievement properties.");
 				return null;
 			}
 
@@ -51,7 +51,7 @@ namespace VoxelBusters.NativePlugins
 					return _curDescription;
 			}
 
-			Console.LogError(Constants.kDebugTag, string.Format("[GameServices] Couldnt find achievement description with identifier= {0}.", _achievementID));
+			DebugUtility.Logger.LogError(Constants.kDebugTag, string.Format("[GameServices] Couldnt find achievement description with identifier= {0}.", _achievementID));
 			return null;
 		}
 
@@ -59,7 +59,7 @@ namespace VoxelBusters.NativePlugins
 		{
 			if (achievementDescriptionList == null)
 			{
-				Console.LogError(Constants.kDebugTag, "[GameServices] Please fetch achievement description list before accessing achievement properties.");
+				DebugUtility.Logger.LogError(Constants.kDebugTag, "[GameServices] Please fetch achievement description list before accessing achievement properties.");
 				return null;
 			}
 			
@@ -73,7 +73,7 @@ namespace VoxelBusters.NativePlugins
 					return _curDescription;
 			}
 			
-			Console.LogError(Constants.kDebugTag, string.Format("[GameServices] Couldnt find achievement description with global identifier= {0}.", _achievementGID));
+			DebugUtility.Logger.LogError(Constants.kDebugTag, string.Format("[GameServices] Couldnt find achievement description with global identifier= {0}.", _achievementGID));
 			return null;
 		}
 

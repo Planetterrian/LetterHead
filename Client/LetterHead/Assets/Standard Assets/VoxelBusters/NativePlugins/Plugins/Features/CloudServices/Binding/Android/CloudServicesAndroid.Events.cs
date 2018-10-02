@@ -1,9 +1,8 @@
+#if USES_CLOUD_SERVICES && UNITY_ANDROID
 using UnityEngine;
 using System.Collections;
-using VoxelBusters.DebugPRO;
-
-#if USES_CLOUD_SERVICES && UNITY_ANDROID
 using VoxelBusters.Utility;
+using VoxelBusters.UASUtils;
 
 namespace VoxelBusters.NativePlugins
 {
@@ -17,16 +16,11 @@ namespace VoxelBusters.NativePlugins
 		private 	const 	string		kKeyForIsFetchedForSave		= "is-fetched-for-save";		
 		private 	const 	string		kKeyForIsCommitSuccess		= "is-commit-success";	
 		private 	const 	string		kKeyForCloudAccount			= "cloud-account-name";	
-		
-		
+
 		private 	const 	string		kKeyForCloudServicesLocalStore 	= "np-cloud-services-local-store";
 		
 		#endregion
-
-		#region Fields
-
-
-		#endregion
+	
 
 		#region Native Callback Methods
 
@@ -36,24 +30,34 @@ namespace VoxelBusters.NativePlugins
 			string			_encodedData		=	_dataDict.GetIfAvailable<string>(kKeyForNewCloudData);
 			string 			_cloudAccountName	=	_dataDict.GetIfAvailable<string>(kKeyForCloudAccount);
 
+
+
 			// Decode the data with Base64 and convert to Json IDict.
 			if(!string.IsNullOrEmpty(_encodedData))
 			{
 				string _decodedData = _encodedData.FromBase64();
 
-				Console.Log(Constants.kDebugTag, "[CloudServices] Received from Cloud : " + _decodedData);
+				DebugUtility.Logger.Log(Constants.kDebugTag, "[CloudServices] Received from Cloud : " + _decodedData);
 				
 				IDictionary _newCloudData = (IDictionary)JSONUtility.FromJSON(_decodedData);
 
 				// Here compare the data with the one on local disk and trigger the ExternallyChagedEvent.
 				CheckChangedKeyValueStoreDataAndRefresh(_newCloudData, _cloudAccountName);
 			}
+			else if (!m_isInitialised)
+			{
+				CloudKeyValueStoreDidInitialise(true);
+			}
+
+			//Set the flag to true
+			m_isInitialised = true;
+
 
 			if (IsLocalDirty())
 			{
 				SetLocalDirty(false); //We are setting to false and on failed commit to cloud we set it to true. If we don't set here, there could be chances for missing the flagstatus if set to false in callback on sucess of save.
 				string _jsonString = m_dataStore.ToJSON();
-				Console.Log(Constants.kDebugTag, "[CloudServices] Save To Cloud : " + _jsonString);
+				DebugUtility.Logger.Log(Constants.kDebugTag, "[CloudServices] Save To Cloud : " + _jsonString);
 				Plugin.Call(Native.Methods.SAVE_CLOUD_DATA, _jsonString.ToBase64());
 			}
 			else

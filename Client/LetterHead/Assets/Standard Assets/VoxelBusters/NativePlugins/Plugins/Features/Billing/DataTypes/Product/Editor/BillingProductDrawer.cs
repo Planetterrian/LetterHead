@@ -6,7 +6,7 @@ using UnityEditor;
 
 namespace VoxelBusters.NativePlugins
 {
-	[CustomPropertyDrawer(typeof(BillingProduct))]
+//	[CustomPropertyDrawer(typeof(BillingProduct))]
 	public class BillingProductDrawer : PropertyDrawer
 	{
 		#region Properties
@@ -22,7 +22,7 @@ namespace VoxelBusters.NativePlugins
 		
 		public override float GetPropertyHeight (SerializedProperty _property, GUIContent _label)
 		{
-			return m_tagPropertyHeightWithOffset + (m_singleLinePropertyHeightWithOffset * 6);
+			return m_tagPropertyHeightWithOffset + (m_singleLinePropertyHeightWithOffset * 8);
 		}
 
 		public override void OnGUI (Rect _position, SerializedProperty _property, GUIContent _label)
@@ -33,7 +33,8 @@ namespace VoxelBusters.NativePlugins
 			SerializedProperty _isConsumableProperty		= _property.FindPropertyRelative("m_isConsumable");
 			SerializedProperty _iosProductIdProperty		= _property.FindPropertyRelative("m_iosProductId");
 			SerializedProperty _androidProductIdProperty	= _property.FindPropertyRelative("m_androidProductId");
-
+			SerializedProperty _developerPayloadIdProperty	= _property.FindPropertyRelative("m_developerPayload");
+			
 			// GUI Styles
 			GUIStyle _tagStyle								= new GUIStyle("GUIEditor.BreadcrumbLeft");
 			_tagStyle.fontStyle								= FontStyle.Bold;
@@ -54,6 +55,10 @@ namespace VoxelBusters.NativePlugins
 			_positionY += m_singleLinePropertyHeightWithOffset;
 			Rect _androidProductPropertyRect				= new Rect(_position.x, _positionY, _position.width, m_singleLinePropertyHeight);	
 			_positionY += m_singleLinePropertyHeightWithOffset;
+			Rect _optionalDataRect							= new Rect(_position.x, _positionY, _position.width, m_singleLinePropertyHeight);	
+			_positionY += m_singleLinePropertyHeightWithOffset;
+			Rect _developerPayloadPropertyRect				= new Rect(_position.x, _positionY, _position.width, m_singleLinePropertyHeight);	
+			_positionY += m_singleLinePropertyHeightWithOffset;
 				
 			// Start drawing property attributes
 			_label	= EditorGUI.BeginProperty(_position, _label, _property);
@@ -69,6 +74,13 @@ namespace VoxelBusters.NativePlugins
 			EditorGUI.PropertyField(_iosProductPropertyRect, _iosProductIdProperty, new GUIContent("iOS"), true);
 			EditorGUI.PropertyField(_androidProductPropertyRect, _androidProductIdProperty, new GUIContent("Android"), true);
 			EditorGUI.indentLevel--;
+
+			// Listing out the platform specific data
+			EditorGUI.LabelField(_optionalDataRect, "Optional Data");
+			EditorGUI.indentLevel++;
+			EditorGUI.PropertyField(_developerPayloadPropertyRect, _developerPayloadIdProperty, new GUIContent("Developer Payload"), true);
+			EditorGUI.indentLevel--;
+			
 
 			EditorGUI.EndProperty();
 		}

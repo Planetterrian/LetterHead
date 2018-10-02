@@ -9,7 +9,7 @@ using VoxelBusters.Utility;
 namespace VoxelBusters.NativePlugins.Internal
 {
 	[CustomEditor(typeof(EditorNotificationCenter))]
-	public class EditorNotificationCenterInspector : AdvancedScriptableObjectInspector 
+	public class EditorNotificationCenterInspector : CustomScriptableObjectEditor 
 	{
 		#region Properties
 

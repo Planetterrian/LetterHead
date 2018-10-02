@@ -1,10 +1,9 @@
-﻿using UnityEngine;
+﻿#if USES_TWITTER && UNITY_IOS
+using UnityEngine;
 using System.Collections;
-
-#if USES_TWITTER && UNITY_IOS
 using System.Runtime.InteropServices;
 using VoxelBusters.Utility;
-using VoxelBusters.DebugPRO;
+using VoxelBusters.UASUtils;
 
 namespace VoxelBusters.NativePlugins
 {
@@ -15,40 +14,31 @@ namespace VoxelBusters.NativePlugins
 		#region Native Methods
 
 		[DllImport("__Internal")]
-		private static extern void initTwitterKit (string _consumerKey, string _consumerSecret);
+		private static extern void cpnpTwitterInitTwitterKit (string _consumerKey, string _consumerSecret);
 		
 		[DllImport("__Internal")]
-		private static extern void twitterLogin ();
+		private static extern void cpnpTwitterLogin (bool _requiresEmailAccess);
+
+		[DllImport("__Internal")]
+		private static extern void cpnpTwitterLogoutUserID (string _userID);
+
+		[DllImport("__Internal")]
+		private static extern bool cpnpTwitterIsUserLoggedIn (string _userID);
 		
 		[DllImport("__Internal")]
-		private static extern void twitterLogout ();
+		private static extern string cpnpTwitterGetSessionDictionaryWithUserID (string _userID);
 		
 		[DllImport("__Internal")]
-		private static extern bool twitterIsLoggedIn ();
+		private static extern void cpnpTwitterShowTweetComposer (string _message, string _URLString, byte[] _imgByteArray, int _imgByteArrayLength);
 		
 		[DllImport("__Internal")]
-		private static extern string twitterGetAuthToken ();
+		private static extern void cpnpTwitterRequestAccountDetailsWithUserID (string _userID);
 		
 		[DllImport("__Internal")]
-		private static extern string twitterGetAuthTokenSecret ();
+		private static extern void cpnpTwitterRequestEmailWithUserID (string _userID);
 		
 		[DllImport("__Internal")]
-		private static extern string twitterGetUserID ();
-		
-		[DllImport("__Internal")]
-		private static extern string twitterGetUserName ();
-		
-		[DllImport("__Internal")]
-		private static extern void showTweetComposer (string _message, string _URLString, byte[] _imgByteArray, int _imgByteArrayLength);
-		
-		[DllImport("__Internal")]
-		private static extern void twitterRequestAccountDetails ();
-		
-		[DllImport("__Internal")]
-		private static extern void twitterRequestEmailAccess ();
-		
-		[DllImport("__Internal")]
-		private static extern void twitterURLRequest (string _methodType, string _URLString, string _parameters);
+		private static extern void cpnpTwitterSendURLRequest (string _userID, string _methodType, string _URLString, string _parameters);
 
 		#endregion
 
@@ -58,11 +48,8 @@ namespace VoxelBusters.NativePlugins
 		{
 			if (base.Initialise())
 			{
-				// Get twitter settings info
 				TwitterSettings _twitterSettings	= NPSettings.SocialNetworkSettings.TwitterSettings;
-				
-				// Initalize twitter component
-				initTwitterKit(_twitterSettings.ConsumerKey, _twitterSettings.ConsumerSecret);
+				cpnpTwitterInitTwitterKit(_twitterSettings.ConsumerKey, _twitterSettings.ConsumerSecret);
 
 				return true;
 			}
@@ -74,18 +61,17 @@ namespace VoxelBusters.NativePlugins
 
 		#region Account API's
 
-		public override void Login (TWTRLoginCompletion _onCompletion)
+		public override void Login (bool _requiresEmailAccess, TWTRLoginCompletion _onCompletion)
 		{
 			if (IsInitialised())
 			{
-				base.Login(_onCompletion);
+				base.Login(_requiresEmailAccess, _onCompletion);
 
-				// Native method is called
-				twitterLogin();
+				cpnpTwitterLogin(_requiresEmailAccess);
 			}
 			else
 			{
-				Console.LogError(Constants.kDebugTag, "Twitter is not yet initialised! Call Initialise method first.");
+				DebugUtility.Logger.LogError(Constants.kDebugTag, "Twitter is not yet initialised! Call Initialise method first.");
 			}
 		}
 		
@@ -93,54 +79,31 @@ namespace VoxelBusters.NativePlugins
 		{
 			if (!IsLoggedIn())
 			{
-				Console.LogWarning(Constants.kDebugTag, "Already logged out.");
+				DebugUtility.Logger.LogWarning(Constants.kDebugTag, "Already logged out.");
 				return;
 			}
 			
 			base.Logout();
 
-			// Native method is called
-			twitterLogout();
+			cpnpTwitterLogoutUserID(m_activeSessionUserID);
+			TwitterLogoutFinished();
 		}
 		
 		public override bool IsLoggedIn ()
 		{
-			bool _isLoggedIn	= twitterIsLoggedIn();
-			Console.Log(Constants.kDebugTag, "[Twitter] IsLoggedIn=" + _isLoggedIn);
+			bool _isLoggedIn	= cpnpTwitterIsUserLoggedIn(m_activeSessionUserID);
+			DebugUtility.Logger.Log(Constants.kDebugTag, "[Twitter] IsLoggedIn=" + _isLoggedIn);
 			
 			return _isLoggedIn;
 		}
 		
-		public override string GetAuthToken ()
+		public override TwitterAuthSession GetSessionWithUserID (string _userID)
 		{	
-			string _authToken	= twitterGetAuthToken();
-			Console.Log(Constants.kDebugTag, "[Twitter] AuthToken=" + _authToken);
-			
-			return _authToken;
-		}
-		
-		public override string GetAuthTokenSecret ()
-		{
-			string _authTokenSecret	= twitterGetAuthTokenSecret();
-			Console.Log(Constants.kDebugTag, "[Twitter] AuthTokenSecret=" + _authTokenSecret);
-			
-			return _authTokenSecret;
-		}
-		
-		public override string GetUserID ()
-		{
-			string _userID	= twitterGetUserID();
-			Console.Log(Constants.kDebugTag, "[Twitter] UserID=" + _userID);
-			
-			return _userID;
-		}
-		
-		public override string GetUserName ()
-		{
-			string _userName	= twitterGetUserName();
-			Console.Log(Constants.kDebugTag, "[Twitter] UserName=" + _userName);
-			
-			return _userName;
+			string _sessionJSONString	= cpnpTwitterGetSessionDictionaryWithUserID(_userID);
+			if (_sessionJSONString == null)
+				return null;
+
+			return new iOSTwitterAuthSession((IDictionary)JSONUtility.FromJSON(_sessionJSONString));
 		}
 
 		#endregion
@@ -153,12 +116,10 @@ namespace VoxelBusters.NativePlugins
 
 			// Get byte array length
 			int _arrayLength	= 0;
-
 			if (_imgByteArray != null)
 				_arrayLength	= _imgByteArray.Length;
 			
-			// Native method is called
-			showTweetComposer(_message, _URL, _imgByteArray, _arrayLength);
+			cpnpTwitterShowTweetComposer(_message, _URL, _imgByteArray, _arrayLength);
 		}
 		
 		#endregion
@@ -169,24 +130,21 @@ namespace VoxelBusters.NativePlugins
 		{
 			base.RequestAccountDetails(_onCompletion);
 
-			// Native method is called
-			twitterRequestAccountDetails();
+			cpnpTwitterRequestAccountDetailsWithUserID(m_activeSessionUserID);
 		}
 		
 		public override void RequestEmailAccess (TWTREmailAccessCompletion _onCompletion)
 		{
 			base.RequestEmailAccess(_onCompletion);
 
-			// Native method is called
-			twitterRequestEmailAccess();
+			cpnpTwitterRequestEmailWithUserID(m_activeSessionUserID);
 		}
 		
-		protected override void URLRequest (string _methodType, string _URL, IDictionary _parameters, TWTRResonse _onCompletion)
+		protected override void SendURLRequest (string _methodType, string _URL, IDictionary _parameters, TWTRResponse _onCompletion)
 		{
-			base.URLRequest(_methodType, _URL, _parameters, _onCompletion);
+			base.SendURLRequest(_methodType, _URL, _parameters, _onCompletion);
 
-			// Native method is called
-			twitterURLRequest(_methodType, _URL, _parameters.ToJSON());
+			cpnpTwitterSendURLRequest(m_activeSessionUserID, _methodType, _URL, _parameters.ToJSON());
 		}
 		
 		#endregion

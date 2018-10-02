@@ -1,8 +1,6 @@
-﻿using UnityEngine;
+﻿#if USES_NETWORK_CONNECTIVITY && UNITY_EDITOR
+using UnityEngine;
 using System.Collections;
-
-#if USES_NETWORK_CONNECTIVITY && UNITY_EDITOR
-using VoxelBusters.DebugPRO;
 
 namespace VoxelBusters.NativePlugins
 {
@@ -29,11 +27,10 @@ namespace VoxelBusters.NativePlugins
 		
 		private IEnumerator MonitorNetworkConnectivity (NetworkConnectivitySettings _settings)
 		{
-			NetworkConnectivitySettings.EditorSettings	_editorSettings	= _settings.Editor;
-			string _pingAddress		= _settings.IPAddress;
-			int _maxRetryCount		= _editorSettings.MaxRetryCount;
-			float _dt				= _editorSettings.TimeGapBetweenPolling;
-			float _timeOutPeriod	= _editorSettings.TimeOutPeriod;
+			string _pingAddress		= _settings.HostAddress;
+			int _maxRetryCount		= _settings.MaxRetryCount;
+			float _dt				= _settings.TimeGapBetweenPolling;
+			float _timeOutPeriod	= _settings.TimeOutPeriod;
 			bool _connectedToNw		= IsConnected;
 			
 			while (true)

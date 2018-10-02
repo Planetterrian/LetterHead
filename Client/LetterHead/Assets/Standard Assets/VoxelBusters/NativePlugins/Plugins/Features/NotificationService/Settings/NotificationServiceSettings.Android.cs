@@ -12,7 +12,7 @@ namespace VoxelBusters.NativePlugins
 		{
 			#region Fields
 			
-			[SerializeField]
+			[SerializeField, NotifyNPSettingsOnValueChange]
 			[Tooltip ("An array of sender IDs used to register physical device with GCM. Sender IDs are basically Google Project Numbers.")]
 			private 	string[]	 	m_senderIDs;
 			private 	bool	 		m_needsBigStyle		= false; 

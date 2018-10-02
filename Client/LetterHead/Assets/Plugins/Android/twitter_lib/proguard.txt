@@ -1,3 +1,8 @@
+#Proguard Config for when AppCompat is not a dependency
+-dontwarn  com.digits.sdk.android.**
+-dontwarn  com.twitter.sdk.android.tweetui.*
+
+# retrofit specific
 #Retrofit Proguard Config https://github.com/square/retrofit
 -dontwarn com.squareup.okhttp.**
 -dontwarn com.google.appengine.api.urlfetch.**

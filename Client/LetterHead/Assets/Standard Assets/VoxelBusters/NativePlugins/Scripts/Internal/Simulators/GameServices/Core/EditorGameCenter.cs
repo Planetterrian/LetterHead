@@ -1,20 +1,19 @@
-﻿using UnityEngine;
+﻿#if USES_GAME_SERVICES && UNITY_EDITOR
+using UnityEngine;
+using UnityEngine.SocialPlatforms;
 using System.Collections;
-
-#if USES_GAME_SERVICES && UNITY_EDITOR
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Globalization;
 using System.IO;
 using VoxelBusters.Utility;
-using VoxelBusters.DebugPRO;
-using UnityEngine.SocialPlatforms;
+using VoxelBusters.UASUtils;
 
 namespace VoxelBusters.NativePlugins.Internal
 {
 	[Serializable]
-	public partial class EditorGameCenter : AdvancedScriptableObject <EditorGameCenter>
+	public partial class EditorGameCenter : SharedScriptableObject<EditorGameCenter>
 	{
 		#region Fields
 
@@ -150,7 +149,7 @@ namespace VoxelBusters.NativePlugins.Internal
 
 				if (_button.Equals("Cancel"))
 				{
-					DebugPRO.Console.LogWarning(Constants.kDebugTag, "[GameServices] User cancelled login prompt.");
+					DebugUtility.Logger.LogWarning(Constants.kDebugTag, "[GameServices] User cancelled login prompt.");
 					_error			= "The operation couldnot be completed because user cancelled the login prompt.";
 				}
 				else
@@ -250,7 +249,7 @@ namespace VoxelBusters.NativePlugins.Internal
 		{
 			if (m_localUser == null || !m_localUser.IsAuthenticated)
 			{
-				DebugPRO.Console.LogError(Constants.kDebugTag, "[GameServices] User needs to authenticate before using services.");
+				DebugUtility.Logger.LogError(Constants.kDebugTag, "[GameServices] User needs to authenticate before using services.");
 				return false;
 			}
 
@@ -323,7 +322,7 @@ namespace VoxelBusters.NativePlugins.Internal
 			// Check if input is valid
 			if (_userIDList == null)
 			{
-				DebugPRO.Console.LogError(Constants.kDebugTag, "[GameServices] Failed to user info.");
+				DebugUtility.Logger.LogError(Constants.kDebugTag, "[GameServices] Failed to user info.");
 				return null;
 			}
 
@@ -501,7 +500,7 @@ namespace VoxelBusters.NativePlugins.Internal
 		{
 			if (_leaderboardID == null)
 			{
-				DebugPRO.Console.LogError(Constants.kDebugTag, Constants.kGameServicesIdentifierNullError);
+				DebugUtility.Logger.LogError(Constants.kDebugTag, Constants.kGameServicesIdentifierNullError);
 				return null;
 			}
 			
@@ -558,7 +557,7 @@ namespace VoxelBusters.NativePlugins.Internal
 		{
 			if (_achievementID == null)
 			{
-				DebugPRO.Console.LogError(Constants.kDebugTag, Constants.kGameServicesIdentifierNullError);
+				DebugUtility.Logger.LogError(Constants.kDebugTag, Constants.kGameServicesIdentifierNullError);
 				return null;
 			}
 
@@ -670,7 +669,7 @@ namespace VoxelBusters.NativePlugins.Internal
 		{
 			if (_achievementID == null)
 			{
-				DebugPRO.Console.LogError(Constants.kDebugTag, Constants.kGameServicesIdentifierNullError);
+				DebugUtility.Logger.LogError(Constants.kDebugTag, Constants.kGameServicesIdentifierNullError);
 				return null;
 			}
 

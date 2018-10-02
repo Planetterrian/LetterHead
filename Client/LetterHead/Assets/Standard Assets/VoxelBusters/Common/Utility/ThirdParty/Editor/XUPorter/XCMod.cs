@@ -131,8 +131,11 @@ namespace VoxelBusters.ThirdParty.XUPorter
 			name = System.IO.Path.GetFileNameWithoutExtension( filename );
 			path = System.IO.Path.GetDirectoryName( filename );
 			
-			string contents = projectFileInfo.OpenText().ReadToEnd();
-//			Debug.Log (contents);
+
+			StreamReader streamReader = projectFileInfo.OpenText();
+			string contents = streamReader.ReadToEnd();
+			streamReader.Close();
+
 			_datastore = (Hashtable)XUPorter.MiniJSON.jsonDecode( contents );
 			if (_datastore == null || _datastore.Count == 0) {
 //				Debug.Log (contents);

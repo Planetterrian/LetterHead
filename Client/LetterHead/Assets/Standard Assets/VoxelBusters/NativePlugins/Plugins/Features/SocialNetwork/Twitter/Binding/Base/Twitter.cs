@@ -1,9 +1,8 @@
-﻿using UnityEngine;
+﻿#if USES_TWITTER
+using UnityEngine;
 using System.Collections;
-
-#if USES_TWITTER
 using VoxelBusters.Utility;
-using VoxelBusters.DebugPRO;
+using VoxelBusters.UASUtils;
 
 namespace VoxelBusters.NativePlugins
 {
@@ -19,6 +18,8 @@ namespace VoxelBusters.NativePlugins
 	public partial class Twitter : MonoBehaviour 
 	{
 		#region Fields
+
+		protected	string 		m_activeSessionUserID;
 
 		private		bool		m_lastTweetWasTextOnly;
 		private		bool		m_isInitialised;
@@ -41,7 +42,7 @@ namespace VoxelBusters.NativePlugins
 			
 			if (string.IsNullOrEmpty(_twitterSettings.ConsumerKey) || string.IsNullOrEmpty(_twitterSettings.ConsumerSecret))
 			{
-				Console.LogError(Constants.kDebugTag, "[Twitter] Twitter initialize failed. Please configure Consumer Key and Consumer Secret in NPSettings.");
+				DebugUtility.Logger.LogError(Constants.kDebugTag, "[Twitter] Twitter initialize failed. Please configure Consumer Key and Consumer Secret in NPSettings.");
 				m_isInitialised = false;
 			}
 			else
@@ -52,7 +53,7 @@ namespace VoxelBusters.NativePlugins
 			return m_isInitialised;
 		}
 
-		protected bool IsInitialised()
+		protected bool IsInitialised ()
 		{
 			return m_isInitialised;
 		}
@@ -67,9 +68,11 @@ namespace VoxelBusters.NativePlugins
 		/// <description>
 		/// This method falls back to presenting an OAuth flow, if it fails to find saved login credentials.
 		/// </description>
+		/// <param name="_requiresEmailAccess">The value indicates whether application needs access to email address information of the logged-in user.</param>
 		/// <param name="_onCompletion">Callback that will be called after operation is completed.</param>
 		/// <remarks>
 		/// \note User authentication is required for API requests that require a user context, for example: Tweeting or following other users.
+		/// Also, requesting a user’s email address requires your application to be whitelisted by Twitter. To request access, please visit https://support.twitter.com/forms/platform.
 		/// </remarks>
 		/// <example>
 		/// The following code shows how to use login method.
@@ -82,7 +85,7 @@ namespace VoxelBusters.NativePlugins
 		/// {
 		/// 	public void Login ()
 		/// 	{
-		/// 		NPBinding.Twitter.Login(LoginFinished);
+		/// 		NPBinding.Twitter.Login(false, OnLoginFinished);
 		/// 	}
 		/// 
 		/// 	private void OnLoginFinished (TwitterSession _session, string _error)
@@ -99,7 +102,7 @@ namespace VoxelBusters.NativePlugins
 		/// }
 		/// </code>
 		/// </example>
-		public virtual void Login (TWTRLoginCompletion _onCompletion)
+		public virtual void Login (bool _requiresEmailAccess, TWTRLoginCompletion _onCompletion)
 		{
 			// Pause unity player
 			this.PauseUnity();
@@ -119,7 +122,6 @@ namespace VoxelBusters.NativePlugins
 		{
 #if USES_SOOMLA_GROW
 			NPBinding.SoomlaGrowService.ReportOnSocialLogoutStarted(eSocialProvider.TWITTER);
-			NPBinding.SoomlaGrowService.ReportOnSocialLogoutFinished(eSocialProvider.TWITTER);
 #endif
 		}
 
@@ -130,71 +132,37 @@ namespace VoxelBusters.NativePlugins
 		public virtual bool IsLoggedIn ()
 		{
 			bool _isLoggedIn	= false;
-			Console.Log(Constants.kDebugTag, "[Twitter] IsLoggedIn=" + _isLoggedIn);
+			DebugUtility.Logger.Log(Constants.kDebugTag, "[Twitter] IsLoggedIn=" + _isLoggedIn);
 			
 			return _isLoggedIn;
 		}
-
-		/// <summary>
-		/// Returns the authorization token of the current user session.
-		/// </summary>
-		/// <returns>The authorization token.</returns>
-		/// <remarks>
-		/// \note Returns <c>null</c> if there is no logged in user.
-		/// </remarks>
-		public virtual string GetAuthToken ()
-		{
-			string _authToken	= null;
-			Console.Log(Constants.kDebugTag, "[Twitter] AuthToken=" + _authToken);
-
-			return _authToken;
-		}
-
-		/// <summary>
-		/// Returns the authorization token secret of the current user session.
-		/// </summary>
-		/// <returns>The authorization token secret.</returns>
-		/// <remarks>
-		/// \note Returns <c>null</c> if there is no logged in user.
-		/// </remarks>
-		public virtual string GetAuthTokenSecret ()
-		{
-			string _authTokenSecret	= null;
-			Console.Log(Constants.kDebugTag, "[Twitter] AuthTokenSecret=" + _authTokenSecret);
-			
-			return _authTokenSecret;
-		}
-
-		/// <summary>
-		/// Returns the user ID associated with the access token.
-		/// </summary>
-		/// <returns>The user ID associated with the access token.</returns>
-		/// <remarks>
-		/// \note Returns <c>null</c> if there is no logged in user.
-		/// </remarks>
-		public virtual string GetUserID ()
-		{
-			string _userID	= null;
-			Console.Log(Constants.kDebugTag, "[Twitter] UserID=" + _userID);
-			
-			return _userID;
-		}
-
-		/// <summary>
-		/// Returns the username associated with the access token.
-		/// </summary>
-		/// <returns>The username associated with the access token.</returns>
-		/// <remarks>
-		/// \note Returns <c>null</c> if there is no logged in user.
-		/// </remarks>
-		public virtual string GetUserName ()
-		{
-			string _userName	= null;
-			Console.Log(Constants.kDebugTag, "[Twitter] UserName=" + _userName);
-			
-			return _userName;
-		}
 		
+		/// <summary>
+		/// Fetches the last logged-in user session information.
+		/// </summary>
+		public TwitterAuthSession GetSession ()
+		{
+			return GetSessionWithUserID(m_activeSessionUserID);
+		}
+
+		/// <summary>
+		/// Fetches the saved session information of the specified user.
+		/// </summary>
+		/// <param name="_userID">The user ID to fetch session for.</param>
+		public virtual TwitterAuthSession GetSessionWithUserID (string _userID)
+		{
+			return null;
+		}
+
+		/// <summary>
+		/// Set the session information to be used while making Twitter request.
+		/// </summary>
+		/// <param name="_session">_session.</param>
+		public void SetActiveSession (TwitterAuthSession _session)
+		{
+			m_activeSessionUserID	= _session.UserID;
+		}
+
 		#endregion
 		
 		#region Tweet API's
@@ -240,7 +208,7 @@ namespace VoxelBusters.NativePlugins
 			}
 			else
 			{
-				Console.LogWarning(Constants.kDebugTag, "[Twitter] Showing tweet composer with message only, texure is null");
+				DebugUtility.Logger.LogWarning(Constants.kDebugTag, "[Twitter] Showing tweet composer with message only, texure is null");
 			}
 
 			// Show tweet composer
@@ -257,7 +225,7 @@ namespace VoxelBusters.NativePlugins
 		{
 			if (string.IsNullOrEmpty(_URL))
 			{
-				Console.LogWarning(Constants.kDebugTag, "[Twitter] Showing tweet composer with message only, URL is null/empty");
+				DebugUtility.Logger.LogWarning(Constants.kDebugTag, "[Twitter] Showing tweet composer with message only, URL is null/empty");
 			}
 
 			// Show tweet composer
@@ -397,7 +365,7 @@ namespace VoxelBusters.NativePlugins
 		/// 			{"id", "20"}
 		/// 		};
 		/// 		
-		/// 		NPBinding.Twitter.GetURLRequest(_URL, _params, OnRequestFinished);
+		/// 		NPBinding.Twitter.SendGetURLRequest(_URL, _params, OnRequestFinished);
 		/// 	}
 		/// 
 		/// 	private void OnRequestFinished (object _responseData, string _error)
@@ -416,9 +384,9 @@ namespace VoxelBusters.NativePlugins
 		/// }
 		/// </code>
 		/// </example>
-		public void GetURLRequest (string _URL,	IDictionary _parameters, TWTRResonse _onCompletion)
+		public void SendGetURLRequest (string _URL,	IDictionary _parameters, TWTRResponse _onCompletion)
 		{
-			URLRequest("GET", _URL, _parameters, _onCompletion);
+			SendURLRequest("GET", _URL, _parameters, _onCompletion);
 		}
 
 		/// <summary>
@@ -427,9 +395,9 @@ namespace VoxelBusters.NativePlugins
 		/// <param name="_URL">Request URL. This is the full Twitter API URL. E.g. https://api.twitter.com/1.1/statuses/user_timeline.json.</param>
 		/// <param name="_parameters">Request parameters.</param>
 		/// <param name="_onCompletion">Callback that will be called after operation is completed.</param>
-		public void PostURLRequest (string _URL,	IDictionary _parameters, TWTRResonse _onCompletion)
+		public void SendPostURLRequest (string _URL,	IDictionary _parameters, TWTRResponse _onCompletion)
 		{
-			URLRequest("POST", _URL, _parameters, _onCompletion);
+			SendURLRequest("POST", _URL, _parameters, _onCompletion);
 		}
 
 		/// <summary>
@@ -438,9 +406,9 @@ namespace VoxelBusters.NativePlugins
 		/// <param name="_URL">Request URL. This is the full Twitter API URL. E.g. https://api.twitter.com/1.1/statuses/user_timeline.json.</param>
 		/// <param name="_parameters">Request parameters.</param>
 		/// <param name="_onCompletion">Callback that will be called after operation is completed.</param>
-		public void PutURLRequest (string _URL,	IDictionary _parameters, TWTRResonse _onCompletion)
+		public void SendPutURLRequest (string _URL,	IDictionary _parameters, TWTRResponse _onCompletion)
 		{
-			URLRequest("PUT", _URL, _parameters, _onCompletion);
+			SendURLRequest("PUT", _URL, _parameters, _onCompletion);
 		}
 
 		/// <summary>
@@ -449,15 +417,73 @@ namespace VoxelBusters.NativePlugins
 		/// <param name="_URL">Request URL. This is the full Twitter API URL. E.g. https://api.twitter.com/1.1/statuses/user_timeline.json.</param>
 		/// <param name="_parameters">Request parameters.</param>
 		/// <param name="_onCompletion">Callback that will be called after operation is completed.</param>
-		public void DeleteURLRequest (string _URL,	IDictionary _parameters, TWTRResonse _onCompletion)
+		public void SendDeleteURLRequest (string _URL,	IDictionary _parameters, TWTRResponse _onCompletion)
 		{
-			URLRequest("DELETE", _URL, _parameters, _onCompletion);
+			SendURLRequest("DELETE", _URL, _parameters, _onCompletion);
 		}
 		
-		protected virtual void URLRequest (string _methodType, string _URL,	IDictionary _parameters, TWTRResonse _onCompletion)
+		protected virtual void SendURLRequest (string _methodType, string _URL,	IDictionary _parameters, TWTRResponse _onCompletion)
 		{
 			// Cache callback
 			OnTwitterURLRequestFinished	= _onCompletion;
+		}
+
+		#endregion
+
+		#region Deprecated Methods
+
+		[System.Obsolete("This method is deprecated. Instead use Login(_requiresEmailAccess, _onCompletion).")]
+		public void Login (TWTRLoginCompletion _onCompletion)
+		{
+			Login(false, _onCompletion);
+		}
+
+		[System.Obsolete("This method is deprecated. Instead use GetSessionWithUserID method.")]
+		public virtual string GetAuthToken ()
+		{
+			return null;
+		}
+		
+		[System.Obsolete("This method is deprecated. Instead use GetSessionWithUserID method.")]
+		public virtual string GetAuthTokenSecret ()
+		{
+			return null;
+		}
+		
+		[System.Obsolete("This method is deprecated. Instead use GetSessionWithUserID method.")]
+		public virtual string GetUserID ()
+		{
+			return null;
+		}
+		
+		[System.Obsolete("This method is deprecated. Instead use RequestAccountDetails method.")]
+		public virtual string GetUserName ()
+		{
+			return null;
+		}
+
+		[System.Obsolete("This method is deprecated. Instead use SendGetURLRequest method.")]
+		public void GetURLRequest (string _URL,	IDictionary _parameters, TWTRResponse _onCompletion)
+		{
+			SendGetURLRequest(_URL, _parameters, _onCompletion);
+		}
+
+		[System.Obsolete("This method is deprecated. Instead use SendPostURLRequest method.")]
+		public void PostURLRequest (string _URL, IDictionary _parameters, TWTRResponse _onCompletion)
+		{
+			SendPostURLRequest(_URL, _parameters, _onCompletion);
+		}
+
+		[System.Obsolete("This method is deprecated. Instead use SendPutURLRequest method.")]
+		public void PutURLRequest (string _URL,	IDictionary _parameters, TWTRResponse _onCompletion)
+		{
+			SendPutURLRequest(_URL, _parameters, _onCompletion);
+		}
+
+		[System.Obsolete("This method is deprecated. Instead use SendDeleteURLRequest method.")]
+		public void DeleteURLRequest (string _URL,	IDictionary _parameters, TWTRResponse _onCompletion)
+		{
+			SendDeleteURLRequest(_URL, _parameters, _onCompletion);
 		}
 
 		#endregion

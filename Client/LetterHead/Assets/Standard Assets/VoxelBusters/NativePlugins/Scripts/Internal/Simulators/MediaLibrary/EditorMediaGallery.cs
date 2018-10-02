@@ -1,7 +1,6 @@
-﻿using UnityEngine;
+﻿#if USES_MEDIA_LIBRARY && UNITY_EDITOR
+using UnityEngine;
 using System.Collections;
-
-#if USES_MEDIA_LIBRARY && UNITY_EDITOR
 using UnityEditor;
 using System.Collections.Generic;
 using VoxelBusters.Utility;
@@ -339,5 +338,4 @@ namespace VoxelBusters.NativePlugins.Internal
 		#endregion
 	}
 }
-
 #endif

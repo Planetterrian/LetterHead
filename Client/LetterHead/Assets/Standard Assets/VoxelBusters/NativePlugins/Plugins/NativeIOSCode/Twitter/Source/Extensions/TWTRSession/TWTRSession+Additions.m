@@ -25,10 +25,4 @@
 	
 	return sessionJsonObject;
 }
-
-- (const char *)toCString
-{
-    return ToJsonCString([self toJsonObject]);
-}
-
 @end

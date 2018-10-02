@@ -1,10 +1,10 @@
-﻿using UnityEngine;
+﻿#if UNITY_ANDROID && USES_ADDRESS_BOOK
+using UnityEngine;
 using System.Collections;
-using VoxelBusters.DebugPRO;
 using VoxelBusters.Utility;
 using System.Collections.Generic;
+using VoxelBusters.UASUtils;
 
-#if UNITY_ANDROID
 namespace VoxelBusters.NativePlugins
 {
 	using Internal;
@@ -66,7 +66,7 @@ namespace VoxelBusters.NativePlugins
 			else
 			{
 				_authStatus = eABAuthorizationStatus.DENIED;
-				Console.LogError(Constants.kDebugTag, "[AddressBook] Wrong parse status " + _statusStr + " " + "Cross check keys with native. Sending DENIED status by default");
+				DebugUtility.Logger.LogError(Constants.kDebugTag, "[AddressBook] Wrong parse status " + _statusStr + " " + "Cross check keys with native. Sending DENIED status by default");
 			}
 
 			return _authStatus;

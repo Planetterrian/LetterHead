@@ -100,7 +100,10 @@ namespace VoxelBusters.ThirdParty.XUPorter
 			}
 			
 			projectFileInfo = new FileInfo( Path.Combine( this.filePath, "project.pbxproj" ) );
-			string contents = projectFileInfo.OpenText().ReadToEnd();
+
+			StreamReader streamReader = projectFileInfo.OpenText();
+			string contents = streamReader.ReadToEnd();
+			streamReader.Close();
 			
 			PBXParser parser = new PBXParser();
 			_datastore = parser.Decode( contents );
@@ -353,6 +356,9 @@ namespace VoxelBusters.ThirdParty.XUPorter
 		
 		public PBXDictionary AddFile( string filePath, PBXGroup parent = null, string tree = "SOURCE_ROOT", bool createBuildFiles = true, bool weak = false, string compilerFlags = null)
 		{
+			// Converting path to use Forward slashes
+			filePath = filePath.Replace('\\', '/');
+
 //			Debug.Log("AddFile " + filePath + ", " + parent + ", " + tree + ", " + (createBuildFiles? "TRUE":"FALSE") + ", " + (weak? "TRUE":"FALSE") ); 
 			
 			PBXDictionary results = new PBXDictionary();

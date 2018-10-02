@@ -48,6 +48,10 @@ namespace VoxelBusters.ThirdParty.XUPorter
 			
 			foreach( string path in paths ) {
 				string currentPath = path;
+
+				// Converting path to use Forward slashes
+				currentPath = currentPath.Replace('\\', '/');
+
 //				Debug.Log ("path " + currentPath);
 				if( !((PBXDictionary)_data[BUILDSETTINGS_KEY]).ContainsKey( key ) ) {
 					((PBXDictionary)_data[BUILDSETTINGS_KEY]).Add( key, new PBXList() );

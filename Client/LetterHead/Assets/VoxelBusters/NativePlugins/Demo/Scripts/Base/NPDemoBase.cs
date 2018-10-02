@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-using VoxelBusters.AssetStoreProductUtility.Demo;
+using VoxelBusters.UASUtils.Demo;
 
 namespace VoxelBusters.NativePlugins.Demo
 {

@@ -26,7 +26,7 @@ namespace VoxelBusters.ThirdParty.XUPorter
 
 			// Find and run through all xcodemods files to patch the project.
 			// Please pay attention that ALL xcodemods files in your project folder will be excuted!
-			string[] files = Directory.GetFiles( Utility.AssetsUtility.GetProjectPath(), "*.xcodemods", SearchOption.AllDirectories );
+			string[] files = Directory.GetFiles( Directory.GetCurrentDirectory(), "*.xcodemods", SearchOption.AllDirectories );
 			foreach( string file in files ) {
 //				UnityEngine.Debug.Log("Xcodemods File: "+file);
 				project.ApplyMod( file );

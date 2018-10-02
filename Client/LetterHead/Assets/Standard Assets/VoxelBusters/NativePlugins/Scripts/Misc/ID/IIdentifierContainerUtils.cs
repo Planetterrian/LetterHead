@@ -11,12 +11,7 @@ namespace VoxelBusters.NativePlugins
 		{
 			foreach (IIdentifierContainer _currentObject in _collection)
 			{
-				string	_currentObjectGlobalID	= _currentObject.GlobalID;
-
-				if (_currentObjectGlobalID == null)
-					continue;
-
-				if (_currentObjectGlobalID.Equals(_globalID))
+				if (string.Equals(_currentObject.GlobalID, _globalID))
 					return _currentObject;
 			}
 			
@@ -31,11 +26,7 @@ namespace VoxelBusters.NativePlugins
 			foreach (IIdentifierContainer _currentObject in _collection)
 			{
 				string 	_currentObjectPlatformID	= _currentObject.GetCurrentPlatformID();
-
-				if (_currentObjectPlatformID == null)
-					continue;
-
-				if (_currentObjectPlatformID.Equals(_platformID))
+				if (string.Equals(_currentObjectPlatformID, _platformID))
 					return _currentObject;
 			}
 			
@@ -47,7 +38,11 @@ namespace VoxelBusters.NativePlugins
 
 		public static string GetCurrentPlatformID (this IIdentifierContainer _object)
 		{
-			return _object.PlatformIDs.GetCurrentPlatformID();
+			PlatformValue _platform = PlatformValueHelper.GetCurrentPlatformValue(_array: _object.PlatformIDs);
+			if (_platform == null)
+				return null;
+
+			return _platform.Value;
 		}
 
 		#endregion

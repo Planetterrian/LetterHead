@@ -115,7 +115,7 @@ namespace VoxelBusters.NativePlugins
 			this.TransactionIdentifier	= null;
 			this.TransactionReceipt		= null;
 			this.TransactionState		= eBillingTransactionState.FAILED;
-			this.VerificationState		= eBillingTransactionVerificationState.SUCCESS;
+			this.VerificationState		= eBillingTransactionVerificationState.FAILED;
 			this.Error					= _error;
 			this.RawPurchaseData		= null;
 		}

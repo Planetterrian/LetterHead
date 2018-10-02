@@ -5,7 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using VoxelBusters.Utility;
 
-#if UNITY_5
+#if  (UNITY_5 || UNITY_2017_1_OR_NEWER)
 using CalendarUnit = UnityEngine.iOS.CalendarUnit;
 #endif
 

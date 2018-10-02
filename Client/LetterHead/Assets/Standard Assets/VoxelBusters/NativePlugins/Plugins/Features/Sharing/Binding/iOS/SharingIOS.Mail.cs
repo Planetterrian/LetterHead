@@ -1,10 +1,9 @@
-﻿using UnityEngine;
+﻿#if USES_SHARING && UNITY_IOS
+using UnityEngine;
 using System.Collections;
-
-#if USES_SHARING && UNITY_IOS
 using System.Runtime.InteropServices;
 using VoxelBusters.Utility;
-using VoxelBusters.DebugPRO;
+using VoxelBusters.UASUtils;
 
 namespace VoxelBusters.NativePlugins
 {
@@ -30,7 +29,7 @@ namespace VoxelBusters.NativePlugins
 		public override bool IsMailServiceAvailable ()
 		{
 			bool _isAvailable	= canSendMail();
-			Console.Log(Constants.kDebugTag, "[Sharing:Mail] Is service available=" + _isAvailable);
+			DebugUtility.Logger.Log(Constants.kDebugTag, "[Sharing:Mail] Is service available=" + _isAvailable);
 			
 			return _isAvailable;
 		}
@@ -72,7 +71,7 @@ namespace VoxelBusters.NativePlugins
 				string	_toRecipientsJSONList		= (_recipients == null) ? null : _recipients.ToJSON();
 
 				if (_attachmentByteArray != null)
-					_attachmentByteArrayLength	= _attachmentByteArray.Length;
+					_attachmentByteArrayLength		= _attachmentByteArray.Length;
 				
 				sendMail(_subject, 				_body, 	_isHTMLBody,
 				         _toRecipientsJSONList, null, 	null, 

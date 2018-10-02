@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using System.Collections;
-using VoxelBusters.DebugPRO;
 using VoxelBusters.Utility;
 using DownloadTexture = VoxelBusters.Utility.DownloadTexture;
 

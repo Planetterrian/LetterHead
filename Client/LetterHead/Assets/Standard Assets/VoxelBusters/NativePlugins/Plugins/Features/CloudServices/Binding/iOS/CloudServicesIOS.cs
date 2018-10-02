@@ -9,6 +9,12 @@ namespace VoxelBusters.NativePlugins
 {
 	public partial class CloudServicesIOS : CloudServices 
 	{
+		#region Private Methods
+
+		private 	bool	m_canSendEvents		= false;
+
+		#endregion
+
 		#region External Methods
 		
 		[DllImport("__Internal")]
@@ -56,6 +62,10 @@ namespace VoxelBusters.NativePlugins
 		[DllImport("__Internal")]
 		private static extern void cpnpCloudServicesRemoveKey (string _key);
 
+		[DllImport("__Internal")]
+		private static extern void cpnpCloudServicesRemoveAllKeys ();
+
+
 		#endregion
 
 		#region Initialise
@@ -66,6 +76,13 @@ namespace VoxelBusters.NativePlugins
 
 			// Native method call
 			cpnpCloudServicesInitialise();
+			Synchronise();
+
+			// reset flag
+			m_canSendEvents	= true;
+
+			// send corresponding event
+			CloudKeyValueStoreDidInitialise(_isSuccess: true);
 		}
 
 		#endregion
@@ -148,8 +165,11 @@ namespace VoxelBusters.NativePlugins
 		{
 			bool _success	= cpnpCloudServicesSynchronise();
 
-			// Send event
-			CloudKeyValueStoreDidSynchronise(_success);
+			// send events
+			if (m_canSendEvents)
+			{
+				CloudKeyValueStoreDidSynchronise(_success);
+			}
 		}
 		
 		#endregion
@@ -159,6 +179,11 @@ namespace VoxelBusters.NativePlugins
 		public override void RemoveKey (string _key)
 		{
 			cpnpCloudServicesRemoveKey(_key);
+		}
+
+		public override void RemoveAllKeys ()
+		{
+			cpnpCloudServicesRemoveAllKeys();
 		}
 
 		#endregion

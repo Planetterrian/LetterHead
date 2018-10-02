@@ -10,9 +10,16 @@
 #import "UnityWebView.h"
 #import "NSURL+Extensions.h"
 
+@interface WebViewHandler ()
+
+// Properties
+@property(nonatomic, retain)    NSMutableDictionary     *webViewContainer;
+
+@end
+
 @implementation WebViewHandler
 
-@synthesize webviewContainer;
+@synthesize webViewContainer;
 
 - (id)init
 {
@@ -21,7 +28,7 @@
     // Initailisation
     if (self)
     {
-        self.webviewContainer   = [NSMutableDictionary dictionary];
+        self.webViewContainer   = [NSMutableDictionary dictionary];
     }
     
     return self;
@@ -30,17 +37,17 @@
 - (void)dealloc
 {
     // Remove all webviews attached to view
-    for (NSString *key in self.webviewContainer.keyEnumerator)
+    for (NSString *key in self.webViewContainer.keyEnumerator)
     {
-		UnityWebView *webview	= [self getWebViewWithTag:key];
+		UnityWebView *webView	= [self getWebViewWithTag:key];
 		
-		if (webview)
-     	   [webview dismiss];
+		if (webView)
+     	   [webView dismiss];
     }
 
     // Release web container
-    [self.webviewContainer removeAllObjects];
-    self.webviewContainer       = NULL;
+    [self.webViewContainer removeAllObjects];
+    self.webViewContainer       = NULL;
     
     [super dealloc];
 }
@@ -49,69 +56,69 @@
 
 - (UnityWebView *)createWebViewWithTag:(NSString*)tag
 {
-    UnityWebView *webview    = [self getWebViewWithTag:tag];
+    UnityWebView *webView    = [self getWebViewWithTag:tag];
    
     // Create new webview and save it
-    if (webview == NULL)
+    if (webView == NULL)
     {
-        UnityWebView *webview    = [UnityWebView CreateWithFrame:CGRectZero tag:tag];
+        UnityWebView *webView    = [UnityWebView CreateWithFrame:CGRectZero tag:tag];
 		NSLog(@"[WebViewHandler] creating webview with tag: %@", tag);
 		
 		// Add it to webview collection
-        [self.webviewContainer setObject:webview forKey:tag];
+        [self.webViewContainer setObject:webView forKey:tag];
     }
     
-    return webview;
+    return webView;
 }
 
 - (UnityWebView *)getWebViewWithTag:(NSString *)tag
 {
-    UnityWebView *webview    = [self.webviewContainer objectForKey:tag];
-	NSLog(@"[WebViewHandler] found webview: %@ for tag: %@", webview, tag);
+    UnityWebView *webView    = [self.webViewContainer objectForKey:tag];
+	NSLog(@"[WebViewHandler] found webview: %@ for tag: %@", webView, tag);
 	
-    return webview;
+    return webView;
 }
 
 - (void)destroyWebViewWithTag:(NSString *)tag
 {
-    UnityWebView *webview    = [self getWebViewWithTag:tag];
+    UnityWebView *webView    = [self getWebViewWithTag:tag];
     
-    if (webview != NULL)
+    if (webView != NULL)
     {
 		NSLog(@"[WebViewHandler] destroying webview with tag: %@", tag);
         
         // Remove webview from view
-        [webview dismiss];
+        [webView dismiss];
 		
         // Remove webview from container
-        [self.webviewContainer removeObjectForKey:tag];
+        [self.webViewContainer removeObjectForKey:tag];
     }
 }
 
 - (void)showWebViewWithTag:(NSString *)tag
 {
-    UnityWebView *webview    = [self getWebViewWithTag:tag];
+    UnityWebView *webView    = [self getWebViewWithTag:tag];
     
-    if (webview != NULL)
+    if (webView != NULL)
     {
 		NSLog(@"[WebViewHandler] showing webview with tag: %@", tag);
 
 		// Show webview
-		[webview show];
+		[webView show];
     }
 }
 
 - (void)dismissWebViewWithTag:(NSString *)tag
 {
-    UnityWebView *webview    = [self getWebViewWithTag:tag];
+    UnityWebView *webView    = [self getWebViewWithTag:tag];
     
     // Couldnt find webview with given tag
-    if (webview != NULL)
+    if (webView != NULL)
     {
 		NSLog(@"[WebViewHandler] dismiss webview with tag: %@", tag);
 		
 		// Dismiss webview
-		[webview dismiss];
+		[webView dismiss];
     }
 }
 
@@ -119,10 +126,10 @@
 
 - (void)loadRequest:(NSString *)URLStr usingWebViewWithTag:(NSString *)tag
 {
-    UnityWebView *webview    = [self getWebViewWithTag:tag];
+    UnityWebView *webView    = [self getWebViewWithTag:tag];
     
     // Couldnt find webview with given tag
-    if (webview == NULL)
+    if (webView == NULL)
         return;
     
     // URL is null
@@ -139,15 +146,15 @@
     NSURLRequest* request   = [[[NSURLRequest alloc] initWithURL:url] autorelease];
    
     // Start loading
-	[webview loadRequest:request];
+	[webView loadRequest:request];
 }
 
 - (void)loadHTMLString:(NSString *)string baseURL:(NSString *)baseURLStr usingWebViewWithTag:(NSString *)tag
 {
-    UnityWebView *webview    = [self getWebViewWithTag:tag];
+    UnityWebView *webView    = [self getWebViewWithTag:tag];
     
     // Couldnt find webview with given tag
-    if (webview == NULL)
+    if (webView == NULL)
         return;
 	
 	NSLog(@"[WebViewHandler] loading request with string: %@ baseURL: %@", string, baseURLStr);
@@ -159,17 +166,17 @@
         baseURL = [NSURL createURLWithString:baseURLStr];
 	
     // Load HTML string
-    [webview loadHTMLString:string baseURL:baseURL];
+    [webView loadHTMLString:string baseURL:baseURL];
 }
 
 - (void)loadData:(NSData *)data MIMEType:(NSString *)MIMEType
 textEncodingName:(NSString *)textEncodingName
          baseURL:(NSString *)baseURLStr usingWebViewWithTag:(NSString *)tag
 {
-    UnityWebView *webview    = [self getWebViewWithTag:tag];
+    UnityWebView *webView    = [self getWebViewWithTag:tag];
     
     // Couldnt find webview with given tag
-    if (webview == NULL)
+    if (webView == NULL)
         return;
     
 	NSLog(@"[WebViewHandler] loading data of type: %@", MIMEType);
@@ -194,181 +201,181 @@ textEncodingName:(NSString *)textEncodingName
     }
     
     // Load data
-    [webview loadData:data
+    [webView loadData:data
 			 MIMEType:MIMEType
 	 textEncodingName:[NSString localizedNameOfStringEncoding:stringEncoding]
 			  baseURL:baseURL];
 }
 
-- (void)evaluateJavaScriptFromString:(NSString *)js usingWebViewWithTag:(NSString *)tag
+- (void)evaluateJavaScript:(NSString *)js usingWebViewWithTag:(NSString *)tag
 {
-    UnityWebView *webview    = [self getWebViewWithTag:tag];
+    UnityWebView *webView    = [self getWebViewWithTag:tag];
     
     // Couldnt find webview with given tag
-    if (webview == NULL)
+    if (webView == NULL)
         return;
 	
 	NSLog(@"[WebViewHandler] evaluating js from string: %@", js);
     
 	// Evaluate js
-   [webview stringByEvaluatingJavaScriptFromString:js];
+   [webView evaluateJavaScript:js];
 }
 
 - (void)reloadWebViewWithTag:(NSString *)tag
 {
-    UnityWebView *webview    = [self getWebViewWithTag:tag];
+    UnityWebView *webView    = [self getWebViewWithTag:tag];
     
 	// Couldnt find webview with given tag
-    if (webview == NULL)
+    if (webView == NULL)
         return;
 	
     NSLog(@"[WebViewHandler] reloading webview");
 	
     // Reload
-    [webview reload];
+    [webView reload];
 }
 
 - (void)stopLoadingWebViewWithTag:(NSString *)tag
 {
-    UnityWebView *webview    = [self getWebViewWithTag:tag];
+    UnityWebView *webView    = [self getWebViewWithTag:tag];
     
     // Couldnt find webview with given tag
-    if (webview == NULL)
+    if (webView == NULL)
         return;
 	
 	 NSLog(@"[WebViewHandler] stopping webview load");
     
     // Stop loading
-    [webview stopLoading];
+    [webView stopLoading];
 }
 
 #pragma mark - properties
 
 - (void)setCanDismiss:(BOOL)canDismiss forWebViewWithTag:(NSString *)tag
 {
-	UnityWebView *webview    = [self getWebViewWithTag:tag];
+	UnityWebView *webView    = [self getWebViewWithTag:tag];
     
     // Couldnt find webview with given tag
-    if (webview == NULL)
+    if (webView == NULL)
         return;
 	
 	NSLog(@"[WebViewHandler] setCanDismiss: %d", canDismiss);
     
     // Set can dismiss
-    [webview setCanDismiss:canDismiss];
+    [webView setCanDismiss:canDismiss];
 }
 
 - (void)setCanBounce:(BOOL)canBounce forWebViewWithTag:(NSString *)tag
 {
-    UnityWebView *webview    = [self getWebViewWithTag:tag];
+    UnityWebView *webView    = [self getWebViewWithTag:tag];
     
     // Couldnt find webview with given tag
-    if (webview == NULL)
+    if (webView == NULL)
         return;
 	
 	NSLog(@"[WebViewHandler] setBounces: %d", canBounce);
     
     // Set bounce property
-    [webview setCanBounce:canBounce];
+    [webView setCanBounce:canBounce];
 }
 
 - (void)setControlType:(WebviewControlType)type forWebViewWithTag:(NSString *)tag;
 {
-    UnityWebView *webview    = [self getWebViewWithTag:tag];
+    UnityWebView *webView    = [self getWebViewWithTag:tag];
    
     // Couldnt find webview with given tag
-    if (webview == NULL)
+    if (webView == NULL)
         return;
 	
 	NSLog(@"[WebViewHandler] setControlType: %d", type);
 
     // Set control type
-	[webview setControlType:type];
+	[webView setControlType:type];
 }
 
 - (void)setShowSpinnerOnLoad:(BOOL)show forWebViewWithTag:(NSString *)tag
 {
-    UnityWebView *webview    = [self getWebViewWithTag:tag];
+    UnityWebView *webView    = [self getWebViewWithTag:tag];
     
     // Couldnt find webview with given tag
-    if (webview == NULL)
+    if (webView == NULL)
         return;
 	
 	NSLog(@"[WebViewHandler] setShowSpinnerOnLoad: %d", show);
     
     // Set show loading indicator
-    [webview setShowSpinnerOnLoad:show];
+    [webView setShowSpinnerOnLoad:show];
 }
 
 - (void)setAutoShowOnLoadFinish:(BOOL)autoShow forWebViewWithTag:(NSString *)tag
 {
-    UnityWebView *webview    = [self getWebViewWithTag:tag];
+    UnityWebView *webView    = [self getWebViewWithTag:tag];
     
     // Couldnt find webview with given tag
-    if (webview == NULL)
+    if (webView == NULL)
         return;
 	
 	NSLog(@"[WebViewHandler] setAutoShowOnLoadFinish: %d", autoShow);
     
     // Set auto show when load complete
-    [webview setAutoShowOnLoadFinish:autoShow];
+    [webView setAutoShowOnLoadFinish:autoShow];
 }
 
 - (void)setScalesPageToFit:(BOOL)scaleToFit forWebViewWithTag:(NSString *)tag
 {
-    UnityWebView *webview    = [self getWebViewWithTag:tag];
+    UnityWebView *webView    = [self getWebViewWithTag:tag];
     
     // Couldnt find webview with given tag
-    if (webview == NULL)
+    if (webView == NULL)
         return;
 	
     NSLog(@"[WebViewHandler] setScalesPageToFit: %d", scaleToFit);
 	
     // Set value to scale page to fit
-    [webview setScalesPageToFit:scaleToFit];
+    [webView setScalesPageToFit:scaleToFit];
 }
 
 - (void)setNormalisedFrame:(CGRect)normalisedFrame forWebViewWithTag:(NSString *)tag
 {
-    UnityWebView *webview    = [self getWebViewWithTag:tag];
+    UnityWebView *webView    = [self getWebViewWithTag:tag];
     
     // Couldnt find webview with given tag
-    if (webview == NULL)
+    if (webView == NULL)
         return;
 	
 	// Setting normalised frame
-    [webview setNormalisedFrame:normalisedFrame];
-	NSLog(@"[WebViewHandler] Setting new frame: %@", NSStringFromCGRect(webview.frame));
+    [webView setNormalisedFrame:normalisedFrame];
+	NSLog(@"[WebViewHandler] Setting new frame: %@", NSStringFromCGRect(webView.frame));
 }
 
 - (void)setBackgroundColor:(UIColor *)color forWebViewWithTag:(NSString *)tag
 {
-    UnityWebView *webview    = [self getWebViewWithTag:tag];
+    UnityWebView *webView    = [self getWebViewWithTag:tag];
     
     // Couldnt find webview with given tag
-    if (webview == NULL)
+    if (webView == NULL)
         return;
 	
     NSLog(@"[WebViewHandler] setBackgroundColor: %@", color);
 	
     // Set bg color
-    [webview setBackgroundColor:color];
+    [webView setBackgroundColor:color];
 }
 
 #pragma mark - URL scheme
 
 - (void)addNewURLScheme:(NSString *)newScheme forWebViewWithTag:(NSString *)tag
 {
-    UnityWebView *webview    = [self getWebViewWithTag:tag];
+    UnityWebView *webView    = [self getWebViewWithTag:tag];
 	
     // Couldnt find webview with given tag
-    if (webview == NULL)
+    if (webView == NULL)
         return;
 	
 	NSLog(@"[WebViewHandler] addNewURLScheme: %@", newScheme);
     
     // Add new scheme
-    [webview addNewURLScheme:newScheme];
+    [webView addNewURLScheme:newScheme];
 }
 
 #pragma mark - cache

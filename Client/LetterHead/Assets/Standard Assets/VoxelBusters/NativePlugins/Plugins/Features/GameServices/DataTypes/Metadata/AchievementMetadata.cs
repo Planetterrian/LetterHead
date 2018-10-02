@@ -13,7 +13,7 @@ namespace VoxelBusters.NativePlugins
 		private		string			m_globalID;
 		[SerializeField]
 		[Tooltip("Collection of identifiers, where each identifier is used to identify achievement in a specific platform game server.")]
-		private		PlatformID[]	m_platformIDs;
+		private		PlatformValue[]	m_platformIDs;
 		[SerializeField]
 		[Tooltip("The number of steps required to complete an achievement. Must be greater than 0.")]
 		private		int				m_noOfSteps		= 1;
@@ -48,7 +48,7 @@ namespace VoxelBusters.NativePlugins
 			}
 		}
 		
-		public PlatformID[] PlatformIDs
+		public PlatformValue[] PlatformIDs
 		{
 			get
 			{
@@ -66,7 +66,10 @@ namespace VoxelBusters.NativePlugins
 		#region Constructors
 
 		public AchievementMetadata ()
-		{}
+		{
+			// Default steps for instant achievement (non-progressive/non-incremental achievement)
+			m_noOfSteps			= 1;
+		}
 
 		#endregion
 
@@ -76,7 +79,6 @@ namespace VoxelBusters.NativePlugins
 		{
 			AchievementMetadata _newObject	= new AchievementMetadata();
 
-			_newObject.m_noOfSteps			= 1;
 			_newObject.m_globalID			= _container.GlobalID;
 			_newObject.m_platformIDs		= _container.PlatformIDs;
 

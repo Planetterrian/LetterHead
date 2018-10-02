@@ -12,4 +12,5 @@ PLEASE READ THIS CAREFULLY FOR ISSUES RELATED TO ANDROID MANIFEST DETAILS.
 		ex: <meta-data android:name="unityplayer.ForwardNativeEventsToDalvik" android:value="true" />
 
 
+3. Runtime perimissions are supported. So you can avoid using Unity permission dialogs. Check sample on how to disable unity defaults.
 //Please refer AndroidManifest_root_activity_settings_sample.txt for sample reference related to flags required in root manifest.

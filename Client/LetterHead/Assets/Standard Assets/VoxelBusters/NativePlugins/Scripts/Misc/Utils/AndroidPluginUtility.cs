@@ -1,11 +1,11 @@
-﻿using UnityEngine;
+﻿#if UNITY_ANDROID
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using VoxelBusters.DebugPRO;
 using VoxelBusters.NativePlugins;
 using VoxelBusters.NativePlugins.Internal;
+using VoxelBusters.UASUtils;
 
-#if UNITY_ANDROID
 public class AndroidPluginUtility
 {
 	static Dictionary<string, AndroidJavaObject> sSingletonInstances = new Dictionary<string, AndroidJavaObject>();
@@ -30,7 +30,7 @@ public class AndroidPluginUtility
 			}
 			else
 			{
-				Console.LogError(Constants.kDebugTag, "Class=" + _className + " not found!");
+				DebugUtility.Logger.LogError(Constants.kDebugTag, "Class=" + _className + " not found!");
 				return null;//Return here 
 			}
 			
@@ -48,7 +48,7 @@ public class AndroidPluginUtility
 		
 		if(_class == null) //If it doesn't exist, throw an error
 		{
-			Console.LogError(Constants.kDebugTag, "Class=" + _className + " not found!");
+			DebugUtility.Logger.LogError(Constants.kDebugTag, "Class=" + _className + " not found!");
 		}
 	
 		return _class;

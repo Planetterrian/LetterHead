@@ -1,10 +1,9 @@
-﻿using UnityEngine;
+﻿#if USES_NETWORK_CONNECTIVITY && UNITY_ANDROID
+using UnityEngine;
 using System.Collections;
-
-#if USES_NETWORK_CONNECTIVITY && UNITY_ANDROID
 using System.Collections.Generic;
 using VoxelBusters.Utility;
-using VoxelBusters.DebugPRO;
+using VoxelBusters.UASUtils;
 
 namespace VoxelBusters.NativePlugins
 {
@@ -59,7 +58,7 @@ namespace VoxelBusters.NativePlugins
 
 				if(_newConnectionStatus == false)
 				{
-					Console.LogWarning(Constants.kDebugTag, "[NetworkConnectivity] networkHardwareConnected ? " + m_networkHardwareConnectivityStatus + " URL Reachable ? " + m_urlReachabilityStatus);
+					DebugUtility.Logger.LogWarning(Constants.kDebugTag, "[NetworkConnectivity] networkHardwareConnected ? " + m_networkHardwareConnectivityStatus + " URL Reachable ? " + m_urlReachabilityStatus);
 				}
 			}
 		}

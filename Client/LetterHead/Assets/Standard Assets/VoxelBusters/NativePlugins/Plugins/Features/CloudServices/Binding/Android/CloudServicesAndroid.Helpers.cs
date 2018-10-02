@@ -13,7 +13,6 @@ namespace VoxelBusters.NativePlugins
 		#region Fields
 			
 		private bool 	m_isLocalMemoryDirty 			= false;
-		private bool 	m_initialSyncDone				= false;
 		private string 	m_currentCloudAccountName 	= null;
 		private int	 	m_syncIndex 				=	0;
 		
@@ -35,6 +34,12 @@ namespace VoxelBusters.NativePlugins
 		private void RemoveKeyValuePair(string _key)
 		{
 			m_dataStore.Remove(_key);
+			m_isLocalMemoryDirty = true;
+		}
+
+		private void RemoveAllKeyValuePairs()
+		{
+			m_dataStore.Clear ();
 			m_isLocalMemoryDirty = true;
 		}
 
@@ -83,7 +88,7 @@ namespace VoxelBusters.NativePlugins
 			return null;
 		}
 		
-		private void SetLocalStoreDiskData(IDictionary _newData)
+	private void SetLocalStoreDiskData(IDictionary _newData)
 		{
 			string _newDataString = null;
 
@@ -112,7 +117,7 @@ namespace VoxelBusters.NativePlugins
 			IDictionary _localData 							= GetLocalStoreDiskData();
 			List<string> _changedKeys 						= null; 			
 			eCloudDataStoreValueChangeReason _changeReason;
-
+			
 			if (_localData != null)
 			{
 				_changedKeys = GetChangedKeys(_localData, _newCloudData);
@@ -138,15 +143,15 @@ namespace VoxelBusters.NativePlugins
 				_changedKeys	= new List<string>(_keysCollection);	
 			}
 
-			if (!m_initialSyncDone)
-			{
-				m_initialSyncDone = true;
-				_changeReason 	= eCloudDataStoreValueChangeReason.INITIAL_SYNC;
-			}
-
 			// Refresh the keys in in-memory store.
 			RefreshLocalStoreMemoryData(_changedKeys, _newCloudData);	
-			
+
+			if (!m_isInitialised)
+			{
+				CloudKeyValueStoreDidInitialise(true);
+				_changeReason 	= eCloudDataStoreValueChangeReason.INITIAL_SYNC;
+			}
+				
 			// Save the synced local store data
 			SetLocalStoreDiskData(_newCloudData);
 

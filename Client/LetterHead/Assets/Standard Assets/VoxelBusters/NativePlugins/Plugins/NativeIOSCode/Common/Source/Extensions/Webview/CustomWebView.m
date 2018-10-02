@@ -12,6 +12,9 @@
 
 #define cToolBarHeight  44
 
+// Reference: https://github.com/mopub/mopub-ios-sdk/blob/master/MoPubSDK/Internal/HTML/MPWebView.m
+static NSString *const kMoPubScalesPageToFitScript = @"var meta = document.createElement('meta'); meta.setAttribute('name', 'viewport'); meta.setAttribute('content', 'width=device-width, initial-scale=1.0, user-scalable=no'); document.getElementsByTagName('head')[0].appendChild(meta);";
+
 @synthesize isShowing = _isShowing;
 @synthesize canDismiss;
 @synthesize canBounce;
@@ -24,7 +27,7 @@
 
 @synthesize closeButton;
 @synthesize loadingSpinner;
-@synthesize webview;
+@synthesize webView;
 @synthesize toolbar;
 @synthesize webviewTag;
 @synthesize URLSchemeList;
@@ -45,22 +48,15 @@
     
     if (self)
     {
-		// Tag
-		self.webviewTag					= tag;
+		self.webviewTag = tag;
 		
-		// Create webview
+        // create depedent components
 		[self createWebView];
-		
-		// Create toolbar
 		[self createToolbar];
-		
-		// Create close button
 		[self createCloseButton];
-		
-        // Create activity indicator
         [self createLoadingSpinner];
 		
-		// Defaults
+		// set default properties
 		_isShowing						= NO;
 		self.URLSchemeList  			= [NSMutableArray array];
 		self.canDismiss					= YES;
@@ -70,11 +66,9 @@
 		self.autoShowOnLoadFinish		= YES;
 		self.scalesPageToFit			= YES;
 		self.allowMediaPlayback			= YES;
-		
-		// Set color
 		[self setBackgroundColor:[UIColor whiteColor]];
 		
-		// Add as observer
+		// register as observer
 		[[UIDeviceOrientationManager Instance] setObserver:self];
     }
     
@@ -83,15 +77,19 @@
 
 - (void)dealloc
 {
-	// Remove observer
+	// remove observer
 	[[UIDeviceOrientationManager Instance] removeObserver:self];
-	[self.webview setDelegate:nil];
-	[self.webview stopLoading];
-	
-	// Release
+    
+    // reset webview properties
+	[self.webView setUIDelegate:nil];
+    [self.webView setNavigationDelegate:nil];
+    [[self.webView scrollView] setDelegate: nil];
+    [self.webView stopLoading];
+   
+	// release
 	self.closeButton	= NULL;
     self.loadingSpinner	= NULL;
-	self.webview		= NULL;
+	self.webView		= NULL;
     self.toolbar     	= NULL;
     self.URLSchemeList	= NULL;
     self.webviewTag     = NULL;
@@ -101,56 +99,65 @@
 
 - (void)createWebView
 {
-	self.webview	= [[[UIWebView alloc] init] autorelease];
-	
-	// Set delegate
-	[self.webview setDelegate:self];
-	[self.webview setOpaque:NO];
-	[self.webview setMediaPlaybackRequiresUserAction:NO];
-	[self.webview setAllowsInlineMediaPlayback:YES];
-	
-	// Add to view
-	[self addSubview:self.webview];
+    // create configuration object
+    WKWebViewConfiguration *webConfig   = [[[WKWebViewConfiguration alloc] init] autorelease];
+    if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"10.0"))
+    {
+        [webConfig setMediaTypesRequiringUserActionForPlayback:WKAudiovisualMediaTypeAll];
+    }
+    else
+    {
+        [webConfig setMediaPlaybackRequiresUserAction:WKAudiovisualMediaTypeAll];
+    }
+    
+    [webConfig setAllowsInlineMediaPlayback:YES];
+
+    // setup webview
+    WKWebView *webView	        = [[[WKWebView alloc] initWithFrame:CGRectZero configuration:webConfig] autorelease];
+    webView.UIDelegate          = self;
+    webView.navigationDelegate  = self;
+    webView.opaque              = false;
+    [self addSubview:webView];
+    
+    // save reference
+    [self setWebView:webView];
 }
 
 - (void)createToolbar
 {
-	self.toolbar            = [[[WebViewToolBar alloc] init] autorelease];
-	
-	// Set delegate
-	[self.toolbar setToolbarDelegate:self];
-	
-	// Add to view
-	[self addSubview:self.toolbar];
+    // setup toolbar
+    WebViewToolBar *toolBar = [[[WebViewToolBar alloc] init] autorelease];
+    [toolBar setToolbarDelegate:self];
+    [self addSubview:toolBar];
+
+	// save reference
+    [self setToolbar:toolBar];
 }
 
 - (void)createCloseButton
 {
 	UIImage *closeBtnImage	= [UIImage imageNamed:@"close_button.png"];
-	self.closeButton		= [UIButton buttonWithType:UIButtonTypeCustom];
-	
-	// Set action and default image
-	[self.closeButton setImage:closeBtnImage
-					  forState:UIControlStateNormal];
-	[self.closeButton addTarget:self
-						 action:@selector(onPressingCloseButton:)
-			   forControlEvents:UIControlEventTouchUpInside];
-	[self.closeButton setFrame:CGRectMake(0, 						0,
-										  closeBtnImage.size.width, closeBtnImage.size.height)];
-	
-	// Add to view
-	[self addSubview:self.closeButton];
+    
+    // create button
+	UIButton *closeButton	= [UIButton buttonWithType:UIButtonTypeCustom];
+    [closeButton setFrame:CGRectMake(0, 0, closeBtnImage.size.width, closeBtnImage.size.height)];
+    [closeButton setImage:closeBtnImage forState:UIControlStateNormal];
+    [closeButton addTarget:self action:@selector(onPressingCloseButton:) forControlEvents:UIControlEventTouchUpInside];
+    [self addSubview:closeButton];
+    
+    // store reference
+    [self setCloseButton:closeButton];
 }
 
 - (void)createLoadingSpinner
 {
-	self.loadingSpinner  	= [[[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray] autorelease];
-	
-	// Set properties
-	[self.loadingSpinner setHidesWhenStopped:YES];
-	
-	// Add to view
-	[self addSubview:self.loadingSpinner];
+    // setup spinner view
+	UIActivityIndicatorView *indicator	= [[[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray] autorelease];
+	[indicator setHidesWhenStopped:YES];
+    [self addSubview:indicator];
+
+	// cache reference
+    [self setLoadingSpinner:indicator];
 }
 
 #pragma mark - Properties
@@ -159,7 +166,7 @@
 {
 	canDismiss		= dismiss;
 	
-	// Update button state
+	// update button state
 	[[self closeButton] setEnabled:dismiss];
 	[[self toolbar] setCanStop:dismiss];
 }
@@ -168,15 +175,15 @@
 {
 	canBounce		= bounces;
 	
-	// Update webview property
-	[[[self webview] scrollView] setBounces:bounces];
+	// update webview property
+	[[[self webView] scrollView] setBounces:bounces];
 }
 
 - (void)setControlType:(WebviewControlType)newType
 {
-    controlType      	= newType;
+    controlType      = newType;
 	
-	// By default toolbar and close button are hidden
+	// by default toolbar and close button are hidden
 	[[self toolbar] setHidden:YES];
 	[[self closeButton] setHidden:YES];
 	
@@ -189,7 +196,6 @@
 		[[self closeButton] setHidden:NO];
 	}
 	
-	// Update frame
 	[self updateWebViewFrame];
 }
 
@@ -197,8 +203,8 @@
 {
     showSpinnerOnLoad = show;
     
-    // Show activity indicator if webview is loading
-    if ([[self webview] isLoading] && showSpinnerOnLoad)
+    // show activity indicator if webview is loading
+    if ([[self webView] isLoading] && showSpinnerOnLoad)
 	{
 		[self showLoadingSpinner];
 	}
@@ -208,35 +214,57 @@
 	}
 }
 
+- (BOOL)scalesPageToFit
+{
+    return ([[[self webView] scrollView] delegate] != NULL);
+}
+
 - (void)setScalesPageToFit:(BOOL)scales
 {
-	scalesPageToFit		= scales;
-	
-	// Update webview property
-	[[self webview] setScalesPageToFit:scales];
+    // Reference: https://github.com/mopub/mopub-ios-sdk/blob/master/MoPubSDK/Internal/HTML/MPWebView.m
+    WKWebView *webView  = [self webView];
+    if (scalesPageToFit)
+    {
+        [[webView scrollView] setDelegate: nil];
+        [[[webView configuration] userContentController] removeAllUserScripts];
+    }
+    else
+    {
+        // Make sure the scroll view can't scroll (prevent double tap to zoom)
+        [[webView scrollView] setDelegate: self];
+        
+        // Inject the user script to scale the page if needed
+        if (webView.configuration.userContentController.userScripts.count == 0)
+        {
+            WKUserScript *viewportScript = [[WKUserScript alloc] initWithSource:kMoPubScalesPageToFitScript
+                                                                  injectionTime:WKUserScriptInjectionTimeAtDocumentEnd
+                                                               forMainFrameOnly:YES];
+            [[[webView configuration] userContentController] addUserScript:viewportScript];
+        }
+    }
 }
 
 - (void)setBackgroundColor:(UIColor *)backgroundColor
 {
 	[super setBackgroundColor:[UIColor clearColor]];
 	
-	// Apply same property to webview
-	[[self webview] setBackgroundColor:backgroundColor];
+	// use same value for webview
+	[[self webView] setBackgroundColor:backgroundColor];
 }
 
 - (void)setAllowMediaPlayback:(BOOL)allow
 {
 	allowMediaPlayback	= allow;
 	
-	// Update webview property
-	[[self webview] setAllowsInlineMediaPlayback:allow];
+	// update webview property
+	[[[self webView] configuration] setAllowsInlineMediaPlayback:allow];
 }
 
 #pragma mark - View
 
 - (void)setFrame:(CGRect)frame
 {
-	// Update normalised rect
+	// recalculate new normalised rect and update the changes in view
 	[self setNormalisedFrame:ConvertToNormalisedRect(frame)];
 }
 
@@ -244,24 +272,21 @@
 {
 	normalisedFrame	= newFrame;
 
-	// Update frame
-	[self updateWebViewFrame];
+    [self updateWebViewFrame];
 }
 
 - (void)updateWebViewFrame
 {
-	// First set this views frame
+	// first, set this views frame
 	[super setFrame:ConvertToApplicationSpace([self normalisedFrame])];
 	
-	// Now update internal subview size
+	// update internal subview size based on style
 	CGRect viewFrame		= [self frame];
 	CGSize viewSize			= viewFrame.size;
 	CGRect webviewFrame;
 
-	// Based on control style frame is set
 	if ([self controlType] == WebviewControlTypeToolbar)
 	{
-		// Set webview origin and size
 		webviewFrame.origin	= CGPointMake(0, 0);
 		webviewFrame.size   = CGSizeMake(viewSize.width, viewSize.height - cToolBarHeight);
 	}
@@ -273,36 +298,35 @@
 		{
 			CALayer* closeBtnLayer	= [[self closeButton] layer];
 			
-			// Cache button size
+			// cache button size
 			closeButtonSize	= [[self closeButton] frame].size;
 			
-			// Update anchor and position
+			// update anchor and position
 			[closeBtnLayer setAnchorPoint:CGPointMake(1, 0)];
 			[closeBtnLayer setPosition:CGPointMake(CGRectGetMaxX(viewFrame), 0)];
 		}
 		
-		// Set webview origin and size
+		// set webview origin and size
 		webviewFrame.origin	= CGPointMake(0, 0);
 		webviewFrame.size	= viewSize;
 	}
 	else
 	{
-		// Set webview origin and size
+		// set webview origin and size
 		webviewFrame.origin	= CGPointMake(0, 0);
 		webviewFrame.size	= viewSize;
 	}
 	
-	// Set webview frame
-	[[self webview] setFrame:webviewFrame];
+	// assign new frame
+	[[self webView] setFrame:webviewFrame];
 	
-	// Update toolbar position
+	// update toolbar position
 	if (self.toolbar)
 	{
-		[[self toolbar] setFrame:CGRectMake(0, 				CGRectGetMaxY(webviewFrame),
-											viewSize.width,	cToolBarHeight)];
+		[[self toolbar] setFrame:CGRectMake(0, CGRectGetMaxY(webviewFrame), viewSize.width,	cToolBarHeight)];
 	}
 	
-	// Set anchor to (0.5, 0.5) and update spinner position
+	// set anchor to (0.5, 0.5) and update spinner position
 	if (self.loadingSpinner)
 	{
 		[[[self loadingSpinner] layer] setAnchorPoint:CGPointMake(0.5, 0.5)];
@@ -314,7 +338,7 @@
 {
     NSLog(@"[CustomWebView] show %@", [self webviewTag]);
 	
-	// Update property
+	// update property value
 	_isShowing	= YES;
 }
 
@@ -322,19 +346,18 @@
 {
 	NSLog(@"[CustomWebView] dismiss %@", [self webviewTag]);
 	
-	// Update property
+    // update property value
 	_isShowing	= NO;
 	
-	// Stop request
+	// stop request
 	[self stopLoading];
 	
-	// Remove view
+	// remove view from parent
 	[self removeFromSuperview];
 }
 
 - (void)layoutSubviews
 {
-	// Update web frame
 	[self updateWebViewFrame];
 }
 
@@ -342,41 +365,41 @@
 
 - (void)loadRequest:(NSURLRequest *)request
 {
-	[[self webview] loadRequest:request];
+	[[self webView] loadRequest:request];
 }
 
 - (void)loadHTMLString:(NSString *)string baseURL:(NSURL *)baseURL
 {
-	[[self webview] loadHTMLString:string
+	[[self webView] loadHTMLString:string
 						   baseURL:baseURL];
 }
 
 - (void)loadData:(NSData *)data MIMEType:(NSString *)MIMEType textEncodingName:(NSString *)textEncodingName baseURL:(NSURL *)baseURL
 {
-	[[self webview] loadData:data
-					MIMEType:MIMEType
-			textEncodingName:textEncodingName
-					 baseURL:baseURL];
+    WKWebView *webView  = [self webView];
+    [webView loadData:data MIMEType:MIMEType characterEncodingName:textEncodingName baseURL:baseURL];
 }
 
-- (NSString *)stringByEvaluatingJavaScriptFromString:(NSString *)script
+- (void)evaluateJavaScript:(NSString *)script
 {
-	NSString* result    = [[self webview] stringByEvaluatingJavaScriptFromString:script];
-	
-    return result;
+    WKWebView *webView  = [self webView];
+    [webView evaluateJavaScript:script completionHandler:^(id _Nullable result, NSError * _Nullable error) {
+        // Invoke handler
+        [self didFinishEvaluatingJavaScriptWithResult:result andError:error];
+    }];
 }
 
 - (void)reload
 {
-	[[self webview] reload];
+	[[self webView] reload];
 }
 
 - (void)stopLoading
 {
-	// Stops loading webview
-	[[self webview] stopLoading];
+	// stops loading webview
+	[[self webView] stopLoading];
 	
-	// Hide activity spinner views
+	// hide activity spinner views
 	[self hideLoadingSpinner];
 	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
 }
@@ -393,10 +416,19 @@
 	return NO;
 }
 
-- (void)foundMatchingURLScheme:(NSURL *)requestURL
+#pragma mark - Callbacks
+
+- (void)didFindMatchingURLScheme:(NSURL *)requestURL
 {
     NSLog(@"[CustomWebView] found matching URL scheme: %@", [requestURL scheme]);
 }
+
+- (void)didFinishEvaluatingJavaScriptWithResult:(id)result andError:(NSError *)error
+{
+    NSLog(@"[CustomWebView] did finish evaluating script, tag %@, result %@", [self webviewTag], result);
+}
+
+#pragma mark - Process URL's
 
 #define kHost		@"host"
 #define kArguments	@"arguments"
@@ -445,7 +477,7 @@
     NSLog(@"[CustomWebView] user pressed go back");
    
 	// Go back
-	[[self webview] goBack];
+	[[self webView] goBack];
 }
 
 - (void)onPressingStop
@@ -461,7 +493,7 @@
     NSLog(@"[CustomWebView] user pressed reload");
     
 	// Reload
-	[[self webview] reload];
+	[[self webView] reload];
 }
 
 - (void)onPressingForward
@@ -469,7 +501,7 @@
     NSLog(@"[CustomWebView] user pressed go forward");
    
 	// Go forward
-	[[self webview] goForward];
+	[[self webView] goForward];
 }
 
 #pragma mark - Button Callback
@@ -493,88 +525,98 @@
 	[self.loadingSpinner stopAnimating];
 }
 
-- (void)onRequestStateChange:(BOOL)isLoading
+- (void)updateViewBasedOnLoadState
 {
-    if (isLoading)
+    WKWebView *webView  = [self webView];
+    
+    // Update indictator state
+    if ([webView isLoading])
     {
-        // Show network activity indicator
         [UIApplication sharedApplication].networkActivityIndicatorVisible   = YES;
-		
-		// By default we will hide loading spinner
-		[self hideLoadingSpinner];
-		
-		// Show spinner if its not auto show on load
-		if (![self autoShowOnLoadFinish])
+        [self hideLoadingSpinner];
+
+		// Show spinner if required
+		if (self.showSpinnerOnLoad)
 		{
-			// Show spinner if required
-			if (self.showSpinnerOnLoad)
-			{
-				[self showLoadingSpinner];
-			}
+			[self showLoadingSpinner];
 		}
     }
     else
     {
-        // Hide network activity indicator
         [UIApplication sharedApplication].networkActivityIndicatorVisible   = NO;
-        
-        // Hide loading spinner
 		[self hideLoadingSpinner];
 	}
-	
-	// Update state of toolbar buttons
-	[[self toolbar] setCanGoBack:self.webview.canGoBack];
-	[[self toolbar] setCanGoForward:self.webview.canGoForward];
+
+    // Update toolbar state
+    WebViewToolBar *toolBar = [self toolbar];
+    [toolBar setCanGoBack: webView.canGoBack];
+    [toolbar setCanGoForward: webView.canGoForward];
 }
 
-#pragma mark - Webview Delegate
+#pragma mark - WKNavigationDelegate Methods
 
-- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
-{
-    NSURL *requestURL            		= [request URL];
-    NSString *currentURLScheme          = [requestURL scheme];
-    
-    for (NSString *scheme in self.URLSchemeList)
-    {
-         if ([currentURLScheme caseInsensitiveCompare:scheme] == NSOrderedSame)
-         {
-			 // Whenever a new matching URL scheme is found, notify
-			 [self foundMatchingURLScheme:requestURL];
-			 
-			 // Check if we need to load this URL
-			 return [self shouldStartLoadRequestWithURLScheme:scheme];
-         }
-    }
-    
-    return YES;
-}
-
-- (void)webViewDidStartLoad:(UIWebView *)webView
+- (void)webView:(WKWebView *)webView didStartProvisionalNavigation:(null_unspecified WKNavigation *)navigation
 {
     NSLog(@"[CustomWebView] did start loading, tag %@", [self webviewTag]);
     
-    // Loading started
-    [self onRequestStateChange:TRUE];
+    [self updateViewBasedOnLoadState];
 }
 
-- (void)webViewDidFinishLoad:(UIWebView *)webView
+- (void)webView:(WKWebView *)webView didFinishNavigation:(null_unspecified WKNavigation *)navigation
 {
     NSLog(@"[CustomWebView] did finish loading, tag %@", [self webviewTag]);
     
-    // Done with loading
-    [self onRequestStateChange:FALSE];
+    [self updateViewBasedOnLoadState];
     
     // Show webview, if auto show is enabled
     if ([self autoShowOnLoadFinish])
+    {
         [self show];
+    }
 }
 
-- (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
+- (void)webView:(WKWebView *)webView didFailProvisionalNavigation:(WKNavigation *)navigation withError:(NSError *)error
 {
     NSLog(@"[CustomWebView] did fail loading, tag %@", [self webviewTag]);
     
-    // Done with loading
-    [self onRequestStateChange:FALSE];
+    [self updateViewBasedOnLoadState];
+}
+
+- (void)webView:(WKWebView *)webView didFailNavigation:(null_unspecified WKNavigation *)navigation withError:(NSError *)error
+{
+    NSLog(@"[CustomWebView] did fail loading, tag %@", [self webviewTag]);
+    
+    [self updateViewBasedOnLoadState];
+}
+
+- (void)webView:(WKWebView *)webView decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler
+{
+    NSURL       *requestURL         = [[navigationAction request] URL];
+    NSString    *currentURLScheme   = [requestURL scheme];
+    
+    if ([self.URLSchemeList indexOfObject:currentURLScheme] != NSNotFound)
+    {
+        [self didFindMatchingURLScheme:requestURL];
+        
+        // Check if we need to load this URL
+        if (![self shouldStartLoadRequestWithURLScheme:currentURLScheme])
+        {
+            decisionHandler(WKNavigationActionPolicyCancel);
+            return;
+        }
+    }
+    
+    decisionHandler(WKNavigationResponsePolicyAllow);
+}
+
+#pragma mark - UIScrollViewDelegate Methods
+
+// Reference: https://github.com/mopub/mopub-ios-sdk/blob/master/MoPubSDK/Internal/HTML/MPWebView.m
+// Avoid double tap to zoom in WKWebView
+// Delegate is only set when scalesPagesToFit is set to NO
+- (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView
+{
+    return nil;
 }
 
 #pragma mark - Orientation Observer

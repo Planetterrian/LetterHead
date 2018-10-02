@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <WebKit/WebKit.h>
 #import "WebViewToolBar.h"
 #import "UIDeviceOrientationManager.h"
 
@@ -18,7 +19,7 @@ enum WebviewControlType
 };
 typedef enum WebviewControlType WebviewControlType;
 
-@interface CustomWebView : UIView <WebViewToolBarDelegate, UIWebViewDelegate, UIDeviceOrientationObserver>
+@interface CustomWebView : UIView <WebViewToolBarDelegate, WKUIDelegate, WKNavigationDelegate, UIDeviceOrientationObserver, UIScrollViewDelegate>
 
 // Properties
 @property(nonatomic, readonly)  BOOL                        isShowing;
@@ -33,7 +34,7 @@ typedef enum WebviewControlType WebviewControlType;
 
 @property(nonatomic, retain)    UIButton					*closeButton;
 @property(nonatomic, retain)    UIActivityIndicatorView     *loadingSpinner;
-@property(nonatomic, retain)    UIWebView					*webview;
+@property(nonatomic, retain)    WKWebView					*webView;
 @property(nonatomic, retain)    WebViewToolBar              *toolbar;
 @property(nonatomic, retain)    NSString                    *webviewTag;
 @property(nonatomic, retain)    NSMutableArray              *URLSchemeList;
@@ -55,14 +56,17 @@ typedef enum WebviewControlType WebviewControlType;
 		MIMEType:(NSString *)MIMEType
 textEncodingName:(NSString *)textEncodingName
 		 baseURL:(NSURL *)baseURL;
-- (NSString *)stringByEvaluatingJavaScriptFromString:(NSString *)script;
+- (void)evaluateJavaScript:(NSString *)script;
 - (void)reload;
 - (void)stopLoading;
 
 // URL Scheme
 - (void)addNewURLScheme:(NSString *)scheme;
 - (BOOL)shouldStartLoadRequestWithURLScheme:(NSString *)URLScheme;
-- (void)foundMatchingURLScheme:(NSURL *)requestURL;
 - (NSMutableDictionary *)parseURLScheme:(NSURL *)requestURL;
+
+// Callbacks
+- (void)didFindMatchingURLScheme:(NSURL *)requestURL;
+- (void)didFinishEvaluatingJavaScriptWithResult:(id)result andError:(NSError *)error;
 
 @end

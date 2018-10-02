@@ -29,8 +29,8 @@
 	
     if (self)
 	{
-		// Initialisation code
-		[[self webview] setOpaque:NO];
+		// set initial properties
+		[[self webView] setOpaque:NO];
     }
 	
     return self;
@@ -38,7 +38,7 @@
 
 - (void)dealloc
 {	
-	// Notify unity
+	// update unity
 	NotifyEventListener(kDestroyed, [[self webviewTag] UTF8String]);
 	
 	[super dealloc];
@@ -48,9 +48,8 @@
 
 - (void)show
 {
-	BOOL	currentlyShowing	= [self isShowing];
-	
-	if (!currentlyShowing)
+	BOOL    currentlyShowing    = [self isShowing];
+    if (!currentlyShowing)
 	{
 		// Add the view on the top of Unity view
 		[super show];
@@ -64,7 +63,6 @@
 - (void)dismiss
 {
 	BOOL	currentlyShowing	= [self isShowing];
-	
 	if (currentlyShowing)
 	{
 		// Removes view from super view
@@ -75,75 +73,91 @@
 	}
 }
 
-#pragma mark - Override Load Methods
+#pragma mark - Callback Methods
 
-- (NSString *)stringByEvaluatingJavaScriptFromString:(NSString *)script
+-(void)didFindMatchingURLScheme:(NSURL *)requestURL
 {
-    NSString *result			= [super stringByEvaluatingJavaScriptFromString:script];
-	
-	// Notify unity
-	NSMutableDictionary *data   = [NSMutableDictionary dictionary];
-	data[@"tag"]                = [self webviewTag];
-	
-	if (result != NULL)
-		data[@"result"]			= result;
-	
-	NotifyEventListener(kFinishedEvaluatingJavaScript, ToJsonCString(data));
-	
-	return result;
-}
-
-#pragma mark - Overide URL Scheme
-
-- (void)foundMatchingURLScheme:(NSURL *)requestURL
-{
-	NSMutableDictionary *messageData	= [self parseURLScheme:requestURL];
-	
-	// Notify unity
-	NSMutableDictionary *data  		= [NSMutableDictionary dictionary];
-	data[@"tag"]              		= [self webviewTag];
-	data[@"message-data"]       	= messageData;
-	
-	// Notify unity
+    // Gather required info
+    NSMutableDictionary *messageData    = [self parseURLScheme:requestURL];
+    
+    NSMutableDictionary *data   = [NSMutableDictionary dictionary];
+    data[@"tag"]                = [self webviewTag];
+    data[@"message-data"]       = messageData;
+    
+    // Send it to unity
     NotifyEventListener(kReceivedMessage, ToJsonCString(data));
 }
 
-#pragma mark - Override Webview Callback
-
-- (void)webViewDidStartLoad:(UIWebView *)webView
+-(void)didFinishEvaluatingJavaScriptWithResult:(id)result andError:(NSError *)error
 {
-	[super webViewDidStartLoad:webView];
+    // Collect information
+	NSMutableDictionary *data   = [NSMutableDictionary dictionary];
+	data[@"tag"]                = [self webviewTag];
+	if (result)
+    {
+		data[@"result"]			= result;
+    }
+    if (error)
+    {
+        data[@"error"]          = [error description];
+    }
+
+    // Send it to Unity
+	NotifyEventListener(kFinishedEvaluatingJavaScript, ToJsonCString(data));
+}
+
+#pragma mark - WKNavigationDelegate Methods
+
+- (void)webView:(WKWebView *)webView didStartProvisionalNavigation:(null_unspecified WKNavigation *)navigation
+{
+    [super webView:webView didStartProvisionalNavigation:navigation];
 	
 	// Notify unity
 	NotifyEventListener(kDidStartLoad, [[self webviewTag] UTF8String]);
 }
 
-- (void)webViewDidFinishLoad:(UIWebView *)webView
+- (void)webView:(WKWebView *)webView didFinishNavigation:(null_unspecified WKNavigation *)navigation
 {
-	[super webViewDidFinishLoad:webView];
+    [super webView:webView didFinishNavigation:navigation];
 	
-	// Notify unity
+	// Pack information to be shared with Unity
 	NSMutableDictionary* data	= [NSMutableDictionary dictionary];
 	data[kTagKey]               = [self webviewTag];
-	
-	if ([webView request])
-		data[kURLKey]           = [[[webView request] URL] absoluteString];
+    if ([webView URL])
+    {
+		data[kURLKey]           = [[webView URL] absoluteString];
+    }
 	
 	NotifyEventListener(kDidFinishLoad, ToJsonCString(data));
 }
 
-- (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
+- (void)webView:(WKWebView *)webView didFailProvisionalNavigation:(WKNavigation *)navigation withError:(NSError *)error
 {
-	[super webView:webView didFailLoadWithError:error];
+    [super webView:webView didFailProvisionalNavigation:navigation withError:error];
     
-    // Notify unity
-    NSMutableDictionary* data	= [NSMutableDictionary dictionary];
-	data[kTagKey]               = [self webviewTag];
-	
-	if ([webView request])
-		data[kURLKey]           = [[[webView request] URL] absoluteString];
-	
-    data[kErrorKey]             = error.description;
+    [self reportWebView:webView didFailWithError:error];
+}
+
+- (void)webView:(WKWebView *)webView didFailNavigation:(null_unspecified WKNavigation *)navigation withError:(NSError *)error
+{
+    [super webView:webView didFailNavigation:navigation withError:error];
+    
+    [self reportWebView:webView didFailWithError:error];
+}
+
+- (void)reportWebView:(WKWebView *)webView didFailWithError:(NSError *)error
+{
+    // Pack information
+    NSMutableDictionary* data   = [NSMutableDictionary dictionary];
+    data[kTagKey]               = [self webviewTag];
+    if ([webView URL])
+    {
+        data[kURLKey]           = [[webView URL] absoluteString];
+    }
+    if (error)
+    {
+        data[kErrorKey]         = error.description;
+    }
     
     NotifyEventListener(kDidFailLoadWithError, ToJsonCString(data));
 }

@@ -1,8 +1,7 @@
-﻿using UnityEngine;
+﻿#if USES_TWITTER && UNITY_EDITOR
+using UnityEngine;
 using System.Collections;
-
-#if USES_TWITTER && UNITY_EDITOR
-using VoxelBusters.DebugPRO;
+using VoxelBusters.UASUtils;
 
 namespace VoxelBusters.NativePlugins
 {
@@ -14,7 +13,6 @@ namespace VoxelBusters.NativePlugins
 
 		public override bool Initialise ()
 		{
-			// Just to show warning
 			base.Initialise();
 
 			return false;
@@ -24,48 +22,24 @@ namespace VoxelBusters.NativePlugins
 
 		#region Account API's
 		
-		public override void Login (TWTRLoginCompletion _onCompletion)
+		public override void Login (bool _requiresEmailAccess, TWTRLoginCompletion _onCompletion)
 		{
-			base.Login(_onCompletion);
+			base.Login(_requiresEmailAccess, _onCompletion);
 
-			// Associated error event is raised
 			TwitterLoginFailed(Constants.kNotSupportedInEditor);
 		}
 		
 		public override void Logout ()
 		{
 			base.Logout();
-			Console.LogError(Constants.kDebugTag, Constants.kNotSupportedInEditor);
+			DebugUtility.Logger.LogError(Constants.kDebugTag, Constants.kNotSupportedInEditor);
+			TwitterLogoutFinished();
 		}
 		
 		public override bool IsLoggedIn ()
 		{
-			Console.LogError(Constants.kDebugTag, Constants.kNotSupportedInEditor);
+			DebugUtility.Logger.LogError(Constants.kDebugTag, Constants.kNotSupportedInEditor);
 			return base.IsLoggedIn();
-		}
-		
-		public override string GetAuthToken ()
-		{
-			Console.LogError(Constants.kDebugTag, Constants.kNotSupportedInEditor);
-			return base.GetAuthToken();
-		}
-		
-		public override string GetAuthTokenSecret ()
-		{
-			Console.LogError(Constants.kDebugTag, Constants.kNotSupportedInEditor);
-			return base.GetAuthTokenSecret();
-		}
-		
-		public override string GetUserID ()
-		{
-			Console.LogError(Constants.kDebugTag, Constants.kNotSupportedInEditor);
-			return base.GetUserID();
-		}
-		
-		public override string GetUserName ()
-		{
-			Console.LogError(Constants.kDebugTag, Constants.kNotSupportedInEditor);
-			return base.GetUserName();
 		}
 
 		#endregion
@@ -76,10 +50,8 @@ namespace VoxelBusters.NativePlugins
 		{
 			base.ShowTweetComposer(_message, _URL, _imgByteArray, _onCompletion);
 
-			// Feature isnt supported
-			Console.LogError(Constants.kDebugTag, Constants.kNotSupportedInEditor);
+			DebugUtility.Logger.LogError(Constants.kDebugTag, Constants.kNotSupportedInEditor);
 
-			// Associated error event is raised
 			TweetComposerDismissed(((int)eTwitterComposerResult.CANCELLED).ToString());
 		}
 		
@@ -91,7 +63,6 @@ namespace VoxelBusters.NativePlugins
 		{			
 			base.RequestAccountDetails(_onCompletion);
 
-			// Associated error event is raised
 			RequestAccountDetailsFailed(Constants.kNotSupportedInEditor);
 		}
 		
@@ -99,15 +70,13 @@ namespace VoxelBusters.NativePlugins
 		{
 			base.RequestEmailAccess(_onCompletion);
 
-			// Associated error event is raised
 			RequestEmailAccessFailed(Constants.kNotSupportedInEditor);
 		}
 		
-		protected override void URLRequest (string _methodType, string _URL, IDictionary _parameters, TWTRResonse _onCompletion)
+		protected override void SendURLRequest (string _methodType, string _URL, IDictionary _parameters, TWTRResponse _onCompletion)
 		{			
-			base.URLRequest(_methodType, _URL, _parameters, _onCompletion);
+			base.SendURLRequest(_methodType, _URL, _parameters, _onCompletion);
 
-			// Associated error event is raised
 			TwitterURLRequestFailed(Constants.kNotSupportedInEditor);
 		}
 		

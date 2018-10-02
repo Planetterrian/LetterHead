@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using VoxelBusters.Utility;
-using VoxelBusters.DebugPRO;
+using VoxelBusters.UASUtils;
 
 namespace VoxelBusters.NativePlugins
 {
@@ -39,7 +39,7 @@ namespace VoxelBusters.NativePlugins
 		
 		private void SingleFieldPromptDialogClosed (string _jsonStr)
 		{
-			Console.Log(Constants.kDebugTag, "[UI] Single field prompt was dismissed");
+			DebugUtility.Logger.Log(Constants.kDebugTag, "[UI] Single field prompt was dismissed");
 			
 			if (OnSingleFieldPromptClosed != null)
 			{
@@ -57,7 +57,7 @@ namespace VoxelBusters.NativePlugins
 		
 		private void LoginPromptDialogClosed (string _jsonStr)
 		{
-			Console.Log(Constants.kDebugTag, "[UI] Login prompt was dismissed");
+			DebugUtility.Logger.Log(Constants.kDebugTag, "[UI] Login prompt was dismissed");
 			
 			if (OnLoginPromptClosed != null)
 			{

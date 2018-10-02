@@ -1,8 +1,7 @@
-﻿using UnityEngine;
+﻿#if USES_SHARING && UNITY_EDITOR
+using UnityEngine;
 using System.Collections;
-
-#if USES_SHARING && UNITY_EDITOR
-using VoxelBusters.DebugPRO;
+using VoxelBusters.UASUtils;
 
 namespace VoxelBusters.NativePlugins
 {
@@ -15,7 +14,7 @@ namespace VoxelBusters.NativePlugins
 		public override bool IsMailServiceAvailable ()
 		{	
 			bool _canSendMail	= true;
-			Console.Log(Constants.kDebugTag, "[Sharing:Mail] CanSendMail=" + _canSendMail);
+			DebugUtility.Logger.Log(Constants.kDebugTag, "[Sharing:Mail] CanSendMail=" + _canSendMail);
 			
 			return _canSendMail;
 		}
@@ -28,7 +27,7 @@ namespace VoxelBusters.NativePlugins
 				return;
 
 			if (_composer.AttachmentData != null)
-				Console.LogWarning(Constants.kDebugTag, "[Sharing:Mail] Attachments are not supported in editor");
+				DebugUtility.Logger.LogWarning(Constants.kDebugTag, "[Sharing:Mail] Attachments are not supported in editor");
 
 			string	_mailToAddress	= null;
 
@@ -65,7 +64,7 @@ namespace VoxelBusters.NativePlugins
 			if (IsMailServiceAvailable())
 			{
 				if (_attachmentByteArray != null)
-					Console.LogWarning(Constants.kDebugTag, "[Sharing:Mail] Attachments are not supported in editor");
+					DebugUtility.Logger.LogWarning(Constants.kDebugTag, "[Sharing:Mail] Attachments are not supported in editor");
 				
 				string	_mailToAddress	= null;
 				

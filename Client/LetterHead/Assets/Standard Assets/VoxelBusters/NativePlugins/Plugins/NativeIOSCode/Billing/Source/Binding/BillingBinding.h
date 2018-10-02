@@ -20,4 +20,6 @@ UIKIT_EXTERN bool cpnpBillingCanMakePayments ();
 UIKIT_EXTERN bool cpnpBillingIsProductPurchased (const char* productID);
 UIKIT_EXTERN void cpnpBillingBuyProduct (const char* productID);
 UIKIT_EXTERN void cpnpBillingRestoreCompletedTransactions ();
+UIKIT_EXTERN void cpnpBillingFinishCompletedTransactions (const char* transactionIDs, bool isRestoreType);
+
 UIKIT_EXTERN void cpnpBillingCustomReceiptVerificationFinished (const char* transactionID, int transactionState, int verificationState);

@@ -62,13 +62,16 @@ const NSString *kEVPlayerCommandResizeView		= @"resizePlayer();";
 	
     if (self)
 	{
-		// Change webview properties
-		UIWebView *webview	= [self webview];
-		[[webview scrollView] setScrollEnabled:NO];
-		[webview setAllowsInlineMediaPlayback:YES];
-		[webview setMediaPlaybackRequiresUserAction:NO];
-		[webview setAutoresizesSubviews:YES];
-		[webview setAutoresizingMask:(UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth)];
+		// change webview properties
+		WKWebView *webView	= [self webView];
+		[[webView scrollView] setScrollEnabled:NO];
+		[webView setAutoresizesSubviews:YES];
+		[webView setAutoresizingMask:(UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth)];
+        
+        // update configuration
+        WKWebViewConfiguration *webConfig   = [webView configuration];
+        [webConfig setAllowsInlineMediaPlayback:YES];
+        [webConfig setMediaTypesRequiringUserActionForPlayback:WKAudiovisualMediaTypeNone];
 		
 		// Set loading spinner properties
 		[[self loadingSpinner] setActivityIndicatorViewStyle:UIActivityIndicatorViewStyleWhite];
@@ -121,18 +124,18 @@ const NSString *kEVPlayerCommandResizeView		= @"resizePlayer();";
 	[self reset];
 	
 	// Start load request
-	[self loadHTMLString:[self embeddedHTMLString] baseURL:[[NSBundle mainBundle] resourceURL]];
+	[self loadHTMLString:[self embeddedHTMLString] baseURL:[[NSBundle mainBundle] bundleURL]];
 }
 
 - (void)pause
 {
-	[self stringByEvaluatingJavaScriptFromString:(NSString *)kEVPlayerCommandPauseVideo];
+	[self evaluateJavaScript:(NSString *)kEVPlayerCommandPauseVideo];
 }
 
 - (void)stop
 {
 	[self stopLoading];
-	[self stringByEvaluatingJavaScriptFromString:(NSString *)kEVPlayerCommandStopVideo];
+	[self evaluateJavaScript:(NSString *)kEVPlayerCommandStopVideo];
 	
 	// Forcibly sending this state code, as youtube can stay on any non playing state when stop is called
 	[self setPlayerInternalStateCode:(NSString *)kEVPlayerStateUserExitedCode];
@@ -182,22 +185,25 @@ const NSString *kEVPlayerCommandResizeView		= @"resizePlayer();";
 	[self stop];
 }
 
-#pragma mark - WebView Methods
+#pragma mark - Callback Methods
 
-- (void)foundMatchingURLScheme:(NSURL *)requestURL
+- (void)didFindMatchingURLScheme:(NSURL *)requestURL
 {
 	NSMutableDictionary *parsedDict	= [self parseURLScheme:requestURL];
 	NSMutableDictionary *argsDict	= [parsedDict objectForKey:@"arguments"];
 	NSString *host					= [parsedDict objectForKey:@"host"];
 	NSString *value					= [argsDict objectForKey:@"value"];
 	
-	if (IsNullOrEmpty(value))
-		value		= kNSStringDefault;
+	if (!value)
+    {
+		value   = kNSStringDefault;
+    }
 	
 	if ([host isEqualToString:(NSString *)kEVPlayerEventOnReady])
 	{
 		// Play video
-		[self stringByEvaluatingJavaScriptFromString:(NSString *)kEVPlayerCommandPlayVideo];
+		[self evaluateJavaScript:(NSString *)kEVPlayerCommandPlayVideo];
+        [self evaluateJavaScript:@"window.innerWidth;"];
 	}
 	else if ([host isEqualToString:(NSString *)kEVPlayerEventOnStateChange])
 	{
@@ -209,12 +215,42 @@ const NSString *kEVPlayerCommandResizeView		= @"resizePlayer();";
 	}
 }
 
-- (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
+- (void)didRotateToOrientation:(UIDeviceOrientation)toOrientation fromOrientation:(UIDeviceOrientation)fromOrientation
 {
-	[super webView:webView didFailLoadWithError:error];
-	
-	// Invoke handler
-	[self onError];
+    [super didRotateToOrientation:toOrientation fromOrientation:fromOrientation];
+    [self evaluateJavaScript:(NSString *)kEVPlayerCommandResizeView];
+}
+
+- (void)onFinishedPlaying:(MPMovieFinishReason)reason
+{
+    // Check if callback finished was already sent
+    if ([self playbackHasEnded])
+        return;
+    
+    // Mark as playback ended
+    [self setPlaybackHasEnded:YES];
+    
+    // Send callback to observers
+    if ([self delegate] && [[self delegate] conformsToProtocol:@protocol(EmbeddedVideoPlayerDelegate)])
+    {
+        [[self delegate] embeddedVideoPlayer:self didFinishPlaying:reason];
+    }
+}
+
+#pragma mark - WKNavigationDelegate Methods
+
+- (void)webView:(WKWebView *)webView didFailProvisionalNavigation:(WKNavigation *)navigation withError:(NSError *)error
+{
+    [super webView:webView didFailProvisionalNavigation:navigation withError:error];
+    
+    [self onError];
+}
+
+- (void)webView:(WKWebView *)webView didFailNavigation:(null_unspecified WKNavigation *)navigation withError:(NSError *)error
+{
+    [super webView:webView didFailNavigation:navigation withError:error];
+    
+    [self onError];
 }
 
 - (void)onError
@@ -222,30 +258,6 @@ const NSString *kEVPlayerCommandResizeView		= @"resizePlayer();";
 	// Send player state to unknown and send callback
 	[self setPlayerInternalStateCode:(NSString *)kEVPlayerStateUnknownCode];
 	[self onFinishedPlaying:MPMovieFinishReasonPlaybackError];
-}
-
-#pragma mark - Send Events Methods
-
-- (void)didRotateToOrientation:(UIDeviceOrientation)toOrientation fromOrientation:(UIDeviceOrientation)fromOrientation
-{
-	[super didRotateToOrientation:toOrientation fromOrientation:fromOrientation];
-	[self stringByEvaluatingJavaScriptFromString:(NSString *)kEVPlayerCommandResizeView];
-}
-
-- (void)onFinishedPlaying:(MPMovieFinishReason)reason
-{
-	// Check if callback finished was already sent
-	if ([self playbackHasEnded])
-		return;
-	
-	// Mark as playback ended
-	[self setPlaybackHasEnded:YES];
-	
-	// Send callback to observers
-	if ([self delegate] != nil && [[self delegate] conformsToProtocol:@protocol(EmbeddedVideoPlayerDelegate)])
-	{
-		[[self delegate] embeddedVideoPlayer:self didFinishPlaying:reason];
-	}
 }
 
 @end

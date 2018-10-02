@@ -1,9 +1,8 @@
-﻿using UnityEngine;
+﻿#if USES_MEDIA_LIBRARY && UNITY_ANDROID
+using UnityEngine;
 using System.Collections;
-
-#if USES_MEDIA_LIBRARY && UNITY_ANDROID
 using VoxelBusters.Utility;
-using VoxelBusters.DebugPRO;
+using VoxelBusters.UASUtils;
 
 namespace VoxelBusters.NativePlugins
 {
@@ -16,10 +15,18 @@ namespace VoxelBusters.NativePlugins
 		MediaLibraryAndroid()
 		{
 			Plugin = AndroidPluginUtility.GetSingletonInstance(Native.Class.NAME);
-
-			Plugin.Call(Native.Methods.INITIALIZE, NPSettings.MediaLibrary.Android.YoutubeAPIKey);		
 		}
 
+		#endregion
+
+		#region Unity Methods
+		
+		protected override void Awake()
+		{
+			base.Awake ();
+			Plugin.Call(Native.Methods.INITIALIZE, NPSettings.MediaLibrary.Android.YoutubeAPIKey);		
+		}
+		
 		#endregion
 
 		#region overridden methods
@@ -27,14 +34,14 @@ namespace VoxelBusters.NativePlugins
 		public override bool IsCameraSupported ()
 		{
 			bool _isSupported	= Plugin.Call<bool>(Native.Methods.IS_CAMERA_SUPPORTED);
-			Console.Log(Constants.kDebugTag, "[MediaLibrary] IsCameraSupported=" + _isSupported);
+			DebugUtility.Logger.Log(Constants.kDebugTag, "[MediaLibrary] IsCameraSupported=" + _isSupported);
 			
 			return _isSupported;
 		}
 		
 		public override void SetAllowsImageEditing (bool _value)
 		{
-			Console.LogWarning(Constants.kDebugTag, Constants.kiOSFeature);
+			DebugUtility.Logger.LogWarning(Constants.kDebugTag, Constants.kiOSFeature);
 		}
 		
 		public override void PickImage (eImageSource _source, 	float _scaleFactor, 	
@@ -51,9 +58,8 @@ namespace VoxelBusters.NativePlugins
 			base.SaveImageToGallery(_imageByteArray, _onCompletion);
 			
 			if (_imageByteArray != null)
-				Plugin.Call(Native.Methods.SAVE_IMAGE_TO_GALLERY, _imageByteArray, _imageByteArray.Length);
+				Plugin.Call(Native.Methods.SAVE_IMAGE_TO_GALLERY, _imageByteArray, _imageByteArray.Length, NPSettings.MediaLibrary.Android.SaveGalleryImagesToAppSpecificFolder);
 		}
-
 
 		public override void PlayVideoFromGallery (PickVideoCompletion _onPickVideoCompletion,
 		                                          PlayVideoCompletion _onPlayVideoCompletion)

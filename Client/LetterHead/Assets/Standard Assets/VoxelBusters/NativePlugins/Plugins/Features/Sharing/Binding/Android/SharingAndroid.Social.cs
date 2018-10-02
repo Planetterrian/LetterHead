@@ -1,10 +1,9 @@
-﻿using UnityEngine;
+﻿#if UNITY_ANDROID
+using UnityEngine;
 using System.Collections;
-
-#if UNITY_ANDROID
 using System.Runtime.InteropServices;
 using VoxelBusters.Utility;
-using VoxelBusters.DebugPRO;
+using VoxelBusters.UASUtils;
 
 namespace VoxelBusters.NativePlugins
 {
@@ -17,7 +16,7 @@ namespace VoxelBusters.NativePlugins
 		public override bool IsFBShareServiceAvailable ()
 		{
 			bool _isAvailable	= Plugin.Call<bool>(Native.Methods.IS_SERVICE_AVAILABLE, (int)eShareOptionsAndroid.FB);
-			Console.Log(Constants.kDebugTag, "[Sharing:FB] Is service available=" + _isAvailable);
+			DebugUtility.Logger.Log(Constants.kDebugTag, "[Sharing:FB] Is service available=" + _isAvailable);
 
 			return _isAvailable;
 		}
@@ -26,7 +25,7 @@ namespace VoxelBusters.NativePlugins
 		{
 			bool _isAvailable	= Plugin.Call<bool>(Native.Methods.IS_SERVICE_AVAILABLE, (int)eShareOptionsAndroid.TWITTER);
 			
-			Console.Log(Constants.kDebugTag, "[Sharing:Twitter] Is service available=" + _isAvailable);
+			DebugUtility.Logger.Log(Constants.kDebugTag, "[Sharing:Twitter] Is service available=" + _isAvailable);
 			
 			return _isAvailable;
 		}

@@ -3,7 +3,8 @@ using System.Collections;
 using System;
 using System.IO;
 using VoxelBusters.Utility;
-using VoxelBusters.DebugPRO;
+using VoxelBusters.UASUtils;
+
 using DownloadTexture = VoxelBusters.Utility.DownloadTexture;
 
 namespace VoxelBusters.NativePlugins
@@ -359,7 +360,7 @@ namespace VoxelBusters.NativePlugins
 		{
 			if (string.IsNullOrEmpty(_URLString))
 			{
-				DebugPRO.Console.LogWarning(Constants.kDebugTag, "[Sharing] ShareURL, URL is null/empty");
+				DebugUtility.Logger.LogWarning(Constants.kDebugTag, "[Sharing] ShareURL, URL is null/empty");
 			}
 			
 			Share(_message, _URLString, null, _excludedOptions, _onCompletion);
@@ -387,7 +388,7 @@ namespace VoxelBusters.NativePlugins
 			}
 			else
 			{
-				DebugPRO.Console.LogWarning(Constants.kDebugTag, "[Sharing] ShareImage, texure is null");
+				DebugUtility.Logger.LogWarning(Constants.kDebugTag, "[Sharing] ShareImage, texure is null");
 			}
 			
 			Share(_message, null, _imageByteArray, _excludedOptions, _onCompletion);
@@ -408,7 +409,7 @@ namespace VoxelBusters.NativePlugins
 				}
 				else
 				{
-					DebugPRO.Console.LogWarning(Constants.kDebugTag, "[Sharing] The operation could not be completed. Error=" + _error);
+					DebugUtility.Logger.LogWarning(Constants.kDebugTag, "[Sharing] The operation could not be completed. Error=" + _error);
 				}
 				
 				Share(_message, null, _imageData, _excludedOptions, _onCompletion);

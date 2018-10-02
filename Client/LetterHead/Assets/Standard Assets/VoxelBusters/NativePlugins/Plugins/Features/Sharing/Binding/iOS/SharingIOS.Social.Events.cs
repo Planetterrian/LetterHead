@@ -1,7 +1,6 @@
-﻿using UnityEngine;
+﻿#if USES_SHARING && UNITY_IOS
+using UnityEngine;
 using System.Collections;
-
-#if USES_SHARING && UNITY_IOS
 using VoxelBusters.Utility;
 
 namespace VoxelBusters.NativePlugins

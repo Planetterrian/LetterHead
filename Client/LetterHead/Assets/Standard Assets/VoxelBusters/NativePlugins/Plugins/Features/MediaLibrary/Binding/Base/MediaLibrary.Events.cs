@@ -1,15 +1,17 @@
-﻿using UnityEngine;
+﻿#if USES_MEDIA_LIBRARY
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using VoxelBusters.Utility;
-using VoxelBusters.DebugPRO;
+using VoxelBusters.UASUtils;
+
 using DownloadTexture = VoxelBusters.Utility.DownloadTexture;
 
 namespace VoxelBusters.NativePlugins
 {
 	using Internal;
 
-	public partial class MediaLibrary : MonoBehaviour 
+	public partial class MediaLibrary : MonoBehaviour
 	{
 		#region Delegates
 
@@ -21,7 +23,7 @@ namespace VoxelBusters.NativePlugins
 		public delegate void PickImageCompletion (ePickImageFinishReason _reason, Texture2D _image);
 
 		/// <summary>
-		/// Delegate that will be called when specified image is saved to gallery. 
+		/// Delegate that will be called when specified image is saved to gallery.
 		/// </summary>
 		/// <param name="_success">A bool value used to indicate operation status.</param>
 		public delegate void SaveImageToGalleryCompletion (bool _success);
@@ -69,13 +71,12 @@ namespace VoxelBusters.NativePlugins
 			// Triggers event
 			PickImageFinished(_imagePath, _finishReason);
 		}
-		
+
 		protected void PickImageFinished (string _imagePath, ePickImageFinishReason _finishReason)
 		{
 			// Resume unity player
 			this.ResumeUnity();
-			
-			Console.Log(Constants.kDebugTag, "[MediaLibrary] Finishing pick image, Path=" + _imagePath + " Reason=" + _finishReason);
+			DebugUtility.Logger.Log(Constants.kDebugTag, "[MediaLibrary] Finishing pick image, Path=" + _imagePath + " Reason=" + _finishReason);
 			if (OnPickImageFinished != null)
 			{
 				// Failed opertation
@@ -84,29 +85,38 @@ namespace VoxelBusters.NativePlugins
 					OnPickImageFinished(_finishReason, null);
 					return;
 				}
-				
+
 				// Download image from given path
 				URL _imagePathURL				= URL.FileURLWithPath(_imagePath);
-				DownloadTexture _newDownload	= new DownloadTexture(_imagePathURL, true, true);
+				DownloadTexture _newDownload	= new DownloadTexture(_imagePathURL, Application.platform != RuntimePlatform.Android, true); //On Android, we consider the exif orientation in native code for performance.
 				_newDownload.ScaleFactor		= m_scaleFactor;
 				_newDownload.OnCompletion		= (Texture2D _texture, string _error)=>{
-					
+
+
+#if !UNITY_EDITOR
+					// Delete the file
+					if (!string.IsNullOrEmpty(_imagePath))
+					{
+						FileOperations.Delete(_imagePath);
+					}
+#endif
+
 					if (string.IsNullOrEmpty(_error))
 					{
 						OnPickImageFinished(ePickImageFinishReason.SELECTED, _texture);
 					}
 					else
 					{
-						Console.LogError(Constants.kDebugTag, "[MediaLibrary] Texture download failed, URL=" + _imagePathURL.URLString);
+						DebugUtility.Logger.LogError(Constants.kDebugTag, "[MediaLibrary] Texture download failed, URL=" + _imagePathURL.URLString);
 						OnPickImageFinished(ePickImageFinishReason.FAILED, null);
 					}
 				};
-				
+
 				// Start download
 				_newDownload.StartRequest();
 			}
-		}	
-		
+		}
+
 		protected void SaveImageToGalleryFinished (string _savedStatus)
 		{
 			bool _savedSuccessfully	= bool.Parse(_savedStatus);
@@ -114,10 +124,10 @@ namespace VoxelBusters.NativePlugins
 			// Triggers event
 			SaveImageToGalleryFinished(_savedSuccessfully);
 		}
-		
+
 		protected void SaveImageToGalleryFinished (bool _savedSuccessfully)
 		{
-			Console.Log(Constants.kDebugTag, "[MediaLibrary] Saving image to gallery finished, Success=" + _savedSuccessfully);
+			DebugUtility.Logger.Log(Constants.kDebugTag, "[MediaLibrary] Saving image to gallery finished, Success=" + _savedSuccessfully);
 			
 			if (OnSaveImageToGalleryFinished != null)
 				OnSaveImageToGalleryFinished(_savedSuccessfully);
@@ -125,7 +135,7 @@ namespace VoxelBusters.NativePlugins
 
 		#endregion
 
-		#region Video Callback Methods 
+		#region Video Callback Methods
 
 		protected void PickVideoFinished (string _reasonStr)
 		{
@@ -133,14 +143,14 @@ namespace VoxelBusters.NativePlugins
 
 			// Parse received data
 			ParsePickVideoFinishedData(_reasonStr, out _finishReason);
-			
+
 			// Triggers event
 			PickVideoFinished(_finishReason);
 		}
-		
+
 		protected void PickVideoFinished (ePickVideoFinishReason _finishReason)
 		{
-			Console.Log(Constants.kDebugTag, "[MediaLibrary] Pick video finished, Reason=" + _finishReason);
+			DebugUtility.Logger.Log(Constants.kDebugTag, "[MediaLibrary] Pick video finished, Reason=" + _finishReason);
 			
 			// If pick video reason is Selected then dont resume, as operation still incomplete
 			if (_finishReason != ePickVideoFinishReason.SELECTED)
@@ -148,7 +158,7 @@ namespace VoxelBusters.NativePlugins
 				// Resume unity player
 				this.ResumeUnity();
 			}
-			
+
 			if (OnPickVideoFinished != null)
 				OnPickVideoFinished(_finishReason);
 		}
@@ -159,7 +169,7 @@ namespace VoxelBusters.NativePlugins
 
 			// Parse received data
 			ParsePlayVideoFinishedData(_reasonStr, out _finishReason);
-			
+
 			// Triggers event
 			PlayVideoFinished(_finishReason);
 		}
@@ -169,8 +179,7 @@ namespace VoxelBusters.NativePlugins
 			// Resume unity player
 			this.ResumeUnity();
 			
-			Console.Log(Constants.kDebugTag, "[MediaLibrary] Playing video finished, Reason=" + _finishReason);
-
+			DebugUtility.Logger.Log(Constants.kDebugTag, "[MediaLibrary] Playing video finished, Reason=" + _finishReason);
 			if (OnPlayVideoFinished != null)
 				OnPlayVideoFinished(_finishReason);
 		}
@@ -201,3 +210,4 @@ namespace VoxelBusters.NativePlugins
 		#endregion
 	}
 }
+#endif

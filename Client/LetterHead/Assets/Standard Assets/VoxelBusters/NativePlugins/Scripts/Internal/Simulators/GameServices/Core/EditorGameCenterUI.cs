@@ -1,7 +1,6 @@
-﻿using UnityEngine;
+﻿#if USES_GAME_SERVICES && UNITY_EDITOR
+using UnityEngine;
 using System.Collections;
-
-#if USES_GAME_SERVICES && UNITY_EDITOR
 using System;
 using System.Linq;
 using System.Collections.Generic;

@@ -13,6 +13,5 @@
 
 // Related to conversion
 - (id)toJsonObject;
-- (const char *)toCString;
 
 @end

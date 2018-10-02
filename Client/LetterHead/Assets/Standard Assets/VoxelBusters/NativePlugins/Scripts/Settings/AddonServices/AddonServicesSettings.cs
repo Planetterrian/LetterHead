@@ -8,21 +8,20 @@ namespace VoxelBusters.NativePlugins
 	{
 		#region Fields
 
-#if USES_SOOMLA_GROW
+	#if USES_SOOMLA_GROW
 		[SerializeField]
 		private		SoomlaGrowServiceSettings		m_soomlaGrowSettings	= new SoomlaGrowServiceSettings();
-#endif
-
-#if USES_ONE_SIGNAL
+	#endif
+	#if USES_ONE_SIGNAL
 		[SerializeField]
 		private		OneSignalServiceSettings		m_oneSignalSettings		= new OneSignalServiceSettings();
-#endif
+	#endif
 
 		#endregion
 
 		#region Properties
 
-#if USES_SOOMLA_GROW
+	#if USES_SOOMLA_GROW
 		public SoomlaGrowServiceSettings SoomlaGrowService
 		{
 			get
@@ -30,9 +29,9 @@ namespace VoxelBusters.NativePlugins
 				return m_soomlaGrowSettings;
 			}
 		}
-#endif
+	#endif
 
-#if USES_ONE_SIGNAL
+	#if USES_ONE_SIGNAL
 		public OneSignalServiceSettings OneSignalService
 		{
 			get
@@ -40,7 +39,7 @@ namespace VoxelBusters.NativePlugins
 				return m_oneSignalSettings;
 			}
 		}
-#endif
+	#endif
 
 		#endregion
 	}

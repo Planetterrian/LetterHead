@@ -1,8 +1,7 @@
-﻿using UnityEngine;
+﻿#if USES_SOOMLA_GROW
+using UnityEngine;
 using System.Collections;
-
-#if USES_SOOMLA_GROW
-using VoxelBusters.DebugPRO;
+using VoxelBusters.UASUtils;
 
 namespace VoxelBusters.NativePlugins
 {
@@ -50,7 +49,7 @@ namespace VoxelBusters.NativePlugins
 
 		protected virtual void Initialise (string _gameKey, string _environmentKey, string _referrerName)
 		{
-			Console.Log(Constants.kDebugTag, "[SoomlaGrow] Initialising SDK.");
+			DebugUtility.Logger.Log(Constants.kDebugTag, "[SoomlaGrow] Initialising SDK.");
 		}
 
 		#endregion
@@ -67,47 +66,47 @@ namespace VoxelBusters.NativePlugins
 
 		protected virtual void ReportOnBillingSupported ()
 		{
-			Console.Log(Constants.kDebugTag, "[SoomlaGrow] Reporting: OnBillingSupported.");
+			DebugUtility.Logger.Log(Constants.kDebugTag, "[SoomlaGrow] Reporting: OnBillingSupported.");
 		}
 
 		protected virtual void ReportOnBillingNotSupported ()
 		{
-			Console.Log(Constants.kDebugTag, "[SoomlaGrow] Reporting: OnBillingNotSupported.");
+			DebugUtility.Logger.Log(Constants.kDebugTag, "[SoomlaGrow] Reporting: OnBillingNotSupported.");
 		}
 		
 		internal virtual void ReportOnBillingPurchaseStarted (string _productID)
 		{
-			Console.Log(Constants.kDebugTag, "[SoomlaGrow] Reporting: OnBillingPurchaseStarted.");
+			DebugUtility.Logger.Log(Constants.kDebugTag, "[SoomlaGrow] Reporting: OnBillingPurchaseStarted.");
 		}
 
 		internal virtual void ReportOnBillingPurchaseFinished (string _productID, long _priceInMicros, string _currencyCode)
 		{			
-			Console.Log(Constants.kDebugTag, "[SoomlaGrow] Reporting: OnBillingPurchaseFinished.");
+			DebugUtility.Logger.Log(Constants.kDebugTag, "[SoomlaGrow] Reporting: OnBillingPurchaseFinished.");
 		}
 
 		internal virtual void ReportOnBillingPurchaseCancelled (string _productID)
 		{
-			Console.Log(Constants.kDebugTag, "[SoomlaGrow] Reporting: OnBillingPurchaseCancelled.");
+			DebugUtility.Logger.Log(Constants.kDebugTag, "[SoomlaGrow] Reporting: OnBillingPurchaseCancelled.");
 		} 
 
 		internal virtual void ReportOnBillingPurchaseFailed (string _productID)
 		{		
-			Console.Log(Constants.kDebugTag, "[SoomlaGrow] Reporting: OnBillingPurchaseFailed.");
+			DebugUtility.Logger.Log(Constants.kDebugTag, "[SoomlaGrow] Reporting: OnBillingPurchaseFailed.");
 		}
 
 		internal virtual void ReportOnBillingPurchasesRestoreStarted ()
 		{
-			Console.Log(Constants.kDebugTag, "[SoomlaGrow] Reporting: OnBillingRestoreStarted.");
+			DebugUtility.Logger.Log(Constants.kDebugTag, "[SoomlaGrow] Reporting: OnBillingRestoreStarted.");
 		}
 
 		internal virtual void ReportOnBillingPurchasesRestoreFinished (bool _success)
 		{			
-			Console.Log(Constants.kDebugTag, "[SoomlaGrow] Reporting: OnBillingRestoreFinished.");
+			DebugUtility.Logger.Log(Constants.kDebugTag, "[SoomlaGrow] Reporting: OnBillingRestoreFinished.");
 		}
 
 		internal virtual void ReportOnBillingPurchaseVerificationFailed ()
 		{			
-			Console.Log(Constants.kDebugTag, "[SoomlaGrow] Reporting: OnBillingVerificationFailed.");
+			DebugUtility.Logger.Log(Constants.kDebugTag, "[SoomlaGrow] Reporting: OnBillingVerificationFailed.");
 		}
 	
 		#endregion
@@ -116,72 +115,72 @@ namespace VoxelBusters.NativePlugins
 
 		internal virtual void ReportOnSocialLoginStarted (eSocialProvider _provider)
 		{		
-			Console.Log(Constants.kDebugTag, "[SoomlaGrow] Reporting: OnSocialLoginStarted.");
+			DebugUtility.Logger.Log(Constants.kDebugTag, "[SoomlaGrow] Reporting: OnSocialLoginStarted.");
 		}
 
 		internal virtual void ReportOnSocialLoginFinished (eSocialProvider _provider, string _userID)
 		{		
-			Console.Log(Constants.kDebugTag, "[SoomlaGrow] Reporting: OnSocialLoginFinished.");
+			DebugUtility.Logger.Log(Constants.kDebugTag, "[SoomlaGrow] Reporting: OnSocialLoginFinished.");
 		}
 
 		internal virtual void ReportOnSocialLoginCancelled (eSocialProvider _provider)
 		{
-			Console.Log(Constants.kDebugTag, "[SoomlaGrow] Reporting: OnSocialLoginCancelled.");
+			DebugUtility.Logger.Log(Constants.kDebugTag, "[SoomlaGrow] Reporting: OnSocialLoginCancelled.");
 		}
 
 		internal virtual void ReportOnSocialLoginFailed (eSocialProvider _provider)
 		{			
-			Console.Log(Constants.kDebugTag, "[SoomlaGrow] Reporting: OnSocialLoginFailed.");
+			DebugUtility.Logger.Log(Constants.kDebugTag, "[SoomlaGrow] Reporting: OnSocialLoginFailed.");
 		}
 
 		internal virtual void ReportOnSocialLogoutStarted (eSocialProvider _provider)
 		{		
-			Console.Log(Constants.kDebugTag, "[SoomlaGrow] Reporting: OnSocialLogoutStarted.");
+			DebugUtility.Logger.Log(Constants.kDebugTag, "[SoomlaGrow] Reporting: OnSocialLogoutStarted.");
 		}
 
 		internal virtual void ReportOnSocialLogoutFinished (eSocialProvider _provider)
 		{			
-			Console.Log(Constants.kDebugTag, "[SoomlaGrow] Reporting: OnSocialLogoutFinished.");
+			DebugUtility.Logger.Log(Constants.kDebugTag, "[SoomlaGrow] Reporting: OnSocialLogoutFinished.");
 		}
 
 		internal virtual void ReportOnSocialLogoutFailed (eSocialProvider _provider)
 		{	
-			Console.Log(Constants.kDebugTag, "[SoomlaGrow] Reporting: OnSocialLogoutFailed.");
+			DebugUtility.Logger.Log(Constants.kDebugTag, "[SoomlaGrow] Reporting: OnSocialLogoutFailed.");
 		}
 
 		internal virtual void ReportOnGetContactsStartedForProvider (eSocialProvider _provider)
 		{	
-			Console.Log(Constants.kDebugTag, "[SoomlaGrow] Reporting: OnGetContactsStartedForProvider.");
+			DebugUtility.Logger.Log(Constants.kDebugTag, "[SoomlaGrow] Reporting: OnGetContactsStartedForProvider.");
 		}
 		
 		internal virtual void ReportOnGetContactsFinishedForProvider (eSocialProvider _provider)
 		{
-			Console.Log(Constants.kDebugTag, "[SoomlaGrow] Reporting: OnGetContactsFinishedForProvider.");
+			DebugUtility.Logger.Log(Constants.kDebugTag, "[SoomlaGrow] Reporting: OnGetContactsFinishedForProvider.");
 		}
 		
 		internal virtual void ReportOnGetContactsFailedForProvider (eSocialProvider _provider)
 		{
-			Console.Log(Constants.kDebugTag, "[SoomlaGrow] Reporting: OnGetContactsFailedForProvider.");
+			DebugUtility.Logger.Log(Constants.kDebugTag, "[SoomlaGrow] Reporting: OnGetContactsFailedForProvider.");
 		}
 		
 		internal virtual void ReportOnSocialActionStarted (eSocialActionType _actionType, eSocialProvider _provider)
 		{
-			Console.Log(Constants.kDebugTag, "[SoomlaGrow] Reporting: OnSocialActionStarted.");
+			DebugUtility.Logger.Log(Constants.kDebugTag, "[SoomlaGrow] Reporting: OnSocialActionStarted.");
 		}
 		
 		internal virtual void ReportOnSocialActionFinished (eSocialActionType _actionType, eSocialProvider _provider)
 		{
-			Console.Log(Constants.kDebugTag, "[SoomlaGrow] Reporting: OnSocialActionFinished.");
+			DebugUtility.Logger.Log(Constants.kDebugTag, "[SoomlaGrow] Reporting: OnSocialActionFinished.");
 		}
 		
 		internal virtual void ReportOnSocialActionCancelled (eSocialActionType _actionType, eSocialProvider _provider)
 		{
-			Console.Log(Constants.kDebugTag, "[SoomlaGrow] Reporting: OnSocialActionCancelled.");
+			DebugUtility.Logger.Log(Constants.kDebugTag, "[SoomlaGrow] Reporting: OnSocialActionCancelled.");
 		}
 		
 		internal virtual void ReportOnSocialActionFailed (eSocialActionType _actionType, eSocialProvider _provider)
 		{			
-			Console.Log(Constants.kDebugTag, "[SoomlaGrow] Reporting: OnSocialActionFailed.");
+			DebugUtility.Logger.Log(Constants.kDebugTag, "[SoomlaGrow] Reporting: OnSocialActionFailed.");
 		}
 
 		#endregion
@@ -190,7 +189,7 @@ namespace VoxelBusters.NativePlugins
 
 		internal virtual void ReportOnLatestScore (string _scoreID, double _latestScore)
 		{
-			Console.Log(Constants.kDebugTag, "[SoomlaGrow] Reporting: OnLatestScore.");
+			DebugUtility.Logger.Log(Constants.kDebugTag, "[SoomlaGrow] Reporting: OnLatestScore.");
 		}
 
 		#endregion
@@ -199,7 +198,7 @@ namespace VoxelBusters.NativePlugins
 	
 		internal virtual void ReportOnUserRating ()
 		{
-			Console.Log(Constants.kDebugTag, "[SoomlaGrow] Reporting: OnUserRating.");
+			DebugUtility.Logger.Log(Constants.kDebugTag, "[SoomlaGrow] Reporting: OnUserRating.");
 		}
 
 		#endregion
@@ -220,7 +219,7 @@ namespace VoxelBusters.NativePlugins
 					
 					if (_productInfo == null)
 					{
-						Console.Log(Constants.kDebugTag, "[SoomlaGrow] The operation could not be completed because product information is not available.");
+						DebugUtility.Logger.Log(Constants.kDebugTag, "[SoomlaGrow] The operation could not be completed because product information is not available.");
 					}
 					else
 					{
@@ -231,7 +230,7 @@ namespace VoxelBusters.NativePlugins
 				{
 					if (_productID == null)
 					{
-						Console.Log(Constants.kDebugTag, "[SoomlaGrow] The operation could not be completed because product identifier information is not available.");
+						DebugUtility.Logger.Log(Constants.kDebugTag, "[SoomlaGrow] The operation could not be completed because product identifier information is not available.");
 					}
 					else
 					{

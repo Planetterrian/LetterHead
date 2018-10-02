@@ -13,15 +13,15 @@ namespace VoxelBusters.NativePlugins.Internal
 	{
 		#region Constants
 
-		private		const	string		kPluginResourcesFolderPath		= "Assets/PluginResources/NativePlugins";
+        private		const	string		kPluginResourcesFolderPath		= Constants.kRootAssetsPath + "/PluginResources/NativePlugins";
 		private 	const 	string 		kiOSAssetsSavePath				= null;
-		private		const 	string 		kAndroidAssetsSavePath			= "Assets/Plugins/Android/native_plugins_lib/res/raw";
+        private		const 	string 		kAndroidAssetsSavePath			= Constants.kAndroidPluginsCPNPPath+"/res/raw";
 	
 		#endregion
 
 		#region Static Methods
 
-		private static void CopyAssetsToActiveBuildTargetFolder ()
+		private static void CopyAssetsToActiveBuildTargetFolder()
 		{
 			// Get save path based on active platform
 			string	_activeBuildTarget			= EditorUserBuildSettings.activeBuildTarget.ToString();
@@ -48,7 +48,6 @@ namespace VoxelBusters.NativePlugins.Internal
 			// Copy assets to save folder
 			if (!string.IsNullOrEmpty(_saveFolderPath))
 			{
-				
 				CopyFiles(_sourceFolderPath, _saveFolderPath, _needsLowerCaseFileNames);
 
 				//Copy common assets
@@ -59,7 +58,7 @@ namespace VoxelBusters.NativePlugins.Internal
 			}
 		}
 
-		private static string GetPluginResourcesPath ()
+		private static string GetPluginResourcesPath()
 		{
 			return kPluginResourcesFolderPath;
 		}
@@ -69,8 +68,7 @@ namespace VoxelBusters.NativePlugins.Internal
 		#region Build Callback Methods
 
 #if UNITY_ANDROID
-
-		static void OnPostprocessAllAssets (string[] importedAssets, string[] deletedAssets, string[] movedAssets, string[] movedFromAssetPaths) 
+		static void OnPostprocessAllAssets(string[] importedAssets, string[] deletedAssets, string[] movedAssets, string[] movedFromAssetPaths) 
 		{
 			string	_pluginResourcesFolderPath	= GetPluginResourcesPath();
 			
@@ -79,7 +77,6 @@ namespace VoxelBusters.NativePlugins.Internal
 				CopyAssetsToActiveBuildTargetFolder ();
 			}
 		}
-
 #endif
 
 		#endregion

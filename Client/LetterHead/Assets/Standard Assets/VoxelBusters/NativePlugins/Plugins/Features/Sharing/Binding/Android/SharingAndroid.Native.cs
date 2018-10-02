@@ -1,8 +1,6 @@
-﻿using UnityEngine;
+﻿#if UNITY_ANDROID
+using UnityEngine;
 using System.Collections;
-
-#if UNITY_ANDROID
-using VoxelBusters.DebugPRO;
 
 namespace VoxelBusters.NativePlugins
 {

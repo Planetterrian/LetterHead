@@ -40,16 +40,16 @@ namespace VoxelBusters.Utility
 			}
 		}
 	
-		public static T GetIfAvailable <T> (this IDictionary _sourceDictionary, string _key)
+		public static T GetIfAvailable <T> (this IDictionary _sourceDictionary, string _key, T _defaultValue = default(T))
 		{
 			if (_key == null || !_sourceDictionary.Contains(_key))
-				return default(T);
+				return _defaultValue;
 
 			object	_value		= _sourceDictionary[_key];
 			Type 	_targetType	= typeof(T);
 
 			if (_value == null)
-				return default(T);
+				return _defaultValue;
 
 			if (_targetType.IsInstanceOfType(_value))
 				return (T)_value;

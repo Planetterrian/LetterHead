@@ -9,9 +9,9 @@ namespace VoxelBusters.NativePlugins
 		#region Fields
 		
 		[SerializeField]
-		private 	string			m_globalID;
+		private 	string				m_globalID;
 		[SerializeField]
-		private		PlatformID[]	m_platformIDs;
+		private		PlatformValue[]		m_platformIDs;
 		
 		#endregion
 
@@ -25,7 +25,7 @@ namespace VoxelBusters.NativePlugins
 			}
 		}
 		
-		public PlatformID[] PlatformIDs
+		public PlatformValue[] PlatformIDs
 		{
 			get
 			{
@@ -40,7 +40,7 @@ namespace VoxelBusters.NativePlugins
 		private IDContainer ()
 		{}
 
-		public IDContainer (string _globalID, params PlatformID[] _platformIDs)
+		public IDContainer (string _globalID, params PlatformValue[] _platformIDs)
 		{
 			// Initialize properties
 			m_globalID		= _globalID;
@@ -53,20 +53,16 @@ namespace VoxelBusters.NativePlugins
 
 		public bool EqualsGlobalID (string _identifier)
 		{
-			if (m_globalID == null)
-				return false;
-
-			return m_globalID.Equals(_identifier);
+			return string.Equals(m_globalID, _identifier);
 		}
 
 		public bool EqualsCurrentPlatformID (string _identifier)
 		{
-			string _curPlatformID	= m_platformIDs.GetCurrentPlatformID();
-
-			if (_curPlatformID == null)
+			PlatformValue _object	= PlatformValueHelper.GetCurrentPlatformValue(_array: m_platformIDs);
+			if (_object == null)
 				return false;
 
-			return _curPlatformID.Equals(_identifier);
+			return string.Equals(_object.Value, _identifier);
 		}
 
 		#endregion

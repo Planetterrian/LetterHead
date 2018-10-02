@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-using VoxelBusters.DebugPRO;
+using VoxelBusters.UASUtils;
 
 namespace VoxelBusters.NativePlugins
 {
@@ -51,7 +51,7 @@ namespace VoxelBusters.NativePlugins
 
 			set
 			{
-				Console.LogWarning(Constants.kDebugTag, "[Sharing] Not allowed.");
+				DebugUtility.Logger.LogWarning(Constants.kDebugTag, "[Sharing] Not allowed.");
 			}
 		}
 

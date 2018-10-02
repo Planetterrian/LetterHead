@@ -1,10 +1,9 @@
-﻿using UnityEngine;
+﻿#if USES_MEDIA_LIBRARY && UNITY_EDITOR
+using UnityEngine;
 using System.Collections;
-
-#if USES_MEDIA_LIBRARY && UNITY_EDITOR
 using UnityEditor;
 using VoxelBusters.Utility;
-using VoxelBusters.DebugPRO;
+using VoxelBusters.UASUtils;
 
 namespace VoxelBusters.NativePlugins
 {
@@ -34,13 +33,13 @@ namespace VoxelBusters.NativePlugins
 
 		public override bool IsCameraSupported ()
 		{
-			Console.LogError(Constants.kDebugTag, Constants.kNotSupportedInEditor);
+			DebugUtility.Logger.LogError(Constants.kDebugTag, Constants.kNotSupportedInEditor);
 			return base.IsCameraSupported();
 		}
 
 		public override void SetAllowsImageEditing (bool _value)
 		{
-			Console.LogWarning(Constants.kDebugTag, Constants.kiOSFeature);
+			DebugUtility.Logger.LogWarning(Constants.kDebugTag, Constants.kiOSFeature);
 		}
 		
 		public override void PickImage (eImageSource _source, float _scaleFactor, PickImageCompletion _onCompletion)
@@ -60,7 +59,7 @@ namespace VoxelBusters.NativePlugins
 			if (_imageByteArray != null)
 			{
 				// Feature isnt supported
-				Console.LogError(Constants.kDebugTag, Constants.kNotSupportedInEditor);
+				DebugUtility.Logger.LogError(Constants.kDebugTag, Constants.kNotSupportedInEditor);
 				
 				// Associated error event is raised
 				SaveImageToGalleryFinished(false);
@@ -90,7 +89,7 @@ namespace VoxelBusters.NativePlugins
 			{
 				string _tempPath = FileUtil.GetUniqueTempPathInProject() + ".html";
 
-				Console.LogError(Constants.kDebugTag, _tempPath);
+				DebugUtility.Logger.LogError(Constants.kDebugTag, _tempPath);
 				System.IO.StreamWriter _stream = FileOperations.CreateText(_tempPath);
 				_stream.Write(_embedHTMLString);
 				_stream.Close();
@@ -121,7 +120,7 @@ namespace VoxelBusters.NativePlugins
 			m_gallery.PickVideoFromGallery();
 			
 			// Feature isnt supported
-			Console.LogWarning(Constants.kDebugTag, "Video Playback from gallery not supported on Editor");
+			DebugUtility.Logger.LogWarning(Constants.kDebugTag, "Video Playback from gallery not supported on Editor");
 
 			// Associated event is raised.
 			PlayVideoFinished(ePlayVideoFinishReason.PLAYBACK_ERROR);

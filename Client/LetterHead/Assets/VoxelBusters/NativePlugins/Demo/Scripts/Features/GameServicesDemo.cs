@@ -124,6 +124,7 @@ namespace VoxelBusters.NativePlugins.Demo
 				DrawLeaderboardSection ();
 				DrawAchievementSection ();
 				DrawUISection ();
+				DrawMiscSection ();
 			}
 		}
 
@@ -281,6 +282,16 @@ namespace VoxelBusters.NativePlugins.Demo
 					ShowAchievementsUI();
 			}
 		}
+
+	private void DrawMiscSection ()
+	{
+		
+		GUILayout.Label("Misc", kSubTitleStyle);
+		
+		if (GUILayout.Button("Load External Authentication Credentials"))
+			LoadExternalAuthenticationCredentials();
+		
+	}
 		
 		#endregion
 		
@@ -494,7 +505,7 @@ namespace VoxelBusters.NativePlugins.Demo
 		private void ReportProgressWithGlobalID (string _achievementGID)
 		{
 			int 	_noOfSteps	= NPBinding.GameServices.GetNoOfStepsForCompletingAchievement(_achievementGID);
-			int		_randomNo	= Random.Range(0, _noOfSteps);
+			int		_randomNo	= Random.Range(0, _noOfSteps+1);
 			double	_progress	= ((double)_randomNo/_noOfSteps) * 100d;
 
 			// If its an incremental achievement, make sure you send a incremented cumulative value everytime you call this method
@@ -537,6 +548,24 @@ namespace VoxelBusters.NativePlugins.Demo
 			});
 		}
 
+		#endregion
+
+		#region Misc API Methods
+
+		private void LoadExternalAuthenticationCredentials ()
+		{
+			AddNewResult("Sending request to Load External Auth Credentials.");
+			NPBinding.GameServices.LoadExternalAuthenticationCredentials((ExternalAuthenticationCredentials _credentials, string _error) => {
+				AddNewResult("LoadExternalAuthenticationCredentials Finished");
+				AppendResult(string.Format("Error= {0}.", _error.GetPrintableString()));
+
+				if (_credentials != null)
+				{
+					AppendResult(_credentials.AndroidCredentials.ServerAuthCode);
+				}
+			});
+		}
+	
 		#endregion
 
 		#region API Callback Methods

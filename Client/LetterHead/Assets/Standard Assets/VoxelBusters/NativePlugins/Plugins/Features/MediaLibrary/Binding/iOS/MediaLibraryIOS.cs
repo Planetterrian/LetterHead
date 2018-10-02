@@ -1,10 +1,9 @@
-﻿using UnityEngine;
+﻿#if USES_MEDIA_LIBRARY && UNITY_IOS
+using UnityEngine;
 using System.Collections;
-
-#if USES_MEDIA_LIBRARY && UNITY_IOS
 using System.Runtime.InteropServices;
 using VoxelBusters.Utility;
-using VoxelBusters.DebugPRO;
+using VoxelBusters.UASUtils;
 
 namespace VoxelBusters.NativePlugins
 {
@@ -57,7 +56,7 @@ namespace VoxelBusters.NativePlugins
 		public override bool IsCameraSupported ()
 		{
 			bool _isSupported	= isCameraSupported();
-			Console.Log(Constants.kDebugTag, "[MediaLibrary] IsCameraSupported=" + _isSupported);
+			DebugUtility.Logger.Log(Constants.kDebugTag, "[MediaLibrary] IsCameraSupported=" + _isSupported);
 
 			return _isSupported;
 		}

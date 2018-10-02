@@ -1,13 +1,11 @@
-﻿using UnityEngine;
+﻿#if USES_BILLING && UNITY_EDITOR
+using UnityEngine;
 using System.Collections;
-
-#if USES_BILLING && UNITY_EDITOR
 using UnityEditor;
 using System;
 using System.Collections.Generic;
 using VoxelBusters.Utility;
-using VoxelBusters.DebugPRO;
-using Console	= VoxelBusters.DebugPRO.Console;
+using VoxelBusters.UASUtils;
 
 namespace VoxelBusters.NativePlugins.Internal
 {
@@ -24,7 +22,7 @@ namespace VoxelBusters.NativePlugins.Internal
 
 		#region Properties
 
-		private 	static 	BillingProduct[]	registeredProducts			= new EditorBillingProduct[0];
+		private 	static 	BillingProduct[]	registeredProducts			= new BillingProductEditor[0];
 
 		#endregion
 
@@ -41,7 +39,7 @@ namespace VoxelBusters.NativePlugins.Internal
 
 			if (_productsList == null || _productsList.Length == 0)
 			{
-				registeredProducts	= new EditorBillingProduct[0];
+				registeredProducts	= new BillingProductEditor[0];
 
 				// Trigger handler
 				OnFinishedProductsRequest(null, "The operation could not be completed because product list is empty.");
@@ -51,14 +49,14 @@ namespace VoxelBusters.NativePlugins.Internal
 			else
 			{
 				// Create new registered product list
-				List<EditorBillingProduct> _newlyRegisteredProductList	= new List<EditorBillingProduct>();
+				List<BillingProductEditor> _newlyRegisteredProductList	= new List<BillingProductEditor>();
 
 				// Create list of registered products with price info
 				foreach (BillingProduct _curProduct in _productsList)
 				{
 					if (_curProduct != null)
 					{
-						EditorBillingProduct 	_newRegProduct	= new EditorBillingProduct(_curProduct);
+						BillingProductEditor 	_newRegProduct	= new BillingProductEditor(_curProduct);
 
 						_newRegProduct.SetLocalizePrice(string.Format("${0:0.00}", _curProduct.Price));
 						_newRegProduct.SetCurrencyCode("USD");
@@ -135,7 +133,7 @@ namespace VoxelBusters.NativePlugins.Internal
 			}
 			else
 			{
-				Console.LogWarning(Constants.kDebugTag, "[EditorStore] Native UI component is null");
+				DebugUtility.Logger.LogWarning(Constants.kDebugTag, "[EditorStore] Native UI component is null");
 				return;
 			}
 		}
@@ -146,7 +144,7 @@ namespace VoxelBusters.NativePlugins.Internal
 
 			if (registeredProducts == null)
 			{
-				Console.LogError(Constants.kDebugTag, "[EditorStore] Restore purchases can be done only after getting products information from store.");
+				DebugUtility.Logger.LogError(Constants.kDebugTag, "[EditorStore] Restore purchases can be done only after getting products information from store.");
 				return;
 			}
 
@@ -215,11 +213,11 @@ namespace VoxelBusters.NativePlugins.Internal
 
 			if (_transactionState == eBillingTransactionState.FAILED)
 			{
-				_transaction = new EditorBillingTransaction(_productID, System.DateTime.UtcNow, null, null, _transactionState, eBillingTransactionVerificationState.SUCCESS, _error);
+				_transaction = new BillingTransactionEditor(_productID, System.DateTime.UtcNow, null, null, _transactionState, eBillingTransactionVerificationState.SUCCESS, _error);
 			}
 			else
 			{
-				_transaction = new EditorBillingTransaction(_productID, System.DateTime.UtcNow, "transactionIdentifier", "receipt", _transactionState, eBillingTransactionVerificationState.SUCCESS, null);
+				_transaction = new BillingTransactionEditor(_productID, System.DateTime.UtcNow, "transactionIdentifier", "receipt", _transactionState, eBillingTransactionVerificationState.SUCCESS, null);
 			}
 
 			return _transaction;
@@ -243,7 +241,7 @@ namespace VoxelBusters.NativePlugins.Internal
 #if UNITY_ANDROID
 			if (string.IsNullOrEmpty(NPSettings.Billing.Android.PublicKey))
 			{
-				Console.LogError(Constants.kDebugTag, "[EditorStore] Please add public key in NPSettings for Billing to work on Android.");
+				DebugUtility.Logger.LogError(Constants.kDebugTag, "[EditorStore] Please add public key in NPSettings for Billing to work on Android.");
 			}
 #endif
 		}

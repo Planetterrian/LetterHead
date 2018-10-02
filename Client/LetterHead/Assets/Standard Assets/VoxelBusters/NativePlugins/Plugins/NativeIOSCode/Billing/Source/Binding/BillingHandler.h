@@ -28,6 +28,8 @@
 
 // Related to transaction
 - (void)restoreCompletedTransactions;
+- (void)finishCompletedTransactions:(NSArray *)transactionIDs ofRestoreType:(BOOL)isRestoreType;
+
 - (void)customReceiptVerificationFinishedForTransactionWithID:(NSString *)transactionID
 											 transactionState:(SKPaymentTransactionState)transactionState
 											verificationState:(ReceiptVerificationState)verificationState;

@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using VoxelBusters.NativePlugins;
 using VoxelBusters.Utility;
-using VoxelBusters.DebugPRO;
+using VoxelBusters.UASUtils;
 
 namespace VoxelBusters.NativePlugins.Demo
 {
@@ -147,7 +147,7 @@ namespace VoxelBusters.NativePlugins.Demo
 			_contactInfo.GetImageAsync((Texture2D _texture, string _error)=>{
 				if (!string.IsNullOrEmpty(_error))
 				{
-					Console.LogError(Constants.kDebugTag, "[AddressBook] Contact Picture download failed " + _error);
+					DebugUtility.Logger.LogError(Constants.kDebugTag, "[AddressBook] Contact Picture download failed " + _error);
 					m_contactPictures[_index] = null;
 				}
 				else

@@ -1,8 +1,8 @@
-﻿using UnityEngine;
+﻿#if UNITY_EDITOR
+using UnityEngine;
 using System.Collections;
-using VoxelBusters.DebugPRO;
+using VoxelBusters.UASUtils;
 
-#if UNITY_EDITOR
 namespace VoxelBusters.NativePlugins
 {
 	using Internal;
@@ -19,7 +19,7 @@ namespace VoxelBusters.NativePlugins
 		
 		public override void SetPopoverPoint (Vector2 _position)
 		{
-			Console.LogWarning(Constants.kDebugTag, Constants.kiOSFeature);
+			DebugUtility.Logger.LogWarning(Constants.kDebugTag, Constants.kiOSFeature);
 		}
 		
 		#endregion

@@ -1,13 +1,12 @@
-﻿using UnityEngine;
+﻿#if USES_GAME_SERVICES && UNITY_EDITOR
+using UnityEngine;
 using System.Collections;
-
-#if USES_GAME_SERVICES && UNITY_EDITOR
 using System;
 using VoxelBusters.Utility;
 
 namespace VoxelBusters.NativePlugins.Internal
 {
-	public partial class EditorGameCenter : AdvancedScriptableObject <EditorGameCenter>
+	public partial class EditorGameCenter : SharedScriptableObject<EditorGameCenter>
 	{
 		#region Keys
 		

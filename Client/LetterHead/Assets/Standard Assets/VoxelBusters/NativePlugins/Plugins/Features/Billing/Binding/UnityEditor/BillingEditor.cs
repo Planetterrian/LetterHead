@@ -1,9 +1,8 @@
-﻿using UnityEngine;
+﻿#if USES_BILLING && UNITY_EDITOR
+using UnityEngine;
 using System.Collections;
-
-#if USES_BILLING && UNITY_EDITOR
 using System.Collections.Generic;
-using VoxelBusters.DebugPRO;
+using VoxelBusters.UASUtils;
 
 namespace VoxelBusters.NativePlugins
 {	
@@ -46,7 +45,7 @@ namespace VoxelBusters.NativePlugins
 			if (!string.IsNullOrEmpty(_productID))
 				_isPurchased	= EditorStore.IsProductPurchased(_productID);
 
-			Console.Log(Constants.kDebugTag, string.Format("[Billing] Product= {0} IsPurchased= {1}.", _productID, _isPurchased));
+			DebugUtility.Logger.Log(Constants.kDebugTag, string.Format("[Billing] Product= {0} IsPurchased= {1}.", _productID, _isPurchased));
 
 			return _isPurchased;
 		}

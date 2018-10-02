@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
-using VoxelBusters.DebugPRO;
 using VoxelBusters.Utility;
+using VoxelBusters.UASUtils;
 
 namespace VoxelBusters.NativePlugins
 {
@@ -20,7 +20,7 @@ namespace VoxelBusters.NativePlugins
 			
 			// Parse received data
 			ParseFBShareFinishedResponse(_reasonString, out _shareResult);
-			Console.Log(Constants.kDebugTag, "[Sharing:Events] FB share finished, Result=" + _shareResult);
+			DebugUtility.Logger.Log(Constants.kDebugTag, "[Sharing:Events] FB share finished, Result=" + _shareResult);
 			
 			// Trigger event
 			if (OnSharingFinished != null)
@@ -36,8 +36,8 @@ namespace VoxelBusters.NativePlugins
 			
 			// Parse received data
 			ParseTwitterShareFinishedResponse(_reasonString, out _shareResult);
-			Console.Log(Constants.kDebugTag, "[Sharing:Events] Twitter share finished, Result=" + _shareResult);
-			
+			DebugUtility.Logger.Log(Constants.kDebugTag, "[Sharing:Events] Twitter share finished, Result=" + _shareResult);
+
 			// Trigger event
 			if (OnSharingFinished != null)
 				OnSharingFinished(_shareResult);

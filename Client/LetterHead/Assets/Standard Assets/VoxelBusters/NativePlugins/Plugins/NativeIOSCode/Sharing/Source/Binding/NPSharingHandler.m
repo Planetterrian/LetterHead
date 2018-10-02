@@ -48,7 +48,7 @@
 - (id)init
 {
 	self	= [super init];
-	
+
 	if (self)
 	{
 		self.mailShare		= [[[MailShare alloc] init] autorelease];
@@ -56,7 +56,7 @@
 		self.whatsAppShare	= [[[WhatsAppShare alloc] init] autorelease];
 		self.socialShare	= [[[SocialShare alloc] init] autorelease];
 	}
-	
+
 	return self;
 }
 
@@ -67,7 +67,7 @@
 	self.messagingShare		= NULL;
 	self.whatsAppShare		= NULL;
 	self.socialShare		= NULL;
-	
+
     [super dealloc];
 }
 
@@ -79,25 +79,24 @@
  withExcludedSharing:(NSArray *)excludedOptions
 {
 	NSMutableArray *objectsToShare  = [NSMutableArray array];
-	
+
 	if (!IsNullOrEmpty(message))
 		[objectsToShare addObject:message];
-	
+
     if (!IsNullOrEmpty(URLString))
         [objectsToShare addObject:[NSURL URLWithString:URLString]];
-    
+
     if (image != NULL)
 		[objectsToShare addObject:image];
-    
+
     // Set excluded options, by default few ios 6+ activities are added
     NSMutableArray *excludedActivities      = [NSMutableArray arrayWithObjects:
 											   UIActivityTypePostToWeibo,
                                                UIActivityTypePrint,
                                                UIActivityTypeCopyToPasteboard,
                                                UIActivityTypeAssignToContact,
-                                               UIActivityTypeSaveToCameraRoll,
 											   nil];
-    
+
     // Activities supported in ios7 +
 #ifdef __IPHONE_7_0
 	if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0"))
@@ -109,16 +108,16 @@
 												  UIActivityTypeAirDrop]];
 	}
 #endif
-	
+
     for (NSNumber *option in excludedOptions)
 	{
 		NSString *excludedActivity	= [self getAcivityTypeForShareOption:[option intValue]];
-		
+
 		// Add it to the exclusion list
 		[excludedActivities addObject:excludedActivity];
 	}
-    
-	
+
+
 	CustomActivityViewController *activityVC    = [[[CustomActivityViewController alloc] initWithActivityItems:objectsToShare
 																						 applicationActivities:[self getApplicationActivities]] autorelease];
 	activityVC.excludedActivityTypes    		= excludedActivities;
@@ -128,10 +127,10 @@
 	if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"8.0"))
 	{
 		[activityVC setCompletionWithItemsHandler:^(NSString *activityType, BOOL completed, NSArray *returnedItems, NSError *activityError){
-			
+
 			// Unset completion handler
 			[activityVC setCompletionWithItemsHandler:nil];
-			
+
 			// Invoke handler
 			[self activityViewControllerWithActivityType:activityType
 									 didFinishWithStatus:completed];
@@ -141,16 +140,16 @@
 #endif
 	{
 		[activityVC setCompletionHandler:^(NSString *activityType, BOOL completed){
-			
+
 			// Unset completion handler
 			[activityVC setCompletionHandler:nil];
-			
+
 			// Invoke handler
 			[self activityViewControllerWithActivityType:activityType
 									 didFinishWithStatus:completed];
 		}];
 	}
-	
+
     // Present it
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
     {
@@ -159,7 +158,7 @@
         CGRect popoverRect;
 		popoverRect.origin		= [[UIHandler Instance] popoverPoint];
 		popoverRect.size		= CGSizeMake(1, 1);
-        
+
         [self.popoverController presentPopoverFromRect:popoverRect
                                                 inView:UnityGetGLView()
                               permittedArrowDirections:UIPopoverArrowDirectionAny
@@ -176,7 +175,7 @@
 - (void)activityViewControllerWithActivityType:(NSString *)activityType didFinishWithStatus:(BOOL)completed
 {
 	NSLog(@"[SharingHandler] dismissed sharing, selected activity: %@  action is completed: %d", activityType, completed);
-	
+
 	if (completed)
 	{
 		NotifyEventListener(kSharingFinished, "true");
@@ -185,7 +184,7 @@
 	{
 		NotifyEventListener(kSharingFinished, "false");
 	}
-	
+
 	// Dismiss controller
 	if (self.popoverController)
 	{
@@ -207,23 +206,23 @@
     {
         case MESSAGE:
             return UIActivityTypeMessage;
-            
+
         case MAIL:
             return UIActivityTypeMail;
-            
+
         case FB:
             return UIActivityTypePostToFacebook;
-            
+
         case TWITTER:
             return UIActivityTypePostToTwitter;
-            
+
         case WHATSAPP:
             return UIActivityTypePostToWhatsApp;
-            
+
         default:
             break;
     }
-    
+
     return @"";
 }
 
@@ -239,7 +238,7 @@
         return TWITTER;
     else if ([type isEqualToString:UIActivityTypePostToWhatsApp])
         return WHATSAPP;
-    
+
     return UNDEFINED;
 }
 

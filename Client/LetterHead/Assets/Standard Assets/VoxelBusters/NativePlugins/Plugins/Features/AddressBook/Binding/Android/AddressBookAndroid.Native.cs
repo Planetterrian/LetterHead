@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-#if UNITY_ANDROID
+#if UNITY_ANDROID && USES_ADDRESS_BOOK
 namespace VoxelBusters.NativePlugins
 {
 	using Internal;

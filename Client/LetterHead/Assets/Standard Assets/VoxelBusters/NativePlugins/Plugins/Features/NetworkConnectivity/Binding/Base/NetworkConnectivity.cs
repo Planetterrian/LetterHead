@@ -1,7 +1,8 @@
+#if USES_NETWORK_CONNECTIVITY
 using UnityEngine;
 using System.Collections;
+using VoxelBusters.UASUtils;
 
-#if USES_NETWORK_CONNECTIVITY
 namespace VoxelBusters.NativePlugins
 {
 	/// <summary>

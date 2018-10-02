@@ -43,9 +43,9 @@ namespace VoxelBusters.NativePlugins
 		/// }
 		/// </code>
 		/// </example>
-		public void ShowSingleFieldPromptDialogWithPlainText (string _title, string _message, string _placeholder, string[] _buttonsList, SingleFieldPromptCompletion _onCompletion)
+		public void ShowSingleFieldPromptDialogWithPlainText (string _title, string _message, string _placeholder, string[] _buttons, SingleFieldPromptCompletion _onCompletion)
 		{
-			ShowSingleFieldPromptDialog(_title, _message, _placeholder, false, _buttonsList, _onCompletion);
+			ShowSingleFieldPromptDialog(_title, _message, _placeholder, false, _buttons, _onCompletion);
 		}
 
 		/// <summary>
@@ -56,9 +56,9 @@ namespace VoxelBusters.NativePlugins
 		/// <param name="_placeholder">The string that is displayed when there is no other text in the textfield.</param>
 		/// <param name="_buttonsList">An array of string values, used as title of action buttons.</param>
 		/// <param name="_onCompletion">Callback that will be called after operation is completed.</param>
-		public void ShowSingleFieldPromptDialogWithSecuredText (string _title, string _message, string _placeholder, string[] _buttonsList, SingleFieldPromptCompletion _onCompletion)
+		public void ShowSingleFieldPromptDialogWithSecuredText (string _title, string _message, string _placeholder, string[] _buttons, SingleFieldPromptCompletion _onCompletion)
 		{
-			ShowSingleFieldPromptDialog(_title, _message, _placeholder, true, _buttonsList, _onCompletion);
+			ShowSingleFieldPromptDialog(_title, _message, _placeholder, true, _buttons, _onCompletion);
 		}
 		
 		protected virtual void ShowSingleFieldPromptDialog (string _title, string _message, string _placeholder, bool _useSecureText, string[] _buttonsList, SingleFieldPromptCompletion _onCompletion)
@@ -104,7 +104,7 @@ namespace VoxelBusters.NativePlugins
 		/// }
 		/// </code>
 		/// </example>
-		public virtual void ShowLoginPromptDialog (string _title, string _message, string _usernamePlaceHolder, string _passwordPlaceHolder, string[] _buttonsList, LoginPromptCompletion _onCompletion)
+		public virtual void ShowLoginPromptDialog (string _title, string _message, string _usernamePlaceHolder, string _passwordPlaceHolder, string[] _buttons, LoginPromptCompletion _onCompletion)
 		{
 			// Cache callback
 			OnLoginPromptClosed			= _onCompletion;

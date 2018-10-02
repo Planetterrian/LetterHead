@@ -8,7 +8,7 @@ namespace VoxelBusters.NativePlugins
 	{
 		#region Constants
 			
-		private const string kDefaultTextForButton = "OK";
+		private const string kDefaultTextForButton = "Ok";
 
 		#endregion
 
@@ -80,26 +80,26 @@ namespace VoxelBusters.NativePlugins
 		/// }
 		/// </code>
 		/// </example>
-		public void ShowAlertDialogWithMultipleButtons (string _title, string _message, string[] _buttonsList, AlertDialogCompletion _onCompletion)
+		public void ShowAlertDialogWithMultipleButtons (string _title, string _message, string[] _buttons, AlertDialogCompletion _onCompletion)
 		{
 			// Cache callback
 			string _callbackTag	= CacheAlertDialogCallback(_onCompletion);
 
 			// Show alert
-			ShowAlertDialogWithMultipleButtons(_title, _message, _buttonsList, _callbackTag);
+			ShowAlertDialogWithMultipleButtons(_title, _message, _buttons, _callbackTag);
 		}
 
-		protected virtual void ShowAlertDialogWithMultipleButtons (string _title, string _message, string[] _buttonsList, string _callbackTag)
+		protected virtual void ShowAlertDialogWithMultipleButtons (string _title, string _message, string[] _buttons, string _callbackTag)
 		{
-			if (_buttonsList == null || _buttonsList.Length == 0)
+			if (_buttons == null || _buttons.Length == 0)
 			{
-				_buttonsList 	= new string[] {
+				_buttons 	= new string[] {
 					kDefaultTextForButton // Adding default text
 				}; 
 			}
-			else if (string.IsNullOrEmpty(_buttonsList[0]))
+			else if (string.IsNullOrEmpty(_buttons[0]))
 			{
-				_buttonsList[0] = kDefaultTextForButton;
+				_buttons[0] = kDefaultTextForButton;
 			}
 		}
 

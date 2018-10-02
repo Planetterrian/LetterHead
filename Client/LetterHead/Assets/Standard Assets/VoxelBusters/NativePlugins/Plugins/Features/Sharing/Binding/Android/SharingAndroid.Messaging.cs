@@ -1,9 +1,8 @@
-﻿using UnityEngine;
+﻿#if UNITY_ANDROID
+using UnityEngine;
 using System.Collections;
-
-#if UNITY_ANDROID
 using VoxelBusters.Utility;
-using VoxelBusters.DebugPRO;
+using VoxelBusters.UASUtils;
 
 namespace VoxelBusters.NativePlugins
 {
@@ -19,7 +18,7 @@ namespace VoxelBusters.NativePlugins
 
 			if (!_isAvailable)
 			{
-				Console.LogWarning(Constants.kDebugTag, "[Sharing:Messaging] IsMessagingServiceAvailable=" + _isAvailable);
+				DebugUtility.Logger.LogWarning(Constants.kDebugTag, "[Sharing:Messaging] IsMessagingServiceAvailable=" + _isAvailable);
 			}
 			
 			return _isAvailable;

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-using VoxelBusters.DebugPRO;
+using VoxelBusters.UASUtils;
 
 namespace VoxelBusters.NativePlugins
 {
@@ -17,7 +17,7 @@ namespace VoxelBusters.NativePlugins
 		public virtual bool IsFBShareServiceAvailable ()
 		{
 			bool _isAvailable	= false;
-			Console.Log(Constants.kDebugTag, "[Sharing] Is service available=" + _isAvailable);
+			DebugUtility.Logger.Log(Constants.kDebugTag, "[Sharing] Is service available=" + _isAvailable);
 			
 			return _isAvailable;
 		}
@@ -29,7 +29,7 @@ namespace VoxelBusters.NativePlugins
 		public virtual bool IsTwitterShareServiceAvailable ()
 		{
 			bool _isAvailable	= false;
-			Console.Log(Constants.kDebugTag, "[Sharing] Is service available=" + _isAvailable);
+			DebugUtility.Logger.Log(Constants.kDebugTag, "[Sharing] Is service available=" + _isAvailable);
 			
 			return _isAvailable;
 		}

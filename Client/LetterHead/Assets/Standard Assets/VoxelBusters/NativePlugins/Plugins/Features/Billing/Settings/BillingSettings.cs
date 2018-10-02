@@ -19,7 +19,7 @@ namespace VoxelBusters.NativePlugins
 		[SerializeField]
 		private 		iOSSettings				m_iOS;
 		[SerializeField]
-		[InspectorButton(eInspectorButtonPosition.BOTTOM, "Clear Purchase History", "Removes all the information about the billing products purchased on Editor.", "ClearPurchaseHistory")]
+		//[InspectorButton(eInspectorButtonPosition.BOTTOM, "Clear Purchase History", "Removes all the information about the billing products purchased on Editor.", "ClearPurchaseHistory")]
 		private 		AndroidSettings			m_android;
 
 		#endregion
@@ -78,8 +78,8 @@ namespace VoxelBusters.NativePlugins
 		public BillingSettings ()
 		{
 			Products	= new BillingProduct[0];
-			iOS			= new BillingSettings.iOSSettings();
-			Android		= new BillingSettings.AndroidSettings();
+			iOS			= new iOSSettings();
+			Android		= new AndroidSettings();
 		}
 
 		#endregion

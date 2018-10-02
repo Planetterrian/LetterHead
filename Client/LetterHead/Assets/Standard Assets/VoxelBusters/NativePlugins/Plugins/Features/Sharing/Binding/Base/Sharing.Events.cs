@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using VoxelBusters.Utility;
-using VoxelBusters.DebugPRO;
+using VoxelBusters.UASUtils;
 
 namespace VoxelBusters.NativePlugins
 {
@@ -36,7 +36,7 @@ namespace VoxelBusters.NativePlugins
 			
 			// Parse received data
 			ParseSharingFinishedData(_reasonString, out _shareResult);
-			Console.Log(Constants.kDebugTag, "[Sharing:Events] Sharing finished, Result=" + _shareResult);
+			DebugUtility.Logger.Log(Constants.kDebugTag, "[Sharing:Events] Sharing finished, Result=" + _shareResult);
 			
 			// Trigger event
 			if (OnSharingFinished != null)

@@ -19,13 +19,15 @@ namespace VoxelBusters.NativePlugins.Internal
 		{
 			Constants.kAndroidPluginsPath 		+	"/support_lib",
 			Constants.kAndroidPluginsPath 		+	"/twitter_lib",
+            Constants.kAndroidPluginsPath       +   "/youtube_lib",
 			Constants.kAndroidPluginsPath 		+	"/native_plugins_lib",
 			Constants.kAndroidPluginsPath 		+	"/voxelbusters_utility_lib",
 			Constants.kAndroidPluginsPath 		+	"/google-play-services_lib",
 			Constants.kVBCodebasePath 			+	"/NativePlugins",
 			Constants.kVBCodebasePath			+	"/Common",
 			Constants.kVBCodebasePath			+	"/DebugPro",
-			Constants.kVBExternalCodebasePath 	+ 	"/NativePlugins"
+			Constants.kVBExternalCodebasePath 	+ 	"/NativePlugins",
+			Constants.kRootAssetsPath			+	"/PlayServicesResolver"
 		};
 		
 		#endregion	
@@ -40,7 +42,7 @@ namespace VoxelBusters.NativePlugins.Internal
 			{
 				foreach (string _eachFolder in kPluginFolders)
 				{
-					string _absolutePath = AssetsUtility.AssetPathToAbsolutePath(_eachFolder);
+					string _absolutePath = AssetDatabaseUtils.AssetPathToAbsolutePath(_eachFolder);
 
 					if (Directory.Exists(_absolutePath))
 					{

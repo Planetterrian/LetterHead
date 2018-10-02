@@ -1,9 +1,8 @@
-﻿using UnityEngine;
+﻿#if UNITY_ANDROID
+using UnityEngine;
 using System.Collections;
-
-#if UNITY_ANDROID
 using VoxelBusters.Utility;
-using VoxelBusters.DebugPRO;
+using VoxelBusters.UASUtils;
 
 namespace VoxelBusters.NativePlugins
 {
@@ -18,7 +17,7 @@ namespace VoxelBusters.NativePlugins
 			bool _canSendMail	= Plugin.Call<bool>(Native.Methods.IS_SERVICE_AVAILABLE, (int)eShareOptionsAndroid.MAIL);
 			if(!_canSendMail)
 			{
-				Console.LogWarning(Constants.kDebugTag, "[Sharing:Mail] CanSendMail=" + _canSendMail);
+				DebugUtility.Logger.LogWarning(Constants.kDebugTag, "[Sharing:Mail] CanSendMail=" + _canSendMail);
 			}
 
 			return _canSendMail;

@@ -12,9 +12,6 @@
 @class UnityWebView;
 @interface WebViewHandler : HandlerBase <UIWebViewDelegate>
 
-// Properties
-@property(nonatomic, retain)    NSMutableDictionary     *webviewContainer;
-
 // Handling webviews
 - (UnityWebView *)createWebViewWithTag:(NSString*)tag;
 - (void)destroyWebViewWithTag:(NSString *)tag;
@@ -27,7 +24,7 @@
 - (void)loadData:(NSData *)data MIMEType:(NSString *)MIMEType
 textEncodingName:(NSString *)textEncodingName
          baseURL:(NSString *)baseURLStr usingWebViewWithTag:(NSString *)tag;
-- (void)evaluateJavaScriptFromString:(NSString *)js usingWebViewWithTag:(NSString *)tag;
+- (void)evaluateJavaScript:(NSString *)js usingWebViewWithTag:(NSString *)tag;
 - (void)reloadWebViewWithTag:(NSString *)tag;
 - (void)stopLoadingWebViewWithTag:(NSString *)tag;
 

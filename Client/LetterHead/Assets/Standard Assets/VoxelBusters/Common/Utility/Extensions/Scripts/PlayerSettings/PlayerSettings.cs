@@ -19,7 +19,11 @@ namespace VoxelBusters.Utility
 		public static string GetBundleIdentifier ()
 		{
 #if UNITY_EDITOR
+#if UNITY_5_6_OR_NEWER
+			return UnityEditor.PlayerSettings.applicationIdentifier;
+#else
 			return UnityEditor.PlayerSettings.bundleIdentifier;
+#endif
 #else
 			return NativeBinding.GetBundleIdentifier();
 #endif

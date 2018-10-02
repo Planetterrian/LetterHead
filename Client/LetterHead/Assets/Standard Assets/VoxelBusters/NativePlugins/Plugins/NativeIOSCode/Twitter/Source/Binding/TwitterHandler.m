@@ -9,6 +9,7 @@
 #import "TwitterHandler.h"
 #import "TWTRSession+Additions.h"
 #import "TWTRUser+Additions.h"
+#import "TWTRSessionStore+Extensions.h"
 
 @implementation TwitterHandler
 
@@ -22,6 +23,8 @@
 #define kTwitterURLRequestSuccess     	"TwitterURLRequestSuccess"
 #define kTwitterURLRequestFailed      	"TwitterURLRequestFailed"
 
+#define TwitterKit [Twitter sharedInstance]
+
 #pragma mark - Init
 
 + (void)InitTwitterKitWithConsumerKey:(NSString *)consumerKey consumerSecret:(NSString *)consumerSecret
@@ -34,104 +37,46 @@
 		return;
 	}
 	
-    // Set consumer key and secret key
     [TwitterKit startWithConsumerKey:consumerKey consumerSecret:consumerSecret];
-	
-    // Initalises the component
     [Fabric with:@[TwitterKit]];
 }
 
 #pragma mark - Login
 
-- (void)login
+- (void)login:(BOOL)requiresEmailAccess
 {
-    NSLog(@"[TwitterHandler] login request received");
+    NSLog(@"[TwitterHandler] login request received.");
     
-    [TwitterKit logInWithCompletion:^(TWTRSession *session, NSError *error) {
+	TWTRLoginMethod methods	= requiresEmailAccess ? TWTRLoginMethodWebBased : TWTRLoginMethodAll;
+	[TwitterKit logInWithMethods:methods completion:^(TWTRSession *session, NSError *error) {
 
         // Check for errors
         if (error == NULL)
 		{
-			const char* sessionJsonStr	= [session toCString];
-			NSLog(@"[TwitterHandler] login successfull, username: %s", sessionJsonStr);
-             
-			// Notify
-			NotifyEventListener(kTWTRLoginSuccess, sessionJsonStr);
+			NotifyEventListener(kTWTRLoginSuccess, ToJsonCString([session toJsonObject]));
 		}
 		else
 		{
-			NSLog(@"[TwitterHandler] login failed");
-             
-			// Notify
 			[self notifyError:kTWTRLoginFailed withError:error];
 		}
      }];
 }
 
-- (void)logout
+- (void)logoutUserID:(NSString *)userID
 {
-	NSLog(@"[TwitterHandler] logged out");
-	[TwitterKit logOut];
+	NSLog(@"[TwitterHandler] logged out.");
+	
+	[[TwitterKit sessionStore] logOutUserID:userID];
 }
 
-- (BOOL)isLoggedIn
+- (BOOL)isUserLoggedIn:(NSString *)userID
 {
-	bool isLoggedIn	= ([TwitterKit session] != NULL);
-    NSLog(@"[TwitterHandler] isLoggedIn: %d", isLoggedIn);
-    
-    return isLoggedIn;
+	return [[TwitterKit sessionStore] sessionForUserID:userID] ? true : false;
 }
 
-- (NSString *)authToken
+- (NSDictionary *)getSessionDictionaryWithUserID:(NSString *)userID
 {
-    if ([self isLoggedIn])
-	{
-		NSString *authToken	= [[TwitterKit session] authToken];
-		NSLog(@"[TwitterHandler] auth token: %@", authToken);
-		
-        return authToken;
-	}
-    
-    return NULL;
-}
-
-- (NSString *)authTokenSecret
-{
-    if ([self isLoggedIn])
-	{
-		NSString *authTokenSecret	= [[TwitterKit session] authTokenSecret];
-		NSLog(@"[TwitterHandler] auth token secret: %@", authTokenSecret);
-		
-        return authTokenSecret;
-	}
-    
-    return NULL;
-}
-
-- (NSString *)userID
-{
-    if ([self isLoggedIn])
-	{
-		NSString *userID	= [[TwitterKit session] userID];
-		NSLog(@"[TwitterHandler] user id: %@", userID);
-		
-        return userID;
-	}
-    
-    return NULL;
-}
-
-- (NSString *)userName
-{
-   if ([self isLoggedIn])
-   {
-	   NSString *userName	= [[TwitterKit session] userName];
-	   NSLog(@"[TwitterHandler] username: %@", userName);
-	   
-	   return userName;
-   }
-    
-    return NULL;
+	return [[TwitterKit sessionStore] getSessionDictionaryWithUserID:userID];
 }
 
 #pragma mark - Tweet
@@ -140,19 +85,17 @@
 {
     TWTRComposer *composer = [[[TWTRComposer alloc] init] autorelease];
     
-    // Set message
-    [composer setText:message];
+	if (message)
+		[composer setText:message];
     
-    // Set URL
-    if (URLString != NULL)
+    if (URLString)
         [composer setURL:[NSURL URLWithString:URLString]];
     
-    // Set image
-    if (image != NULL)
+    if (image)
         [composer setImage:image];
     
-    // Execute
-    [composer showWithCompletion:^(TWTRComposerResult result) {
+    // Display the composer
+	[composer showFromViewController:UnityGetGLViewController() completion:^(TWTRComposerResult result) {
         NSString *resultStr = [NSString stringWithFormat:@"%d", result];
         NSLog(@"[TwitterHandler] tweet composer dismissed, ressult %@", resultStr);
         
@@ -163,122 +106,110 @@
 
 #pragma mark - Advanced
 
-- (void)requestAccountDetails
+- (void)requestAccountDetailsWithUserID:(NSString *)userID
 {
     NSLog(@"[TwitterHandler] requesting user details");
 	
 	// Check if user is logged in
-	if (![self isLoggedIn])
+	if (![self isUserLoggedIn:userID])
 	{
 		// Notify
 		[self notifyError:kRequestAccountDetailsFailed withError:[self createNoAuthError]];
 		return;
 	}
-    
-    [[TwitterKit APIClient] loadUserWithID:[self userID] completion:^(TWTRUser *user, NSError *error) {
+	
+	// Send a request
+	TWTRAPIClient 	*client	 	= [[[TWTRAPIClient alloc] initWithUserID:userID] autorelease];
+    [client loadUserWithID:userID completion:^(TWTRUser *user, NSError *error) {
 		// Check for errors
         if (error == NULL)
         {
-			const char* userJsonStr		= [user toCString];
-            NSLog(@"[TwitterHandler] fetched user details: %s", userJsonStr);
-			
-            // Notify
-            NotifyEventListener(kRequestAccountDetailsSuccess, userJsonStr);
+            NotifyEventListener(kRequestAccountDetailsSuccess, ToJsonCString([user toJsonObject]));
         }
         else
         {
-            NSLog(@"[Twitter] failed to load user details");
-            
-            // Notify
 			[self notifyError:kRequestAccountDetailsFailed withError:error];
         }
     }];
 }
 
-- (void)requestEmailAccess
+- (void)requestEmailWithUserID:(NSString *)userID
 {
 	// Check if user is logged in
-	if (![self isLoggedIn])
+	if (![self isUserLoggedIn:userID])
 	{
 		// Notify
 		[self notifyError:kEmailAccessFailed withError:[self createNoAuthError]];
 		return;
 	}
 	
-    TWTRShareEmailViewController *shareEmailViewController = [[TWTRShareEmailViewController alloc] initWithCompletion:^(NSString *email, NSError *error) {
-        // Check for errors
-        if (error == NULL)
-        {
-            NSLog(@"[TwitterHandler] fetched user email: %@", email);
-            
-            // Notify
-            NotifyEventListener(kEmailAccesSuccess, [email UTF8String]);
-        }
-        // Got few errors
-        else
-        {
-            NSLog(@"[TwitterHandler] failed to access user email");
-            
-            // Notify
-			[self notifyError:kEmailAccessFailed withError:error];
-        }
-    }];
-    
-    // Present view controller where user grants permission
-    [UnityGetGLViewController() presentViewController:shareEmailViewController
-                                             animated:YES
-                                           completion:nil];
+	// Create a request
+	TWTRAPIClient *client = [[[TWTRAPIClient alloc] initWithUserID:userID] autorelease];
+	NSURLRequest *request = [client URLRequestWithMethod:@"GET"
+													 URL:@"https://api.twitter.com/1.1/account/verify_credentials.json"
+											  parameters:@{@"include_email": @"true", @"skip_status": @"true"}
+												   error:nil];
+	
+	[client sendTwitterRequest:request completion:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
+		
+		// Parse response
+		if (connectionError == NULL)
+		{
+			NSError *jsonError	= NULL;
+			NSDictionary *json 	= [NSJSONSerialization JSONObjectWithData:data
+																  options:0
+																	error:&jsonError];
+			
+			NSString *email		= [json objectForKey:@"email"];
+			NotifyEventListener(kEmailAccesSuccess, email ? [email UTF8String] : kCStringEmpty);
+		}
+		else
+		{
+			[self notifyError:kEmailAccessFailed withError:connectionError];
+		}
+
+	}];
 }
 
-- (void)URLRequestWithMethod:(NSString *)method URL:(NSString *)URLString parameters:(NSDictionary *)parameters
+- (void)sendURLRequestUsingClientWithUserID:(NSString *)userID method:(NSString *)method URL:(NSString *)URLString parameters:(NSDictionary *)parameters
 {
 	// Check if user is logged in
-	if (![self isLoggedIn])
+	if (![self isUserLoggedIn:userID])
 	{
 		// Notify
 		[self notifyError:kTwitterURLRequestFailed withError:[self createNoAuthError]];
 		return;
 	}
 	
-    NSError         *clientError	= NULL;
-    NSURLRequest    *request        = [[TwitterKit APIClient] URLRequestWithMethod:method
-                                                                               URL:URLString
-                                                                        parameters:parameters
-                                                                             error:&clientError];
-    
+	TWTRAPIClient 	*client	 	= [[[TWTRAPIClient alloc] initWithUserID:userID] autorelease];
+    NSError         *clientError;
+	
+    NSURLRequest    *request	= [client URLRequestWithMethod:method
+														URL:URLString
+												 parameters:parameters
+													  error:&clientError];
     if (request)
     {
-        [[TwitterKit APIClient] sendTwitterRequest:request
-                                        completion:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
-		
-            // Check for errors
-            if (connectionError == NULL)
+        [client sendTwitterRequest:request
+						completion:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
+            // Parse response
+            if (data)
             {
-                NSLog(@"[TwitterHandler] request with URL: %@ finished", URLString);
-                
-                // Hanndle the response data
                 NSError *jsonError	= NULL;
                 NSDictionary *json 	= [NSJSONSerialization JSONObjectWithData:data
 																	  options:0
 																		error:&jsonError];
                 
-                // Notify
                 NotifyEventListener(kTwitterURLRequestSuccess, ToJsonCString(json));
             }
             else
             {
-                NSLog(@"[TwitterHandler] request with URL: %@ failed", URLString);
-                
-                // Notify
-				[self notifyError:kTwitterURLRequestFailed withError:connectionError];
+                [self notifyError:kTwitterURLRequestFailed withError:connectionError];
             }
         }];
     }
     else
     {
-		NSLog(@"[TwitterHandler] Failed to create request");
-		
-		// Notify
 		[self notifyError:kTwitterURLRequestFailed withError:clientError];
     }
 }
@@ -288,7 +219,6 @@
 - (void)notifyError:(const char *)methodName withError:(NSError *)error
 {
 	NSString *errorDescription	= error ? [error description] : kNSStringDefault;
-	NSLog(@"[TwitterHandler] error with description: %@", errorDescription);
 	
 	// Notify
 	NotifyEventListener(methodName, [errorDescription UTF8String]);

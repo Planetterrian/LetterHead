@@ -1,9 +1,8 @@
-﻿using UnityEngine;
+﻿#if UNITY_IOS
+using UnityEngine;
 using System.Collections;
-
-#if UNITY_IOS
 using System.Runtime.InteropServices;
-using VoxelBusters.DebugPRO;
+using VoxelBusters.UASUtils;
 
 namespace VoxelBusters.NativePlugins
 {
@@ -22,7 +21,7 @@ namespace VoxelBusters.NativePlugins
 
 		public override void ShowToast (string _message, eToastMessageLength _length)
 		{
-			Console.LogWarning(Constants.kDebugTag, Constants.kAndroidFeature);
+			DebugUtility.Logger.LogWarning(Constants.kDebugTag, Constants.kAndroidFeature);
 		}
 
 		public override void SetPopoverPoint (Vector2 _position)

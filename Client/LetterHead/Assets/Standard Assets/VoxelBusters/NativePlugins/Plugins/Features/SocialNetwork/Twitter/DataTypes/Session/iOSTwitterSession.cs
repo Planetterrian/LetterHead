@@ -15,23 +15,21 @@ namespace VoxelBusters.NativePlugins.Internal
 
 		#region Constants
 		
-		private const string	kUserID				= "user-ID";
-		private const string	kAuthToken			= "auth-token";
-		private const string	kUserName			= "user-name";
-		private const string	kAuthTokenSecret	= "auth-token-secret";
-		
+		private const string	kUserName		= "user-name";
+
 		#endregion
 
 		#region Constructor
 		
 		public iOSTwitterSession (IDictionary _sessionJsonDict)
 		{
-			AuthToken		= _sessionJsonDict.GetIfAvailable<string>(kAuthToken);
-			AuthTokenSecret	= _sessionJsonDict.GetIfAvailable<string>(kAuthTokenSecret);
+			// Set properties
+			AuthToken		= _sessionJsonDict.GetIfAvailable<string>(iOSTwitterAuthSession.kAuthToken);
+			AuthTokenSecret	= _sessionJsonDict.GetIfAvailable<string>(iOSTwitterAuthSession.kAuthTokenSecret);
+			UserID			= _sessionJsonDict.GetIfAvailable<string>(iOSTwitterAuthSession.kUserID);
 			UserName		= _sessionJsonDict.GetIfAvailable<string>(kUserName);
-			UserID			= _sessionJsonDict.GetIfAvailable<string>(kUserID);
 		}
-		
+
 		#endregion
 	}
 }

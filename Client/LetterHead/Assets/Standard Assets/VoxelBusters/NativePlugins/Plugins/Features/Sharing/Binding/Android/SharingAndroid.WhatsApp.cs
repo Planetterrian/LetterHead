@@ -1,8 +1,7 @@
-﻿using UnityEngine;
+﻿#if UNITY_ANDROID
+using UnityEngine;
 using System.Collections;
-
-#if UNITY_ANDROID
-using VoxelBusters.DebugPRO;
+using VoxelBusters.UASUtils;
 
 namespace VoxelBusters.NativePlugins
 {
@@ -18,7 +17,7 @@ namespace VoxelBusters.NativePlugins
 
 			if (!_canShare)
 			{
-				Console.Log(Constants.kDebugTag, "[Sharing:WhatsApp] CanShare=" + _canShare);
+				DebugUtility.Logger.Log(Constants.kDebugTag, "[Sharing:WhatsApp] CanShare=" + _canShare);
 			}
 			
 			return _canShare;

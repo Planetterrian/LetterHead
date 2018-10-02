@@ -23,15 +23,16 @@ namespace VoxelBusters.NativePlugins
 			// For holding method names
 			internal class Methods
 			{
-				internal const string INITIALIZE		 						= "initialize";
+				internal const string INITIALIZE		 					= "initialize";
 				internal const string LOGIN		 							= "login";
-				internal const string LOGOUT		 							= "logout";
+				internal const string LOGOUT		 						= "logout";
 				internal const string IS_LOGGED_IN		 					= "isLoggedIn";
-				internal const string GET_AUTH_TOKEN		 					= "getAuthToken";
+				internal const string GET_AUTH_SESSION		 				= "getAuthSession";
+				internal const string GET_AUTH_TOKEN		 				= "getAuthToken";
 				internal const string GET_AUTH_TOKEN_SECRET		 			= "getAuthTokenSecret";
-				internal const string GET_USER_ID		 						= "getUserId";
+				internal const string GET_USER_ID		 					= "getUserId";
 				internal const string GET_USER_NAME		 					= "getUserName";
-				internal const string SHOW_TWEET_COMPOSER						= "showTweetComposer";
+				internal const string SHOW_TWEET_COMPOSER					= "showTweetComposer";
 				internal const string REQUEST_ACCOUNT_DETAILS 				= "requestAccountDetails";
 				internal const string REQUEST_EMAIL_ACCESS 					= "requestEmailAccess";
 				internal const string URL_REQUEST 							= "urlRequest";

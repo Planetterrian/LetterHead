@@ -3,8 +3,9 @@ using System.Collections;
 
 namespace VoxelBusters.NativePlugins
 {
-	public partial class ApplicationSettings 
-	{
+    using Internal;
+    public partial class ApplicationSettings
+    {
 		/// <summary>
 		/// Application Settings specific to Android platform.
 		/// </summary>
@@ -16,6 +17,11 @@ namespace VoxelBusters.NativePlugins
 			[SerializeField] 
 			[Tooltip("The string that identifies your app in Google Play Store.")]
 			private 	string		m_storeIdentifier;
+
+            [SerializeField]
+            [NotifyNPSettingsOnValueChange]
+            [Tooltip("The string that identifies your app in Google Play Store.")]
+            private bool m_enableProguardSetup;
 
 			#endregion
 
@@ -36,6 +42,22 @@ namespace VoxelBusters.NativePlugins
 					m_storeIdentifier	= value;
 				}
 			}
+
+            /// <summary>
+            /// The enables/disables proguard setup automatically. This basically renames build.gradle files as per requirement
+            /// </summary>
+            public bool EnableProguardSetup
+            {
+                get
+                {
+                    return m_enableProguardSetup;
+                }
+
+                private set
+                {
+                    m_enableProguardSetup = value;
+                }
+            }
 
 			#endregion
 		}

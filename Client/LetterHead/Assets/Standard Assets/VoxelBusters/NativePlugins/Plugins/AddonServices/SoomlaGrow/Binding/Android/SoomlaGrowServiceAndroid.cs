@@ -1,9 +1,7 @@
-﻿using UnityEngine;
+﻿#if USES_SOOMLA_GROW && UNITY_ANDROID
+using UnityEngine;
 using System.Collections;
-
-#if USES_SOOMLA_GROW && UNITY_ANDROID
 using System.Runtime.InteropServices;
-using VoxelBusters.DebugPRO;
 
 namespace VoxelBusters.NativePlugins
 {

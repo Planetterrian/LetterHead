@@ -10,6 +10,18 @@ namespace VoxelBusters.NativePlugins
 {
 	public partial class CloudServicesEditor : CloudServices 
 	{
+
+		#region Initialise
+
+		public override void Initialise ()
+		{
+			base.Initialise();
+			CloudKeyValueStoreDidInitialise(true);
+			m_isInitialised = true;
+		}
+
+		#endregion
+
 		#region Setting Values
 
 		public override void SetBool (string _key, bool _value)
@@ -76,7 +88,7 @@ namespace VoxelBusters.NativePlugins
 		public override IDictionary GetDictionary (string _key)
 		{
 			string _JSONString	= EditorPrefs.GetString(_key, null);
-
+		
 			return (_JSONString == null) ? null : (IDictionary)JSONUtility.FromJSON(_JSONString);
 		}
 

@@ -47,6 +47,11 @@ void cpnpBillingRestoreCompletedTransactions ()
     [[BillingHandler Instance] restoreCompletedTransactions];
 }
 
+void cpnpBillingFinishCompletedTransactions (const char* transactionIDs, bool isRestoreType)
+{
+	[[BillingHandler Instance] finishCompletedTransactions:ConvertToNSArray(transactionIDs) ofRestoreType:isRestoreType];
+}
+
 void cpnpBillingCustomReceiptVerificationFinished (const char* transactionID, int transactionState, int verificationState)
 {
 	[[BillingHandler Instance] customReceiptVerificationFinishedForTransactionWithID:ConvertToNSString(transactionID)

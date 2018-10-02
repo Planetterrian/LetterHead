@@ -38,7 +38,6 @@ enum ePickVideoFinishReason
 };
 typedef enum ePickVideoFinishReason ePickVideoFinishReason;
 
-
 @interface MediaLibraryHandler : HandlerBase <UIAlertViewDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, HybridActionSheetDelegate, EmbeddedVideoPlayerViewControllerDelegate, UIPopoverControllerDelegate>
 
 // Properties

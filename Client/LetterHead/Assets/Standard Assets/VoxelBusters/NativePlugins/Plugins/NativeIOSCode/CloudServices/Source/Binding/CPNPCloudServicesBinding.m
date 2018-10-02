@@ -105,3 +105,12 @@ void cpnpCloudServicesRemoveKey (const char *key)
 {
 	[[NSUbiquitousKeyValueStore defaultStore] removeObjectForKey:ConvertToNSString(key)];
 }
+
+void cpnpCloudServicesRemoveAllKeys ()
+{
+    NSDictionary * dict = [[NSUbiquitousKeyValueStore defaultStore] dictionaryRepresentation];
+    for (id key in dict)
+    {
+        cpnpCloudServicesRemoveKey([key UTF8String]);
+    }
+}

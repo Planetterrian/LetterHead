@@ -14,6 +14,10 @@ namespace VoxelBusters.NativePlugins
 			[SerializeField]
 			[Tooltip("Youtube API key assigned to your application.")]
 			private 	string 		m_youtubeAPIKey;
+
+			[SerializeField]
+			[Tooltip("If you set this to false, the images will be saved to default gallery. Else to app specific album.")]
+			private 	bool 		m_saveToGallerySavesToAppFolder = true;
 			
 			#endregion
 			
@@ -24,6 +28,14 @@ namespace VoxelBusters.NativePlugins
 				get 
 				{ 
 					return m_youtubeAPIKey; 
+				}
+			}
+
+			internal bool SaveGalleryImagesToAppSpecificFolder
+			{
+				get 
+				{ 
+					return m_saveToGallerySavesToAppFolder; 
 				}
 			}
 			

@@ -62,9 +62,14 @@ namespace VoxelBusters.NativePlugins.Demo
 				Initialise();
 			}
 			
-			if (GUILayout.Button("Login"))
+			if (GUILayout.Button("Login (Without Email Permission)"))
 			{
-				Login();
+				Login(false);
+			}
+
+			if (GUILayout.Button("Login (With Email Permission)"))
+			{
+				Login(true);
 			}
 			
 			if (GUILayout.Button("Logout"))
@@ -82,34 +87,23 @@ namespace VoxelBusters.NativePlugins.Demo
 		
 		private void DrawSessionDetailsAPI ()
 		{
-			GUILayout.Label("Session Details", kSubTitleStyle);
+			GUILayout.Label("Session", kSubTitleStyle);
 			
-			if (GUILayout.Button("Get Auth Token"))
+			if (GUILayout.Button("Get Session"))
 			{
-				string _authToken		= NPBinding.Twitter.GetAuthToken();
+				TwitterAuthSession _session	= NPBinding.Twitter.GetSession();
 
-				AddNewResult(string.Format("Authentication token is {0}.", _authToken));
-			}
-			
-			if (GUILayout.Button("Get Auth Token Secret"))
-			{
-				string _authTokenSecret	= NPBinding.Twitter.GetAuthTokenSecret();
-
-				AddNewResult(string.Format("Authentication token secret is {0}.", _authTokenSecret));
-			}
-			
-			if (GUILayout.Button("Get User ID"))
-			{
-				string 	_userID			= NPBinding.Twitter.GetUserID();
-
-				AddNewResult(string.Format("User identifier is {0}.", _userID));
-			}
-			
-			if (GUILayout.Button("Get User Name"))
-			{
-				string 	_userName		= NPBinding.Twitter.GetUserName();
-
-				AddNewResult(string.Format("User name is {0}.", _userName));
+				if (_session != null)
+				{
+					AddNewResult("Successfully fetched current session information.");
+					AppendResult(string.Format("Authentication token is {0}.", _session.AuthToken));
+					AppendResult(string.Format("Authentication token secret is {0}.", _session.AuthTokenSecret));
+					AppendResult(string.Format("User identifier is {0}.", _session.UserID));
+				}
+				else
+				{
+					AddNewResult("Couldn't find session information.");
+				}
 			}
 		}
 		
@@ -159,7 +153,7 @@ namespace VoxelBusters.NativePlugins.Demo
 			
 			if (GUILayout.Button("URL Request"))
 			{
-				MakeURLRequest();
+				SendURLRequest();
 			}
 		}
 		
@@ -172,9 +166,9 @@ namespace VoxelBusters.NativePlugins.Demo
 			AddNewResult( NPBinding.Twitter.Initialise() ? "Feature is initialised." : "Feature is not yet initialised.");
 		}
 
-		private void Login ()
+		private void Login (bool _requiresEmailAccess)
 		{
-			NPBinding.Twitter.Login(LoginFinished);
+			NPBinding.Twitter.Login(_requiresEmailAccess, LoginFinished);
 		}
 
 		private void Logout ()
@@ -217,14 +211,14 @@ namespace VoxelBusters.NativePlugins.Demo
 			NPBinding.Twitter.RequestEmailAccess(EmailAccessRequestFinished);
 		}
 
-		private void MakeURLRequest ()
+		private void SendURLRequest ()
 		{
 			string _URL 		= "https://api.twitter.com/1.1/statuses/show.json";
 			IDictionary _params = new Dictionary<string, string>(){
 				{"id", "20"}
 			};
 			
-			NPBinding.Twitter.GetURLRequest(_URL, _params, URLRequestFinished);
+			NPBinding.Twitter.SendGetURLRequest(_URL, _params, URLRequestFinished);
 		}
 	
 		#endregion

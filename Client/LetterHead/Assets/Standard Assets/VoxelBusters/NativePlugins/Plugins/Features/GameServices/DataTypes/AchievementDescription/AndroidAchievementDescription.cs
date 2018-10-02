@@ -1,11 +1,9 @@
-﻿using UnityEngine;
+﻿#if USES_GAME_SERVICES && UNITY_ANDROID
+using UnityEngine;
 using System.Collections;
-
-#if USES_GAME_SERVICES && UNITY_ANDROID
 using System;
 using UnityEngine.SocialPlatforms;
 using VoxelBusters.Utility;
-using VoxelBusters.DebugPRO;
 using DownloadTexture = VoxelBusters.Utility.DownloadTexture;
 
 namespace VoxelBusters.NativePlugins.Internal

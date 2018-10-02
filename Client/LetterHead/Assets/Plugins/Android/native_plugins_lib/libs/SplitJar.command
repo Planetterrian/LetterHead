@@ -21,9 +21,6 @@ echo "Making sharing.jar…"
 jar -cf feature.sharing.jar com/voxelbusters/nativeplugins/features/sharing
 rm -rf com/voxelbusters/nativeplugins/features/sharing
 
-
-
-
 echo "Making billing.jar…"
 jar -cf feature.billing.jar com/voxelbusters/nativeplugins/features/billing com/android/vending
 rm -rf com/voxelbusters/nativeplugins/features/billing
@@ -58,6 +55,12 @@ echo "Making sdk integration jar files..."
 echo "Making sdk.soomla.integration.jar"
 jar -cf feature.sdk.soomla.integration.jar com/voxelbusters/nativeplugins/features/external/sdk/soomla
 rm -rf com/voxelbusters/nativeplugins/features/external/sdk/soomla
+
+
+echo "Making external jars…"
+jar -cf feature.externallibrary.shortcutbadger.jar com/voxelbusters/nativeplugins/externallibrary/notification/shortcutbadger
+rm -rf com/voxelbusters/nativeplugins/externallibrary/notification/shortcutbadger
+
 
 jar -cf nativeplugins.core.jar com/voxelbusters
 

@@ -1,11 +1,10 @@
-﻿using UnityEngine;
+﻿#if USES_NOTIFICATION_SERVICE && UNITY_ANDROID
+using UnityEngine;
 using System.Collections;
-
-#if USES_NOTIFICATION_SERVICE && UNITY_ANDROID
 using System;
 using System.Collections.Generic;
-using VoxelBusters.DebugPRO;
 using VoxelBusters.Utility;
+using VoxelBusters.UASUtils;
 
 namespace VoxelBusters.NativePlugins.Internal
 {
@@ -27,6 +26,8 @@ namespace VoxelBusters.NativePlugins.Internal
 		public const string 		kContentText 					= "content-text";
 		public const string 		kTag			 				= "notification-tag";
 		public const string 		kCustomSoundKey					= "custom-sound";
+	
+		public const string			kBadgeCount						= "badge";
 		
 		
 		public static string 		ContentTitleKey 
@@ -81,7 +82,7 @@ namespace VoxelBusters.NativePlugins.Internal
 			if (_payloadDict.Contains(NPSettings.Notification.Android.ContentTextKey))
 			{
 				//Check here which key is being received.
-				VoxelBusters.DebugPRO.Console.Log(Constants.kDebugTag, "[AndroidNotificationPayload] " + _payloadDict.ToJSON());//TODO
+				DebugUtility.Logger.Log(Constants.kDebugTag, "[AndroidNotificationPayload] " + _payloadDict.ToJSON());//TODO
 				object _alertUnknownType	= _payloadDict[ContentTextKey] as object;
 				
 				// String type
@@ -109,6 +110,7 @@ namespace VoxelBusters.NativePlugins.Internal
 			AndroidProperties.TickerText		=  	_payloadDict.GetIfAvailable<string>(TickerTextKey);
 			AndroidProperties.Tag				=  	_payloadDict.GetIfAvailable<string>(TagKey);
 			AndroidProperties.LargeIcon			= 	_payloadDict.GetIfAvailable<string>(kLargeIcon);
+			AndroidProperties.BadgeCount		=	_payloadDict.GetIfAvailable<int>(kBadgeCount);
 		}
 		
 		#endregion
@@ -131,7 +133,6 @@ namespace VoxelBusters.NativePlugins.Internal
 			_payloadDict[kRepeatIntervalKey]	= (int)_notification.RepeatInterval;
 			_payloadDict[kCustomSound]			= _notification.SoundName;
 			
-
 			// ContentTitle, TickerText, Tag
 			if(_androidProperties != null)
 			{
@@ -139,13 +140,7 @@ namespace VoxelBusters.NativePlugins.Internal
 				_payloadDict[TickerTextKey]		= _androidProperties.TickerText;
 				_payloadDict[TagKey]			= _androidProperties.Tag;
 				_payloadDict[kLargeIcon]		= _androidProperties.LargeIcon;
-
-				if(string.IsNullOrEmpty(_notification.SoundName)) //This fallback will be removed in upcoming version.
-				{
-#pragma warning disable
-					_payloadDict[kCustomSound] = _androidProperties.CustomSound;
-#pragma warning enable
-				}
+				_payloadDict[kBadgeCount]		= _androidProperties.BadgeCount;
 			}
 			
 			return _payloadDict;

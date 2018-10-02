@@ -107,7 +107,7 @@
 
 - (void)embeddedVideoPlayer:(EmbeddedVideoPlayer *)player stateChangedTo:(MPMoviePlaybackState)state
 {
-	NSLog(@"[EmbeddedPlayer] New state %d", state);
+	NSLog(@"[EmbeddedPlayer] New state %lu", state);
 }
 
 - (void)embeddedVideoPlayer:(EmbeddedVideoPlayer *)player didFinishPlaying:(MPMovieFinishReason)reason

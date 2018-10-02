@@ -6,5 +6,7 @@
      <!-- Common  -->
     <item name="np_transparent" type="color">#00000000</item>
     <item name="np_semi_transparent" type="color">#AA000000</item>
-    
+
+    <!-- Chaning from transaparent will make the below color to be used as the loader color>-->
+    <item name="np_webview_override_loading_color" type="color">#00000000</item>
 </resources>

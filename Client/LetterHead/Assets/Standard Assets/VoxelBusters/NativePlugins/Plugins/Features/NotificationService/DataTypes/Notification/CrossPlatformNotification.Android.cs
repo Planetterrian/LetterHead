@@ -20,6 +20,7 @@ namespace VoxelBusters.NativePlugins
 			private		const 	string 		kTickerTextKey		= "ticker-text";
 			private		const	string 		kTagKey				= "tag";
 			private		const	string 		kLargeIcon			= "large-icon";
+			private		const	string 		kBadgeCount			= "badge";
 			
 			#endregion
 
@@ -66,19 +67,6 @@ namespace VoxelBusters.NativePlugins
 			}
 
 			/// <summary>
-			/// The name of the sound file to play when an alert is displayed.
-			/// </summary>
-			/// <remarks>
-			/// \note Make sure all referred sounds are in Assets/PluginResources/Android or Common folder. 
-			/// </remarks>
-			[System.Obsolete("This property is deprecated. Use SoundName property of CrossPlatformNotification instance instead.")]
-			public string CustomSound
-			{
-				get; 
-				set;
-			}
-
-			/// <summary>
 			/// The image used as the large icon for notification.
 			/// </summary>
 			/// <remarks>
@@ -86,6 +74,18 @@ namespace VoxelBusters.NativePlugins
 			/// If the value is not set, then default image will be used. 
 			/// </remarks>
 			public string LargeIcon
+			{
+				get; 
+				set;
+			}
+
+			/// <summary>
+			/// The Badge Count for the notification.
+			/// </summary>
+			/// <description>
+			/// This sets the badge for app icon on platforms where badge is permitted on Android Platform.
+			/// </description>
+			public int BadgeCount
 			{
 				get; 
 				set;
@@ -104,6 +104,7 @@ namespace VoxelBusters.NativePlugins
 				TickerText		= null;
 				Tag				= null;
 				LargeIcon		= null;
+				BadgeCount		= 0;
 			}
 
 			internal AndroidSpecificProperties (IDictionary _jsonDict)
@@ -112,6 +113,7 @@ namespace VoxelBusters.NativePlugins
 				TickerText		= _jsonDict.GetIfAvailable<string>(kTickerTextKey);
 				Tag				= _jsonDict.GetIfAvailable<string>(kTagKey);
 				LargeIcon		= _jsonDict.GetIfAvailable<string>(kLargeIcon);
+				BadgeCount		= _jsonDict.GetIfAvailable<int>(kBadgeCount);
 			}
 
 			#endregion
@@ -120,12 +122,12 @@ namespace VoxelBusters.NativePlugins
 
 			internal IDictionary JSONObject ()
 			{
-				Dictionary<string, string> _jsonDict	= new Dictionary<string, string>();
+				Dictionary<string, object> _jsonDict	= new Dictionary<string, object>();
 				_jsonDict[kContentTitleKey]				= ContentTitle;
 				_jsonDict[kTickerTextKey]				= TickerText;
 				_jsonDict[kTagKey]						= Tag;
 				_jsonDict[kLargeIcon]					= LargeIcon;
-
+				_jsonDict[kBadgeCount]					= BadgeCount;
 				return _jsonDict;
 			}
 

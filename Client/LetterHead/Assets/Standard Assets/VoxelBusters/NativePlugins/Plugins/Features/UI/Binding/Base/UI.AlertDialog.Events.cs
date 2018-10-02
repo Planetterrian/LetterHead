@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using VoxelBusters.Utility;
-using VoxelBusters.DebugPRO;
+using VoxelBusters.UASUtils;
 
 namespace VoxelBusters.NativePlugins
 {
@@ -36,7 +36,7 @@ namespace VoxelBusters.NativePlugins
 
 			// Parse received data
 			ParseAlertDialogDismissedData(_jsonData, out _buttonPressed, out _callerTag);
-			Console.Log(Constants.kDebugTag, "[UI] Alert dialog closed, ButtonPressed=" + _buttonPressed);
+			DebugUtility.Logger.Log(Constants.kDebugTag, "[UI] Alert dialog closed, ButtonPressed=" + _buttonPressed);
 			
 			// Get callback
 			AlertDialogCompletion _alertCompletionCallback	= GetAlertDialogCallback(_callerTag);

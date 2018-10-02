@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 #if USES_BILLING && UNITY_IOS
 using VoxelBusters.Utility;
@@ -37,12 +38,12 @@ namespace VoxelBusters.NativePlugins
 
 				if (_regProductsJSONList != null)
 				{
-					_regProductsList	= new iOSBillingProduct[_regProductsJSONList.Count];
+					_regProductsList	= new BillingProductIOS[_regProductsJSONList.Count];
 					int		_iter		= 0;
 					
 					foreach (IDictionary _productInfoDict in _regProductsJSONList)
 					{
-						_regProductsList[_iter++]			= new iOSBillingProduct(_productInfoDict);
+						_regProductsList[_iter++]			= new BillingProductIOS(_productInfoDict);
 					}
 				}
 				
@@ -68,12 +69,51 @@ namespace VoxelBusters.NativePlugins
 				if (_transactionsJSONList != null)
 				{
 					int		_count		= _transactionsJSONList.Count;
-					_transactions		= new iOSBillingTransaction[_count];
+					_transactions		= new BillingTransactionIOS[_count];
 
 					for (int _iter = 0; _iter < _count; _iter++)
-						_transactions[_iter]	= new iOSBillingTransaction((IDictionary)_transactionsJSONList[_iter]);
+						_transactions[_iter]	= new BillingTransactionIOS((IDictionary)_transactionsJSONList[_iter]);
 				}
 			}
+		}
+
+		protected override void ProcessPurchaseTransactions (BillingTransaction[] _transactions)
+		{
+			if (_transactions == null)
+				return;
+			
+			IList _transactionIDs	= GetFinishedTransactionIdentifiers(_transactions);
+			if (_transactionIDs.Count > 0)
+				cpnpBillingFinishCompletedTransactions(_transactionIDs.ToJSON(), false);
+		}
+
+		protected override void ProcessRestoredTransactions (BillingTransaction[] _transactions)
+		{
+			if (_transactions == null)
+				return;
+			
+			IList _transactionIDs	= GetFinishedTransactionIdentifiers(_transactions);
+			if (_transactionIDs.Count > 0)
+				cpnpBillingFinishCompletedTransactions(_transactionIDs.ToJSON(), true);
+		}
+
+		private IList GetFinishedTransactionIdentifiers (BillingTransaction[] _transactions)
+		{
+			int				_count			= _transactions.Length;
+			
+			List<string> 	_transactionIDs	= new List<string>(_count);
+			for (int _iter = 0; _iter < _count; _iter++)
+			{
+				BillingTransaction _transaction	= _transactions[_iter];
+
+				if (string.IsNullOrEmpty(_transaction.TransactionIdentifier))
+					continue;
+
+				if (_transaction.VerificationState == eBillingTransactionVerificationState.SUCCESS)
+					_transactionIDs.Add(_transaction.TransactionIdentifier);
+			}
+
+			return _transactionIDs;
 		}
 
 		#endregion

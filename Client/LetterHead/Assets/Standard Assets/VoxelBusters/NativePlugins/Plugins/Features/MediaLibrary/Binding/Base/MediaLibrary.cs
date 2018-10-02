@@ -1,8 +1,10 @@
-﻿using UnityEngine;
+﻿#if USES_MEDIA_LIBRARY
+using UnityEngine;
 using System.Collections;
-using VoxelBusters.Utility;
 using System.Text.RegularExpressions;
-using VoxelBusters.DebugPRO;
+using VoxelBusters.Utility;
+using VoxelBusters.UASUtils;
+
 using DownloadTexture = VoxelBusters.Utility.DownloadTexture;
 
 namespace VoxelBusters.NativePlugins
@@ -36,7 +38,7 @@ namespace VoxelBusters.NativePlugins
 		public virtual bool IsCameraSupported ()
 		{
 			bool _isSupported	= false;
-			Console.Log(Constants.kDebugTag, "[MediaLibrary] IsCameraSupported=" + _isSupported);
+			DebugUtility.Logger.Log(Constants.kDebugTag, "[MediaLibrary] IsCameraSupported=" + _isSupported);
 
 			return _isSupported;
 		}
@@ -108,7 +110,7 @@ namespace VoxelBusters.NativePlugins
 				// Save downloaded texture
 				if (!string.IsNullOrEmpty(_error))
 				{
-					Console.LogError(Constants.kDebugTag, "[MediaLibrary] Texture download failed, URL=" + _URL.URLString);
+					DebugUtility.Logger.LogError(Constants.kDebugTag, "[MediaLibrary] Texture download failed, URL=" + _URL.URLString);
 				}
 
 				// Save image
@@ -150,7 +152,7 @@ namespace VoxelBusters.NativePlugins
 
 			if (_imageByteArray == null)
 			{
-				Console.LogError(Constants.kDebugTag, "[MediaLibrary] Saving image to album failed, texture data is null");
+				DebugUtility.Logger.LogError(Constants.kDebugTag, "[MediaLibrary] Saving image to album failed, texture data is null");
 				SaveImageToGalleryFinished(false);
 				return;
 			}
@@ -175,7 +177,7 @@ namespace VoxelBusters.NativePlugins
 
 			if (string.IsNullOrEmpty(_videoID))
 			{
-				Console.LogError(Constants.kDebugTag, "[MediaLibrary] Play youtube video failed, Video ID can't be null");
+				DebugUtility.Logger.LogError(Constants.kDebugTag, "[MediaLibrary] Play youtube video failed, Video ID can't be null");
 				PlayVideoFinished(ePlayVideoFinishReason.PLAYBACK_ERROR);
 				return;
 			}
@@ -196,7 +198,7 @@ namespace VoxelBusters.NativePlugins
 
 			if (string.IsNullOrEmpty(_embedHTMLString))
 			{
-				Console.LogError(Constants.kDebugTag, "[MediaLibrary] Play video using webview failed, HTML string cant be null");
+				DebugUtility.Logger.LogError(Constants.kDebugTag, "[MediaLibrary] Play video using webview failed, HTML string cant be null");
 				PlayVideoFinished(ePlayVideoFinishReason.PLAYBACK_ERROR);
 				return;
 			}
@@ -220,7 +222,7 @@ namespace VoxelBusters.NativePlugins
 
 			if (string.IsNullOrEmpty(_URL.URLString))
 			{
-				Console.LogError(Constants.kDebugTag, "[MediaLibrary] Play video from URL failed, URL can't be null");
+				DebugUtility.Logger.LogError(Constants.kDebugTag, "[MediaLibrary] Play video from URL failed, URL can't be null");
 				PlayVideoFinished(ePlayVideoFinishReason.PLAYBACK_ERROR);
 				return;
 			}
@@ -256,7 +258,7 @@ namespace VoxelBusters.NativePlugins
 			{
 				foreach(Group each in regexMatch.Groups)
 				{
-					Console.Log(Constants.kDebugTag, "Value "+each.Value);
+					DebugUtility.Logger.Log(Constants.kDebugTag, "Value "+each.Value);
 				}
 
 				if(regexMatch.Groups.Count > 1)
@@ -284,3 +286,4 @@ namespace VoxelBusters.NativePlugins
 		#endregion
 	}
 }
+#endif

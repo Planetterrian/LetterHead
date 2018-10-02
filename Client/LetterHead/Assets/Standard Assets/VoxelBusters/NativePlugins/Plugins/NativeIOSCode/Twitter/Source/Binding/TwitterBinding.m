@@ -11,78 +11,42 @@
 
 #pragma mark - init
 
-void initTwitterKit (const char* consumerKey, const char* consumerSecret)
+void cpnpTwitterInitTwitterKit (const char* consumerKey, const char* consumerSecret)
 {
-	// Supported only in iOS 7 and above
-#ifdef UNITY_VERSION
-	if (SYSTEM_VERSION_LESS_THAN(@"7.0"))
-		return;
-#endif
-	
     [TwitterHandler InitTwitterKitWithConsumerKey:ConvertToNSString(consumerKey)
 								   consumerSecret:ConvertToNSString(consumerSecret)];
 }
 
-#pragma mark - login
+#pragma mark - Session Methods
 
-void twitterLogin ()
+void cpnpTwitterLogin (bool requiresEmailAccess)
 {
-    [[TwitterHandler Instance] login];
+	[[TwitterHandler Instance] login:requiresEmailAccess];
 }
 
-void twitterLogout ()
+void cpnpTwitterLogoutUserID (const char* userID)
 {
-    [[TwitterHandler Instance] logout];
+    [[TwitterHandler Instance] logoutUserID:ConvertToNSString(userID)];
 }
 
-bool twitterIsLoggedIn ()
+bool cpnpTwitterIsUserLoggedIn (const char* userID)
 {
-    return [[TwitterHandler Instance] isLoggedIn];
+    return [[TwitterHandler Instance] isUserLoggedIn:ConvertToNSString(userID)];
 }
 
-char* twitterGetAuthToken ()
+char* cpnpTwitterGetSessionDictionaryWithUserID (const char* userID)
 {
-	NSString *authToken	= [[TwitterHandler Instance] authToken];
+	NSDictionary *sessionDict	= [[TwitterHandler Instance] getSessionDictionaryWithUserID:ConvertToNSString(userID)];
 
-	if (authToken != NULL)
-		return CStringCopy([authToken UTF8String]);
+	if (sessionDict)
+		return CStringCopy(ToJsonCString(sessionDict));
 		
 	return NULL;
 }
 
-char* twitterGetAuthTokenSecret ()
-{
-	NSString *authTokenSecret	= [[TwitterHandler Instance] authTokenSecret];
-	
-	if (authTokenSecret != NULL)
-		return CStringCopy([authTokenSecret UTF8String]);
-	
-	return NULL;
-}
+#pragma mark - Tweet methods
 
-char* twitterGetUserID ()
-{
-	NSString *userID	= [[TwitterHandler Instance] userID];
-	
-	if (userID != NULL)
-		return CStringCopy([userID UTF8String]);
-	
-	return NULL;
-}
-
-char* twitterGetUserName ()
-{
-	NSString *userName	= [[TwitterHandler Instance] userName];
-	
-	if (userName != NULL)
-		return CStringCopy([userName UTF8String]);
-	
-	return NULL;
-}
-
-#pragma mark - tweet
-
-void showTweetComposer (const char* message, const char* URLString, UInt8* imgByteArray, int imgByteArrayLength)
+void cpnpTwitterShowTweetComposer (const char* message, const char* URLString, UInt8* imgByteArray, int imgByteArrayLength)
 {
     // Show tweet compose
     [[TwitterHandler Instance] showTweetComposerWithMessage:ConvertToNSString(message)
@@ -91,22 +55,23 @@ void showTweetComposer (const char* message, const char* URLString, UInt8* imgBy
                                                                                      ofLength:imgByteArrayLength]];
 }
 
-#pragma mark - requests
+#pragma mark - Request Methods
 
-void twitterRequestAccountDetails ()
+void cpnpTwitterRequestAccountDetailsWithUserID(const char* userID)
 {
-    [[TwitterHandler Instance] requestAccountDetails];
+    [[TwitterHandler Instance] requestAccountDetailsWithUserID:ConvertToNSString(userID)];
 }
 
-void twitterRequestEmailAccess ()
+void cpnpTwitterRequestEmailWithUserID (const char* userID)
 {
-    [[TwitterHandler Instance] requestEmailAccess];
+    [[TwitterHandler Instance] requestEmailWithUserID:ConvertToNSString(userID)];
 }
 
-void twitterURLRequest (const char* methodType, const char* URLString,
-						const char* parameters)
+void cpnpTwitterSendURLRequest (const char* userID,		const char* methodType,
+								const char* URLString,	const char* parameters)
 {
-    [[TwitterHandler Instance] URLRequestWithMethod:ConvertToNSString(methodType)
-												URL:ConvertToNSString(URLString)
-										 parameters:FromJson(parameters)];
+    [[TwitterHandler Instance] sendURLRequestUsingClientWithUserID:ConvertToNSString(userID)
+															method:ConvertToNSString(methodType)
+															   URL:ConvertToNSString(URLString)
+														parameters:FromJson(parameters)];
 }

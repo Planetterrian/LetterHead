@@ -2,7 +2,7 @@
 using System.Collections;
 using System.IO;
 using VoxelBusters.Utility;
-using VoxelBusters.DebugPRO;
+using VoxelBusters.UASUtils;
 
 namespace VoxelBusters.NativePlugins
 {
@@ -19,7 +19,7 @@ namespace VoxelBusters.NativePlugins
 		public virtual bool IsMailServiceAvailable ()
 		{
 			bool _isAvailable	= false;
-			Console.Log(Constants.kDebugTag, "[Sharing] Is service available=" + _isAvailable);
+			DebugUtility.Logger.Log(Constants.kDebugTag, "[Sharing] Is service available=" + _isAvailable);
 			
 			return _isAvailable;
 		}
@@ -84,7 +84,7 @@ namespace VoxelBusters.NativePlugins
 			}
 			else
 			{
-				Console.LogWarning(Constants.kDebugTag, "[Sharing] Sending mail with no attachments, attachment is null");
+				DebugUtility.Logger.LogWarning(Constants.kDebugTag, "[Sharing] Sending mail with no attachments, attachment is null");
 			}
 			
 			SendMail(_subject, _body, _isHTMLBody, _imageByteArray, 
@@ -108,7 +108,7 @@ namespace VoxelBusters.NativePlugins
 				}
 				else
 				{
-					Console.LogWarning(Constants.kDebugTag, "[Sharing] The operation could not be completed. Error=" + _error);
+					DebugUtility.Logger.LogWarning(Constants.kDebugTag, "[Sharing] The operation could not be completed. Error=" + _error);
 				}
 
 				SendMail(_subject, _body, _isHTMLBody, _attachmentByteArray,

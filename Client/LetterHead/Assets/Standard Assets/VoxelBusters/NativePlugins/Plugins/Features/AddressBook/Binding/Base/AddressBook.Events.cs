@@ -1,7 +1,8 @@
-﻿using UnityEngine;
+﻿#if USES_ADDRESS_BOOK 
+using UnityEngine;
 using System.Collections;
 using VoxelBusters.Utility;
-using VoxelBusters.DebugPRO;
+using VoxelBusters.UASUtils;
 
 namespace VoxelBusters.NativePlugins
 {
@@ -36,8 +37,8 @@ namespace VoxelBusters.NativePlugins
 
 		protected void ABRequestAccessFinished (eABAuthorizationStatus _authStatus, string _error)
 		{
-			Console.Log(Constants.kDebugTag, string.Format("[AddressBook] Request access finished. AuthStatus={0}, Error={1}.", _authStatus, _error.GetPrintableString()));
-
+			DebugUtility.Logger.Log(Constants.kDebugTag, string.Format("[AddressBook] Request access finished. AuthStatus={0}, Error={1}.", _authStatus, _error.GetPrintableString()));
+	
 			if (RequestAccessFinishedEvent != null)
 				RequestAccessFinishedEvent(_authStatus, _error);
 		}
@@ -61,7 +62,7 @@ namespace VoxelBusters.NativePlugins
 
 		private void ABReadContactsFinished (eABAuthorizationStatus _authStatus, AddressBookContact[] _contactsList)
 		{
-			Console.Log(Constants.kDebugTag, string.Format("[AddressBook] Read contacts finished. Status= {0}.", _authStatus));
+			DebugUtility.Logger.Log(Constants.kDebugTag, string.Format("[AddressBook] Read contacts finished. Status= {0}.", _authStatus));
 			
 			if (ReadContactsFinishedEvent != null)
 				ReadContactsFinishedEvent(_authStatus, _contactsList);
@@ -80,3 +81,4 @@ namespace VoxelBusters.NativePlugins
 		#endregion
 	}
 }
+#endif

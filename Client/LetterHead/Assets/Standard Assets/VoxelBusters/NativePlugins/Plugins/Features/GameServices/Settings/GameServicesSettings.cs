@@ -20,7 +20,7 @@ namespace VoxelBusters.NativePlugins
 		[SerializeField]
 		private 	iOSSettings				m_iOS		= new iOSSettings();
 		[SerializeField]
-		[InspectorButton(eInspectorButtonPosition.BOTTOM, "Refresh Simulator;Updates simulator data with current config values.;RefreshEditorGameCenter", "Reset Achievements;Resets all achievement progress.;ResetEditorGameCenterAchievements")]
+		//[InspectorButton(eInspectorButtonPosition.BOTTOM, "Refresh Simulator;Updates simulator data with current config values.;RefreshEditorGameCenter", "Reset Achievements;Resets all achievement progress.;ResetEditorGameCenterAchievements")]
 		private 	AndroidSettings			m_android	= new AndroidSettings();
 
 		#endregion

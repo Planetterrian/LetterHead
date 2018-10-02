@@ -1,10 +1,9 @@
+#if USES_NOTIFICATION_SERVICE 
 using UnityEngine;
 using System.Collections;
-
-#if USES_NOTIFICATION_SERVICE 
 using System.Collections.Generic;
 using VoxelBusters.Utility;
-using VoxelBusters.DebugPRO;
+using VoxelBusters.UASUtils;
 
 namespace VoxelBusters.NativePlugins
 {
@@ -205,7 +204,7 @@ namespace VoxelBusters.NativePlugins
 
 			if (_payloadDict == null)
 			{
-				Console.LogError(Constants.kDebugTag, "[CrossPlatformNotification] Failed to create notification.");
+				DebugUtility.Logger.LogError(Constants.kDebugTag, "[CrossPlatformNotification] Failed to create notification.");
 				return null;
 			}
 
