@@ -34,6 +34,7 @@ public class DialogWindowTM : Singleton<DialogWindowTM>
 
     void Start()
     {
+        GetComponent<CanvasGroup>().alpha = 1;
         Hide();
     }
 

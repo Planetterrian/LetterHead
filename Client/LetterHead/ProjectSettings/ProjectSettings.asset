@@ -119,6 +119,7 @@ PlayerSettings:
   m_HolographicPauseOnTrackingLoss: 1
   xboxOneDisableKinectGpuReservation: 0
   xboxOneEnable7thCore: 1
+  isWsaHolographicRemotingEnabled: 0
   vrSettings:
     cardboard:
       depthFormat: 0
@@ -168,7 +169,7 @@ PlayerSettings:
   StripUnusedMeshComponents: 0
   VertexChannelCompressionMask: 214
   iPhoneSdkVersion: 988
-  iOSTargetOSVersionString: 8.0
+  iOSTargetOSVersionString: 9.0
   tvOSSdkVersion: 0
   tvOSRequireExtendedGameController: 0
   tvOSTargetOSVersionString: 9.0
@@ -263,7 +264,99 @@ PlayerSettings:
       m_Width: 128
       m_Height: 128
       m_Kind: 0
-  m_BuildTargetPlatformIcons: []
+  m_BuildTargetPlatformIcons:
+  - m_BuildTarget: Android
+    m_Icons:
+    - m_Textures: []
+      m_Width: 432
+      m_Height: 432
+      m_Kind: 2
+      m_SubKind: 
+    - m_Textures: []
+      m_Width: 324
+      m_Height: 324
+      m_Kind: 2
+      m_SubKind: 
+    - m_Textures: []
+      m_Width: 216
+      m_Height: 216
+      m_Kind: 2
+      m_SubKind: 
+    - m_Textures: []
+      m_Width: 162
+      m_Height: 162
+      m_Kind: 2
+      m_SubKind: 
+    - m_Textures: []
+      m_Width: 108
+      m_Height: 108
+      m_Kind: 2
+      m_SubKind: 
+    - m_Textures: []
+      m_Width: 81
+      m_Height: 81
+      m_Kind: 2
+      m_SubKind: 
+    - m_Textures: []
+      m_Width: 192
+      m_Height: 192
+      m_Kind: 0
+      m_SubKind: 
+    - m_Textures: []
+      m_Width: 144
+      m_Height: 144
+      m_Kind: 0
+      m_SubKind: 
+    - m_Textures: []
+      m_Width: 96
+      m_Height: 96
+      m_Kind: 0
+      m_SubKind: 
+    - m_Textures: []
+      m_Width: 72
+      m_Height: 72
+      m_Kind: 0
+      m_SubKind: 
+    - m_Textures: []
+      m_Width: 48
+      m_Height: 48
+      m_Kind: 0
+      m_SubKind: 
+    - m_Textures: []
+      m_Width: 36
+      m_Height: 36
+      m_Kind: 0
+      m_SubKind: 
+    - m_Textures: []
+      m_Width: 192
+      m_Height: 192
+      m_Kind: 1
+      m_SubKind: 
+    - m_Textures: []
+      m_Width: 144
+      m_Height: 144
+      m_Kind: 1
+      m_SubKind: 
+    - m_Textures: []
+      m_Width: 96
+      m_Height: 96
+      m_Kind: 1
+      m_SubKind: 
+    - m_Textures: []
+      m_Width: 72
+      m_Height: 72
+      m_Kind: 1
+      m_SubKind: 
+    - m_Textures: []
+      m_Width: 48
+      m_Height: 48
+      m_Kind: 1
+      m_SubKind: 
+    - m_Textures: []
+      m_Width: 36
+      m_Height: 36
+      m_Kind: 1
+      m_SubKind: 
   m_BuildTargetBatching: []
   m_BuildTargetGraphicsAPIs: []
   m_BuildTargetVRSettings: []
@@ -404,6 +497,7 @@ PlayerSettings:
   switchAllowsVideoCapturing: 1
   switchAllowsRuntimeAddOnContentInstall: 0
   switchDataLossConfirmation: 0
+  switchUserAccountLockEnabled: 0
   switchSupportedNpadStyles: 6
   switchNativeFsCacheSize: 32
   switchIsHoldTypeHorizontal: 0
@@ -505,12 +599,12 @@ PlayerSettings:
   webGLLinkerTarget: 1
   webGLThreadsSupport: 0
   scriptingDefineSymbols:
-    1: USES_GAME_SERVICES;USES_NETWORK_CONNECTIVITY;USES_NOTIFICATION_SERVICE;USES_BILLING;USES_ADDRESS_BOOK;USES_CLOUD_SERVICES;USES_MEDIA_LIBRARY;USES_SHARING;USES_TWITTER;USES_WEBVIEW
-    4: USES_GAME_SERVICES;USES_NETWORK_CONNECTIVITY;USES_NOTIFICATION_SERVICE;USES_BILLING;USES_ADDRESS_BOOK;USES_CLOUD_SERVICES;USES_MEDIA_LIBRARY;USES_SHARING;USES_TWITTER;USES_WEBVIEW
-    7: USES_GAME_SERVICES;USES_NETWORK_CONNECTIVITY;USES_NOTIFICATION_SERVICE;USES_BILLING;USES_ADDRESS_BOOK;USES_CLOUD_SERVICES;USES_MEDIA_LIBRARY;USES_SHARING;USES_TWITTER;USES_WEBVIEW
-    14: USES_GAME_SERVICES;USES_NETWORK_CONNECTIVITY;USES_NOTIFICATION_SERVICE;USES_BILLING;USES_ADDRESS_BOOK;USES_CLOUD_SERVICES;USES_MEDIA_LIBRARY;USES_SHARING;USES_TWITTER;USES_WEBVIEW
+    1: USES_GAME_SERVICES;USES_NETWORK_CONNECTIVITY;USES_NOTIFICATION_SERVICE;USES_BILLING
+    4: USES_GAME_SERVICES;USES_NETWORK_CONNECTIVITY;USES_NOTIFICATION_SERVICE;USES_BILLING
+    7: USES_GAME_SERVICES;USES_NETWORK_CONNECTIVITY;USES_NOTIFICATION_SERVICE;USES_BILLING
+    14: USES_GAME_SERVICES;USES_NETWORK_CONNECTIVITY;USES_NOTIFICATION_SERVICE;USES_BILLING
     15: USES_GAME_SERVICES;USES_NETWORK_CONNECTIVITY;USES_NOTIFICATION_SERVICE;USES_BILLING
-    25: USES_ADDRESS_BOOK;USES_BILLING;USES_CLOUD_SERVICES;USES_GAME_SERVICES;USES_MEDIA_LIBRARY;USES_NETWORK_CONNECTIVITY;USES_NOTIFICATION_SERVICE;USES_SHARING;USES_TWITTER;USES_WEBVIEW
+    25: USES_BILLING;USES_GAME_SERVICES;USES_NETWORK_CONNECTIVITY;USES_NOTIFICATION_SERVICE
   platformArchitecture:
     iOS: 2
   scriptingBackend:
@@ -547,7 +641,8 @@ PlayerSettings:
   metroDefaultTileSize: 1
   metroTileForegroundText: 1
   metroTileBackgroundColor: {r: 0.13333334, g: 0.17254902, b: 0.21568628, a: 0}
-  metroSplashScreenBackgroundColor: {r: 0.13333334, g: 0.17254902, b: 0.21568628, a: 1}
+  metroSplashScreenBackgroundColor: {r: 0.13333334, g: 0.17254902, b: 0.21568628,
+    a: 1}
   metroSplashScreenUseBackgroundColor: 1
   platformCapabilities: {}
   metroTargetDeviceFamilies: {}

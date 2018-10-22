@@ -874,12 +874,12 @@ MonoBehaviour:
   OnFadeOutCompleted:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: CanvasFade+FadeEvent, Assembly-CSharp, Version=1.0.2.28365, Culture=neutral,
+    m_TypeName: CanvasFade+FadeEvent, Assembly-CSharp, Version=1.0.2.36907, Culture=neutral,
       PublicKeyToken=null
   OnFadeInCompleted:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: CanvasFade+FadeEvent, Assembly-CSharp, Version=1.0.2.28365, Culture=neutral,
+    m_TypeName: CanvasFade+FadeEvent, Assembly-CSharp, Version=1.0.2.36907, Culture=neutral,
       PublicKeyToken=null
 --- !u!1 &111288
 GameObject:
@@ -1503,7 +1503,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.000021457672, y: 0.000019024134}
+  m_AnchoredPosition: {x: 0.000021457672, y: 0.0000037607888}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &11490576
@@ -4146,12 +4146,12 @@ MonoBehaviour:
   OnFadeOutCompleted:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: CanvasFade+FadeEvent, Assembly-CSharp, Version=1.0.2.28365, Culture=neutral,
+    m_TypeName: CanvasFade+FadeEvent, Assembly-CSharp, Version=1.0.2.36907, Culture=neutral,
       PublicKeyToken=null
   OnFadeInCompleted:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: CanvasFade+FadeEvent, Assembly-CSharp, Version=1.0.2.28365, Culture=neutral,
+    m_TypeName: CanvasFade+FadeEvent, Assembly-CSharp, Version=1.0.2.36907, Culture=neutral,
       PublicKeyToken=null
 --- !u!114 &11439910
 MonoBehaviour:
@@ -9110,7 +9110,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 200, y: 50}
+  m_SizeDelta: {x: 348.14, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &22208756
 CanvasRenderer:
@@ -9175,7 +9175,7 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 22
   m_fontStyle: 0
-  m_textAlignment: 5
+  m_textAlignment: 514
   m_isAlignmentEnumConverted: 1
   m_characterSpacing: 0
   m_wordSpacing: 0
