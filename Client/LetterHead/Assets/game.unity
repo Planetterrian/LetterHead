@@ -4531,7 +4531,7 @@ MonoBehaviour:
   timer: {fileID: 40828290}
   lever: {fileID: 1469034603}
   leftAvatarBox: {fileID: 189819210}
-  rightAvatarBox: {fileID: 0}
+  rightAvatarBox: {fileID: 1326408093}
   dailyGameBox: {fileID: 863987478}
   leftPowerupsBox: {fileID: 538862853}
   rightPowerupsBox: {fileID: 1024254623}
@@ -6022,7 +6022,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 22443710, guid: e4240ff317e6f8d41a10e63730bda187, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.0000041379662
+      value: 0.000018093151
       objectReference: {fileID: 0}
     - target: {fileID: 22422674, guid: e4240ff317e6f8d41a10e63730bda187, type: 3}
       propertyPath: m_AnchorMax.x
@@ -7832,7 +7832,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 22460282, guid: dd86f428e9238454bb7fd922793d9565, type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 22460282, guid: dd86f428e9238454bb7fd922793d9565, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -12290,6 +12290,18 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 1326408091}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1326408093 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 11419314, guid: 603f22fba55cf3c4abbc9ab0f05e796d,
+    type: 3}
+  m_PrefabInstance: {fileID: 1326408091}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98c8c20d0c95e0a4aa82af6859b2c51a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1344476761
 GameObject:
   m_ObjectHideFlags: 0
@@ -13709,7 +13721,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 496f2e385b0c62542b5c739ccfafd8da, type: 3}
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &1448078863 stripped
