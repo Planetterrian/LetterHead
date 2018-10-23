@@ -604,7 +604,7 @@ PlayerSettings:
     7: USES_GAME_SERVICES;USES_NETWORK_CONNECTIVITY;USES_NOTIFICATION_SERVICE;USES_BILLING
     14: USES_GAME_SERVICES;USES_NETWORK_CONNECTIVITY;USES_NOTIFICATION_SERVICE;USES_BILLING
     15: USES_GAME_SERVICES;USES_NETWORK_CONNECTIVITY;USES_NOTIFICATION_SERVICE;USES_BILLING
-    25: USES_BILLING;USES_GAME_SERVICES;USES_NETWORK_CONNECTIVITY;USES_NOTIFICATION_SERVICE
+    25: USES_GAME_SERVICES;USES_NETWORK_CONNECTIVITY;USES_NOTIFICATION_SERVICE;USES_BILLING
   platformArchitecture:
     iOS: 2
   scriptingBackend:
@@ -618,7 +618,7 @@ PlayerSettings:
     iOS: 1
   allowUnsafeCode: 0
   additionalIl2CppArgs: 
-  scriptingRuntimeVersion: 1
+  scriptingRuntimeVersion: 0
   apiCompatibilityLevelPerPlatform: {}
   m_RenderingPath: 1
   m_MobileRenderingPath: 0
@@ -701,7 +701,7 @@ PlayerSettings:
   facebookStatus: 1
   facebookXfbml: 0
   facebookFrictionlessRequests: 1
-  apiCompatibilityLevel: 6
+  apiCompatibilityLevel: 2
   cloudProjectId: de46f886-2b6f-4d5a-85b2-ca54b350a7c9
   framebufferDepthMemorylessMode: 0
   projectName: LetterHead
