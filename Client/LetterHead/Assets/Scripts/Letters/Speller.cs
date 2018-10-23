@@ -16,7 +16,7 @@ public class Speller : Singleton<Speller>, IGameHandler
     public uTweener[] invalidTweens;
     public uTweener[] invalidTweensDupe;
 
-    private float tileWidthDivider = 1.75f;
+    public float tileWidthDivider = 1.75f;
 
     [Serializable]
     public class SpellerEvent : UnityEvent
