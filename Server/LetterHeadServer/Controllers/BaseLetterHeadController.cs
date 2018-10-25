@@ -7,6 +7,7 @@ using LetterHeadServer.Models;
 
 namespace LetterHeadServer.Controllers
 {
+    [AllowJsonGet]
     public class BaseLetterHeadController : Controller
     {
         protected User currentUser;

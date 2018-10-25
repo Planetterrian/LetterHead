@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -11,6 +10,7 @@ public class REST : MonoBehaviour
 {
     public virtual UnityWebRequest GET(string url, System.Action<string> onComplete, System.Action<string> onError = null)
     {
+        Debug.Log(url);
         var www = UnityWebRequest.Get(url);
        
         StartCoroutine(WaitForRequest(www, onComplete, onError));
@@ -19,20 +19,23 @@ public class REST : MonoBehaviour
 
     public virtual UnityWebRequest POST(string url, Dictionary<string, string> post, System.Action<string> onComplete, System.Action<string> onError = null)
     {
-        if (post == null)
+        var queryString = "";
+
+        if (post != null)
         {
-            post = new Dictionary<string, string>();
-            post.Add("x", "");
+
+            foreach (var kv in post)
+            {
+                queryString += kv.Key + "=" + kv.Value + "&";
+            }
+
+            queryString = "?" + queryString.TrimEnd('&');
         }
 
-        var bodyJsonString = JsonConvert.SerializeObject(post);
+        url = url + queryString;
 
-        var www = new UnityWebRequest(url, "POST");
-        byte[] bodyRaw = new System.Text.UTF8Encoding().GetBytes(bodyJsonString);
-        www.uploadHandler = (UploadHandler)new UploadHandlerRaw(bodyRaw);
-        www.downloadHandler = (DownloadHandler)new DownloadHandlerBuffer();
-        www.SetRequestHeader("Content-Type", "application/json");
-        www.chunkedTransfer = false;
+        Debug.Log(url);
+        var www = UnityWebRequest.Get(url);
 
         var additionalHeaders = GetAdditionalHeaders();
         if (additionalHeaders != null)
@@ -42,7 +45,6 @@ public class REST : MonoBehaviour
                 www.SetRequestHeader(additionalHeader.Key, additionalHeader.Value);
             }
         }
-
 
         StartCoroutine(WaitForRequest(www, onComplete, onError));
         return www;
@@ -55,7 +57,7 @@ public class REST : MonoBehaviour
 
     private IEnumerator WaitForRequest(UnityWebRequest www, Action<string> onComplete, Action<string> onError)
     {
-        yield return www.SendWebRequest();
+        yield return www.Send();
         // check for errors
         if (www.error == null)
         {
