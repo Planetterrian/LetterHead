@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -24,7 +25,13 @@ public class REST : MonoBehaviour
             post.Add("x", "");
         }
 
-        var www = UnityWebRequest.Post(url, post);
+        var bodyJsonString = JsonConvert.SerializeObject(post);
+
+        var www = new UnityWebRequest(url, "POST");
+        byte[] bodyRaw = new System.Text.UTF8Encoding().GetBytes(bodyJsonString);
+        www.uploadHandler = (UploadHandler)new UploadHandlerRaw(bodyRaw);
+        www.downloadHandler = (DownloadHandler)new DownloadHandlerBuffer();
+        www.SetRequestHeader("Content-Type", "application/json");
         www.chunkedTransfer = false;
 
         var additionalHeaders = GetAdditionalHeaders();
@@ -37,8 +44,6 @@ public class REST : MonoBehaviour
         }
 
 
-        //WWW www = new WWW(url, form.data, headers);
-
         StartCoroutine(WaitForRequest(www, onComplete, onError));
         return www;
     }
@@ -50,7 +55,7 @@ public class REST : MonoBehaviour
 
     private IEnumerator WaitForRequest(UnityWebRequest www, Action<string> onComplete, Action<string> onError)
     {
-        yield return www.Send();
+        yield return www.SendWebRequest();
         // check for errors
         if (www.error == null)
         {
