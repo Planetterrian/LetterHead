@@ -25,6 +25,7 @@ public class REST : MonoBehaviour
         }
 
         var www = UnityWebRequest.Post(url, post);
+        www.chunkedTransfer = false;
 
         var additionalHeaders = GetAdditionalHeaders();
         if (additionalHeaders != null)
