@@ -40,7 +40,7 @@ public class GameRealTime : Singleton<GameRealTime>
 
         currentMatchId = GameManager.Instance.MatchId;
         System.Uri uri = new Uri(Srv.Instance.Url());
-        string uriWithoutScheme = uri.Host + ":" + uri.Port + uri.PathAndQuery;
+        string uriWithoutScheme = uri.Host + ":80" + uri.PathAndQuery;
 
         socket = WebSocketManager.Instance.MakeNew("ws://" + uriWithoutScheme + "api/RealTime?sessionId=" 
             + ClientManager.Instance.SessionId + "&matchId=" + GameManager.Instance.MatchId);
