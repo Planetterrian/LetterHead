@@ -24,7 +24,7 @@ public class TipDisplay : MonoBehaviour
 
     private IEnumerator GetTip()
     {
-        var www = UnityWebRequest.Get("http://letterhead.azurewebsites.net/Home/Tip");
+        var www = UnityWebRequest.Get("https://letterhead.azurewebsites.net/Home/Tip");
         yield return www.Send();
 
         if(!www.isNetworkError && text)
