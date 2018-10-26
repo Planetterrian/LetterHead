@@ -3769,12 +3769,12 @@ MonoBehaviour:
   OnFadeOutCompleted:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: CanvasFade+FadeEvent, Assembly-CSharp, Version=1.0.2.27076, Culture=neutral,
+    m_TypeName: CanvasFade+FadeEvent, Assembly-CSharp, Version=1.0.2.31292, Culture=neutral,
       PublicKeyToken=null
   OnFadeInCompleted:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: CanvasFade+FadeEvent, Assembly-CSharp, Version=1.0.2.27076, Culture=neutral,
+    m_TypeName: CanvasFade+FadeEvent, Assembly-CSharp, Version=1.0.2.31292, Culture=neutral,
       PublicKeyToken=null
 --- !u!225 &355430594
 CanvasGroup:
@@ -4399,7 +4399,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: UI.Pagination.Page+PageEvent, Assembly-CSharp, Version=1.0.2.27076,
+    m_TypeName: UI.Pagination.Page+PageEvent, Assembly-CSharp, Version=1.0.2.31292,
       Culture=neutral, PublicKeyToken=null
   OnHideEvent:
     m_PersistentCalls:
@@ -4415,7 +4415,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: UI.Pagination.Page+PageEvent, Assembly-CSharp, Version=1.0.2.27076,
+    m_TypeName: UI.Pagination.Page+PageEvent, Assembly-CSharp, Version=1.0.2.31292,
       Culture=neutral, PublicKeyToken=null
   UsePageAnimationType: 0
   AnimationType: 0
@@ -4444,7 +4444,7 @@ MonoBehaviour:
   m_IgnoreLayout: 0
   m_MinWidth: -1
   m_MinHeight: -1
-  m_PreferredWidth: 586.7257
+  m_PreferredWidth: 513.38495
   m_PreferredHeight: 849.6239
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
@@ -5876,7 +5876,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 694.9901}
+  m_AnchoredPosition: {x: 0, y: 817.4445}
   m_SizeDelta: {x: 0, y: 1300}
   m_Pivot: {x: 0, y: 1}
 --- !u!1001 &563708516
@@ -13107,12 +13107,12 @@ MonoBehaviour:
   OnFadeOutCompleted:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: CanvasFade+FadeEvent, Assembly-CSharp, Version=1.0.2.27076, Culture=neutral,
+    m_TypeName: CanvasFade+FadeEvent, Assembly-CSharp, Version=1.0.2.31292, Culture=neutral,
       PublicKeyToken=null
   OnFadeInCompleted:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: CanvasFade+FadeEvent, Assembly-CSharp, Version=1.0.2.27076, Culture=neutral,
+    m_TypeName: CanvasFade+FadeEvent, Assembly-CSharp, Version=1.0.2.31292, Culture=neutral,
       PublicKeyToken=null
 --- !u!225 &1100336867
 CanvasGroup:
@@ -13445,7 +13445,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: UI.Pagination.Page+PageEvent, Assembly-CSharp, Version=1.0.2.27076,
+    m_TypeName: UI.Pagination.Page+PageEvent, Assembly-CSharp, Version=1.0.2.31292,
       Culture=neutral, PublicKeyToken=null
   OnHideEvent:
     m_PersistentCalls:
@@ -13461,7 +13461,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: UI.Pagination.Page+PageEvent, Assembly-CSharp, Version=1.0.2.27076,
+    m_TypeName: UI.Pagination.Page+PageEvent, Assembly-CSharp, Version=1.0.2.31292,
       Culture=neutral, PublicKeyToken=null
   UsePageAnimationType: 0
   AnimationType: 0
@@ -13494,7 +13494,7 @@ MonoBehaviour:
   m_IgnoreLayout: 0
   m_MinWidth: -1
   m_MinHeight: -1
-  m_PreferredWidth: 586.7257
+  m_PreferredWidth: 513.38495
   m_PreferredHeight: 849.6239
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
@@ -13960,7 +13960,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: UI.Pagination.Page+PageEvent, Assembly-CSharp, Version=1.0.2.27076,
+    m_TypeName: UI.Pagination.Page+PageEvent, Assembly-CSharp, Version=1.0.2.31292,
       Culture=neutral, PublicKeyToken=null
   OnHideEvent:
     m_PersistentCalls:
@@ -13976,7 +13976,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: UI.Pagination.Page+PageEvent, Assembly-CSharp, Version=1.0.2.27076,
+    m_TypeName: UI.Pagination.Page+PageEvent, Assembly-CSharp, Version=1.0.2.31292,
       Culture=neutral, PublicKeyToken=null
   UsePageAnimationType: 0
   AnimationType: 0
@@ -14003,7 +14003,7 @@ MonoBehaviour:
   m_IgnoreLayout: 0
   m_MinWidth: -1
   m_MinHeight: -1
-  m_PreferredWidth: 586.7257
+  m_PreferredWidth: 513.38495
   m_PreferredHeight: 849.6239
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
@@ -18071,7 +18071,7 @@ MonoBehaviour:
   PageChangedEvent:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UI.Pagination.PagedRect+PageChangedEventType, Assembly-CSharp, Version=1.0.2.27076,
+    m_TypeName: UI.Pagination.PagedRect+PageChangedEventType, Assembly-CSharp, Version=1.0.2.31292,
       Culture=neutral, PublicKeyToken=null
   ScrollRect: {fileID: 0}
   ScrollRectViewport: {fileID: 0}
@@ -18807,7 +18807,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 2.8438716}
+  m_AnchoredPosition: {x: 0, y: 62.98848}
   m_SizeDelta: {x: 0, y: 300}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1476953451
@@ -19254,7 +19254,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: UI.Pagination.Page+PageEvent, Assembly-CSharp, Version=1.0.2.27076,
+    m_TypeName: UI.Pagination.Page+PageEvent, Assembly-CSharp, Version=1.0.2.31292,
       Culture=neutral, PublicKeyToken=null
   OnHideEvent:
     m_PersistentCalls:
@@ -19270,7 +19270,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: UI.Pagination.Page+PageEvent, Assembly-CSharp, Version=1.0.2.27076,
+    m_TypeName: UI.Pagination.Page+PageEvent, Assembly-CSharp, Version=1.0.2.31292,
       Culture=neutral, PublicKeyToken=null
   UsePageAnimationType: 0
   AnimationType: 0
@@ -19299,7 +19299,7 @@ MonoBehaviour:
   m_IgnoreLayout: 0
   m_MinWidth: -1
   m_MinHeight: -1
-  m_PreferredWidth: 586.7257
+  m_PreferredWidth: 513.38495
   m_PreferredHeight: 849.6239
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
@@ -19406,12 +19406,12 @@ MonoBehaviour:
   OnFadeOutCompleted:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: CanvasFade+FadeEvent, Assembly-CSharp, Version=1.0.2.27076, Culture=neutral,
+    m_TypeName: CanvasFade+FadeEvent, Assembly-CSharp, Version=1.0.2.31292, Culture=neutral,
       PublicKeyToken=null
   OnFadeInCompleted:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: CanvasFade+FadeEvent, Assembly-CSharp, Version=1.0.2.27076, Culture=neutral,
+    m_TypeName: CanvasFade+FadeEvent, Assembly-CSharp, Version=1.0.2.31292, Culture=neutral,
       PublicKeyToken=null
 --- !u!225 &1532835245
 CanvasGroup:
@@ -22117,12 +22117,12 @@ MonoBehaviour:
   OnFadeOutCompleted:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: CanvasFade+FadeEvent, Assembly-CSharp, Version=1.0.2.27076, Culture=neutral,
+    m_TypeName: CanvasFade+FadeEvent, Assembly-CSharp, Version=1.0.2.31292, Culture=neutral,
       PublicKeyToken=null
   OnFadeInCompleted:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: CanvasFade+FadeEvent, Assembly-CSharp, Version=1.0.2.27076, Culture=neutral,
+    m_TypeName: CanvasFade+FadeEvent, Assembly-CSharp, Version=1.0.2.31292, Culture=neutral,
       PublicKeyToken=null
 --- !u!225 &1746275135
 CanvasGroup:
@@ -23024,12 +23024,12 @@ MonoBehaviour:
   OnFadeOutCompleted:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: CanvasFade+FadeEvent, Assembly-CSharp, Version=1.0.2.27076, Culture=neutral,
+    m_TypeName: CanvasFade+FadeEvent, Assembly-CSharp, Version=1.0.2.31292, Culture=neutral,
       PublicKeyToken=null
   OnFadeInCompleted:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: CanvasFade+FadeEvent, Assembly-CSharp, Version=1.0.2.27076, Culture=neutral,
+    m_TypeName: CanvasFade+FadeEvent, Assembly-CSharp, Version=1.0.2.31292, Culture=neutral,
       PublicKeyToken=null
 --- !u!225 &1783718045
 CanvasGroup:
@@ -23511,6 +23511,7 @@ GameObject:
   - component: {fileID: 1812473680}
   - component: {fileID: 1812473677}
   - component: {fileID: 1812473678}
+  - component: {fileID: 1812473679}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -23542,6 +23543,18 @@ MonoBehaviour:
   landscapeMaxAspectRatio: {x: 16, y: 9}
   portraitMinAspectRatio: {x: 9, y: 16}
   portraitMaxAspectRatio: {x: 10, y: 3}
+--- !u!114 &1812473679
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1812473676}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd823341dae78d8458d8adf41970fe29, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!20 &1812473680
 Camera:
   m_ObjectHideFlags: 0
@@ -25018,7 +25031,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 22443710, guid: e4240ff317e6f8d41a10e63730bda187, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.00002055999
+      value: 0.000017866689
       objectReference: {fileID: 0}
     - target: {fileID: 22447876, guid: e4240ff317e6f8d41a10e63730bda187, type: 3}
       propertyPath: m_AnchorMin.y
@@ -26110,7 +26123,7 @@ MonoBehaviour:
   m_IgnoreLayout: 0
   m_MinWidth: -1
   m_MinHeight: -1
-  m_PreferredWidth: 586.7257
+  m_PreferredWidth: 513.38495
   m_PreferredHeight: 849.6239
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
@@ -26167,7 +26180,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: UI.Pagination.Page+PageEvent, Assembly-CSharp, Version=1.0.2.27076,
+    m_TypeName: UI.Pagination.Page+PageEvent, Assembly-CSharp, Version=1.0.2.31292,
       Culture=neutral, PublicKeyToken=null
   OnHideEvent:
     m_PersistentCalls:
@@ -26183,7 +26196,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: UI.Pagination.Page+PageEvent, Assembly-CSharp, Version=1.0.2.27076,
+    m_TypeName: UI.Pagination.Page+PageEvent, Assembly-CSharp, Version=1.0.2.31292,
       Culture=neutral, PublicKeyToken=null
   UsePageAnimationType: 0
   AnimationType: 0
@@ -28715,12 +28728,12 @@ MonoBehaviour:
   OnFadeOutCompleted:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: CanvasFade+FadeEvent, Assembly-CSharp, Version=1.0.2.27076, Culture=neutral,
+    m_TypeName: CanvasFade+FadeEvent, Assembly-CSharp, Version=1.0.2.31292, Culture=neutral,
       PublicKeyToken=null
   OnFadeInCompleted:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: CanvasFade+FadeEvent, Assembly-CSharp, Version=1.0.2.27076, Culture=neutral,
+    m_TypeName: CanvasFade+FadeEvent, Assembly-CSharp, Version=1.0.2.31292, Culture=neutral,
       PublicKeyToken=null
 --- !u!225 &2128038915
 CanvasGroup:
