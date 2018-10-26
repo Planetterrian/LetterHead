@@ -10,7 +10,6 @@ public class REST : MonoBehaviour
 {
     public virtual UnityWebRequest GET(string url, System.Action<string> onComplete, System.Action<string> onError = null)
     {
-        Debug.Log(url);
         var www = UnityWebRequest.Get(url);
        
         StartCoroutine(WaitForRequest(www, onComplete, onError));
@@ -19,23 +18,14 @@ public class REST : MonoBehaviour
 
     public virtual UnityWebRequest POST(string url, Dictionary<string, string> post, System.Action<string> onComplete, System.Action<string> onError = null)
     {
-        var queryString = "";
-
-        if (post != null)
+        if (post == null)
         {
-
-            foreach (var kv in post)
-            {
-                queryString += kv.Key + "=" + kv.Value + "&";
-            }
-
-            queryString = "?" + queryString.TrimEnd('&');
+            post = new Dictionary<string, string>();
+            post.Add("x", "");
         }
 
-        url = url + queryString;
-
-        Debug.Log(url);
-        var www = UnityWebRequest.Get(url);
+        var www = UnityWebRequest.Post(url, post);
+        www.chunkedTransfer = false;
 
         var additionalHeaders = GetAdditionalHeaders();
         if (additionalHeaders != null)
@@ -45,6 +35,9 @@ public class REST : MonoBehaviour
                 www.SetRequestHeader(additionalHeader.Key, additionalHeader.Value);
             }
         }
+
+
+        //WWW www = new WWW(url, form.data, headers);
 
         StartCoroutine(WaitForRequest(www, onComplete, onError));
         return www;

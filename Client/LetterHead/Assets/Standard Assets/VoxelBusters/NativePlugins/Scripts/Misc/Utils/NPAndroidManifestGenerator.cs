@@ -240,7 +240,7 @@ namespace VoxelBusters.NativePlugins
 			_xmlWriter.WriteStartElement("meta-data");
 			{
 				WriteAttributeString(_xmlWriter, "android", "name", null, "com.google.android.gms.games.APP_ID");
-				WriteAttributeString(_xmlWriter, "android", "value", null, string.Format("\\ {0}", NPSettings.GameServicesSettings.Android.PlayServicesApplicationID));// Space Added because its getting considered as integer when added from xml instead of string.
+				WriteAttributeString(_xmlWriter, "android", "value", null, string.Format("\\u003{0}", NPSettings.GameServicesSettings.Android.PlayServicesApplicationID));// Space Added because its getting considered as integer when added from xml instead of string.
 			}
 			_xmlWriter.WriteEndElement();
 #endif

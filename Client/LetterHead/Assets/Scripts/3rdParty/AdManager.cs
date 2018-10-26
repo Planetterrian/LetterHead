@@ -11,10 +11,10 @@ public class AdManager : Singleton<AdManager>
 
 #if UNITY_ANDROID
         string bannerAdUnitId = "ca-app-pub-7112330326407860/5797002235";
-    private string appId = "";
+    private string appId = "ca-app-pub-7112330326407860~4320269035";
 #elif UNITY_IPHONE
         string bannerAdUnitId = "ca-app-pub-7112330326407860/7413336235";
-    private string appId = "";
+    private string appId = "ca-app-pub-7112330326407860~5936603036";
 #else
     string bannerAdUnitId = "unexpected_platform";
     private string appId = "unexpected_platform";

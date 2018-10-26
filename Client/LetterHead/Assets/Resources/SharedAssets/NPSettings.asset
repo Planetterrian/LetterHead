@@ -216,7 +216,8 @@ MonoBehaviour:
     m_iOS:
       m_userInfoKey: user_info
     m_android:
-      m_senderIDs: []
+      m_senderIDs:
+      - 392465604696
       m_allowVibration: 1
       m_whiteSmallIcon: {fileID: 0}
       m_colouredSmallIcon: {fileID: 0}
@@ -235,7 +236,7 @@ MonoBehaviour:
     m_iOS:
       m_showDefaultAchievementCompletionBanner: 1
     m_android:
-      m_playServicesApplicationID: 
+      m_playServicesApplicationID: 722368806774
       m_serverClientID: 
       m_showDefaultErrorDialogs: 1
       m_allowAutoLogin: 1

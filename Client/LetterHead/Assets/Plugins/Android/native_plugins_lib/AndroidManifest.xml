@@ -37,7 +37,7 @@
     <receiver android:name="com.voxelbusters.nativeplugins.features.notification.core.AlarmEventReceiver" />
     <!--Notifications : Job Service-->
     <service android:name="com.voxelbusters.nativeplugins.features.notification.core.NotificationJobService" android:permission="android.permission.BIND_JOB_SERVICE" />
-    <meta-data android:name="com.google.android.gms.games.APP_ID" android:value="\ " />
+    <meta-data android:name="com.google.android.gms.games.APP_ID" android:value="\u003722368806774" />
   </application>
   <!--Permissions-->
   <!--Network Connectivity-->
