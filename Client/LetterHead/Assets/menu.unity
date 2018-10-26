@@ -1850,7 +1850,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 2, y: -416.99994}
+  m_AnchoredPosition: {x: 2, y: -417}
   m_SizeDelta: {x: 328, y: 86}
   m_Pivot: {x: 0.5169697, y: 0.50000006}
 --- !u!114 &121279016
@@ -2935,7 +2935,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 22482414, guid: dd86f428e9238454bb7fd922793d9565, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -49.1
+      value: -49.100006
       objectReference: {fileID: 0}
     - target: {fileID: 22482414, guid: dd86f428e9238454bb7fd922793d9565, type: 3}
       propertyPath: m_SizeDelta.y
@@ -3010,6 +3010,10 @@ PrefabInstance:
     - target: {fileID: 11485196, guid: dd86f428e9238454bb7fd922793d9565, type: 3}
       propertyPath: m_havePropertiesChanged
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 22482414, guid: dd86f428e9238454bb7fd922793d9565, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: -36.6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dd86f428e9238454bb7fd922793d9565, type: 3}
@@ -3632,7 +3636,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 22482414, guid: dd86f428e9238454bb7fd922793d9565, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -49.1
+      value: -49.100006
       objectReference: {fileID: 0}
     - target: {fileID: 22482414, guid: dd86f428e9238454bb7fd922793d9565, type: 3}
       propertyPath: m_SizeDelta.y
@@ -3708,6 +3712,14 @@ PrefabInstance:
       propertyPath: m_havePropertiesChanged
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 22482414, guid: dd86f428e9238454bb7fd922793d9565, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 22482414, guid: dd86f428e9238454bb7fd922793d9565, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: -31.2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dd86f428e9238454bb7fd922793d9565, type: 3}
 --- !u!224 &336206407 stripped
@@ -3757,12 +3769,12 @@ MonoBehaviour:
   OnFadeOutCompleted:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: CanvasFade+FadeEvent, Assembly-CSharp, Version=1.0.2.21036, Culture=neutral,
+    m_TypeName: CanvasFade+FadeEvent, Assembly-CSharp, Version=1.0.2.27076, Culture=neutral,
       PublicKeyToken=null
   OnFadeInCompleted:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: CanvasFade+FadeEvent, Assembly-CSharp, Version=1.0.2.21036, Culture=neutral,
+    m_TypeName: CanvasFade+FadeEvent, Assembly-CSharp, Version=1.0.2.27076, Culture=neutral,
       PublicKeyToken=null
 --- !u!225 &355430594
 CanvasGroup:
@@ -4387,7 +4399,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: UI.Pagination.Page+PageEvent, Assembly-CSharp, Version=1.0.2.21036,
+    m_TypeName: UI.Pagination.Page+PageEvent, Assembly-CSharp, Version=1.0.2.27076,
       Culture=neutral, PublicKeyToken=null
   OnHideEvent:
     m_PersistentCalls:
@@ -4403,7 +4415,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: UI.Pagination.Page+PageEvent, Assembly-CSharp, Version=1.0.2.21036,
+    m_TypeName: UI.Pagination.Page+PageEvent, Assembly-CSharp, Version=1.0.2.27076,
       Culture=neutral, PublicKeyToken=null
   UsePageAnimationType: 0
   AnimationType: 0
@@ -4432,8 +4444,8 @@ MonoBehaviour:
   m_IgnoreLayout: 0
   m_MinWidth: -1
   m_MinHeight: -1
-  m_PreferredWidth: 589.8576
-  m_PreferredHeight: 849.62195
+  m_PreferredWidth: 586.7257
+  m_PreferredHeight: 849.6239
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
@@ -5772,7 +5784,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1750420501}
   m_Direction: 2
   m_Value: 0
-  m_Size: 1
+  m_Size: 0.0347488
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -5864,7 +5876,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 39.244774}
+  m_AnchoredPosition: {x: 0, y: 694.9901}
   m_SizeDelta: {x: 0, y: 1300}
   m_Pivot: {x: 0, y: 1}
 --- !u!1001 &563708516
@@ -10169,11 +10181,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 22463054, guid: 5beb83b102641f7438f1a120bab02da1, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 22463054, guid: 5beb83b102641f7438f1a120bab02da1, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 22463054, guid: 5beb83b102641f7438f1a120bab02da1, type: 3}
       propertyPath: m_AnchorMin.y
@@ -10794,9 +10806,9 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -17, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &923110551
 MonoBehaviour:
@@ -13095,12 +13107,12 @@ MonoBehaviour:
   OnFadeOutCompleted:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: CanvasFade+FadeEvent, Assembly-CSharp, Version=1.0.2.21036, Culture=neutral,
+    m_TypeName: CanvasFade+FadeEvent, Assembly-CSharp, Version=1.0.2.27076, Culture=neutral,
       PublicKeyToken=null
   OnFadeInCompleted:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: CanvasFade+FadeEvent, Assembly-CSharp, Version=1.0.2.21036, Culture=neutral,
+    m_TypeName: CanvasFade+FadeEvent, Assembly-CSharp, Version=1.0.2.27076, Culture=neutral,
       PublicKeyToken=null
 --- !u!225 &1100336867
 CanvasGroup:
@@ -13433,7 +13445,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: UI.Pagination.Page+PageEvent, Assembly-CSharp, Version=1.0.2.21036,
+    m_TypeName: UI.Pagination.Page+PageEvent, Assembly-CSharp, Version=1.0.2.27076,
       Culture=neutral, PublicKeyToken=null
   OnHideEvent:
     m_PersistentCalls:
@@ -13449,7 +13461,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: UI.Pagination.Page+PageEvent, Assembly-CSharp, Version=1.0.2.21036,
+    m_TypeName: UI.Pagination.Page+PageEvent, Assembly-CSharp, Version=1.0.2.27076,
       Culture=neutral, PublicKeyToken=null
   UsePageAnimationType: 0
   AnimationType: 0
@@ -13482,8 +13494,8 @@ MonoBehaviour:
   m_IgnoreLayout: 0
   m_MinWidth: -1
   m_MinHeight: -1
-  m_PreferredWidth: 589.8576
-  m_PreferredHeight: 849.62195
+  m_PreferredWidth: 586.7257
+  m_PreferredHeight: 849.6239
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
@@ -13948,7 +13960,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: UI.Pagination.Page+PageEvent, Assembly-CSharp, Version=1.0.2.21036,
+    m_TypeName: UI.Pagination.Page+PageEvent, Assembly-CSharp, Version=1.0.2.27076,
       Culture=neutral, PublicKeyToken=null
   OnHideEvent:
     m_PersistentCalls:
@@ -13964,7 +13976,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: UI.Pagination.Page+PageEvent, Assembly-CSharp, Version=1.0.2.21036,
+    m_TypeName: UI.Pagination.Page+PageEvent, Assembly-CSharp, Version=1.0.2.27076,
       Culture=neutral, PublicKeyToken=null
   UsePageAnimationType: 0
   AnimationType: 0
@@ -13991,8 +14003,8 @@ MonoBehaviour:
   m_IgnoreLayout: 0
   m_MinWidth: -1
   m_MinHeight: -1
-  m_PreferredWidth: 589.8576
-  m_PreferredHeight: 849.62195
+  m_PreferredWidth: 586.7257
+  m_PreferredHeight: 849.6239
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
@@ -14957,7 +14969,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0.0000073098986}
-  m_SizeDelta: {x: 0, y: 117}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1251704734
 MonoBehaviour:
@@ -16821,19 +16833,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 22480252, guid: 2abd8bb250520d24fbcff6248935b154, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 275.02124
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 22480252, guid: 2abd8bb250520d24fbcff6248935b154, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -58.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 22480252, guid: 2abd8bb250520d24fbcff6248935b154, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 550.0425
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 22480252, guid: 2abd8bb250520d24fbcff6248935b154, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 39
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 22480252, guid: 2abd8bb250520d24fbcff6248935b154, type: 3}
       propertyPath: m_AnchorMin.x
@@ -16841,7 +16853,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 22480252, guid: 2abd8bb250520d24fbcff6248935b154, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 22480252, guid: 2abd8bb250520d24fbcff6248935b154, type: 3}
       propertyPath: m_AnchorMax.x
@@ -16849,7 +16861,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 22480252, guid: 2abd8bb250520d24fbcff6248935b154, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 22480252, guid: 2abd8bb250520d24fbcff6248935b154, type: 3}
       propertyPath: m_Pivot.x
@@ -17201,7 +17213,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -2, y: -500.99994}
+  m_AnchoredPosition: {x: -2, y: -501}
   m_SizeDelta: {x: 140, y: 65}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1396208188
@@ -18059,7 +18071,7 @@ MonoBehaviour:
   PageChangedEvent:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UI.Pagination.PagedRect+PageChangedEventType, Assembly-CSharp, Version=1.0.2.21036,
+    m_TypeName: UI.Pagination.PagedRect+PageChangedEventType, Assembly-CSharp, Version=1.0.2.27076,
       Culture=neutral, PublicKeyToken=null
   ScrollRect: {fileID: 0}
   ScrollRectViewport: {fileID: 0}
@@ -18080,7 +18092,7 @@ MonoBehaviour:
   - {fileID: 1926150712}
   - {fileID: 1112872608}
   - {fileID: 1141005266}
-  editorSelectedPage: 3
+  editorSelectedPage: 2
   sizingTransform: {fileID: 0}
 --- !u!114 &1443373194
 MonoBehaviour:
@@ -18795,7 +18807,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.000005123954}
+  m_AnchoredPosition: {x: 0, y: 2.8438716}
   m_SizeDelta: {x: 0, y: 300}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1476953451
@@ -19111,7 +19123,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1526127408
 RectTransform:
   m_ObjectHideFlags: 0
@@ -19242,7 +19254,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: UI.Pagination.Page+PageEvent, Assembly-CSharp, Version=1.0.2.21036,
+    m_TypeName: UI.Pagination.Page+PageEvent, Assembly-CSharp, Version=1.0.2.27076,
       Culture=neutral, PublicKeyToken=null
   OnHideEvent:
     m_PersistentCalls:
@@ -19258,7 +19270,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: UI.Pagination.Page+PageEvent, Assembly-CSharp, Version=1.0.2.21036,
+    m_TypeName: UI.Pagination.Page+PageEvent, Assembly-CSharp, Version=1.0.2.27076,
       Culture=neutral, PublicKeyToken=null
   UsePageAnimationType: 0
   AnimationType: 0
@@ -19287,8 +19299,8 @@ MonoBehaviour:
   m_IgnoreLayout: 0
   m_MinWidth: -1
   m_MinHeight: -1
-  m_PreferredWidth: 589.8576
-  m_PreferredHeight: 849.62195
+  m_PreferredWidth: 586.7257
+  m_PreferredHeight: 849.6239
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
@@ -19394,12 +19406,12 @@ MonoBehaviour:
   OnFadeOutCompleted:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: CanvasFade+FadeEvent, Assembly-CSharp, Version=1.0.2.21036, Culture=neutral,
+    m_TypeName: CanvasFade+FadeEvent, Assembly-CSharp, Version=1.0.2.27076, Culture=neutral,
       PublicKeyToken=null
   OnFadeInCompleted:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: CanvasFade+FadeEvent, Assembly-CSharp, Version=1.0.2.21036, Culture=neutral,
+    m_TypeName: CanvasFade+FadeEvent, Assembly-CSharp, Version=1.0.2.27076, Culture=neutral,
       PublicKeyToken=null
 --- !u!225 &1532835245
 CanvasGroup:
@@ -19699,19 +19711,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 22480252, guid: 2abd8bb250520d24fbcff6248935b154, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 275.02124
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 22480252, guid: 2abd8bb250520d24fbcff6248935b154, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -97.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 22480252, guid: 2abd8bb250520d24fbcff6248935b154, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 550.0425
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 22480252, guid: 2abd8bb250520d24fbcff6248935b154, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 39
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 22480252, guid: 2abd8bb250520d24fbcff6248935b154, type: 3}
       propertyPath: m_AnchorMin.x
@@ -19719,7 +19731,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 22480252, guid: 2abd8bb250520d24fbcff6248935b154, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 22480252, guid: 2abd8bb250520d24fbcff6248935b154, type: 3}
       propertyPath: m_AnchorMax.x
@@ -19727,7 +19739,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 22480252, guid: 2abd8bb250520d24fbcff6248935b154, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 22480252, guid: 2abd8bb250520d24fbcff6248935b154, type: 3}
       propertyPath: m_Pivot.x
@@ -22105,12 +22117,12 @@ MonoBehaviour:
   OnFadeOutCompleted:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: CanvasFade+FadeEvent, Assembly-CSharp, Version=1.0.2.21036, Culture=neutral,
+    m_TypeName: CanvasFade+FadeEvent, Assembly-CSharp, Version=1.0.2.27076, Culture=neutral,
       PublicKeyToken=null
   OnFadeInCompleted:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: CanvasFade+FadeEvent, Assembly-CSharp, Version=1.0.2.21036, Culture=neutral,
+    m_TypeName: CanvasFade+FadeEvent, Assembly-CSharp, Version=1.0.2.27076, Culture=neutral,
       PublicKeyToken=null
 --- !u!225 &1746275135
 CanvasGroup:
@@ -22254,7 +22266,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 22482414, guid: dd86f428e9238454bb7fd922793d9565, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -49.1
+      value: -49.100006
       objectReference: {fileID: 0}
     - target: {fileID: 22482414, guid: dd86f428e9238454bb7fd922793d9565, type: 3}
       propertyPath: m_SizeDelta.y
@@ -22321,6 +22333,10 @@ PrefabInstance:
     - target: {fileID: 11402724, guid: dd86f428e9238454bb7fd922793d9565, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 22482414, guid: dd86f428e9238454bb7fd922793d9565, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: -45
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dd86f428e9238454bb7fd922793d9565, type: 3}
@@ -23008,12 +23024,12 @@ MonoBehaviour:
   OnFadeOutCompleted:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: CanvasFade+FadeEvent, Assembly-CSharp, Version=1.0.2.21036, Culture=neutral,
+    m_TypeName: CanvasFade+FadeEvent, Assembly-CSharp, Version=1.0.2.27076, Culture=neutral,
       PublicKeyToken=null
   OnFadeInCompleted:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: CanvasFade+FadeEvent, Assembly-CSharp, Version=1.0.2.21036, Culture=neutral,
+    m_TypeName: CanvasFade+FadeEvent, Assembly-CSharp, Version=1.0.2.27076, Culture=neutral,
       PublicKeyToken=null
 --- !u!225 &1783718045
 CanvasGroup:
@@ -23840,7 +23856,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 22482414, guid: dd86f428e9238454bb7fd922793d9565, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -49.1
+      value: -49.100006
       objectReference: {fileID: 0}
     - target: {fileID: 22482414, guid: dd86f428e9238454bb7fd922793d9565, type: 3}
       propertyPath: m_SizeDelta.y
@@ -23915,6 +23931,10 @@ PrefabInstance:
     - target: {fileID: 11485196, guid: dd86f428e9238454bb7fd922793d9565, type: 3}
       propertyPath: m_havePropertiesChanged
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 22482414, guid: dd86f428e9238454bb7fd922793d9565, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: -20.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dd86f428e9238454bb7fd922793d9565, type: 3}
@@ -24998,7 +25018,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 22443710, guid: e4240ff317e6f8d41a10e63730bda187, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.000010773008
+      value: 0.00002055999
       objectReference: {fileID: 0}
     - target: {fileID: 22447876, guid: e4240ff317e6f8d41a10e63730bda187, type: 3}
       propertyPath: m_AnchorMin.y
@@ -26050,7 +26070,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1926150709
 RectTransform:
   m_ObjectHideFlags: 0
@@ -26090,8 +26110,8 @@ MonoBehaviour:
   m_IgnoreLayout: 0
   m_MinWidth: -1
   m_MinHeight: -1
-  m_PreferredWidth: 589.8576
-  m_PreferredHeight: 849.62195
+  m_PreferredWidth: 586.7257
+  m_PreferredHeight: 849.6239
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
@@ -26147,7 +26167,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: UI.Pagination.Page+PageEvent, Assembly-CSharp, Version=1.0.2.21036,
+    m_TypeName: UI.Pagination.Page+PageEvent, Assembly-CSharp, Version=1.0.2.27076,
       Culture=neutral, PublicKeyToken=null
   OnHideEvent:
     m_PersistentCalls:
@@ -26163,7 +26183,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: UI.Pagination.Page+PageEvent, Assembly-CSharp, Version=1.0.2.21036,
+    m_TypeName: UI.Pagination.Page+PageEvent, Assembly-CSharp, Version=1.0.2.27076,
       Culture=neutral, PublicKeyToken=null
   UsePageAnimationType: 0
   AnimationType: 0
@@ -26225,19 +26245,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 22480252, guid: 2abd8bb250520d24fbcff6248935b154, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 275.02124
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 22480252, guid: 2abd8bb250520d24fbcff6248935b154, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -19.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 22480252, guid: 2abd8bb250520d24fbcff6248935b154, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 550.0425
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 22480252, guid: 2abd8bb250520d24fbcff6248935b154, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 39
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 22480252, guid: 2abd8bb250520d24fbcff6248935b154, type: 3}
       propertyPath: m_AnchorMin.x
@@ -26245,7 +26265,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 22480252, guid: 2abd8bb250520d24fbcff6248935b154, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 22480252, guid: 2abd8bb250520d24fbcff6248935b154, type: 3}
       propertyPath: m_AnchorMax.x
@@ -26253,7 +26273,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 22480252, guid: 2abd8bb250520d24fbcff6248935b154, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 22480252, guid: 2abd8bb250520d24fbcff6248935b154, type: 3}
       propertyPath: m_Pivot.x
@@ -26851,7 +26871,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 22497886, guid: c38be9b55f08ed141838e30da5a2946e, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -603.99994
+      value: -604
       objectReference: {fileID: 0}
     - target: {fileID: 22497886, guid: c38be9b55f08ed141838e30da5a2946e, type: 3}
       propertyPath: m_SizeDelta.x
@@ -28695,12 +28715,12 @@ MonoBehaviour:
   OnFadeOutCompleted:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: CanvasFade+FadeEvent, Assembly-CSharp, Version=1.0.2.21036, Culture=neutral,
+    m_TypeName: CanvasFade+FadeEvent, Assembly-CSharp, Version=1.0.2.27076, Culture=neutral,
       PublicKeyToken=null
   OnFadeInCompleted:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: CanvasFade+FadeEvent, Assembly-CSharp, Version=1.0.2.21036, Culture=neutral,
+    m_TypeName: CanvasFade+FadeEvent, Assembly-CSharp, Version=1.0.2.27076, Culture=neutral,
       PublicKeyToken=null
 --- !u!225 &2128038915
 CanvasGroup:

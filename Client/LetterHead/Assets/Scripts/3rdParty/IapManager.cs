@@ -101,6 +101,8 @@ public class IapManager : Singleton<IapManager>
 
     public void RequestPurchase(string identifier)
     {
+        identifier = identifier.Trim();
+
         if (!NPBinding.Billing.IsAvailable())
         {
             DialogWindowTM.Instance.Error("Unable to access the store at this time");

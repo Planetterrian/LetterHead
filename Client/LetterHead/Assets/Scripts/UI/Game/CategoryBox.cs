@@ -186,6 +186,8 @@ public class CategoryBox : MonoBehaviour, IGameHandler
 
     public void SetCurrentlySelectedCategory(Category category, bool instant = false)
     {
+        InitilizeRows();
+
         currentSelectedCategoryImage.gameObject.SetActive(true);
 
         var box = categoryScoreFunctions.First(c => c.Value.name == category.name).Key;

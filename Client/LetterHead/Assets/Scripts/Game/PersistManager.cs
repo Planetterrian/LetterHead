@@ -71,12 +71,13 @@ public class PersistManager : Singleton<PersistManager>
         persistCanvas.gameObject.SetActive(true);
         OnMusicEnabledChanged();
         OnSoundEnabledChanged();
+/*
 
         if (Application.platform == RuntimePlatform.Android)
         {
             Application.targetFrameRate = 30;
             Debug.Log("FPS set to 30");
-        }
+        }*/
     }
 
     public void LoadMatch(int matchId, bool isDaily)

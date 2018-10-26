@@ -190,9 +190,11 @@ public class HomePage : Page
 
             SoundManager.Instance.PlayClip("Invite");
 
-            DialogWindowTM.Instance.Show("Invite", "You have a match invite from " + invite.Inviter.Username + " (" + invite.ScoringType.ToString() + "). Do you want to accept?",
+            DialogWindowTM.Instance.Show("Invite", "You have a match invite from " + invite.Inviter.Username + " (" + GameManager.ModeName(invite.ScoringType) + "). Do you want to accept?",
                 () =>
                 {
+                    DialogWindowTM.Instance.Hide();
+
                     Srv.Instance.POST("Match/AcceptInvite",
                         new Dictionary<string, string>() {{"inviteId", invite.Id.ToString()}},
                         s =>
@@ -201,6 +203,8 @@ public class HomePage : Page
                         }, DialogWindowTM.Instance.Error);
                 }, () =>
                 {
+                    DialogWindowTM.Instance.Hide();
+
                     Srv.Instance.POST("Match/DeclineInvite",
                         new Dictionary<string, string>() {{"inviteId", invite.Id.ToString()}}, s =>
                         {
