@@ -1,6 +1,0 @@
-Font: Roboto  Pt. Size: 73
-Characters packed: 98/99
-
-Missing Characters
-----------------------------------------
-ID: 9633	Hex: 25A1	Char [□]
