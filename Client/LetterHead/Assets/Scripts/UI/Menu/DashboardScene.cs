@@ -18,8 +18,10 @@ public class DashboardScene : GuiScene
 
         pagination.DefaultPage = PersistManager.Instance.initialDashPage;
         pagination.SetCurrentPage(PersistManager.Instance.initialDashPage, true);
-
+        print("Loading default page " + PersistManager.Instance.initialDashPage);
         homePage.ClearMatches();
+
+        PersistManager.Instance.SetInitialDashPage(0);
 
         if (showReview)
         {

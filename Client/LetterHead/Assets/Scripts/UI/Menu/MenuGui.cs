@@ -117,7 +117,14 @@ public class MenuGui : Singleton<MenuGui>
         }
         else
         {
-            PersistManager.Instance.SetInitialDashPage(initialPage);
+            if (PersistManager.Instance.initialDashPage == 3)
+            {
+                // Special condition for shop page
+            }
+            else
+            {
+                PersistManager.Instance.SetInitialDashPage(initialPage);
+            }
         }
 
         sceneManager.SetGuiScene(dashboardScene);

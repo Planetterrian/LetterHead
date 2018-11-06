@@ -654,7 +654,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.000017609484}
+  m_AnchoredPosition: {x: 0, y: 0.000017248838}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &82545926
@@ -5922,7 +5922,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 22443710, guid: e4240ff317e6f8d41a10e63730bda187, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.000020697638
+      value: 0.00000042035126
       objectReference: {fileID: 0}
     - target: {fileID: 22422674, guid: e4240ff317e6f8d41a10e63730bda187, type: 3}
       propertyPath: m_AnchorMax.x
@@ -8897,7 +8897,7 @@ MonoBehaviour:
   onSpellerChangedEvent:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Speller+SpellerEvent, Assembly-CSharp, Version=1.0.2.34715, Culture=neutral,
+    m_TypeName: Speller+SpellerEvent, Assembly-CSharp, Version=1.0.2.27604, Culture=neutral,
       PublicKeyToken=null
 --- !u!114 &1012846007
 MonoBehaviour:
@@ -9249,12 +9249,12 @@ MonoBehaviour:
   OnFadeOutCompleted:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: CanvasFade+FadeEvent, Assembly-CSharp, Version=1.0.2.34715, Culture=neutral,
+    m_TypeName: CanvasFade+FadeEvent, Assembly-CSharp, Version=1.0.2.27604, Culture=neutral,
       PublicKeyToken=null
   OnFadeInCompleted:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: CanvasFade+FadeEvent, Assembly-CSharp, Version=1.0.2.34715, Culture=neutral,
+    m_TypeName: CanvasFade+FadeEvent, Assembly-CSharp, Version=1.0.2.27604, Culture=neutral,
       PublicKeyToken=null
 --- !u!225 &1042343860
 CanvasGroup:
@@ -12432,6 +12432,10 @@ PrefabInstance:
       propertyPath: m_SizeDelta.x
       value: 144.44
       objectReference: {fileID: 0}
+    - target: {fileID: 164452, guid: 603f22fba55cf3c4abbc9ab0f05e796d, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 603f22fba55cf3c4abbc9ab0f05e796d, type: 3}
 --- !u!224 &1326408092 stripped
@@ -13032,12 +13036,12 @@ MonoBehaviour:
   OnFadeOutCompleted:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: CanvasFade+FadeEvent, Assembly-CSharp, Version=1.0.2.34715, Culture=neutral,
+    m_TypeName: CanvasFade+FadeEvent, Assembly-CSharp, Version=1.0.2.27604, Culture=neutral,
       PublicKeyToken=null
   OnFadeInCompleted:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: CanvasFade+FadeEvent, Assembly-CSharp, Version=1.0.2.34715, Culture=neutral,
+    m_TypeName: CanvasFade+FadeEvent, Assembly-CSharp, Version=1.0.2.27604, Culture=neutral,
       PublicKeyToken=null
 --- !u!225 &1366952544
 CanvasGroup:
@@ -19684,7 +19688,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: KeyboardInput+KeyPressEvent, Assembly-CSharp, Version=1.0.2.34715,
+    m_TypeName: KeyboardInput+KeyPressEvent, Assembly-CSharp, Version=1.0.2.27604,
       Culture=neutral, PublicKeyToken=null
   OnBackpsace:
     m_PersistentCalls:

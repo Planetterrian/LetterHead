@@ -26,6 +26,7 @@ public class InviteUsernameWindow : WindowController
             DialogWindowTM.Instance.Show("Invite", "Invite sent to " + username + ".", () => { });
             submitButton.interactable = true;
             usernameInput.interactable = true;
+            usernameInput.text = "";
         }, s =>
         {
             DialogWindowTM.Instance.Error(s);
@@ -36,6 +37,7 @@ public class InviteUsernameWindow : WindowController
 
     void OnWindowShown()
     {
+        usernameInput.text = "";
         submitButton.interactable = true;
         usernameInput.interactable = true;
     }
