@@ -223,14 +223,17 @@ public class HomePage : Page
 
     private void RefreshBars(List<DashboardRow> rows)
     {
-        var sortedRows = rows.OrderByDescending(r => r.transform.position.y).ToList();
+        //var sortedRows = rows.OrderByDescending(r => r.transform.position.y).ToList();
 
-        for (int index = 0; index < sortedRows.Count; index++)
+        for (int index = 0; index < rows.Count; index++)
         {
-            var dashboardRow = sortedRows[index];
+            var dashboardRow = rows[index];
 
-            if (index == sortedRows.Count - 1)
+            if (index == 0)
+            {
                 dashboardRow.barBottom.SetActive(true);
+                Debug.Log("Adding bottom bar ", dashboardRow.gameObject);
+            }
             else
                 dashboardRow.barBottom.SetActive(false);
         }

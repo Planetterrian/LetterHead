@@ -226,7 +226,7 @@ MonoBehaviour:
   m_fontSizeMin: 16
   m_fontSizeMax: 20
   m_fontStyle: 0
-  m_textAlignment: 514
+  m_textAlignment: 516
   m_isAlignmentEnumConverted: 1
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -582,7 +582,7 @@ MonoBehaviour:
   m_fontSizeMin: 16
   m_fontSizeMax: 20
   m_fontStyle: 0
-  m_textAlignment: 514
+  m_textAlignment: 516
   m_isAlignmentEnumConverted: 1
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -1693,7 +1693,7 @@ MonoBehaviour:
   m_fontSizeMin: 16
   m_fontSizeMax: 20
   m_fontStyle: 0
-  m_textAlignment: 514
+  m_textAlignment: 516
   m_isAlignmentEnumConverted: 1
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -3745,7 +3745,7 @@ MonoBehaviour:
   m_fontSizeMin: 16
   m_fontSizeMax: 20
   m_fontStyle: 0
-  m_textAlignment: 514
+  m_textAlignment: 516
   m_isAlignmentEnumConverted: 1
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -5746,7 +5746,7 @@ MonoBehaviour:
   m_fontSizeMin: 16
   m_fontSizeMax: 20
   m_fontStyle: 0
-  m_textAlignment: 514
+  m_textAlignment: 516
   m_isAlignmentEnumConverted: 1
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -6027,7 +6027,7 @@ MonoBehaviour:
   m_fontSizeMin: 16
   m_fontSizeMax: 20
   m_fontStyle: 2
-  m_textAlignment: 514
+  m_textAlignment: 516
   m_isAlignmentEnumConverted: 1
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -6308,7 +6308,7 @@ MonoBehaviour:
   m_fontSizeMin: 16
   m_fontSizeMax: 20
   m_fontStyle: 0
-  m_textAlignment: 514
+  m_textAlignment: 516
   m_isAlignmentEnumConverted: 1
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -6664,7 +6664,7 @@ MonoBehaviour:
   m_fontSizeMin: 16
   m_fontSizeMax: 20
   m_fontStyle: 0
-  m_textAlignment: 514
+  m_textAlignment: 516
   m_isAlignmentEnumConverted: 1
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -8990,7 +8990,7 @@ MonoBehaviour:
   m_fontSizeMin: 16
   m_fontSizeMax: 20
   m_fontStyle: 0
-  m_textAlignment: 514
+  m_textAlignment: 516
   m_isAlignmentEnumConverted: 1
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -11606,7 +11606,7 @@ MonoBehaviour:
   m_fontSizeMin: 16
   m_fontSizeMax: 20
   m_fontStyle: 0
-  m_textAlignment: 514
+  m_textAlignment: 516
   m_isAlignmentEnumConverted: 1
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -12012,7 +12012,7 @@ MonoBehaviour:
   m_fontSizeMin: 16
   m_fontSizeMax: 20
   m_fontStyle: 0
-  m_textAlignment: 514
+  m_textAlignment: 516
   m_isAlignmentEnumConverted: 1
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -14906,7 +14906,7 @@ MonoBehaviour:
   m_fontSizeMin: 16
   m_fontSizeMax: 20
   m_fontStyle: 0
-  m_textAlignment: 514
+  m_textAlignment: 516
   m_isAlignmentEnumConverted: 1
   m_characterSpacing: 0
   m_wordSpacing: 0
